@@ -40,12 +40,12 @@ if(isset($_COOKIE['bnp_ips_user'])){
                 var user = document.getElementById("username").value;
                 var pass = document.getElementById("password").value;
                 
-                if(user == ""){
-                    alert("Please input username.");
+                if(user == ''){
+                    document.getElementById("username").focus();
                     document.getElementById("error").innerHTML = "Please input username.";
                     return false;
                 }else if (pass == ''){
-                    alert("Please input password.");
+                    document.getElementById("password").focus();
                     document.getElementById("error").innerHTML = "Please input password.";
                     return false;
                 }
