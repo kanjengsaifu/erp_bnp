@@ -1,16 +1,16 @@
 <?php
 require_once("BaseModel.php");
 
-class UserPositionModel extends BaseModel{
+class ContractorStatusModel extends BaseModel{
 
     function __construct(){
         if(!static::$db){
-            static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
+            static::$db = mysqli_connect($this->host, $this->contractorname, $this->password, $this->db_name);
         }
     }
 
-    function getUserPositionBy($name = ''){
-        $sql = "SELECT * FROM tb_user_position WHERE  user_position_name LIKE ('%$name%') 
+    function getContractorStatusBy($name = ''){
+        $sql = "SELECT * FROM tb_contractor_status WHERE  contractor_status_name LIKE ('%$name%') 
         ";
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -20,12 +20,13 @@ class UserPositionModel extends BaseModel{
             $result->close();
             return $data;
         }
+
     }
 
-    function getUserPositionByID($id){
+    function getContractorStatusByID($id){
         $sql = " SELECT * 
-        FROM tb_user_position 
-        WHERE user_position_id = '$id' 
+        FROM tb_contractor_status 
+        WHERE contractor_status_id = '$id' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -36,22 +37,25 @@ class UserPositionModel extends BaseModel{
             $result->close();
             return $data;
         }
+
     }
 
-    function updateUserPositionByID($id,$data = []){
+    function updateContractorStatusByID($id,$data = []){
         $sql = " SELECT * 
-        FROM tb_user_position 
-        WHERE user_position_id = '$id' 
+        FROM tb_contractor_status 
+        WHERE contractor_status_id = '$id' 
         ";
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $row = mysqli_fetch_array($result,MYSQLI_NUM);
             $result->close();
             return $row;
         }
+
     }
 
-    function deleteUserPositionByID($id){
-        $sql = " DELETE FROM tb_user_position WHERE user_position_id = '$id' ";
+
+    function deleteContractorStatusByID($id){
+        $sql = " DELETE FROM tb_contractor_status WHERE contractor_status_id = '$id' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }

@@ -1,14 +1,15 @@
 <?php 
 require_once('../../models/AddressModel.php');
-$address = new AddressModel;
-$add_district = $address->getDistricByAmphurID($_POST['amphur']);
+
+$address_model = new AddressModel;
+
+$district = $address_model->getDistricByAmphurID($_POST['amphur']);
 ?>
 <option value="">Select</option>
 <?php
-for($i=0; $i < count($add_district); $i++){
+for($i=0; $i < count($district); $i++){
 ?>
-<option value="<?php echo $add_district[$i]['DISTRICT_NAME']?>"><?php echo $add_district[$i]['DISTRICT_NAME']?></option>
+<option value="<?php echo $district[$i]['DISTRICT_ID']?>"><?php echo $district[$i]['DISTRICT_NAME']?></option>
 <?
 }
-
 ?>

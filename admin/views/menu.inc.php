@@ -137,6 +137,15 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <li>
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
                 </li>
+                <li>
+                    <a href="?app=songserm" <?PHP if($_GET['app'] == "songserm"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ส่งเสริม</a>
+                </li>
+                <li>
+                    <a href="?app=contractor" <?PHP if($_GET['app'] == "contractor"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ผู้รับเหมา</a>
+                </li>
+                <li>
+                    <a href="?app=agent" <?PHP if($_GET['app'] == "agent"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> นายหน้า</a>
+                </li>
                 <li
                 <?PHP 
                     if(

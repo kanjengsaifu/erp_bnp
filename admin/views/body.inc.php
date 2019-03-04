@@ -23,7 +23,16 @@
     }else if($_GET['app'] == "production"){
         require_once("modules/production/views/index.inc.php");
     }
-
     /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
+
+    /* ----------------------------------- ระบบจัดการตัวเเทน ผู้รับเหมา --------------------------------- */
+    else if($_GET['app'] == "songserm"){
+        require_once("modules/songserm/views/index.inc.php");   
+    }else if($_GET['app'] == "contractor"){
+        require_once("modules/contractor/views/index.inc.php");
+    }else if($_GET['app'] == "agent"){
+        require_once("modules/agent/views/index.inc.php");   
+    }
+    /* ----------------------------------- //ระบบจัดการตัวเเทน ผู้รับเหมา// ---------------------------------------------- */
     
 ?>
