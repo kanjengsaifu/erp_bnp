@@ -7,28 +7,32 @@ $path = "modules/license/views/";
  
 $license_model = new LicenseModel; 
 $license_permission_model = new LicensePermissionModel; 
-$menu_model = new MenuModel; 
+$menus_model = new MenuModel; 
 
  
 $license_code = $_GET['code'];
-if ($_GET['action'] == 'insert'&&$menu['license']['add']==1){  
-    $menu = $menu_model->getMenuBy();
+// if ($_GET['action'] == 'insert'&&$menus['license']['add']==1){  
+if ($_GET['action'] == 'insert'){  
+    $menus = $menus_model->getMenuBy();
     require_once($path.'insert.inc.php');
-}else if ($_GET['action'] == 'update'&&$menu['license']['edit']==1){ 
+// }else if ($_GET['action'] == 'update'&&$menus['license']['edit']==1){ 
+}else if ($_GET['action'] == 'update'){ 
     
-    $menu = $menu_model->getMenuBy();
+    $menus = $menus_model->getMenuBy();
     $license = $license_model->getLicenseByID($license_code);
     $license_permission = $license_permission_model->getLicensePermissionByID($license_code);
     // echo '<pre>';
     // print_r($license_permission);
     // echo '</pre>';
     require_once($path.'update.inc.php');
-}else if ($_GET['action'] == 'delete'&&$menu['license']['delete']==1){  
+// }else if ($_GET['action'] == 'delete'&&$menus['license']['delete']==1){  
+}else if ($_GET['action'] == 'delete'){  
     $license_permission_model->deleteLicensePermissionByID($license_code);
     $license_model->deleteLicenseByID($license_code);
     $license = $license_model->getLicenseBy();
     require_once($path.'view.inc.php');
-}else if ($_GET['action'] == 'add'&&$menu['license']['add']==1){
+// }else if ($_GET['action'] == 'add'&&$menus['license']['add']==1){
+}else if ($_GET['action'] == 'add'){
 
 
  
@@ -45,31 +49,36 @@ if ($_GET['action'] == 'insert'&&$menu['license']['add']==1){
         $data['license_name'] = $_POST['license_name']; 
         $license_code = $license_model->insertLicense($data);
         if($license_code!=false){
-            $menu = $menu_model->getMenuBy();
+            $menus = $menus_model->getMenuBy();
             $data_per =[];
-            for($i = 0;$i<count($menu);$i++){ 
+            for($i = 0;$i<count($menus);$i++){ 
                 $license_permission_code = "LP";
                 $license_permission_code = $license_permission_model->getLicensePermissionLastCode($license_permission_code,5);  
                 $data_per[$i]['license_permission_code'] = $license_permission_code; 
                 $data_per[$i]['license_code'] = $license_code; 
-                $data_per[$i]['menu_code'] = $menu[$i]['menu_code']; 
-                if($_POST['license_permission_view_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_view'] = $_POST['license_permission_view_'.$menu[$i]['menu_code']]; 
+                $data_per[$i]['menu_code'] = $menus[$i]['menu_code']; 
+                if($_POST['license_permission_view_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_view'] = $_POST['license_permission_view_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_view'] = 0; 
                 }
-                if($_POST['license_permission_add_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_add'] = $_POST['license_permission_add_'.$menu[$i]['menu_code']]; 
+                if($_POST['license_permission_add_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_add'] = $_POST['license_permission_add_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_add'] = 0; 
                 }
-                if($_POST['license_permission_edit_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_edit'] = $_POST['license_permission_edit_'.$menu[$i]['menu_code']]; 
+                if($_POST['license_permission_edit_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_edit'] = $_POST['license_permission_edit_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_edit'] = 0; 
                 }
-                if($_POST['license_permission_delete_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_delete'] = $_POST['license_permission_delete_'.$menu[$i]['menu_code']]; 
+                if($_POST['license_permission_cancel_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_cancel'] = $_POST['license_permission_cancel_'.$menus[$i]['menu_code']]; 
+                }else{
+                    $data_per[$i]['license_permission_cancel'] = 0; 
+                }
+                if($_POST['license_permission_delete_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_delete'] = $_POST['license_permission_delete_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_delete'] = 0; 
                 }
@@ -88,7 +97,8 @@ if ($_GET['action'] == 'insert'&&$menu['license']['add']==1){
     
     
 
-}else if ($_GET['action'] == 'edit'&&$menu['license']['edit']==1){
+// }else if ($_GET['action'] == 'edit'&&$menus['license']['edit']==1){
+}else if ($_GET['action'] == 'edit'){
     $license_code = $_POST['license_code'];
     $check_result = $license_model->checkLicenseBy(trim($_POST['license_name']),trim($_POST['license_code']));
     if(count($check_result)<1){
@@ -97,29 +107,34 @@ if ($_GET['action'] == 'insert'&&$menu['license']['add']==1){
         $data['license_name'] = $_POST['license_name']; 
         $license_model->updateLicenseByID($license_code,$data);
         if($license_code!=false){
-            $menu = $menu_model->getMenuBy();
+            $menus = $menus_model->getMenuBy();
             $data_per =[];
-            for($i = 0;$i<count($menu);$i++){  
-                $data_per[$i]['license_permission_code'] = $_POST['license_permission_code_'.$menu[$i]['menu_code']]; 
+            for($i = 0;$i<count($menus);$i++){  
+                $data_per[$i]['license_permission_code'] = $_POST['license_permission_code_'.$menus[$i]['menu_code']]; 
                 $data_per[$i]['license_code'] = $license_code; 
-                $data_per[$i]['menu_code'] = $menu[$i]['menu_code']; 
-                if($_POST['license_permission_view_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_view'] = $_POST['license_permission_view_'.$menu[$i]['menu_code']]; 
+                $data_per[$i]['menu_code'] = $menus[$i]['menu_code']; 
+                if($_POST['license_permission_view_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_view'] = $_POST['license_permission_view_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_view'] = 0; 
                 }
-                if($_POST['license_permission_add_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_add'] = $_POST['license_permission_add_'.$menu[$i]['menu_code']]; 
+                if($_POST['license_permission_add_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_add'] = $_POST['license_permission_add_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_add'] = 0; 
                 }
-                if($_POST['license_permission_edit_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_edit'] = $_POST['license_permission_edit_'.$menu[$i]['menu_code']]; 
+                if($_POST['license_permission_edit_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_edit'] = $_POST['license_permission_edit_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_edit'] = 0; 
                 }
-                if($_POST['license_permission_delete_'.$menu[$i]['menu_code']]!=''){
-                    $data_per[$i]['license_permission_delete'] = $_POST['license_permission_delete_'.$menu[$i]['menu_code']]; 
+                if($_POST['license_permission_cancel_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_cancel'] = $_POST['license_permission_cancel_'.$menus[$i]['menu_code']]; 
+                }else{
+                    $data_per[$i]['license_permission_cancel'] = 0; 
+                }
+                if($_POST['license_permission_delete_'.$menus[$i]['menu_code']]!=''){
+                    $data_per[$i]['license_permission_delete'] = $_POST['license_permission_delete_'.$menus[$i]['menu_code']]; 
                 }else{
                     $data_per[$i]['license_permission_delete'] = 0; 
                 }
@@ -148,7 +163,8 @@ if ($_GET['action'] == 'insert'&&$menu['license']['add']==1){
     }else{
         echo '<script>alert("ข้อมูลซ้ำ");window.history.back();</script>';
     } 
-}else if ($menu['license']['view']==1 ){
+// }else if ($menus['license']['view']==1 ){
+}else{
     $license = $license_model->getLicenseBy();
     require_once($path.'view.inc.php');
 }

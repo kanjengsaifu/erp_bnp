@@ -6,9 +6,22 @@
         if (checkbox[0].checked == true ){
             $('input[name="'+name+'"]').prop('checked', true);
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="'+class_name+'"]').prop('checked', true);
+            $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="view"]').prop('checked', true); 
+            if(class_name=="delete"){
+                $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="cancel"]').prop('checked', true);
+            }
         }else{
             $('input[name="'+name+'"]').prop('checked', false);
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="'+class_name+'"]').prop('checked', false);
+            if(class_name=="view"){
+                $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="add"]').prop('checked', false);
+                $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="edit"]').prop('checked', false);
+                $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="cancel"]').prop('checked', false);
+                $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="delete"]').prop('checked', false);
+            } 
+            if(class_name=="cancel"){
+                $(id).closest('table').children('tbody').children('tr').children('td').children('input[class="delete"]').prop('checked', false);
+            }
         }
     }
     function check(){
@@ -34,7 +47,14 @@
     <div class="col-lg-6">
         <h1 class="page-header">จัดการสิทธิ์การใช้งาน / License Management</h1>
     </div>
-    <div class="col-lg-6" align="right"> 
+    <div class="col-lg-6" align="right">  
+        <?php if($menu['user']['view']==1){?> 
+        <a href="?app=user" class="btn btn-primary  btn-menu">พนักงาน / Employee</a>
+        <?PHP } ?>
+        <?php if($menu['license']['view']==1){?> 
+        <a href="?app=license" class="btn btn-primary active btn-menu">สิทธิ์การใช้งาน / License</a>
+        <?PHP } ?>
+    
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -73,56 +93,66 @@
                                     <tr>
                                         <th>#</th>
                                         <th>เมนู</th>   
-                                        <th style="width:10%" class="text-center">
+                                        <th style="width:90px;" class="text-center">
                                             <div class="checkbox" style="margin-top:0px;margin-bottom: 0px;">
                                                 <label>
                                                     <input type="checkbox" value="all" id="view" name="view" onclick="checkAll(this,'view','view')" /> ดู
                                                 </label>
                                             </div>
                                         </th>   
-                                        <th style="width:10%" class="text-center">
+                                        <th style="width:90px" class="text-center">
                                             <div class="checkbox" style="margin-top:0px;margin-bottom: 0px;">
                                                 <label>
                                                     <input type="checkbox" value="all" id="add" name="add" onclick="checkAll(this,'add','add')" /> เพิ่ม
                                                 </label>
                                             </div> 
                                         </th>   
-                                        <th style="width:10%" class="text-center">
+                                        <th style="width:90px" class="text-center">
                                             <div class="checkbox" style="margin-top:0px;margin-bottom: 0px;">
                                                 <label>
                                                     <input type="checkbox" value="all" id="edit" name="edit" onclick="checkAll(this,'edit','edit')" /> แก้ไข
                                                 </label>
                                             </div> 
                                         </th>   
-                                        <th style="width:10%" class="text-center">
+                                        <th style="width:90px" class="text-center">
                                             <div class="checkbox" style="margin-top:0px;margin-bottom: 0px;">
                                                 <label>
-                                                    <input type="checkbox" value="all" id="delete" name="delete" onclick="checkAll(this,'delete','delete')" /> ลบ
+                                                    <input type="checkbox" value="all" id="cancel" name="cancel" onclick="checkAll(this,'cancel','cancel')" /> ลบ(ชั่วคราว)
                                                 </label>
                                             </div> 
-                                        </th>    
+                                        </th>       
+                                        <th style="width:90px" class="text-center">
+                                            <div class="checkbox" style="margin-top:0px;margin-bottom: 0px;">
+                                                <label>
+                                                    <input type="checkbox" value="all" id="delete" name="delete" onclick="checkAll(this,'delete','delete')" /> ลบ(ถาวร)
+                                                </label>
+                                            </div> 
+                                        </th>       
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php 
-                                for($i=0; $i < count($menu); $i++){    
-                                    $license_permission = $license_permission_model->getLicensePermissionByLicenseID($license_code,$menu[$i]['menu_code']);
+                                for($i=0; $i < count($menus); $i++){    
+                                    $license_permission = $license_permission_model->getLicensePermissionByLicenseID($license_code,$menus[$i]['menu_code']);
                                 ?>
                                     <tr>  
-                                        <input type="hidden"  name="license_permission_code_<?PHP echo $menu[$i]['menu_code'];?>" value="<?php if($license_permission['license_permission_code']!=''){echo $license_permission['license_permission_code'];}  ?>" />
+                                        <input type="hidden"  name="license_permission_code_<?PHP echo $menus[$i]['menu_code'];?>" value="<?php if($license_permission['license_permission_code']!=''){echo $license_permission['license_permission_code'];}  ?>" />
                                         <td><?php echo $i+1; ?></td> 
-                                        <td><?php echo $menu[$i]['menu_name']; ?></td>  
+                                        <td><?php echo $menus[$i]['menu_name']; ?></td>  
                                         <td> 
-                                            <input class="view"  style="align:center;" type="checkbox" value="1" id="license_permission_view_<?PHP echo $menu[$i]['menu_code'];?>" name="license_permission_view_<?PHP echo $menu[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_view']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menu[$i]['menu_code'];?>','view');"> 
+                                            <input class="view"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_view_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_view_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_view']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','view');"> 
                                         </td> 
                                         <td> 
-                                            <input class="add"  style="align:center;" type="checkbox" value="1" id="license_permission_add_<?PHP echo $menu[$i]['menu_code'];?>" name="license_permission_add_<?PHP echo $menu[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_add']==1){ echo 'checked';}?>  onclick="oncheck('<?PHP echo $menu[$i]['menu_code'];?>','add');">  
+                                            <input class="add"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_add_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_add_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_add']==1){ echo 'checked';}?>  onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','add');">  
                                         </td> 
                                         <td> 
-                                            <input class="edit"  style="align:center;" type="checkbox" value="1" id="license_permission_edit_<?PHP echo $menu[$i]['menu_code'];?>" name="license_permission_edit_<?PHP echo $menu[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_edit']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menu[$i]['menu_code'];?>','edit');">  
+                                            <input class="edit"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_edit_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_edit_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_edit']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','edit');">  
                                         </td> 
                                         <td> 
-                                            <input class="delete"  style="align:center;" type="checkbox" value="1" id="license_permission_delete_<?PHP echo $menu[$i]['menu_code'];?>" name="license_permission_delete_<?PHP echo $menu[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_delete']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menu[$i]['menu_code'];?>','delete');">  
+                                            <input class="cancel"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_cancel_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_cancel_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_cancel']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','cancel');">  
+                                        </td>
+                                        <td> 
+                                            <input class="delete"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_delete_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_delete_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_delete']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','delete');">  
                                         </td>
                                     </tr>
                                     
@@ -150,12 +180,31 @@
 </div> 
 <script>
 function oncheck(id,action) { 
+    
    if(document.getElementById('license_permission_'+action+'_'+id).checked==true){
         document.getElementById('license_permission_view_'+id).checked = true;
+   }
+   if(document.getElementById('license_permission_delete_'+id).checked==true){
+        document.getElementById('license_permission_cancel_'+id).checked = true;
+        document.getElementById('license_permission_view_'+id).checked = true;
+   }
+   if(action=='cancel'){ 
+    if(document.getElementById('license_permission_delete_'+id).checked==true){
+        document.getElementById('license_permission_cancel_'+id).checked = false;
+        document.getElementById('license_permission_delete_'+id).checked = false;
+    }else{
+        if(document.getElementById('license_permission_cancel_'+id).checked){
+            document.getElementById('license_permission_cancel_'+id).checked = true; 
+        }else{ 
+            document.getElementById('license_permission_cancel_'+id).checked = false; 
+        }
+        // document.getElementById('license_permission_delete_'+id).checked = true; 
+    }
    }
    if(document.getElementById('license_permission_view_'+id).checked==false){
         document.getElementById('license_permission_add_'+id).checked = false;
         document.getElementById('license_permission_edit_'+id).checked = false;
+        document.getElementById('license_permission_cancel_'+id).checked = false;
         document.getElementById('license_permission_delete_'+id).checked = false;
    }
 }

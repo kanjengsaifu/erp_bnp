@@ -59,6 +59,7 @@ class LicensePermissionModel extends BaseModel{
         tb_license_permission.license_permission_view ,
         tb_license_permission.license_permission_add,
         tb_license_permission.license_permission_edit,
+        tb_license_permission.license_permission_cancel,
         tb_license_permission.license_permission_delete
         FROM tb_user 
         LEFT JOIN tb_license ON tb_user.license_code = tb_license.license_code
@@ -103,6 +104,7 @@ class LicensePermissionModel extends BaseModel{
             license_permission_view,
             license_permission_add,
             license_permission_edit,
+            license_permission_cancel, 
             license_permission_delete 
             ) VALUES (
             '".$data['license_permission_code']."',
@@ -111,6 +113,7 @@ class LicensePermissionModel extends BaseModel{
             '".$data['license_permission_view']."',
             '".$data['license_permission_add']."',
             '".$data['license_permission_edit']."',
+            '".$data['license_permission_cancel']."',
             '".$data['license_permission_delete']."'
             )";
             // echo $sql;
@@ -128,6 +131,7 @@ class LicensePermissionModel extends BaseModel{
         license_permission_view = '".$data['license_permission_view']."',
         license_permission_add = '".$data['license_permission_add']."',
         license_permission_edit = '".$data['license_permission_edit']."',
+        license_permission_cancel = '".$data['license_permission_cancel']."',
         license_permission_delete = '".$data['license_permission_delete']."' 
         WHERE license_permission_code = '$code' 
         ";

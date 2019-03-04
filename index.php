@@ -7,7 +7,10 @@ if(isset($_COOKIE['bnp_ips_user'])){
         <script> window.location = "admin/" </script>
         <?PHP 
     }
+    
+    
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

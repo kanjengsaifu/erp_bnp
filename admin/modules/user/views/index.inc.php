@@ -3,8 +3,7 @@ require_once('../models/UserModel.php');
 require_once('../models/UserStatusModel.php');
 require_once('../models/LicenseModel.php'); 
 require_once('../models/UserPositionModel.php');  
-require_once('../models/AddressModel.php');
-require_once('../models/BranchModel.php');
+require_once('../models/AddressModel.php'); 
 
 $path = "modules/user/views/";
 
@@ -12,8 +11,7 @@ $user_model = new UserModel;
 $user_status_model = new UserStatusModel; 
 $license_model = new LicenseModel; 
 $user_position_model = new UserPositionModel; 
-$address_model = new AddressModel;
-$branch_model = new BranchModel;
+$address_model = new AddressModel; 
 
 date_default_timezone_set("Asia/Bangkok");
 $d1=date("d");
@@ -29,8 +27,7 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     $license = $license_model->getLicenseBy();
     $user_position = $user_position_model->getUserPositionBy();
     $user_status = $user_status_model->getUserStatusBy();
-    $add_province = $address_model->getProvinceByID(); 
-    $branchs = $branch_model->getBranchBy();
+    $add_province = $address_model->getProvinceByID();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['user']['edit']==1){
     $user = $user_model->getUserByID($user_code);
@@ -39,8 +36,7 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     $user_status = $user_status_model->getUserStatusBy();
     $add_province = $address_model->getProvinceByID();
     $add_amphur = $address_model->getAmphurByProviceID($user['user_province']);
-    $add_district = $address_model->getDistricByAmphurID($user['user_amphur']);
-    $branchs = $branch_model->getBranchBy();
+    $add_district = $address_model->getDistricByAmphurID($user['user_amphur']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['user']['delete']==1){
     $user = $user_model->getUserByID($user_code);
@@ -55,7 +51,7 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
 
 }else if ($_GET['action'] == 'add'&&$menu['user']['add']==1){
     $user_code = "U";
-    $user_code = $user_model->getUserLastCode($user_code,3);  
+    $user_code = $user_model->getUserLastCode($user_code,4);  
     if($user_code!=false){
         $data['user_code'] = $user_code;
         $data['user_prefix'] = $_POST['user_prefix'];
@@ -72,20 +68,14 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
         $data['user_zipcode'] = $_POST['user_zipcode'];
         $data['user_position_code'] = $_POST['user_position_code'];
         $data['license_code'] = $_POST['license_code'];
-        $data['user_status_code'] = $_POST['user_status_code'];
-        $data['branch_code'] = $_POST['branch_code'];
+        $data['user_status_code'] = $_POST['user_status_code']; 
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
         
         $user = $user_model->insertUser($data);
 
-        if($user != ""){ 
-        ?>
-            <script>window.location="index.php?app=user&action=update&code=<?PHP echo $user?>"</script>
-        <?php
-        }else{
-        ?>
-            <script>window.location="index.php?app=user"</script>
-        <?php
-        }
+         
     }else{
     ?>
         <script>window.location="index.php?app=user"</script>
@@ -109,8 +99,7 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
         $data['user_zipcode'] = $_POST['user_zipcode'];
         $data['user_position_code'] = $_POST['user_position_code'];
         $data['license_code'] = $_POST['license_code'];
-        $data['user_status_code'] = $_POST['user_status_code'];
-        $data['branch_code'] = $_POST['branch_code'];
+        $data['user_status_code'] = $_POST['user_status_code']; 
         
         // echo '<pre>';
         // print_r($data);

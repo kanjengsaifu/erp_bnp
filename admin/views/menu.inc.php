@@ -121,7 +121,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 </li>
                 <li>
                     <a href="?" <?PHP if(!isset($_GET['app'])){ ?> class="active" <?PHP } ?>><i class="fa fa-line-chart" aria-hidden="true"></i> ภาพรวม</a>
-                </li>  
+                </li>   
                 <li> 
                     <a href="?app=order" <?PHP if($_GET["app"]=='order'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-text-o" aria-hidden="true"></i> ใบรับงาน</a>
                 </li>
@@ -201,13 +201,8 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <?PHP }?> 
                         <?PHP if($menu['user']['view']==1){ ?>
                         <li>
-                            <a href="?app=user" <?PHP if($_GET['app'] == "user"){?> class="active" <?PHP } ?> ><i class="fa fa-user" aria-hidden="true"></i> พนักงาน (Employee)</a>
+                            <a href="?app=user" <?PHP if($_GET['app'] == "user" || $_GET["app"]=='license'){?> class="active" <?PHP } ?> ><i class="fa fa-user" aria-hidden="true"></i> พนักงาน (Employee)</a>
                         </li>
-                        <?PHP }?> 
-                        <?PHP if($menu['license']['view']==1){ ?>
-                        <li>
-                            <a href="?app=license" <?PHP if($_GET['app'] == "license"){?> class="active" <?PHP } ?> ><i class="fa fa-user" aria-hidden="true"></i> สิทธิการใช้งาน (License)</a>
-                        </li> 
                         <?PHP }?>  
                         <?PHP if($menu['supplier']['view']==1){ ?>
                         <li>

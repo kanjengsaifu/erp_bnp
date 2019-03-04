@@ -32,8 +32,7 @@ function check_code(id){
         var user_zipcode = document.getElementById("user_zipcode").value;
         var user_position_code = document.getElementById("user_position_code").value;
         var license_code = document.getElementById("license_code").value;
-        var user_status_code = document.getElementById("user_status_code").value; 
-        var branch_code = document.getElementById("branch_code").value; 
+        var user_status_code = document.getElementById("user_status_code").value;  
 
         user_prefix = $.trim(user_prefix);
         user_name = $.trim(user_name);
@@ -49,8 +48,7 @@ function check_code(id){
         user_zipcode = $.trim(user_zipcode);
         user_position_code = $.trim(user_position_code);
         license_code = $.trim(license_code);
-        user_status_code = $.trim(user_status_code);
-        branch_code = $.trim(branch_code);
+        user_status_code = $.trim(user_status_code); 
 
         
 
@@ -101,11 +99,7 @@ function check_code(id){
         }else if(user_status_code.length == 0){
             alert("Please input employee status");
             document.getElementById("user_status_code").focus();
-            return false;
-        }else if(branch_code.length == 0){
-            alert("Please input branch ");
-            document.getElementById("branch_code").focus();
-            return false;
+            return false; 
         }else{ 
             return true;
         }
@@ -145,13 +139,19 @@ function getDistrict(){
 </script>
 
 <div class="row">
-<div class="col-lg-6">
-    <h1 class="page-header">จัดการพนักงาน / Employee Management</h1>
-</div>
-<div class="col-lg-6" align="right">
-    <a href="?app=user" class="btn btn-primary active btn-menu">พนักงาน / Employee</a>
-    <a href="?app=license" class="btn btn-primary  btn-menu">สิทธิ์การใช้งาน / License</a>
-</div>
+    <div class="col-lg-6">
+        <h1 class="page-header">จัดการพนักงาน / Employee Management</h1>
+    </div>
+    <div class="col-lg-6" align="right">
+    
+        <?php if($menu['user']['view']==1){?> 
+        <a href="?app=user" class="btn btn-primary active btn-menu">พนักงาน / Employee</a>
+        <?PHP } ?>
+        <?php if($menu['license']['view']==1){?> 
+        <a href="?app=license" class="btn btn-primary  btn-menu">สิทธิ์การใช้งาน / License</a>
+        <?PHP } ?>
+    
+    </div>
 <!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
@@ -333,24 +333,7 @@ function getDistrict(){
                             </select>
                             <p class="help-block">Example : ผู้ดูแลระบบ.</p>
                         </div>
-                    </div>
-                    
-                    <div class="col-lg-3">
-                        <div class="form-group">
-                            <label>สาขา / Branch <font color="#F00"><b>*</b></font> </label>
-                            <select class="form-control" id="branch_code" name="branch_code">
-                            <option value="">Select</option>
-                                <?php 
-                                for($i =  0 ; $i < count($branchs) ; $i++){
-                                ?>
-                                <option <?php if($user['branch_code'] == $branchs[$i]['branch_code'] ){?> selected <?php } ?> value="<?php echo $branchs[$i]['branch_code'] ?>"><?php echo $branchs[$i]['branch_name'] ?></option>
-                                <?
-                                }
-                                ?>
-                            </select>
-                            <p class="help-block">Example : สาขาปากช่อง</p>
-                        </div>
-                    </div>
+                    </div> 
 
                     <div class="col-lg-3">
                         <div class="form-group">

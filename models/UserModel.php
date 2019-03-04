@@ -43,7 +43,7 @@ class UserModel extends BaseModel{
     }
 
     function getUserBy($name = '', $position = '', $email = '', $mobile  = ''){
-        $sql = " SELECT user_code, user_code, user_image , CONCAT(tb_user.user_name,' ',tb_user.user_lastname) as name , user_mobile, user_email, user_position_name, user_status_name  
+        $sql = " SELECT user_code, user_code, user_profile_img , CONCAT(tb_user.user_name,' ',tb_user.user_lastname) as name , user_mobile, user_email, user_position_name, user_status_name  
         FROM tb_user LEFT JOIN tb_user_position ON tb_user.user_position_code = tb_user_position.user_position_code 
         LEFT JOIN tb_user_status ON tb_user.user_status_code = tb_user_status.user_status_code 
         WHERE CONCAT(tb_user.user_name,' ',tb_user.user_lastname) LIKE ('%$name%') 
@@ -132,8 +132,7 @@ class UserModel extends BaseModel{
         user_zipcode = '".static::$db->real_escape_string($data['user_zipcode'])."', 
         user_position_code = '".static::$db->real_escape_string($data['user_position_code'])."',
         license_code = '".static::$db->real_escape_string($data['license_code'])."', 
-        user_status_code = '".static::$db->real_escape_string($data['user_status_code'])."', 
-        branch_code = '".static::$db->real_escape_string($data['branch_code'])."' 
+        user_status_code = '".static::$db->real_escape_string($data['user_status_code'])."' 
         WHERE user_code = '".static::$db->real_escape_string($code)."'
         ";
 
@@ -249,8 +248,7 @@ class UserModel extends BaseModel{
             user_zipcode,
             user_position_code,
             license_code,
-            user_status_code,
-            branch_code
+            user_status_code 
             )  VALUES ('".  
             $data['user_code']."','".
             $data['user_prefix']."','".
@@ -267,8 +265,7 @@ class UserModel extends BaseModel{
             $data['user_zipcode']."','".
             $data['user_position_code']."','".
             $data['license_code']."','".
-            $data['user_status_code']."','".
-            $data['branch_code']."'
+            $data['user_status_code']."' 
         ); 
         ";
 

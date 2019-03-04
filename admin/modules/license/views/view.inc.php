@@ -5,7 +5,13 @@
     <div class="col-lg-6">
         <h1 class="page-header">จัดการสิทธิ์การใช้งาน / License Management</h1>
     </div>
-    <div class="col-lg-6" align="right"> 
+    <div class="col-lg-6" align="right">  
+        <?php if($menu['user']['view']==1){?> 
+        <a href="?app=user" class="btn btn-primary  btn-menu">พนักงาน / Employee</a>
+        <?PHP } ?>
+        <?php if($menu['license']['view']==1){?> 
+        <a href="?app=license" class="btn btn-primary active btn-menu">สิทธิ์การใช้งาน / License</a>
+        <?PHP } ?>
     
     </div>
     <!-- /.col-lg-12 -->
@@ -46,16 +52,16 @@
                           <td><?php echo $license[$i]['license_code']; ?></td> 
                           <td><?php echo $license[$i]['license_name']; ?></td> 
                           <td>
-                          <?php if($menu['license']['edit']==1){ ?> 
+                          <?php //if($menu['license']['edit']==1){ ?> 
                               <a href="?app=license&action=update&code=<?php echo $license[$i]['license_code'];?>">
                                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                               </a> 
-                          <?PHP }?>
-                          <?php if($menu['license']['delete']==1){ ?> 
+                          <?PHP //}?>
+                          <?php //if($menu['license']['delete']==1){ ?> 
                               <a href="?app=license&action=delete&code=<?php echo $license[$i]['license_code'];?>" onclick="return confirm('You want to delete License : <?php echo $license[$i]['name']; ?>');" style="color:red;">
                                   <i class="fa fa-times" aria-hidden="true"></i>
                               </a>
-                          <?PHP }?>
+                          <?PHP //}?>
                           </td>
                       </tr>
                       <?

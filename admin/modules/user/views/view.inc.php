@@ -3,9 +3,12 @@
         <h1 class="page-header">จัดการพนักงาน / Employee Management</h1>
     </div>
     <div class="col-lg-6" align="right">
-    
+        <?php if($menu['user']['view']==1){?> 
         <a href="?app=user" class="btn btn-primary active btn-menu">พนักงาน / Employee</a>
+        <?PHP } ?>
+        <?php if($menu['license']['view']==1){?> 
         <a href="?app=license" class="btn btn-primary  btn-menu">สิทธิ์การใช้งาน / License</a>
+        <?PHP } ?>
     
     </div>
     <!-- /.col-lg-12 -->
