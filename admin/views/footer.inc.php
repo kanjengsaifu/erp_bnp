@@ -58,6 +58,7 @@ div.dataTables_filter{
             "pageLength": 100,
             responsive: true 
         });
+
         $('#dataTables-example').DataTable({
             "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
             "pageLength": 100,
@@ -69,6 +70,7 @@ div.dataTables_filter{
             "pageLength": 100,
             responsive: true
         });
+        
         $('#tb-popup').DataTable({
             "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
             "pageLength": 100,

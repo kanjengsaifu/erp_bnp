@@ -9,8 +9,10 @@ class AddressModel extends BaseModel{
         }
     }
 
-    function getProvinceByID($id = ''){
-        $sql = " SELECT * FROM tb_province ORDER BY PROVINCE_NAME";
+    function getProvinceBy(){
+        $sql = "SELECT * 
+        FROM tb_province 
+        ORDER BY PROVINCE_NAME";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -22,11 +24,11 @@ class AddressModel extends BaseModel{
         }
     }
 
-    function getAmphurByProviceID($id = ''){
-        $sql = " SELECT * FROM tb_amphur ";
-        if ($id != ''){
-            $sql = " SELECT * FROM tb_amphur , tb_province WHERE tb_amphur.PROVINCE_ID = tb_province.PROVINCE_ID AND  PROVINCE_NAME = '$id' ";
-        }
+    function getAmphurByProviceID($id){
+        $sql = "SELECT * 
+        FROM tb_amphur 
+        WHERE PROVINCE_ID = '$id'
+        ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -38,11 +40,11 @@ class AddressModel extends BaseModel{
         }
     }
 
-    function getDistricByAmphurID($id = ''){
-        $sql = " SELECT * FROM tb_district ";
-        if ($id != ''){
-            $sql = " SELECT * FROM tb_district , tb_amphur WHERE tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID AND  AMPHUR_NAME = '$id' ";
-        }
+    function getDistricByAmphurID($id){
+        $sql = "SELECT * 
+        FROM tb_district
+        WHERE AMPHUR_ID = '$id'
+        ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -54,11 +56,11 @@ class AddressModel extends BaseModel{
         }
     }
 
-    function getZipcodeByAmphurID($id = ''){
-        $sql = " SELECT * FROM tb_amphur ";
-        if ($id != ''){
-            $sql .= " WHERE AMPHUR_NAME = '$id' ";
-        }
+    function getZipcodeByAmphurID($id){
+        $sql = "SELECT *
+        FROM tb_amphur
+        WHERE AMPHUR_ID = '$id'
+        ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data;

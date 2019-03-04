@@ -13,7 +13,6 @@ $license_model = new LicenseModel;
 $user_position_model = new UserPositionModel; 
 $address_model = new AddressModel; 
 
-date_default_timezone_set("Asia/Bangkok");
 $d1=date("d");
 $d2=date("m");
 $d3=date("Y");
@@ -27,14 +26,14 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     $license = $license_model->getLicenseBy();
     $user_position = $user_position_model->getUserPositionBy();
     $user_status = $user_status_model->getUserStatusBy();
-    $add_province = $address_model->getProvinceByID();  
+    $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['user']['edit']==1){
     $user = $user_model->getUserByID($user_code);
     $license = $license_model->getLicenseBy();
     $user_position = $user_position_model->getUserPositionBy();
     $user_status = $user_status_model->getUserStatusBy();
-    $add_province = $address_model->getProvinceByID();
+    $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($user['province_id']);
     $add_district = $address_model->getDistricByAmphurID($user['amphur_id']); 
     require_once($path.'update.inc.php');
@@ -74,8 +73,6 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
         // echo '</pre>';
         
         $user = $user_model->insertUser($data);
-
-         
     }else{
     ?>
         <script>window.location="index.php?app=user"</script>

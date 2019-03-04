@@ -39,7 +39,6 @@ class UserModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getUserBy($name = '', $position = '', $email = '', $mobile  = ''){
@@ -61,7 +60,6 @@ class UserModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getUserByID($code){
@@ -78,7 +76,6 @@ class UserModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
 
@@ -96,7 +93,6 @@ class UserModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getUserByCode($code){
@@ -113,7 +109,6 @@ class UserModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function updateUserByID($code,$data = []){
@@ -126,9 +121,9 @@ class UserModel extends BaseModel{
         user_username = '".static::$db->real_escape_string($data['user_username'])."', 
         user_password = '".static::$db->real_escape_string($data['user_password'])."', 
         user_address = '".static::$db->real_escape_string($data['user_address'])."', 
-        user_province = '".static::$db->real_escape_string($data['user_province'])."', 
-        user_amphur = '".static::$db->real_escape_string($data['user_amphur'])."', 
-        user_district = '".static::$db->real_escape_string($data['user_district'])."', 
+        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
+        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
+        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         user_zipcode = '".static::$db->real_escape_string($data['user_zipcode'])."', 
         user_position_code = '".static::$db->real_escape_string($data['user_position_code'])."',
         license_code = '".static::$db->real_escape_string($data['license_code'])."', 
@@ -141,8 +136,6 @@ class UserModel extends BaseModel{
         }else {
             return false;
         }
-
-
     }
 
     function updateUserProfileByID($code,$data = []){
@@ -157,9 +150,9 @@ class UserModel extends BaseModel{
         user_username = '".static::$db->real_escape_string($data['user_username'])."', 
         user_password = '".static::$db->real_escape_string($data['user_password'])."', 
         user_address = '".static::$db->real_escape_string($data['user_address'])."', 
-        user_province = '".static::$db->real_escape_string($data['user_province'])."', 
-        user_amphur = '".static::$db->real_escape_string($data['user_amphur'])."', 
-        user_district = '".static::$db->real_escape_string($data['user_district'])."', 
+        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
+        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
+        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         user_zipcode = '".static::$db->real_escape_string($data['user_zipcode'])."'
         WHERE user_code = '".static::$db->real_escape_string($code)."'
         ";
@@ -169,11 +162,8 @@ class UserModel extends BaseModel{
         }else {
             return false;
         }
-
-
     }
 
-    
     function updateUserProfileNoIMGByID($code,$data = []){
         $sql = " UPDATE tb_user SET 
         
@@ -185,9 +175,9 @@ class UserModel extends BaseModel{
         user_username = '".static::$db->real_escape_string($data['user_username'])."', 
         user_password = '".static::$db->real_escape_string($data['user_password'])."', 
         user_address = '".static::$db->real_escape_string($data['user_address'])."', 
-        user_province = '".static::$db->real_escape_string($data['user_province'])."', 
-        user_amphur = '".static::$db->real_escape_string($data['user_amphur'])."', 
-        user_district = '".static::$db->real_escape_string($data['user_district'])."', 
+        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
+        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
+        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         user_zipcode = '".static::$db->real_escape_string($data['user_zipcode'])."'
         WHERE user_code = '".static::$db->real_escape_string($code)."'
         ";
@@ -197,8 +187,6 @@ class UserModel extends BaseModel{
         }else {
             return false;
         }
-
-
     }
 
     function updateUserSignatureByID($code,$data = []){
@@ -212,8 +200,6 @@ class UserModel extends BaseModel{
         }else {
             return false;
         }
-
-
     }
 
     function updatePlayerIDByID($code,$user_player_code){
@@ -227,8 +213,6 @@ class UserModel extends BaseModel{
         }else {
             return false;
         }
-
-
     }
 
     function insertUser($data = []){
@@ -242,9 +226,9 @@ class UserModel extends BaseModel{
             user_username,
             user_password,
             user_address,
-            user_province,
-            user_amphur,
-            user_district,
+            province_id,
+            amphur_id,
+            district_id,
             user_zipcode,
             user_position_code,
             license_code,
@@ -259,9 +243,9 @@ class UserModel extends BaseModel{
             $data['user_username']."','".
             $data['user_password']."','".
             $data['user_address']."','".
-            $data['user_province']."','".
-            $data['user_amphur']."','".
-            $data['user_district']."','".
+            $data['province_id']."','".
+            $data['amphur_id']."','".
+            $data['district_id']."','".
             $data['user_zipcode']."','".
             $data['user_position_code']."','".
             $data['license_code']."','".
@@ -274,14 +258,11 @@ class UserModel extends BaseModel{
         }else {
             return '';
         }
-
     }
-
 
     function deleteUserByID($code){
         $sql = " DELETE FROM tb_user WHERE user_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
     }
 }
 ?>
