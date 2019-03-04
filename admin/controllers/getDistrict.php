@@ -7,7 +7,7 @@ $add_district = $address->getDistricByAmphurID($_POST['amphur']);
 <?php
 for($i=0; $i < count($add_district); $i++){
 ?>
-<option value="<?php echo $add_district[$i]['DISTRICT_NAME']?>"><?php echo $add_district[$i]['DISTRICT_NAME']?></option>
+<option value="<?php echo $add_district[$i]['DISTRICT_ID']?>"><?php echo $add_district[$i]['DISTRICT_NAME']?></option>
 <?
 }
 

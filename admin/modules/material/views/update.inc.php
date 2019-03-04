@@ -251,7 +251,7 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>รูปวัตถุดิบ / Material Picture </label>
-                                    <img class="img-responsive" id="img_logo" src="../upload/material/<?php if($material['material_logo'] != "" ){echo $material['material_logo'];}else{ echo "default.png";} ?>" />
+                                    <img class="img-responsive" id="img_logo" src="<?php if($material['material_logo'] != "" ){echo '../upload/material/'.$material['material_logo'];}else{ echo "../upload/default.png";} ?>" />
                                     <input accept=".jpg , .png"   type="file" id="material_logo" name="material_logo" onChange="readURL_logo(this);">
                                     <p class="help-block">Example : .jpg or .png </p> 
                                 </div>
@@ -283,7 +283,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Supplier List
+                รายการผู้ขาย / Supplier List
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
@@ -300,7 +300,7 @@
                    <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label>Supplier <font color="#F00"><b>*</b></font></label>
+                                <label>ชื่อผู้ขาย / Supplier name <font color="#F00"><b>*</b></font></label>
                                 <select id="supplier_code" name="supplier_code"  class="form-control">
                                     <option value="">Select</option>
                                     <?php 
@@ -323,14 +323,14 @@
                        
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Price <font color="#F00"><b>*</b></font></label>
+                                <label>ราคา ( บาท ) / Price <font color="#F00"><b>*</b></font></label>
                                 <input id="material_supplier_buyprice" name="material_supplier_buyprice" type="text" class="form-control" value="<?php echo $material_supplier['material_supplier_buyprice']?>">
                                 <p class="help-block">Example : 120.</p>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Lead Time <font color="#F00"><b>*</b></font></label>
+                                <label>ระยะเวลาขนส่ง ( วัน ) / Lead Time <font color="#F00"><b>*</b></font></label>
                                 <input id="material_supplier_lead_time" name="material_supplier_lead_time" type="text" class="form-control" value="<?php echo $material_supplier['material_supplier_lead_time']?>">
                                 <p class="help-block">Example : 50.</p>
                             </div>
@@ -351,7 +351,7 @@
                     <div class="row">
                         <div class="col-lg-offset-9 col-lg-3" align="right">
                             <a href="?app=material&action=update&code=<? echo $material_code;?>" class="btn btn-primary" >Reset</a>
-                            <button  type="button" onclick="check_login('form_target_1');" class="btn btn-success">Save</button>
+                            <button  type="submit" class="btn btn-success">Save</button>
                         </div>
                     </div>
                 </form>

@@ -223,7 +223,7 @@
                             <div class="col-lg-12">
                                 <div class="form-group">
                                     <label>รูปวัตถุดิบ / Material Picture </label>
-                                    <img class="img-responsive" id="img_logo" src="../upload/material/default.png" />
+                                    <img class="img-responsive" id="img_logo" src="../upload/default.png" />
                                     <input accept=".jpg , .png"   type="file" id="material_logo" name="material_logo" onChange="readURL_logo(this);">
                                     <p class="help-block">Example : .jpg or .png </p>
                                 </div>

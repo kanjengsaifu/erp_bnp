@@ -1,27 +1,27 @@
 <?php
 require_once('../models/MaterialModel.php');
 // require_once('../models/MaterialGroupModel.php');
-require_once('../models/MaterialTypeModel.php');
+// require_once('../models/MaterialTypeModel.php');
 // require_once('../models/MaterialCategoryModel.php');
-require_once('../models/MaterialUnitModel.php');
+require_once('../models/UnitModel.php');
 // require_once('../models/MaterialCustomerModel.php');
 require_once('../models/MaterialSupplierModel.php');
 // require_once('../models/CustomerModel.php');
 require_once('../models/SupplierModel.php');
 // require_once('../models/AccountModel.php');
 
-$path = "modules/material/views/";
 $model_material = new MaterialModel;
 // $model_material_group = new MaterialGroupModel;
-$material_type_model = new MaterialTypeModel;
+// $material_type_model = new MaterialTypeModel;
 // $model_material_category = new MaterialCategoryModel;
-$unit_model = new MaterialUnitModel;
+$unit_model = new UnitModel;
 // $model_material_customer = new MaterialCustomerModel;
 $model_material_supplier = new MaterialSupplierModel;
 // $model_customer = new CustomerModel;
 $supplier_model = new SupplierModel;
 // $account_model = new AccountModel;
 
+$path = "modules/material/views/";
 $target_dir = "../upload/material/";
 $material_code = $_GET['code'];
 $material_supplier_code = $_GET['material_supplier_code']; 
@@ -47,8 +47,8 @@ $material_supplier_code = $_GET['material_supplier_code'];
 
 if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
  
-    $material_type = $material_type_model->getMaterialTypeBy(); 
-    $unit = $unit_model->getMaterialUnitBy(); 
+    // $material_type = $material_type_model->getMaterialTypeBy(); 
+    $unit = $unit_model->getUnitBy(); 
     require_once($path.'insert.inc.php');
 
 }else if ($_GET['action'] == 'update' && $menu['material']['edit']==1 ){
@@ -58,7 +58,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
     // $material_group = $model_material_group->getMaterialGroupBy();
     // $material_type = $material_type_model->getMaterialTypeBy();
     // $material_category = $model_material_category->getMaterialCategoryBy();
-    $unit = $unit_model->getMaterialUnitBy();
+    $unit = $unit_model->getUnitBy();
     // $account = $account_model->getAccountAll();
 
     // $material_customers = $model_material_customer->getMaterialCustomerBy($material_code);
@@ -105,6 +105,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
         $data = [];
         $data['material_code'] = $material_code;
         $data['material_name'] = $_POST['material_name'];
+        $data['material_logo'] = $_POST['material_logo'];
         $data['material_quantity_per_unit'] = preg_replace('/\D/', '', $_POST['material_quantity_per_unit']);
         $data['unit_code'] = $_POST['unit_code'];
         $data['material_minimum_stock'] = $_POST['material_minimum_stock'];
@@ -194,6 +195,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
     if(isset($_POST['material_name'])){
         $data = [];  
         $data['material_name'] = $_POST['material_name'];
+        $data['material_logo'] = $_POST['material_logo'];
         $data['material_quantity_per_unit'] = preg_replace('/\D/', '', $_POST['material_quantity_per_unit']);
         $data['unit_code'] = $_POST['unit_code'];
         $data['material_minimum_stock'] = $_POST['material_minimum_stock'];
@@ -355,7 +357,7 @@ else if ($menu['material']['view']==1){
 
     $page_size = 100;
     
-    $material_type = $material_type_model->getMaterialTypeBy();
+    // $material_type = $material_type_model->getMaterialTypeBy();
     // $material_category = $model_material_category->getMaterialCategoryBy();
     $suppliers = $supplier_model->getSupplierBy();
     $material = $model_material->getMaterialBy($supplier_code , $keyword  );

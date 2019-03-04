@@ -174,7 +174,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         || $_GET["app"]=='company' 
                         || $_GET["app"]=='license' 
                         || $_GET["app"]=='material' 
-                        || $_GET["app"]=='material_unit' 
+                        || $_GET["app"]=='unit' 
                         || $_GET["app"]=='material_type' 
                     ){
                         echo ' class="active" ';
@@ -189,7 +189,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <li>
                             <a href="?app=material" <?PHP if(
                                 $_GET['app'] == "material"
-                            || $_GET["app"]=='material_unit'
+                            || $_GET["app"]=='unit'
                             || $_GET["app"]=='material_type'
                             ){?> class="active" <?PHP } ?> ><i class="fa fa-gears" aria-hidden="true"></i> วัตถุดิบ</a>
                         </li>

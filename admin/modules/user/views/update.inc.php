@@ -26,9 +26,9 @@ function check_code(id){
         var user_username = document.getElementById("user_username").value;
         var user_password = document.getElementById("user_password").value;
         var user_address = document.getElementById("user_address").value;
-        var user_province = document.getElementById("user_province").value;
-        var user_amphur = document.getElementById("user_amphur").value;
-        var user_district = document.getElementById("user_district").value;
+        var province_id = document.getElementById("province_id").value;
+        var amphur_id = document.getElementById("amphur_id").value;
+        var district_id = document.getElementById("district_id").value;
         var user_zipcode = document.getElementById("user_zipcode").value;
         var user_position_code = document.getElementById("user_position_code").value;
         var license_code = document.getElementById("license_code").value;
@@ -42,9 +42,9 @@ function check_code(id){
         user_username = $.trim(user_username);
         user_password = $.trim(user_password);
         user_address = $.trim(user_address);
-        user_province = $.trim(user_province);
-        user_amphur = $.trim(user_amphur);
-        user_district = $.trim(user_district);
+        province_id = $.trim(province_id);
+        amphur_id = $.trim(amphur_id);
+        district_id = $.trim(district_id);
         user_zipcode = $.trim(user_zipcode);
         user_position_code = $.trim(user_position_code);
         license_code = $.trim(license_code);
@@ -76,17 +76,17 @@ function check_code(id){
             alert("Please input employee address");
             document.getElementById("user_address").focus();
             return false;
-        }else if(user_province.length == 0){
+        }else if(province_id.length == 0){
             alert("Please input employee provice");
-            document.getElementById("user_province").focus();
+            document.getElementById("province_id").focus();
             return false;
-        }else if(user_amphur.length == 0){
+        }else if(amphur_id.length == 0){
             alert("Please input employee amphur");
-            document.getElementById("user_amphur").focus();
+            document.getElementById("amphur_id").focus();
             return false;
-        }else if(user_district.length == 0){
+        }else if(district_id.length == 0){
             alert("Please input employee district");
-            document.getElementById("user_district").focus();
+            document.getElementById("district_id").focus();
             return false;
         }else if(user_position_code.length == 0){
             alert("Please input employee position");
@@ -110,10 +110,10 @@ function check_code(id){
 
 function getAmphur(){
     
-    var user_province = document.getElementById("user_province").value;
-    $.post( "controllers/getAmphur.php", { 'province': user_province }, function( data ) {
-        document.getElementById("user_amphur").innerHTML = data;
-        $("#user_amphur").selectpicker('refresh');
+    var province_id = document.getElementById("province_id").value;
+    $.post( "controllers/getAmphur.php", { 'province': province_id }, function( data ) {
+        document.getElementById("amphur_id").innerHTML = data;
+        $("#amphur_id").selectpicker('refresh');
     });
 
     
@@ -121,13 +121,13 @@ function getAmphur(){
 }
 
 function getDistrict(){
-    var user_amphur = document.getElementById("user_amphur").value;
-    $.post( "controllers/getDistrict.php", { 'amphur': user_amphur }, function( data ) {
-        document.getElementById("user_district").innerHTML = data;
-        $("#user_district").selectpicker('refresh');
+    var amphur_id = document.getElementById("amphur_id").value;
+    $.post( "controllers/getDistrict.php", { 'amphur': amphur_id }, function( data ) {
+        document.getElementById("district_id").innerHTML = data;
+        $("#district_id").selectpicker('refresh');
     });
 
-    $.post( "controllers/getZipcode.php", { 'amphur': user_amphur }, function( data ) {
+    $.post( "controllers/getZipcode.php", { 'amphur': amphur_id }, function( data ) {
         document.getElementById("user_zipcode").value = data;
     });
 }
@@ -255,12 +255,12 @@ function getDistrict(){
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>จังหวัด / Province <font color="#F00"><b>*</b></font> </label>
-                            <select id="user_province" name="user_province" class="form-control" onchange="getAmphur()">
+                            <select id="province_id" name="province_id" class="form-control" onchange="getAmphur()">
                                 <option value="">Select</option>
                                 <?php 
                                 for($i =  0 ; $i < count($add_province) ; $i++){
                                 ?>
-                                <option <?php if($user['user_province'] == $add_province[$i]['PROVINCE_NAME'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_NAME'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                                <option <?php if($user['province_id'] == $add_province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
                                 <?
                                 }
                                 ?>
@@ -272,12 +272,12 @@ function getDistrict(){
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
-                            <select id="user_amphur" name="user_amphur"  class="form-control" onchange="getDistrict()">
+                            <select id="amphur_id" name="amphur_id"  class="form-control" onchange="getDistrict()">
                             <option value="">Select</option>
                             <?php 
                                 for($i =  0 ; $i < count($add_amphur) ; $i++){
                                 ?>
-                                <option <?php if($user['user_amphur'] == $add_amphur[$i]['AMPHUR_NAME'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_NAME'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
+                                <option <?php if($user['amphur_id'] == $add_amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_ID'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
                                 <?
                                 }
                                 ?>
@@ -290,12 +290,12 @@ function getDistrict(){
                         <div class="form-group">
                             <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
                             
-                            <select id="user_district" name="user_district" class="form-control">
+                            <select id="district_id" name="district_id" class="form-control">
                             <option value="">Select</option>
                             <?php 
                                 for($i =  0 ; $i < count($add_district) ; $i++){
                                 ?>
-                                <option <?php if($user['user_district'] == $add_district[$i]['DISTRICT_NAME'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_NAME'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
+                                <option <?php if($user['district_id'] == $add_district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_ID'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
                                 <?
                                 }
                                 ?>

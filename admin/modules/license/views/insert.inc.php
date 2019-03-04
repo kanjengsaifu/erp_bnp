@@ -182,31 +182,36 @@
 <script>
 function oncheck(id,action) { 
     
-   if(document.getElementById('license_permission_'+action+'_'+id).checked==true){
+    if(document.getElementById('license_permission_'+action+'_'+id).checked==true){
         document.getElementById('license_permission_view_'+id).checked = true;
-   }
-   if(document.getElementById('license_permission_delete_'+id).checked==true){
-        document.getElementById('license_permission_cancel_'+id).checked = true;
-        document.getElementById('license_permission_view_'+id).checked = true;
-   }
-   if(action=='cancel'){ 
-    if(document.getElementById('license_permission_delete_'+id).checked==true){
-        document.getElementById('license_permission_cancel_'+id).checked = false;
-        document.getElementById('license_permission_delete_'+id).checked = false;
-    }else{
-        if(document.getElementById('license_permission_cancel_'+id).checked){
-            document.getElementById('license_permission_cancel_'+id).checked = true; 
-        }else{ 
-            document.getElementById('license_permission_cancel_'+id).checked = false; 
-        }
-        // document.getElementById('license_permission_delete_'+id).checked = true; 
     }
-   }
-   if(document.getElementById('license_permission_view_'+id).checked==false){
-        document.getElementById('license_permission_add_'+id).checked = false;
-        document.getElementById('license_permission_edit_'+id).checked = false;
-        document.getElementById('license_permission_cancel_'+id).checked = false;
-        document.getElementById('license_permission_delete_'+id).checked = false;
-   }
+    if(action=='cancel'){ 
+        if(document.getElementById('license_permission_delete_'+id).checked==true){
+            document.getElementById('license_permission_cancel_'+id).checked = false;
+            document.getElementById('license_permission_delete_'+id).checked = false;
+        }else{
+            if(document.getElementById('license_permission_cancel_'+id).checked){
+                document.getElementById('license_permission_cancel_'+id).checked = true; 
+            }else{ 
+                document.getElementById('license_permission_cancel_'+id).checked = false; 
+            }
+            // document.getElementById('license_permission_delete_'+id).checked = true; 
+        }
+    }else if(action=='view'){
+        if(document.getElementById('license_permission_view_'+id).checked==false){
+            document.getElementById('license_permission_add_'+id).checked = false;
+            document.getElementById('license_permission_edit_'+id).checked = false;
+            document.getElementById('license_permission_cancel_'+id).checked = false;
+            document.getElementById('license_permission_delete_'+id).checked = false;
+            document.getElementById('license_permission_view_'+id).checked = false;
+        }
+    }else if(action=='delete'){ 
+        if(document.getElementById('license_permission_delete_'+id).checked==true){
+            document.getElementById('license_permission_cancel_'+id).checked = true;
+            document.getElementById('license_permission_view_'+id).checked = true;
+        }
+    }
+    // alert(document.getElementById('license_permission_view_'+id).checked);
+   
 }
 </script>

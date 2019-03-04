@@ -104,7 +104,7 @@
                                             </a> 
                                         <?PHP } ?>
                                         <?php if($menu['unit']['delete']==1){ ?> 
-                                            <a title="Delete data" href="?app=unit&action=delete&code=<?php echo $units[$i]['unit_code'];?>" onclick="return confirm('You want to delete customer material unit : <?php echo $units[$i]['unit_name']; ?>');" style="color:red;">
+                                            <a title="Delete data" href="?app=unit&action=delete&code=<?php echo $units[$i]['unit_code'];?>" onclick="return confirm('You want to delete unit : <?php echo $units[$i]['unit_name']; ?>');" style="color:red;">
                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                             </a>
                                         <?PHP } ?>

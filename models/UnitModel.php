@@ -1,14 +1,14 @@
 <?php
 
 require_once("BaseModel.php");
-class MaterialUnitModel extends BaseModel{
+class UnitModel extends BaseModel{
 
     function __construct(){
         if(!static::$db){
             static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
         }
     }
-    function getMaterialUnitLastCode($code,$digit){
+    function getUnitLastCode($code,$digit){
         $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(unit_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
         FROM tb_unit 
         WHERE unit_code LIKE ('$code%') 
@@ -21,7 +21,7 @@ class MaterialUnitModel extends BaseModel{
         }
     }
 
-    function getMaterialUnitBy($unit_name = ''){
+    function getUnitBy($unit_name = ''){
         $sql = " SELECT unit_code, unit_name, unit_detail   
         FROM tb_unit 
         WHERE unit_name LIKE ('%$unit_name%') 
@@ -38,7 +38,7 @@ class MaterialUnitModel extends BaseModel{
 
     }
 
-    function getMaterialUnitByID($code){
+    function getUnitByID($code){
         $sql = " SELECT * 
         FROM tb_unit 
         WHERE unit_code = '$code' 
@@ -55,7 +55,7 @@ class MaterialUnitModel extends BaseModel{
 
     }
 
-    function updateMaterialUnitByID($code,$data = []){
+    function updateUnitByID($code,$data = []){
         $sql = " UPDATE tb_unit SET     
         unit_name = '".$data['unit_name']."', 
         unit_detail = '".$data['unit_detail']."'  
@@ -72,7 +72,7 @@ class MaterialUnitModel extends BaseModel{
 
     }
 
-    function insertMaterialUnit($data = []){
+    function insertUnit($data = []){
         $sql = " INSERT INTO tb_unit (
             unit_code,
             unit_name,
@@ -94,7 +94,7 @@ class MaterialUnitModel extends BaseModel{
     }
 
 
-    function deleteMaterialUnitByID($code){
+    function deleteUnitByID($code){
         $sql = " DELETE FROM tb_unit WHERE unit_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
