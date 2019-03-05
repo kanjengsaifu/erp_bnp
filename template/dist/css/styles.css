@@ -136,3 +136,7 @@
 .calendar{
     background-color: #fff!important;
 }
+.badge-danger{
+    color: #fff !important;
+    background-color: red !important;
+}

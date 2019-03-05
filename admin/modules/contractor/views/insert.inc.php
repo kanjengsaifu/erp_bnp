@@ -17,9 +17,6 @@
         var contractor_name = document.getElementById("contractor_name").value;
         var contractor_lastname = document.getElementById("contractor_lastname").value;
         var contractor_mobile = document.getElementById("contractor_mobile").value;
-        var contractor_email = document.getElementById("contractor_email").value;
-        var contractor_username = document.getElementById("contractor_username").value;
-        var contractor_password = document.getElementById("contractor_password").value;
         var contractor_address = document.getElementById("contractor_address").value;
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
@@ -31,9 +28,6 @@
         contractor_name = $.trim(contractor_name);
         contractor_lastname = $.trim(contractor_lastname);
         contractor_mobile = $.trim(contractor_mobile);
-        contractor_email = $.trim(contractor_email);
-        contractor_username = $.trim(contractor_username);
-        contractor_password = $.trim(contractor_password);
         contractor_address = $.trim(contractor_address);
         province_id = $.trim(province_id);
         amphur_id = $.trim(amphur_id);
@@ -52,14 +46,6 @@
         }else if(contractor_lastname.length == 0){
             alert("Please input contractor lastname");
             document.getElementById("contractor_lastname").focus();
-            return false;
-        }else if(contractor_username.length == 0){
-            alert("Please input contractor contractorname");
-            document.getElementById("contractor_username").focus();
-            return false;
-        }else if(contractor_password.length == 0){
-            alert("Please input contractor password");
-            document.getElementById("contractor_password").focus();
             return false;
         }else if(contractor_address.length == 0){
             alert("Please input contractor address");
@@ -85,21 +71,70 @@
             return true;
         }
     }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_contractor').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }else{
+            $('#img_contractor').attr('src', '../upload/default.png');
+        }
+    }
+
+    function readURL_id_card(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_id_card').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }else{
+            $('#img_id_card').attr('src', '../upload/default.png');
+        }
+    }
+
+    function readURL_house_regis(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_house_regis').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }else{
+            $('#img_house_regis').attr('src', '../upload/default.png');
+        }
+    }
+
+    function readURL_account(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#img_account').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }else{
+            $('#img_account').attr('src', '../upload/default.png');
+        }
+    }
 </script>
 
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">จัดการผู้รับเหมา / Contractor Management</h1>
     </div>
+</div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
         เพิ่มผู้รับเหมา / Add contractor
     </div>
     <div class="panel-body">
-        <form  id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=add" >
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=add" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-lg-3">
+                <div class="col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
                         <select id="contractor_prefix" name="contractor_prefix" class="form-control">
@@ -110,68 +145,59 @@
                         </select>
                         <p class="help-block">Example : นาย.</p>
                     </div>
-                </div>
-                <div class="col-lg-3">
+                </div> 
+                <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_name" name="contractor_name" class="form-control">
+                        <input id="contractor_name" name="contractor_name" class="form-control" autocomplete="off">
                         <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_lastname" name="contractor_lastname" class="form-control">
+                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" autocomplete="off">
                         <p class="help-block">Example : ชาญชัย.</p>
                     </div>
                 </div>
-            </div>
-            <!-- /.row (nested) -->
-
-            <div class="row">
-                <div class="col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
-                        <label>อีเมล์ / Email </label>
-                        <input id="contractor_email" name="contractor_email" type="email" class="form-control">
-                        <p class="help-block">Example : admin@arno.co.th.</p>
+                        <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
+                        <select class="form-control" id="contractor_status_code" name="contractor_status_code">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($contractor_status) ; $i++){
+                            ?>
+                            <option value="<?php echo $contractor_status[$i]['contractor_status_code'] ?>"><?php echo $contractor_status[$i]['contractor_status_name'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : ทำงาน.</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
-                        <input id="contractor_mobile" name="contractor_mobile" type="text" class="form-control">
+                        <input id="contractor_mobile" name="contractor_mobile" type="text" class="form-control" autocomplete="off">
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>ยูสเซอร์ / Contractorname <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_username" name="contractor_username" class="form-control">
-                        <p class="help-block">Example : thana.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>รหัสผ่าน / Password <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_password" name="contractor_password" type="password" class="form-control">
-                        <p class="help-block">Example : thanaadmin.</p>
-                    </div>
-                </div>
-            </div>
-            <!-- /.row (nested) -->
 
-            <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
-                        <input type="text" id="contractor_address" name="contractor_address" class="form-control">
+                        <input type="text" id="contractor_address" name="contractor_address" class="form-control" autocomplete="off">
                         <p class="help-block">Example : 271/55.</p>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>จังหวัด / Province <font color="#F00"><b>*</b></font> </label>
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
@@ -188,7 +214,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
@@ -198,7 +224,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
                         <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
@@ -208,34 +234,43 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control">
+                        <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="contractor_status_code" name="contractor_status_code">
-                        <option value="">Select</option>
-                            <?php 
-                            for($i =  0 ; $i < count($contractor_status) ; $i++){
-                            ?>
-                            <option value="<?php echo $contractor_status[$i]['contractor_status_code'] ?>"><?php echo $contractor_status[$i]['contractor_status_name'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
-                        <p class="help-block">Example : ทำงาน.</p>
+                <div class="col-md-12">
+                    <label>รูปผู้รับเหมา / Contractor image </label>
+                    <div class="form-group" align="center">
+                        <img id="img_contractor" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
+                        <input accept=".jpg , .png" type="file" id="contractor_image" name="contractor_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>สำเนาบัตรประชาชน / Copy of ID card </label>
+                    <div class="form-group" align="center">
+                        <img id="img_id_card" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
+                        <input accept=".jpg , .png" type="file" id="id_card_image" name="id_card_image" class="form-control" style="margin-top: 14px" onChange="readURL_id_card(this);">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>สำเนาทะเบียนบ้าน / Copy of House registration </label>
+                    <div class="form-group" align="center">
+                        <img id="img_house_regis" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
+                        <input accept=".jpg , .png" type="file" id="house_regis_image" name="house_regis_image" class="form-control" style="margin-top: 14px" onChange="readURL_house_regis(this);">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>สำเนาหน้าสมุดบัญชี / Copy of account book page </label>
+                    <div class="form-group" align="center">
+                        <img id="img_account" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
+                        <input accept=".jpg , .png" type="file" id="account_image" name="account_image" class="form-control" style="margin-top: 14px" onChange="readURL_account(this);">
                     </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-lg-offset-9 col-lg-3" align="right">
                     <a href="?app=contractor" class="btn btn-default">Back</a>
