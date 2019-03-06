@@ -1,12 +1,12 @@
 <?php
-require_once('../models/ContractorModel.php');
-require_once('../models/ContractorStatusModel.php');
+require_once('../models/AgentModel.php');
+require_once('../models/AgentStatusModel.php');
 require_once('../models/AddressModel.php');
 
-$path = "modules/contractor/views/";
+$path = "modules/agent/views/";
 
-$contractor_model = new ContractorModel;
-$contractor_status_model = new ContractorStatusModel; 
+$agent_model = new AgentModel;
+$agent_status_model = new AgentStatusModel; 
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -17,65 +17,57 @@ $d5=date("i");
 $d6=date("s");
 $date="$d1$d2$d3$d4$d5$d6";
 
-$target_dir = "../upload/contractor/";
+$target_dir = "../upload/agent/";
 
-$contractor_code = $_GET['code'];
+$agent_code = $_GET['code'];
 
-// foreach ($_POST as $key => $value) {
-//     echo "<div>";
-//     echo $key;
-//     echo " : ";
-//     echo $value;
-//     echo "</div>";
-// }
-
-if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){ 
-    $contractor_status = $contractor_status_model->getContractorStatusBy();
+if ($_GET['action'] == 'insert'&&$menu['agent']['add']){ 
+    $agent_status = $agent_status_model->getAgentStatusBy();
     $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
-}else if ($_GET['action'] == 'update'&&$menu['contractor']['edit']){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
-    $contractor_status = $contractor_status_model->getContractorStatusBy();
+}else if ($_GET['action'] == 'update'&&$menu['agent']['edit']){
+    $agent = $agent_model->getAgentByCode($agent_code);
+    $agent_status = $agent_status_model->getAgentStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceCode($contractor['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
+    $add_amphur = $address_model->getAmphurByProviceID($agent['province_id']);
+    $add_district = $address_model->getDistricByAmphurID($agent['amphur_id']); 
     require_once($path.'update.inc.php');
-}else if ($_GET['action'] == 'delete'&&$menu['contractor']['delete']){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
+}else if ($_GET['action'] == 'delete'&&$menu['agent']['delete']){
+    $agent = $agent_model->getAgentByCode($agent_code);
 
-    $img_delete = ['contractor_image','id_card_image','house_regis_image','account_image'];
+    $img_delete = ['agent_image','id_card_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
-        if ($contractor[$img_delete[$i]] != ''){
-            $target_file = $target_dir .$contractor[$img_delete[$i]];
+        if ($agent[$img_delete[$i]] != ''){
+            $target_file = $target_dir .$agent[$img_delete[$i]];
             if (file_exists($target_file)) {
                 unlink($target_file);
             }
         }
     }
 
-    $result = $contractor_model->deleteContractorByCode($contractor_code);
+    $result = $agent_model->deleteAgentByCode($agent_code);
 
-    ?> <script> window.location="index.php?app=contractor"</script> <?php
-}else if ($_GET['action'] == 'add'&&$menu['contractor']['add']){
-    $contractor_code = "CT";
-    $contractor_code = $contractor_model->getContractorLastCode($contractor_code,4);  
+    ?> <script> window.location="index.php?app=agent"</script> <?php
+}else if ($_GET['action'] == 'add'&&$menu['agent']['add']){
+    $agent_code = "AG";
+    $agent_code = $agent_model->getAgentLastCode($agent_code,4);  
 
-    if($contractor_code != '' && isset($_POST['contractor_prefix'])){
+    if($agent_code != '' && isset($_POST['agent_prefix'])){
         $check = true;
-        $data['contractor_code'] = $contractor_code;
-        $data['contractor_prefix'] = $_POST['contractor_prefix'];  
-        $data['contractor_name'] = $_POST['contractor_name'];
-        $data['contractor_lastname'] = $_POST['contractor_lastname'];
-        $data['contractor_mobile'] = $_POST['contractor_mobile'];
-        $data['contractor_address'] = $_POST['contractor_address'];
+        $data['agent_code'] = $agent_code;
+        $data['agent_prefix'] = $_POST['agent_prefix'];  
+        $data['agent_name'] = $_POST['agent_name'];
+        $data['agent_lastname'] = $_POST['agent_lastname'];
+        $data['agent_mobile'] = $_POST['agent_mobile'];
+        $data['agent_address'] = $_POST['agent_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
-        $data['contractor_status_code'] = $_POST['contractor_status_code']; 
+        $data['agent_zipcode'] = $_POST['agent_zipcode'];
+        $data['agent_status_code'] = $_POST['agent_status_code']; 
 
-        $img_upload = ['contractor_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['agent_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -113,10 +105,10 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         }
 
         if($check){
-            $result = $contractor_model->insertContractor($data);
+            $result = $agent_model->insertAgent($data);
 
             if($result){
-                ?> <script> window.location="index.php?app=contractor" </script> <?php
+                ?> <script> window.location="index.php?app=agent" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -129,25 +121,25 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=contractor" </script> <?php
+        ?> <script> window.location="index.php?app=agent" </script> <?php
     }
-}else if ($_GET['action'] == 'edit'&&$menu['contractor']['edit']){
-    if(isset($_POST['contractor_code'])){
+}else if ($_GET['action'] == 'edit'&&$menu['agent']['edit']){
+    if(isset($_POST['agent_code'])){
         $check = true;
         $data = [];  
-        $data['contractor_code'] = $_POST['contractor_code'];
-        $data['contractor_prefix'] = $_POST['contractor_prefix'];
-        $data['contractor_name'] = $_POST['contractor_name'];
-        $data['contractor_lastname'] = $_POST['contractor_lastname'];
-        $data['contractor_mobile'] = $_POST['contractor_mobile'];
-        $data['contractor_address'] = $_POST['contractor_address'];
+        $data['agent_code'] = $_POST['agent_code'];
+        $data['agent_prefix'] = $_POST['agent_prefix'];
+        $data['agent_name'] = $_POST['agent_name'];
+        $data['agent_lastname'] = $_POST['agent_lastname'];
+        $data['agent_mobile'] = $_POST['agent_mobile'];
+        $data['agent_address'] = $_POST['agent_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
-        $data['contractor_status_code'] = $_POST['contractor_status_code']; 
+        $data['agent_zipcode'] = $_POST['agent_zipcode'];
+        $data['agent_status_code'] = $_POST['agent_status_code']; 
 
-        $img_upload = ['contractor_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['agent_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -192,10 +184,10 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         }
 
         if($check){
-            $result = $contractor_model->updateContractorByCode($_POST['contractor_code'],$data);
+            $result = $agent_model->updateAgentByCode($_POST['agent_code'],$data);
 
             if($result){
-                ?> <script> window.location="index.php?app=contractor" </script> <?php
+                ?> <script> window.location="index.php?app=agent" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -208,26 +200,17 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=contractor" </script> <?php
+        ?> <script> window.location="index.php?app=agent" </script> <?php
     }
 }else if ($_GET['action'] == 'profile'){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
-    $contractor_status = $contractor_status_model->getContractorStatusBy();
+    $agent = $agent_model->getAgentByCode($agent_code);
+    $agent_status = $agent_status_model->getAgentStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($contractor['amphur_id']); 
+    $add_amphur = $address_model->getAmphurByProviceID($agent['province_id']);
+    $add_district = $address_model->getDistricByAmphurID($agent['amphur_id']); 
     require_once($path.'detail.inc.php');
-}else if ($_GET['status'] == 'pending'){
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('00');
-    require_once($path.'view.inc.php');
-}else if ($_GET['status'] == 'cease'){
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('02');
-    require_once($path.'view.inc.php');
 }else{
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('01');
+    $agent = $agent_model->getAgentBy();
     require_once($path.'view.inc.php');
 }
 ?>

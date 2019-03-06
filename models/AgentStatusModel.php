@@ -1,16 +1,16 @@
 <?php
 require_once("BaseModel.php");
 
-class ContractorStatusModel extends BaseModel{
+class AgentStatusModel extends BaseModel{
 
     function __construct(){
         if(!static::$db){
-            static::$db = mysqli_connect($this->host, $this->contractorname, $this->password, $this->db_name);
+            static::$db = mysqli_connect($this->host, $this->agentname, $this->password, $this->db_name);
         }
     }
 
-    function getContractorStatusBy($name = ''){
-        $sql = "SELECT * FROM tb_contractor_status WHERE  contractor_status_name LIKE ('%$name%') 
+    function getAgentStatusBy($name = ''){
+        $sql = "SELECT * FROM tb_agent_status WHERE  agent_status_name LIKE ('%$name%') 
         ";
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -23,10 +23,10 @@ class ContractorStatusModel extends BaseModel{
 
     }
 
-    function getContractorStatusByID($id){
+    function getAgentStatusByID($id){
         $sql = " SELECT * 
-        FROM tb_contractor_status 
-        WHERE contractor_status_id = '$id' 
+        FROM tb_agent_status 
+        WHERE agent_status_id = '$id' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -40,10 +40,10 @@ class ContractorStatusModel extends BaseModel{
 
     }
 
-    function updateContractorStatusByID($id,$data = []){
+    function updateAgentStatusByID($id,$data = []){
         $sql = " SELECT * 
-        FROM tb_contractor_status 
-        WHERE contractor_status_id = '$id' 
+        FROM tb_agent_status 
+        WHERE agent_status_id = '$id' 
         ";
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $row = mysqli_fetch_array($result,MYSQLI_NUM);
@@ -53,8 +53,8 @@ class ContractorStatusModel extends BaseModel{
 
     }
 
-    function deleteContractorStatusByID($id){
-        $sql = " DELETE FROM tb_contractor_status WHERE contractor_status_id = '$id' ";
+    function deleteAgentStatusByID($id){
+        $sql = " DELETE FROM tb_agent_status WHERE agent_status_id = '$id' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }

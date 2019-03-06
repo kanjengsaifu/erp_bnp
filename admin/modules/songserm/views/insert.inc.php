@@ -1,11 +1,11 @@
 <script>
     function check_code(id){
         var code = $(id).val();
-        $.post("controllers/getContractorByCode.php", { 'contractor_code': code }, function( data ) {  
+        $.post("controllers/getSongsermByCode.php", { 'songserm_code': code }, function( data ) {  
             if(data != null){ 
                 alert("This "+code+" is already in the system.");
-                document.getElementById("contractor_code").focus();
-                $("#code_check").val(data.contractor_code);
+                document.getElementById("songserm_code").focus();
+                $("#code_check").val(data.songserm_code);
             } else{
                 $("#code_check").val("");
             }
@@ -13,59 +13,59 @@
     }
 
     function check(){
-        var contractor_prefix = document.getElementById("contractor_prefix").value;
-        var contractor_name = document.getElementById("contractor_name").value;
-        var contractor_lastname = document.getElementById("contractor_lastname").value;
-        var contractor_mobile = document.getElementById("contractor_mobile").value;
-        var contractor_address = document.getElementById("contractor_address").value;
+        var songserm_prefix = document.getElementById("songserm_prefix").value;
+        var songserm_name = document.getElementById("songserm_name").value;
+        var songserm_lastname = document.getElementById("songserm_lastname").value;
+        var songserm_mobile = document.getElementById("songserm_mobile").value;
+        var songserm_address = document.getElementById("songserm_address").value;
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var contractor_zipcode = document.getElementById("contractor_zipcode").value;
-        var contractor_status_code = document.getElementById("contractor_status_code").value;  
+        var songserm_zipcode = document.getElementById("songserm_zipcode").value;
+        var songserm_status_code = document.getElementById("songserm_status_code").value;  
 
-        contractor_prefix = $.trim(contractor_prefix);
-        contractor_name = $.trim(contractor_name);
-        contractor_lastname = $.trim(contractor_lastname);
-        contractor_mobile = $.trim(contractor_mobile);
-        contractor_address = $.trim(contractor_address);
+        songserm_prefix = $.trim(songserm_prefix);
+        songserm_name = $.trim(songserm_name);
+        songserm_lastname = $.trim(songserm_lastname);
+        songserm_mobile = $.trim(songserm_mobile);
+        songserm_address = $.trim(songserm_address);
         province_id = $.trim(province_id);
         amphur_id = $.trim(amphur_id);
         district_id = $.trim(district_id);
-        contractor_zipcode = $.trim(contractor_zipcode);
-        contractor_status_code = $.trim(contractor_status_code); 
+        songserm_zipcode = $.trim(songserm_zipcode);
+        songserm_status_code = $.trim(songserm_status_code); 
 
-        if(contractor_prefix.length == 0){
-            alert("Please input contractor prefix");
-            document.getElementById("contractor_prefix").focus();
+        if(songserm_prefix.length == 0){
+            alert("Please input songserm prefix");
+            document.getElementById("songserm_prefix").focus();
             return false;
-        }else if(contractor_name.length == 0){
-            alert("Please input contractor name");
-            document.getElementById("contractor_name").focus();
+        }else if(songserm_name.length == 0){
+            alert("Please input songserm name");
+            document.getElementById("songserm_name").focus();
             return false;
-        }else if(contractor_lastname.length == 0){
-            alert("Please input contractor lastname");
-            document.getElementById("contractor_lastname").focus();
+        }else if(songserm_lastname.length == 0){
+            alert("Please input songserm lastname");
+            document.getElementById("songserm_lastname").focus();
             return false;
-        }else if(contractor_address.length == 0){
-            alert("Please input contractor address");
-            document.getElementById("contractor_address").focus();
+        }else if(songserm_address.length == 0){
+            alert("Please input songserm address");
+            document.getElementById("songserm_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input contractor provice");
+            alert("Please input songserm provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input contractor amphur");
+            alert("Please input songserm amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input contractor district");
+            alert("Please input songserm district");
             document.getElementById("district_id").focus();
             return false;
-        }else if(contractor_status_code.length == 0){
-            alert("Please input contractor status");
-            document.getElementById("contractor_status_code").focus();
+        }else if(songserm_status_code.length == 0){
+            alert("Please input songserm status");
+            document.getElementById("songserm_status_code").focus();
             return false; 
         }else{ 
             return true;
@@ -76,11 +76,11 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-                $('#img_contractor').attr('src', e.target.result);
+                $('#img_songserm').attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }else{
-            $('#img_contractor').attr('src', '../upload/default.png');
+            $('#img_songserm').attr('src', '../upload/default.png');
         }
     }
 
@@ -123,21 +123,21 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">จัดการผู้รับเหมา / Contractor Management</h1>
+        <h1 class="page-header">จัดการทีมส่งเสริม / Songserm Management</h1>
     </div>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        เพิ่มผู้รับเหมา / Add contractor
+        เพิ่มทีมส่งเสริม / Add songserm
     </div>
     <div class="panel-body">
-        <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=add" enctype="multipart/form-data">
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=songserm&action=add" enctype="multipart/form-data">
             <div class="row"> 
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="contractor_prefix" name="contractor_prefix" class="form-control">
+                        <select id="songserm_prefix" name="songserm_prefix" class="form-control">
                             <option value="">Select</option>
                             <option value="นาย">นาย</option>
                             <option value="นาง">นาง</option>
@@ -149,26 +149,26 @@
                 <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_name" name="contractor_name" class="form-control" autocomplete="off">
+                        <input id="songserm_name" name="songserm_name" class="form-control" autocomplete="off">
                         <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
                 <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" autocomplete="off">
+                        <input id="songserm_lastname" name="songserm_lastname" class="form-control" autocomplete="off">
                         <p class="help-block">Example : ชาญชัย.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="contractor_status_code" name="contractor_status_code">
+                        <select class="form-control" id="songserm_status_code" name="songserm_status_code">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($contractor_status) ; $i++){
+                            for($i =  0 ; $i < count($songserm_status) ; $i++){
                             ?>
-                            <option value="<?php echo $contractor_status[$i]['contractor_status_code'] ?>"><?php echo $contractor_status[$i]['contractor_status_name'] ?></option>
+                            <option value="<?php echo $songserm_status[$i]['songserm_status_code'] ?>"><?php echo $songserm_status[$i]['songserm_status_name'] ?></option>
                             <?
                             }
                             ?>
@@ -182,7 +182,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
-                        <input id="contractor_mobile" name="contractor_mobile" type="text" class="form-control" autocomplete="off">
+                        <input id="songserm_mobile" name="songserm_mobile" type="text" class="form-control" autocomplete="off">
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
-                        <input type="text" id="contractor_address" name="contractor_address" class="form-control" autocomplete="off">
+                        <input type="text" id="songserm_address" name="songserm_address" class="form-control" autocomplete="off">
                         <p class="help-block">Example : 271/55.</p>
                     </div>
                 </div>
@@ -237,21 +237,18 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" autocomplete="off">
+                        <input id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <label>รูปผู้รับเหมา / Contractor image </label>
+
+                <div class="col-md-12">
+                    <label>รูปทีมส่งเสริม / Songserm image </label>
                     <div class="form-group" align="center">
-                        <img id="img_contractor" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="contractor_image" name="contractor_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <img id="img_songserm" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
+                        <input accept=".jpg , .png" type="file" id="songserm_image" name="songserm_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-4">
                     <label>สำเนาบัตรประชาชน / Copy of ID card </label>
                     <div class="form-group" align="center">
@@ -276,7 +273,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-offset-9 col-lg-3" align="right">
-                    <a href="?app=contractor" class="btn btn-default">Back</a>
+                    <a href="?app=songserm" class="btn btn-default">Back</a>
                     <button type="reset" class="btn btn-primary">Reset</button>
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
@@ -308,7 +305,7 @@
         });
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
-            $("#contractor_zipcode").val(data);
+            $("#songserm_zipcode").val(data);
         });
     }
 </script>

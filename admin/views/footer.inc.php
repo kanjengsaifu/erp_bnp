@@ -53,28 +53,10 @@ div.dataTables_filter{
     });
     
     $(document).ready(function() {
-        $('#dataTables-view').DataTable({
+        $('.dataTables').DataTable({
             "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
             "pageLength": 100,
             responsive: true 
-        });
-
-        $('#dataTables-example').DataTable({
-            "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
-            "pageLength": 100,
-            responsive: true
-        });
-
-        $('#tb-product-customer').DataTable({
-            "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
-            "pageLength": 100,
-            responsive: true
-        });
-        
-        $('#tb-popup').DataTable({
-            "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
-            "pageLength": 100,
-            responsive: true
         });
 
         $('.select').selectpicker();

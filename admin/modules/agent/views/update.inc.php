@@ -1,11 +1,11 @@
 <script>
     function check_code(id){
         var code = $(id).val();
-        $.post("controllers/getContractorByCode.php", { 'contractor_code': code }, function( data ) {  
+        $.post("controllers/getAgentByCode.php", { 'agent_code': code }, function( data ) {  
             if(data != null){ 
                 alert("This "+code+" is already in the system.");
-                document.getElementById("contractor_code").focus();
-                $("#code_check").val(data.contractor_code);
+                document.getElementById("agent_code").focus();
+                $("#code_check").val(data.agent_code);
             } else{
                 $("#code_check").val("");
             }
@@ -13,59 +13,59 @@
     }
 
     function check(){
-        var contractor_prefix = document.getElementById("contractor_prefix").value;
-        var contractor_name = document.getElementById("contractor_name").value;
-        var contractor_lastname = document.getElementById("contractor_lastname").value;
-        var contractor_mobile = document.getElementById("contractor_mobile").value;
-        var contractor_address = document.getElementById("contractor_address").value;
+        var agent_prefix = document.getElementById("agent_prefix").value;
+        var agent_name = document.getElementById("agent_name").value;
+        var agent_lastname = document.getElementById("agent_lastname").value;
+        var agent_mobile = document.getElementById("agent_mobile").value;
+        var agent_address = document.getElementById("agent_address").value;
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var contractor_zipcode = document.getElementById("contractor_zipcode").value;
-        var contractor_status_code = document.getElementById("contractor_status_code").value;  
+        var agent_zipcode = document.getElementById("agent_zipcode").value;
+        var agent_status_code = document.getElementById("agent_status_code").value;  
 
-        contractor_prefix = $.trim(contractor_prefix);
-        contractor_name = $.trim(contractor_name);
-        contractor_lastname = $.trim(contractor_lastname);
-        contractor_mobile = $.trim(contractor_mobile);
-        contractor_address = $.trim(contractor_address);
+        agent_prefix = $.trim(agent_prefix);
+        agent_name = $.trim(agent_name);
+        agent_lastname = $.trim(agent_lastname);
+        agent_mobile = $.trim(agent_mobile);
+        agent_address = $.trim(agent_address);
         province_id = $.trim(province_id);
         amphur_id = $.trim(amphur_id);
         district_id = $.trim(district_id);
-        contractor_zipcode = $.trim(contractor_zipcode);
-        contractor_status_code = $.trim(contractor_status_code); 
+        agent_zipcode = $.trim(agent_zipcode);
+        agent_status_code = $.trim(agent_status_code); 
 
-        if(contractor_prefix.length == 0){
-            alert("Please input contractor prefix");
-            document.getElementById("contractor_prefix").focus();
+        if(agent_prefix.length == 0){
+            alert("Please input agent prefix");
+            document.getElementById("agent_prefix").focus();
             return false;
-        }else if(contractor_name.length == 0){
-            alert("Please input contractor name");
-            document.getElementById("contractor_name").focus();
+        }else if(agent_name.length == 0){
+            alert("Please input agent name");
+            document.getElementById("agent_name").focus();
             return false;
-        }else if(contractor_lastname.length == 0){
-            alert("Please input contractor lastname");
-            document.getElementById("contractor_lastname").focus();
+        }else if(agent_lastname.length == 0){
+            alert("Please input agent lastname");
+            document.getElementById("agent_lastname").focus();
             return false;
-        }else if(contractor_address.length == 0){
-            alert("Please input contractor address");
-            document.getElementById("contractor_address").focus();
+        }else if(agent_address.length == 0){
+            alert("Please input agent address");
+            document.getElementById("agent_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input contractor provice");
+            alert("Please input agent provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input contractor amphur");
+            alert("Please input agent amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input contractor district");
+            alert("Please input agent district");
             document.getElementById("district_id").focus();
             return false;
-        }else if(contractor_status_code.length == 0){
-            alert("Please input contractor status");
-            document.getElementById("contractor_status_code").focus();
+        }else if(agent_status_code.length == 0){
+            alert("Please input agent status");
+            document.getElementById("agent_status_code").focus();
             return false; 
         }else{ 
             return true;
@@ -76,11 +76,11 @@
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-                $('#img_contractor').attr('src', e.target.result);
+                $('#img_agent').attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }else{
-            $('#img_contractor').attr('src', '../upload/default.png');
+            $('#img_agent').attr('src', '../upload/default.png');
         }
     }
 
@@ -123,25 +123,25 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">จัดการผู้รับเหมา / Contractor Management</h1>
+        <h1 class="page-header">จัดการนายหน้า / Agent Management</h1>
     </div>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        เพิ่มผู้รับเหมา / Add contractor
+        แก้ไขนายหน้า / Edit agent 
     </div>
     <div class="panel-body">
-        <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=add" enctype="multipart/form-data">
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=agent&action=edit" enctype="multipart/form-data">>
             <div class="row"> 
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="contractor_prefix" name="contractor_prefix" class="form-control">
+                        <select id="agent_prefix" name="agent_prefix" class="form-control">
                             <option value="">Select</option>
-                            <option value="นาย">นาย</option>
-                            <option value="นาง">นาง</option>
-                            <option value="นาย">นางสาว</option>
+                            <option <?php if($agent['agent_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
+                            <option <?php if($agent['agent_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
+                            <option <?php if($agent['agent_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
                         </select>
                         <p class="help-block">Example : นาย.</p>
                     </div>
@@ -149,26 +149,26 @@
                 <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_name" name="contractor_name" class="form-control" autocomplete="off">
+                        <input id="agent_name" name="agent_name" class="form-control" value="<?php echo $agent['agent_name']?>" autocomplete="off">
                         <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
                 <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" autocomplete="off">
+                        <input id="agent_lastname" name="agent_lastname" class="form-control" value="<?php echo $agent['agent_lastname']?>" autocomplete="off">
                         <p class="help-block">Example : ชาญชัย.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="contractor_status_code" name="contractor_status_code">
+                        <select class="form-control" id="agent_status_code" name="agent_status_code">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($contractor_status) ; $i++){
+                            for($i =  0 ; $i < count($agent_status) ; $i++){
                             ?>
-                            <option value="<?php echo $contractor_status[$i]['contractor_status_code'] ?>"><?php echo $contractor_status[$i]['contractor_status_name'] ?></option>
+                            <option <?php if($agent['agent_status_code'] == $agent_status[$i]['agent_status_code'] ){?> selected <?php } ?> value="<?php echo $agent_status[$i]['agent_status_code'] ?>"><?php echo $agent_status[$i]['agent_status_name'] ?></option>
                             <?
                             }
                             ?>
@@ -182,7 +182,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
-                        <input id="contractor_mobile" name="contractor_mobile" type="text" class="form-control" autocomplete="off">
+                        <input id="agent_mobile" name="agent_mobile" type="text" class="form-control" value="<?php echo $agent['agent_mobile']?>" autocomplete="off">
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
-                        <input type="text" id="contractor_address" name="contractor_address" class="form-control" autocomplete="off">
+                        <input type="text" id="agent_address" name="agent_address" class="form-control" value="<?php echo $agent['agent_address']?>" autocomplete="off">
                         <p class="help-block">Example : 271/55.</p>
                     </div>
                 </div>
@@ -205,7 +205,7 @@
                             <?php 
                             for($i =  0 ; $i < count($add_province) ; $i++){
                             ?>
-                            <option value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($agent['province_id'] == $add_province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -219,6 +219,13 @@
                         <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($add_amphur) ; $i++){
+                            ?>
+                            <option <?php if($agent['amphur_id'] == $add_amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_ID'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
                         </select>
                         <p class="help-block">Example : เมือง.</p>
                     </div>
@@ -229,6 +236,13 @@
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
                         <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($add_district) ; $i++){
+                            ?>
+                            <option <?php if($agent['district_id'] == $add_district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_ID'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
                         </select>
                         <p class="help-block">Example : ในเมือง.</p>
                     </div>
@@ -237,50 +251,54 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" autocomplete="off">
+                        <input id="agent_zipcode" name="agent_zipcode" type="text" readonly class="form-control" value="<?php echo $agent['agent_zipcode']?>"  autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <label>รูปผู้รับเหมา / Contractor image </label>
+
+                <div class="col-md-12">
+                    <label>รูปนายหน้า / Agent image </label>
                     <div class="form-group" align="center">
-                        <img id="img_contractor" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="contractor_image" name="contractor_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <img id="img_agent" src="../upload/<?php if($agent['agent_image'] != "") echo 'agent/'.$agent['agent_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                        <input accept=".jpg , .png" type="file" id="agent_image" name="agent_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-4">
                     <label>สำเนาบัตรประชาชน / Copy of ID card </label>
                     <div class="form-group" align="center">
-                        <img id="img_id_card" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
+                        <img id="img_id_card" src="../upload/<?php if($agent['id_card_image'] != "") echo 'agent/'.$agent['id_card_image']; else echo "default.png" ?>" style="width: 100%;max-width: 320px;"> 
                         <input accept=".jpg , .png" type="file" id="id_card_image" name="id_card_image" class="form-control" style="margin-top: 14px" onChange="readURL_id_card(this);">
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <label>สำเนาทะเบียนบ้าน / Copy of House registration </label>
                     <div class="form-group" align="center">
-                        <img id="img_house_regis" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
+                        <img id="img_house_regis" src="../upload/<?php if($agent['house_regis_image'] != "") echo 'agent/'.$agent['house_regis_image']; else echo "default.png" ?>" style="width: 100%;max-width: 320px;"> 
                         <input accept=".jpg , .png" type="file" id="house_regis_image" name="house_regis_image" class="form-control" style="margin-top: 14px" onChange="readURL_house_regis(this);">
                     </div>
                 </div>
                 <div class="col-lg-4">
                     <label>สำเนาหน้าสมุดบัญชี / Copy of account book page </label>
                     <div class="form-group" align="center">
-                        <img id="img_account" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
+                        <img id="img_account" src="../upload/<?php if($agent['account_image'] != "") echo 'agent/'.$agent['account_image']; else echo "default.png" ?>" style="width: 100%;max-width: 320px;"> 
                         <input accept=".jpg , .png" type="file" id="account_image" name="account_image" class="form-control" style="margin-top: 14px" onChange="readURL_account(this);">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-offset-9 col-lg-3" align="right">
-                    <a href="?app=contractor" class="btn btn-default">Back</a>
+                    <a href="?app=agent" class="btn btn-default">Back</a>
                     <button type="reset" class="btn btn-primary">Reset</button>
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
             </div>
+
+            <input type="hidden" id="agent_image_o" name="agent_image_o" value="<?php echo $agent['agent_image']; ?>">
+            <input type="hidden" id="id_card_image_o" name="id_card_image_o" value="<?php echo $agent['id_card_image']; ?>">
+            <input type="hidden" id="house_regis_image_o" name="house_regis_image_o" value="<?php echo $agent['house_regis_image']; ?>">
+            <input type="hidden" id="account_image_o" name="account_image_o" value="<?php echo $agent['account_image']; ?>">
+
+            <input type="hidden" id="agent_code" name="agent_code" value="<?php echo $agent_code ?>">
         </form>
     </div>
 </div>
@@ -308,7 +326,7 @@
         });
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
-            $("#contractor_zipcode").val(data);
+            $("#agent_zipcode").val(data);
         });
     }
 </script>
