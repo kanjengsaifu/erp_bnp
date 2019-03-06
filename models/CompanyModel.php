@@ -40,7 +40,7 @@ class CompanyModel extends BaseModel{
 
     }
 
-    function getCompanyByID($code){
+    function getCompanyByCode($code){
         $sql = " SELECT * 
         FROM tb_company  
         WHERE company_code = '$code' 
@@ -57,7 +57,7 @@ class CompanyModel extends BaseModel{
 
     }
 
-    function updateCompanyByID($code,$data = []){
+    function updateCompanyByCode($code,$data = []){
         $sql = " UPDATE tb_company SET     
         company_name_th = '".$data['company_name_th']."', 
         company_name_en = '".$data['company_name_en']."', 
@@ -131,7 +131,7 @@ class CompanyModel extends BaseModel{
     }
 
 
-    function deleteCompanyByID($code){
+    function deleteCompanyByCode($code){
         $sql = " DELETE FROM tb_company WHERE company_code = '$code' ";
         mysqli_query( static::$db,$sql, MYSQLI_USE_RESULT);
 

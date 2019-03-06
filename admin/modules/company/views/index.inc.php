@@ -36,10 +36,10 @@ if ($_GET['action'] == 'insert'&&$menu['company']['add']==1){
     require_once($path.'insert.inc.php'); 
 }else if ($_GET['action'] == 'update'&&$menu['company']['edit']==1){
        
-    $company = $company_model->getCompanyByID($company_code); 
+    $company = $company_model->getCompanyByCode($company_code); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['company']['delete']==1){ 
-    $company = $company_model->getCompanyByID($company_code); 
+    $company = $company_model->getCompanyByCode($company_code); 
     $input_image = array(
         "company_image",
         "company_image_rectangle" 
@@ -55,7 +55,7 @@ if ($_GET['action'] == 'insert'&&$menu['company']['add']==1){
    
 
 
-    $company_model->deleteCompanyByID($company_code); 
+    $company_model->deleteCompanyByCode($company_code); 
     ?>
     <script>
         window.location="index.php?app=company";
@@ -219,7 +219,7 @@ if ($_GET['action'] == 'insert'&&$menu['company']['add']==1){
             <?PHP
         }else{
             
-            $company = $company_model->updateCompanyByID($data['company_code'],$data);    
+            $company = $company_model->updateCompanyByCode($data['company_code'],$data);    
             if($company!=false){ 
                 ?> 
                 <script>
@@ -245,7 +245,7 @@ if ($_GET['action'] == 'insert'&&$menu['company']['add']==1){
     }
 
 }else if ($menu['company']['view']==1 ){
-    $company = $company_model->getCompanyByID($company_code); 
+    $company = $company_model->getCompanyByCode($company_code); 
     require_once($path.'update.inc.php');
     // $company = $company_model->getCompanyBy(); 
     // require_once($path.'view.inc.php');

@@ -20,14 +20,14 @@
         var material_name = document.getElementById("material_name").value; 
         var material_description = document.getElementById("material_description").value; 
         var unit_code = document.getElementById("unit_code").value;
-        var material_quantity_per_unit = document.getElementById("material_quantity_per_unit").value;  
+        // var material_quantity_per_unit = document.getElementById("material_quantity_per_unit").value;  
         var material_minimum_stock = document.getElementById("material_minimum_stock").value;  
         var material_maximum_stock = document.getElementById("material_maximum_stock").value;  
          
         material_name = $.trim(material_name); 
         material_description = $.trim(material_description); 
         unit_code = $.trim(unit_code);
-        material_quantity_per_unit = $.trim(material_quantity_per_unit); 
+        // material_quantity_per_unit = $.trim(material_quantity_per_unit); 
         material_minimum_stock = $.trim(material_minimum_stock); 
         material_maximum_stock = $.trim(material_maximum_stock); 
 
@@ -39,10 +39,10 @@
             alert("Please input material unit code");
             document.getElementById("unit_code").focus();
             return false;
-        }else if(material_quantity_per_unit.length == 0){
-            alert("Please input material quantity per unit");
-            document.getElementById("material_quantity_per_unit").focus();
-            return false;
+        // }else if(material_quantity_per_unit.length == 0){
+        //     alert("Please input material quantity per unit");
+        //     document.getElementById("material_quantity_per_unit").focus();
+        //     return false;
         }else if(material_minimum_stock.length == 0){
             alert("Please input minimum stock");
             document.getElementById("material_minimum_stock").focus();
@@ -166,7 +166,7 @@
 
                         <!-- /.row (nested) -->
                         <div class="row"> 
-                            <div class="col-lg-6">
+                            <!-- <div class="col-lg-6">
                                 
                                 <div class="form-group">
                                     <label>ปริมาณต่อหน่วย / Quantity Per Unit <font color="#F00"><b>*</b></font></label>
@@ -174,7 +174,7 @@
                                     <p class="help-block">Example : 500</p>
                                 </div>
                                 
-                            </div> 
+                            </div>  -->
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>หน่วยวัตถุดิบ / Material Unit <font color="#F00"><b>*</b></font> </label>

@@ -144,7 +144,7 @@ class InvoiceSupplierModel extends BaseModel{
         }
     }
 
-    function getInvoiceSupplierByID($id){
+    function getInvoiceSupplierByCode($id){
         $sql = "SELECT tb_invoice_supplier.* ,tb_user.*
         FROM tb_invoice_supplier 
         LEFT JOIN tb_user ON tb_invoice_supplier.user_code = tb_user.user_code 
@@ -179,7 +179,7 @@ class InvoiceSupplierModel extends BaseModel{
 
     }
 
-    function getInvoiceSupplierViewByID($code){
+    function getInvoiceSupplierViewByCode($code){
         $sql = " SELECT *   
         FROM tb_invoice_supplier 
         LEFT JOIN tb_user ON tb_invoice_supplier.user_code = tb_user.user_code 
@@ -307,7 +307,7 @@ class InvoiceSupplierModel extends BaseModel{
         return $data;
     }
 
-    function getInvoiceSupplierLastID($id,$digit){
+    function getInvoiceSupplierLastCode($id,$digit){
         $sql = "SELECT CONCAT('$id' , LPAD(IFNULL(MAX(CAST(SUBSTRING(invoice_supplier_code_gen,".(strlen($id)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  invoice_supplier_lastcode 
         FROM tb_invoice_supplier
         WHERE invoice_supplier_code_gen LIKE ('$id%') 
@@ -382,7 +382,7 @@ class InvoiceSupplierModel extends BaseModel{
         return $data;
     }
 
-    function updateInvoiceSupplierByID($code,$data = []){
+    function updateInvoiceSupplierByCode($code,$data = []){
         $sql = " UPDATE tb_invoice_supplier SET  
         supplier_code = '".$data['supplier_code']."',  
         invoice_supplier_code_receive = '".static::$db->real_escape_string($data['invoice_supplier_code_receive'])."', 
@@ -471,7 +471,7 @@ class InvoiceSupplierModel extends BaseModel{
 
     }
 
-    function updateSupplierByInvoiceID($id,$data = []){
+    function updateSupplierByInvoiceCode($id,$data = []){
         $sql = " UPDATE tb_invoice_supplier SET 
         supplier_code = '".$data['supplier_code']."',  
         invoice_supplier_name = '".static::$db->real_escape_string($data['invoice_supplier_name'])."', 
@@ -493,7 +493,7 @@ class InvoiceSupplierModel extends BaseModel{
 
     }
 
-    function deleteInvoiceSupplierByID($code){
+    function deleteInvoiceSupplierByCode($code){
         $sql = "SELECT invoice_supplier_list_code, tb_invoice_supplier_list.material_code , invoice_supplier_list_qty 
                 FROM  tb_invoice_supplier_list 
                 LEFT JOIN tb_material ON tb_invoice_supplier_list.material_code = tb_material.material_code  

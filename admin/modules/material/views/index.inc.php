@@ -54,7 +54,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
 }else if ($_GET['action'] == 'update' && $menu['material']['edit']==1 ){
 
     
-    $material = $model_material->getMaterialByID($material_code);
+    $material = $model_material->getMaterialByCode($material_code);
     // $material_group = $model_material_group->getMaterialGroupBy();
     // $material_type = $material_type_model->getMaterialTypeBy();
     // $material_category = $model_material_category->getMaterialCategoryBy();
@@ -63,16 +63,20 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
 
     // $material_customers = $model_material_customer->getMaterialCustomerBy($material_code);
     $material_suppliers = $model_material_supplier->getMaterialSupplierByMaterialCode($material_code);
+    echo '<pre>';
+    print_r($material_code);
+    echo '</pre>';
+    
 
     // $customer = $model_customer->getCustomerBy();
     $supplier = $supplier_model->getSupplierBy();
 
     if($material_supplier_code != ''){
-        $material_supplier = $model_material_supplier->getMaterialSupplierByID($material_supplier_code);
+        $material_supplier = $model_material_supplier->getMaterialSupplierByCode($material_supplier_code);
     }
 
     // if($material_customer_id != ''){
-    //     $material_customer = $model_material_customer->getMaterialCustomerByID($material_customer_id);
+    //     $material_customer = $model_material_customer->getMaterialCustomerByCode($material_customer_id);
     // }
 
     require_once($path.'update.inc.php');
@@ -106,7 +110,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
         $data['material_code'] = $material_code;
         $data['material_name'] = $_POST['material_name'];
         $data['material_logo'] = $_POST['material_logo'];
-        $data['material_quantity_per_unit'] = preg_replace('/\D/', '', $_POST['material_quantity_per_unit']);
+        // $data['material_quantity_per_unit'] = preg_replace('/\D/', '', $_POST['material_quantity_per_unit']);
         $data['unit_code'] = $_POST['unit_code'];
         $data['material_minimum_stock'] = $_POST['material_minimum_stock'];
         $data['material_maximum_stock'] = $_POST['material_maximum_stock'];
@@ -196,7 +200,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
         $data = [];  
         $data['material_name'] = $_POST['material_name'];
         $data['material_logo'] = $_POST['material_logo'];
-        $data['material_quantity_per_unit'] = preg_replace('/\D/', '', $_POST['material_quantity_per_unit']);
+        // $data['material_quantity_per_unit'] = preg_replace('/\D/', '', $_POST['material_quantity_per_unit']);
         $data['unit_code'] = $_POST['unit_code'];
         $data['material_minimum_stock'] = $_POST['material_minimum_stock'];
         $data['material_maximum_stock'] = $_POST['material_maximum_stock'];
@@ -265,7 +269,7 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
         </script>
     <?php
         }else{
-            $result = $model_material->updateMaterialByID($_POST['material_code'],$data);
+            $result = $model_material->updateMaterialByCode($_POST['material_code'],$data);
 
             if($result){
             ?>
@@ -330,7 +334,7 @@ else if ($_GET['action'] == 'add_supplier' && $menu['material']['edit']==1){
         // echo '<pre>';
         // print_r($data);
         // echo '</pre>'
-        $model_material_supplier->updateMaterialSupplierByID($_POST['material_supplier_code'],$data);
+        $model_material_supplier->updateMaterialSupplierByCode($_POST['material_supplier_code'],$data);
         
         ?>
             <script>window.location="index.php?app=material&action=update&code=<?php echo $material_code?>"</script>

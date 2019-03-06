@@ -82,7 +82,7 @@ class MaterialSupplierModel extends BaseModel{
 
     }
 
-    function getMaterialSupplierByID($code){
+    function getMaterialSupplierByCode($code){
         $sql = " SELECT * 
         FROM tb_material_supplier 
         WHERE material_supplier_code = '$code' 
@@ -99,7 +99,7 @@ class MaterialSupplierModel extends BaseModel{
 
     }
 
-    function getMaterialSupplierPriceByID($material_code,$supplier_code){
+    function getMaterialSupplierPriceByCode($material_code,$supplier_code){
         $sql = " SELECT * 
         FROM tb_material_supplier 
         WHERE material_code = '$material_code' AND supplier_code = '$supplier_code' 
@@ -115,7 +115,7 @@ class MaterialSupplierModel extends BaseModel{
         } 
     }
 
-    function updateMaterialSupplierPriceByID($data = []){
+    function updateMaterialSupplierPriceByCode($data = []){
         $sql = " UPDATE tb_material_supplier SET      
         material_supplier_buyprice = '".$data['material_supplier_buyprice']."' 
         WHERE supplier_code = '".$data['supplier_code']."' AND material_code = '".$data['material_code']."' 
@@ -130,7 +130,7 @@ class MaterialSupplierModel extends BaseModel{
 
     }
 
-    function updateMaterialSupplierByID($code,$data = []){
+    function updateMaterialSupplierByCode($code,$data = []){
         $sql = " UPDATE tb_material_supplier SET     
         supplier_code = '".$data['supplier_code']."', 
         material_supplier_buyprice = '".$data['material_supplier_buyprice']."', 
@@ -174,7 +174,7 @@ class MaterialSupplierModel extends BaseModel{
     }
 
 
-    function deleteMaterialSupplierByID($code){
+    function deleteMaterialSupplierByCode($code){
         $sql = " DELETE FROM tb_material_supplier WHERE material_supplier_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 

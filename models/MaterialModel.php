@@ -55,10 +55,10 @@ class MaterialModel extends BaseModel{
     function getMaterialByCode($material_code){
         $sql = "SELECT * 
         FROM tb_material  
-        LEFT JOIN tb_material_unit ON tb_material.unit_code = tb_material_unit.unit_code 
+        LEFT JOIN tb_unit ON tb_material.unit_code = tb_unit.unit_code 
         WHERE tb_material.material_code = '$material_code' 
         ";
-        // return $sql;
+        // echo $sql;
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data;
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -69,25 +69,9 @@ class MaterialModel extends BaseModel{
         }
 
     }
+ 
 
-    function getMaterialByID($code){
-        $sql = " SELECT * 
-        FROM tb_material 
-        WHERE material_code = '$code' 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
-            $result->close();
-            return $data;
-        }
-
-    }
-
-    function updateMaterialByID($code,$data = []){
+    function updateMaterialByCode($code,$data = []){
         $sql = " UPDATE tb_material SET     
         material_name = '".$data['material_name']."', 
         material_logo = '".$data['material_logo']."', 
@@ -101,7 +85,7 @@ class MaterialModel extends BaseModel{
         WHERE material_code = '$code' 
         ";
 
-        echo $sql;
+        // echo $sql;
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
            return true;
         }else {
@@ -151,7 +135,7 @@ class MaterialModel extends BaseModel{
     }
 
 
-    function deleteMaterialByID($code){
+    function deleteMaterialByCode($code){
         $sql = " DELETE FROM tb_material WHERE material_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 

@@ -61,7 +61,7 @@ class InvoiceSupplierListModel extends BaseModel{
     }
 
     
-    function getInvoiceSupplierListByID($code){
+    function getInvoiceSupplierListByCode($code){
         $sql = " SELECT * 
         FROM tb_invoice_supplier_list 
         WHERE invoice_supplier_list_code = '$code'  
@@ -80,7 +80,7 @@ class InvoiceSupplierListModel extends BaseModel{
 
     function updateInvoiceSupplierListById($data,$code){
 
-        $data_old = $this->getInvoiceSupplierListByID($code);
+        $data_old = $this->getInvoiceSupplierListByCode($code);
         $data_old['branch_code'] = $data['branch_code'];
 
         $sql = " UPDATE tb_invoice_supplier_list 
@@ -156,7 +156,7 @@ class InvoiceSupplierListModel extends BaseModel{
 
     }
 
-    function deleteInvoiceSupplierListByInvoiceSupplierIDNotIN($code,$data){
+    function deleteInvoiceSupplierListByInvoiceSupplierCodeNotIN($code,$data){
         $str ='';
         if(is_array($data)){ 
             for($i=0; $i < count($data) ;$i++){

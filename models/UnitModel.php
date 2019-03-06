@@ -38,7 +38,7 @@ class UnitModel extends BaseModel{
 
     }
 
-    function getUnitByID($code){
+    function getUnitByCode($code){
         $sql = " SELECT * 
         FROM tb_unit 
         WHERE unit_code = '$code' 
@@ -55,7 +55,7 @@ class UnitModel extends BaseModel{
 
     }
 
-    function updateUnitByID($code,$data = []){
+    function updateUnitByCode($code,$data = []){
         $sql = " UPDATE tb_unit SET     
         unit_name = '".$data['unit_name']."', 
         unit_detail = '".$data['unit_detail']."'  
@@ -94,7 +94,7 @@ class UnitModel extends BaseModel{
     }
 
 
-    function deleteUnitByID($code){
+    function deleteUnitByCode($code){
         $sql = " DELETE FROM tb_unit WHERE unit_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 

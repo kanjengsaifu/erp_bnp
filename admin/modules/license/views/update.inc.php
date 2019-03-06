@@ -88,7 +88,7 @@
                             <div>
                                 <h1>สิทธิ์การใช้งาน</h1> 
                             </div>
-                            <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table width="100%" class="table table-striped table-bordered table-hover" id="">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -133,25 +133,25 @@
                                 <tbody>
                                 <?php 
                                 for($i=0; $i < count($menus); $i++){    
-                                    $license_permission = $license_permission_model->getLicensePermissionByLicenseID($license_code,$menus[$i]['menu_code']);
+                                    $license_permission = $license_permission_model->getLicensePermissionByLicenseCode($license_code,$menus[$i]['menu_code']);
                                 ?>
                                     <tr>  
                                         <input type="hidden"  name="license_permission_code_<?PHP echo $menus[$i]['menu_code'];?>" value="<?php if($license_permission['license_permission_code']!=''){echo $license_permission['license_permission_code'];}  ?>" />
                                         <td><?php echo $i+1; ?></td> 
                                         <td><?php echo $menus[$i]['menu_name']; ?></td>  
-                                        <td> 
+                                        <td class="text-center"> 
                                             <input class="view"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_view_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_view_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_view']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','view');"> 
                                         </td> 
-                                        <td> 
+                                        <td class="text-center"> 
                                             <input class="add"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_add_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_add_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_add']==1){ echo 'checked';}?>  onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','add');">  
                                         </td> 
-                                        <td> 
+                                        <td class="text-center"> 
                                             <input class="edit"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_edit_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_edit_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_edit']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','edit');">  
                                         </td> 
-                                        <td> 
+                                        <td class="text-center"> 
                                             <input class="cancel"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_cancel_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_cancel_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_cancel']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','cancel');">  
                                         </td>
-                                        <td> 
+                                        <td class="text-center"> 
                                             <input class="delete"  style="align:center;width: 20px;height: 20px;" type="checkbox" value="1" id="license_permission_delete_<?PHP echo $menus[$i]['menu_code'];?>" name="license_permission_delete_<?PHP echo $menus[$i]['menu_code'];?>" <?PHP if($license_permission['license_permission_delete']==1){ echo 'checked';}?> onclick="oncheck('<?PHP echo $menus[$i]['menu_code'];?>','delete');">  
                                         </td>
                                     </tr>

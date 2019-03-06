@@ -66,7 +66,7 @@
         // var purchase_order_category = document.getElementById('purchase_order_category').value;
         // var user_code = document.getElementById('user_code').value;
         document.getElementById('supplier_code').value = supplier_code;
-        $.post( "controllers/getSupplierByID.php", { 'supplier_code': supplier_code}, function( data ) {
+        $.post( "controllers/getSupplierByCode.php", { 'supplier_code': supplier_code}, function( data ) {
             // console.log(data);
             document.getElementById('supplier_code').value = data.supplier_code;
             document.getElementById('invoice_supplier_name').value = data.supplier_name_en;
@@ -77,13 +77,13 @@
             document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
         });
 
-        // $.post( "controllers/getPurchaseOrderCodeByID.php", { 'supplier_code': supplier_code, 'user_code':user_code, 'purchase_order_category':purchase_order_category  }, function( data ) {
+        // $.post( "controllers/getPurchaseOrderCodeByCode.php", { 'supplier_code': supplier_code, 'user_code':user_code, 'purchase_order_category':purchase_order_category  }, function( data ) {
         //     document.getElementById('purchase_order_code').value = data;
         //     check_code();
 
         // });
 
-        // $.post( "controllers/getMaterialBySupplierID.php", { 'supplier_code': supplier_code }, function( data ) {
+        // $.post( "controllers/getMaterialBySupplierCode.php", { 'supplier_code': supplier_code }, function( data ) {
         //     material_data = data;
         // });
     }
@@ -144,7 +144,7 @@
         console.log(purchase_order_list_code);
         if(supplier_code != ""){
 
-            $.post( "controllers/getInvoiceSupplierListBySupplierID.php", { 
+            $.post( "controllers/getInvoiceSupplierListBySupplierCode.php", { 
                 'supplier_code': supplier_code,
                 'purchase_order_code':'<?PHP echo $_GET['purchase_order_code'];?>', 
                 'purchase_order_list_code': JSON.stringify(purchase_order_list_code) }, function( data ) {
@@ -211,7 +211,7 @@
             purchase_order_list_code.push(val[i].value);
         }
 
-        $.post( "controllers/getInvoiceSupplierListBySupplierID.php", { 
+        $.post( "controllers/getInvoiceSupplierListBySupplierCode.php", { 
             'supplier_code': supplier_code, 
             'purchase_order_code':'<?PHP echo $_GET['purchase_order_code'];?>', 
             'purchase_order_list_code': JSON.stringify(purchase_order_list_code), search : $(id).val() }, function( data ) {
@@ -273,7 +273,7 @@
                 
                 var supplier_code = $('#supplier_code').val(); 
                 if(supplier_code!=''){
-                    $.post( "controllers/getMaterialSupplierPriceByID.php", { 'material_code': $.trim(data.material_code),'supplier_code': $.trim(supplier_code)}, function( data ) { 
+                    $.post( "controllers/getMaterialSupplierPriceByCode.php", { 'material_code': $.trim(data.material_code),'supplier_code': $.trim(supplier_code)}, function( data ) { 
                         // console.log(data);
                         if (data != null){
                             if( data.material_code == null ){

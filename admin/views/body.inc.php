@@ -22,6 +22,14 @@
         require_once("modules/invoice_supplier/views/index.inc.php");   
     }else if($_GET['app'] == "production"){
         require_once("modules/production/views/index.inc.php");
+    }else if($_GET['app'] == "product"){
+        require_once("modules/product/views/index.inc.php");   
+    }else if($_GET['app'] == "product_type"){
+        require_once("modules/product_type/views/index.inc.php");   
+    }else if($_GET['app'] == "product_brand"){
+        require_once("modules/product_brand/views/index.inc.php");   
+    }else if($_GET['app'] == "project"){
+        require_once("modules/project/views/index.inc.php");   
     }
     /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
 

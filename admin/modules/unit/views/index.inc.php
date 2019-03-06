@@ -6,7 +6,7 @@ $unit_code = $_GET['code'];
 
 if ($_GET['action'] == 'delete'&& $menu['unit']['delete']==1 ){
 
-    $unit_model->deleteUnitByID($unit_code);
+    $unit_model->deleteUnitByCode($unit_code);
 ?>
     <script>window.location="index.php?app=unit"</script>
 <?php
@@ -40,7 +40,7 @@ if ($_GET['action'] == 'delete'&& $menu['unit']['delete']==1 ){
         $data['unit_name'] = $_POST['unit_name'];
         $data['unit_detail'] = $_POST['unit_detail'];
             
-        $code = $unit_model->updateUnitByID($_POST['unit_code'],$data);
+        $code = $unit_model->updateUnitByCode($_POST['unit_code'],$data);
         if($code > 0){
     ?>
             <script>window.location="index.php?app=unit&action=view&code=<?php echo $unit_code;?>"</script>
@@ -54,7 +54,7 @@ if ($_GET['action'] == 'delete'&& $menu['unit']['delete']==1 ){
         }
     
 }else if ($menu['unit']['view']==1 ){
-    $unit = $unit_model->getUnitByID($unit_code);
+    $unit = $unit_model->getUnitByCode($unit_code);
     $units = $unit_model->getUnitBy();
     require_once($path.'view.inc.php');
 

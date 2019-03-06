@@ -37,7 +37,7 @@ class LicenseModel extends BaseModel{
 
     
 
-    function getLicenseByID($code){
+    function getLicenseByCode($code){
         $sql = " SELECT * 
         FROM tb_license 
         WHERE license_code = '$code' 
@@ -86,7 +86,7 @@ class LicenseModel extends BaseModel{
         }
     }
 
-    function updateLicenseByID($code,$data = []){
+    function updateLicenseByCode($code,$data = []){
         $sql = " UPDATE tb_license SET 
         license_name = '".$data['license_name']."'
         WHERE license_code = '$code' 
@@ -99,7 +99,7 @@ class LicenseModel extends BaseModel{
     }
 
 
-    function deleteLicenseByID($code){
+    function deleteLicenseByCode($code){
         $sql = " DELETE FROM tb_license WHERE license_code = '$code' ";
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return 1;

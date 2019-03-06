@@ -37,7 +37,7 @@ class LicensePermissionModel extends BaseModel{
 
     
 
-    function getLicensePermissionByID($code){
+    function getLicensePermissionByCode($code){
         $sql = " SELECT * 
         FROM tb_license_permission 
         WHERE license_code = '$code' 
@@ -51,7 +51,7 @@ class LicensePermissionModel extends BaseModel{
             return $data;
         }
     } 
-    function getLicensePermissionByUserID($code){
+    function getLicensePermissionByUserCode($code){
         $sql = "SELECT  
         tb_license_permission.menu_code,
         tb_menu.menu_name,
@@ -77,7 +77,7 @@ class LicensePermissionModel extends BaseModel{
             return $data;
         }
     } 
-    function getLicensePermissionByLicenseID($code,$menu_code=''){
+    function getLicensePermissionByLicenseCode($code,$menu_code=''){
         $sql = " SELECT * 
         FROM tb_license_permission 
         WHERE license_code = '$code' 
@@ -124,7 +124,7 @@ class LicensePermissionModel extends BaseModel{
         }
     }
 
-    function updateLicensePermissionByID($code,$data = []){
+    function updateLicensePermissionByCode($code,$data = []){
         $sql = " UPDATE tb_license_permission SET 
         license_code = '".$data['license_code']."',
         menu_code = '".$data['menu_code']."',
@@ -144,7 +144,7 @@ class LicensePermissionModel extends BaseModel{
     }
 
 
-    function deleteLicensePermissionByID($code){
+    function deleteLicensePermissionByCode($code){
         $sql = " DELETE FROM tb_license_permission WHERE license_code = '$code' ";
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return 1;

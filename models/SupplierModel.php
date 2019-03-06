@@ -40,7 +40,7 @@ class SupplierModel extends BaseModel{
 
  
 
-    function getSupplierByID($code){
+    function getSupplierByCode($code){
         $sql = " SELECT * 
         FROM tb_supplier  
         WHERE supplier_code = '$code' 
@@ -73,26 +73,9 @@ class SupplierModel extends BaseModel{
             return $data;
         }
 
-    }
+    } 
 
-    function getSupplierByCode($code){
-        $sql = " SELECT * 
-        FROM tb_supplier  
-        WHERE supplier_code = '$code' 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
-            $result->close();
-            return $data;
-        }
-
-    }
-
-    function updateSupplierByID($code,$data = []){
+    function updateSupplierByCode($code,$data = []){
         $sql = " UPDATE tb_supplier SET   
         supplier_name_th = '".$data['supplier_name_th']."', 
         supplier_name_en = '".$data['supplier_name_en']."',  
@@ -189,7 +172,7 @@ class SupplierModel extends BaseModel{
     }
 
 
-    function deleteSupplierByID($code){
+    function deleteSupplierByCode($code){
         $sql = " DELETE FROM tb_supplier WHERE supplier_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 

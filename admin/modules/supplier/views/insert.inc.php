@@ -79,7 +79,7 @@
 
         reader.readAsDataURL(input.files[0]);
         }else{
-            $('#img_logo').attr('src', '../upload/supplier/default.png');
+            $('#img_logo').attr('src', '../upload/default.png');
         }
     }
 
@@ -213,7 +213,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>รูปผู้ขาย / Supplier Picture </label>
-                                        <img class="img-responsive" id="img_logo" src="../upload/supplier/default.png" /><br>
+                                        <img class="img-responsive" id="img_logo" src="../upload/default.png" /><br>
                                         <input accept=".jpg , .png"   type="file" id="supplier_logo" name="supplier_logo" onChange="readURL(this);">
                                         <p class="help-block">Example : .jpg or .png </p>
                                     </div>

@@ -29,16 +29,16 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['user']['edit']==1){
-    $user = $user_model->getUserByID($user_code);
+    $user = $user_model->getUserByCode($user_code);
     $license = $license_model->getLicenseBy();
     $user_position = $user_position_model->getUserPositionBy();
     $user_status = $user_status_model->getUserStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($user['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($user['amphur_id']); 
+    $add_amphur = $address_model->getAmphurByProviceCode($user['province_id']);
+    $add_district = $address_model->getDistrictByAmphurID($user['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['user']['delete']==1){
-    $user = $user_model->getUserByID($user_code);
+    $user = $user_model->getUserByCode($user_code);
     $target_file = $target_dir .$user['user_image'];
     if (file_exists($target_file)&& $_POST['user_image_o']!='') {
         unlink($target_file);
@@ -102,7 +102,7 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
         // print_r($data);
         // echo '</pre>';
 
-        $user = $user_model->updateUserByID($_POST['user_code'],$data);
+        $user = $user_model->updateUserByCode($_POST['user_code'],$data);
 
         if($user){  
 ?>

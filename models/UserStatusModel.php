@@ -23,7 +23,7 @@ class UserStatusModel extends BaseModel{
 
     }
 
-    function getUserStatusByID($id){
+    function getUserStatusByCode($id){
         $sql = " SELECT * 
         FROM tb_user_status 
         WHERE user_status_id = '$id' 
@@ -40,7 +40,7 @@ class UserStatusModel extends BaseModel{
 
     }
 
-    function updateUserStatusByID($id,$data = []){
+    function updateUserStatusByCode($id,$data = []){
         $sql = " SELECT * 
         FROM tb_user_status 
         WHERE user_status_id = '$id' 
@@ -54,7 +54,7 @@ class UserStatusModel extends BaseModel{
     }
 
 
-    function deleteUserStatusByID($id){
+    function deleteUserStatusByCode($id){
         $sql = " DELETE FROM tb_user_status WHERE user_status_id = '$id' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 

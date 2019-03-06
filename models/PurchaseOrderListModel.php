@@ -55,7 +55,7 @@ class PurchaseOrderListModel extends BaseModel{
 
     }
 
-    function getPurchaseOrderListIDByOther($purchase_order_code,$purchase_order_list_no){
+    function getPurchaseOrderListCodeByOther($purchase_order_code,$purchase_order_list_no){
         $sql ="SELECT * 
         FROM tb_purchase_order_list 
         LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_code 
@@ -158,7 +158,7 @@ class PurchaseOrderListModel extends BaseModel{
         }
     }
 
-    function updateInvoiceSupplierListID($purchase_order_list_id,$invoice_supplier_list_id){
+    function updateInvoiceSupplierListCode($purchase_order_list_id,$invoice_supplier_list_id){
         $sql = " UPDATE tb_purchase_request_list 
             SET invoice_supplier_list_id = '$invoice_supplier_list_id' 
             WHERE purchase_order_list_id = '$purchase_order_list_id' 
@@ -173,7 +173,7 @@ class PurchaseOrderListModel extends BaseModel{
     }
 
     
-    function updateInvoiceCustomerListID($purchase_order_list_id,$invoice_customer_list_id){
+    function updateInvoiceCustomerListCode($purchase_order_list_id,$invoice_customer_list_id){
         $sql = " UPDATE tb_purchase_request_list 
             SET invoice_customer_list_id = '$invoice_customer_list_id' 
             WHERE purchase_order_list_id = '$purchase_order_list_id' 
@@ -189,14 +189,14 @@ class PurchaseOrderListModel extends BaseModel{
 
 
 
-    function deletePurchaseOrderListByID($id){
+    function deletePurchaseOrderListByCode($id){
         $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_list_id = '$id' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }
 
 
-    function deletePurchaseOrderListByPurchaseOrderID($id){
+    function deletePurchaseOrderListByPurchaseOrderCode($id){
 
         $sql = "UPDATE  tb_purchase_request_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
      
@@ -236,7 +236,7 @@ class PurchaseOrderListModel extends BaseModel{
 
     }
 
-    function deletePurchaseOrderListByPurchaseOrderIDNotIN($id,$data){
+    function deletePurchaseOrderListByPurchaseOrderCodeNotIN($id,$data){
         $str ='';
         if(is_array($data)){ 
             for($i=0; $i < count($data) ;$i++){

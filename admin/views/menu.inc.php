@@ -6,7 +6,7 @@ $menu_model = new MenuModel;
 $license_permission_model = new LicensePermissionModel; 
 
 $menu_list = $menu_model->getMenuBy();
-$license_permission = $license_permission_model->getLicensePermissionByUserID($login_user['user_code']); 
+$license_permission = $license_permission_model->getLicensePermissionByUserCode($login_user['user_code']); 
 
 $menu = [];
 for($i = 0 ; $i < count($menu_list); $i++){
@@ -128,9 +128,9 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <li>
                     <a href="?app=job" <?PHP if($_GET["app"]=='job'){ ?> class="active" <?PHP } ?>><i class="fa fa-gears" aria-hidden="true"></i> งาน</a>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="?app=product" <?PHP if($_GET["app"]=='product'){ ?> class="active" <?PHP } ?>><i class="fa fa-th" aria-hidden="true"></i> สินค้า</a>
-                </li>
+                </li> -->
                 <li>
                     <a href="?app=stock" <?PHP if($_GET["app"]=='stock'){ ?> class="active" <?PHP } ?>><i class="fa fa-cubes" aria-hidden="true"></i> คลัง</a>
                 </li>
@@ -185,6 +185,10 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         || $_GET["app"]=='material' 
                         || $_GET["app"]=='unit' 
                         || $_GET["app"]=='material_type' 
+                        || $_GET["app"]=='product' 
+                        || $_GET["app"]=='product_type'
+                        || $_GET["app"]=='product_brand'
+                        || $_GET["app"]=='project'
                     ){
                         echo ' class="active" ';
                     }
@@ -200,8 +204,22 @@ for($i = 0 ; $i < count($menu_list); $i++){
                                 $_GET['app'] == "material"
                             || $_GET["app"]=='unit'
                             || $_GET["app"]=='material_type'
-                            ){?> class="active" <?PHP } ?> ><i class="fa fa-gears" aria-hidden="true"></i> วัตถุดิบ</a>
+                            ){?> class="active" <?PHP } ?> ><i class="fa fa-briefcase" aria-hidden="true"></i> วัตถุดิบ</a>
                         </li>
+                        <?PHP }?> 
+                        <?PHP if($menu['product']['view']==1){ ?>
+                        <li>
+                            <a href="?app=product" <?PHP if(
+                                $_GET['app'] == "product" 
+                            || $_GET["app"]=='product_type'
+                            || $_GET["app"]=='product_brand'
+                            ){?> class="active" <?PHP } ?> ><i class="fa fa-product-hunt" aria-hidden="true"></i> สินค้า</a>
+                        </li>
+                        <?PHP }?> 
+                        <?PHP if($menu['project']['view']==1){ ?>
+                        <li>
+                            <a href="?app=project" <?PHP if($_GET['app'] == "project"){?> class="active" <?PHP } ?> ><i class="fa fa-building" aria-hidden="true"></i> โครงการปรับปรุงดิน</a>
+                        </li> 
                         <?PHP }?> 
                         <?PHP if($menu['company']['view']==1){ ?>
                         <li>

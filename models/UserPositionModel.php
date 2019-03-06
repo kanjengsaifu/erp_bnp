@@ -22,7 +22,7 @@ class UserPositionModel extends BaseModel{
         }
     }
 
-    function getUserPositionByID($id){
+    function getUserPositionByCode($id){
         $sql = " SELECT * 
         FROM tb_user_position 
         WHERE user_position_id = '$id' 
@@ -38,7 +38,7 @@ class UserPositionModel extends BaseModel{
         }
     }
 
-    function updateUserPositionByID($id,$data = []){
+    function updateUserPositionByCode($id,$data = []){
         $sql = " SELECT * 
         FROM tb_user_position 
         WHERE user_position_id = '$id' 
@@ -50,7 +50,7 @@ class UserPositionModel extends BaseModel{
         }
     }
 
-    function deleteUserPositionByID($id){
+    function deleteUserPositionByCode($id){
         $sql = " DELETE FROM tb_user_position WHERE user_position_id = '$id' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 

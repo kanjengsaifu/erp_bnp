@@ -24,7 +24,7 @@
             <thead>
                 <tr>
                     <th style="text-align:center;">ลำดับ <br>No.</th>
-                    <th style="text-align:center;">รหัส <br>ID</th>
+                    <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
                     <th style="text-align:center;">ตำแหน่ง <br>Position</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>

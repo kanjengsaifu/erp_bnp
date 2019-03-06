@@ -37,22 +37,22 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     $users=$user_model->getUserBy(); 
       
     if($supplier_code != ""){
-        $supplier=$supplier_model->getSupplierByID($supplier_code);
+        $supplier=$supplier_model->getSupplierByCode($supplier_code);
         if($supplier['vat_type'] == '0'){
             $vat= '0';
         }else{
             $vat = $invoice_supplier['vat'];
         }
-        //$materials=$material_supplier_model->getMaterialBySupplierID(/*$supplier_code*/);
+        //$materials=$material_supplier_model->getMaterialBySupplierCode(/*$supplier_code*/);
         $materials=$material_model->getMaterialBy('','','','Active');
 
         if($supplier['supplier_domestic'] == "ภายในประเทศ"){
-            $paper = $paper_model->getPaperByID('11');
+            $paper = $paper_model->getPaperByCode('11');
         }else{
-            $paper = $paper_model->getPaperByID('10');
+            $paper = $paper_model->getPaperByCode('10');
         }
 
-        $user=$user_model->getUserByID($admin_id);
+        $user=$user_model->getUserByCode($admin_id);
         
         $data = [];
         $data['year'] = date("Y");
@@ -65,7 +65,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
         for($i = 0 ; $i < count($code); $i++){
         
             if($code[$i]['type'] == "number"){
-                $last_code = $purchase_order_model->getPurchaseOrderLastID($last_code,$code[$i]['length']);
+                $last_code = $purchase_order_model->getPurchaseOrderLastCode($last_code,$code[$i]['length']);
             }else{
                 $last_code .= $code[$i]['value'];
             }   
@@ -83,16 +83,16 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     
     $suppliers=$supplier_model->getSupplierBy();
     $users=$user_model->getUserBy();
-    $purchase_order = $purchase_order_model->getPurchaseOrderByID($purchase_order_code);
+    $purchase_order = $purchase_order_model->getPurchaseOrderByCode($purchase_order_code);
     $type=$purchase_order["purchase_order_type"];
     $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
-    $supplier=$supplier_model->getSupplierByID($purchase_order['supplier_code']);
+    $supplier=$supplier_model->getSupplierByCode($purchase_order['supplier_code']);
     if($supplier['vat_type'] == '0'){
         $vat= '0';
     }else{
         $vat = $invoice_supplier['vat'];
     }
-    //$materials=$material_supplier_model->getMaterialBySupplierID($purchase_order['supplier_code']);
+    //$materials=$material_supplier_model->getMaterialBySupplierCode($purchase_order['supplier_code']);
     $materials=$material_model->getMaterialBy('','','','Active');
     // echo "<pre>";
     // print_r( $purchase_order_lists);
@@ -100,7 +100,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     require_once($path.'update.inc.php');
 
 }else if ($_GET['action'] == 'detail'&& $menu['purchase_order']['view']==1){ 
-    $purchase_order = $purchase_order_model->getPurchaseOrderViewByID($purchase_order_code);
+    $purchase_order = $purchase_order_model->getPurchaseOrderViewByCode($purchase_order_code);
     $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
     // if($supplier['vat_type'] == '0'){
     //     $vat= '0';
@@ -114,15 +114,15 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
 
 }else if ($_GET['action'] == 'delete' && $menu['purchase_order']['delete']==1){
 
-    // $notification_model->deleteNotificationByTypeID('Purchase Order',$purchase_order_code);
-    // $purchase_order_list_model->deletePurchaseOrderListByPurchaseOrderID($purchase_order_code);
-    $purchase_orders = $purchase_order_model->deletePurchaseOrderByID($purchase_order_code);
+    // $notification_model->deleteNotificationByTypeCode('Purchase Order',$purchase_order_code);
+    // $purchase_order_list_model->deletePurchaseOrderListByPurchaseOrderCode($purchase_order_code);
+    $purchase_orders = $purchase_order_model->deletePurchaseOrderByCode($purchase_order_code);
 ?>
     <script>window.location="index.php?app=purchase_order"</script>
 <?php
 
 }else if ($_GET['action'] == 'cancelled' && $menu['purchase_order']['delete']==1){
-    $purchase_order_model->cancelPurchaseOrderByID($purchase_order_code);
+    $purchase_order_model->cancelPurchaseOrderByCode($purchase_order_code);
 ?>
     <script>
         window.location="index.php?app=purchase_order"
@@ -130,7 +130,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
 <?php
 
 }else if ($_GET['action'] == 'uncancelled' && $menu['purchase_order']['delete']==1){
-    $purchase_order_model->uncancelPurchaseOrderByID($purchase_order_code);
+    $purchase_order_model->uncancelPurchaseOrderByCode($purchase_order_code);
 ?>
      <script>
         window.location="index.php?app=purchase_order"
@@ -245,7 +245,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
             // print_r($data);
             // echo '</pre>';
 
-            $purchase_order_model->updatePurchaseOrderByID($purchase_order_code,$data);
+            $purchase_order_model->updatePurchaseOrderByCode($purchase_order_code,$data);
 
             $save_material_price = $_POST['save_material_price'];
             // echo '<pre>';
@@ -258,7 +258,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
                         $material_price = (float)filter_var($purchase_order_list_price[$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                     }
                 }
-                $material_supplier_prices =  $material_supplier_model->getMaterialSupplierPriceByID($save_material_price[$i],$_POST['supplier_code']);
+                $material_supplier_prices =  $material_supplier_model->getMaterialSupplierPriceByCode($save_material_price[$i],$_POST['supplier_code']);
     
                 $data = [];
                 $data['material_code'] = $save_material_price[$i];
@@ -267,7 +267,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
                 $data['material_supplier_lead_time'] = 0;   
     
                 if(count($material_supplier_prices) > 0){ 
-                    $material_supplier_model->updateMaterialSupplierPriceByID($data);
+                    $material_supplier_model->updateMaterialSupplierPriceByCode($data);
                 }else{
                     $material_supplier_code = "MATS";
                     $material_supplier_code = $material_supplier_model->getMaterialSupplierLastCode($material_supplier_code,3);  
@@ -309,7 +309,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
         $purchase_order_list_delivery_max = $_POST['purchase_order_list_delivery_max'];
         $purchase_order_list_remark = $_POST['purchase_order_list_remark'];
 
-        $purchase_order_list_model->deletePurchaseOrderListByPurchaseOrderIDNotIN($purchase_order_code,$purchase_order_list_code);
+        $purchase_order_list_model->deletePurchaseOrderListByPurchaseOrderCodeNotIN($purchase_order_code,$purchase_order_list_code);
         
         if(is_array($material_code)){
             for($i=0; $i < count($material_code) ; $i++){
@@ -377,7 +377,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
         $data['purchase_order_net_price'] = (float)filter_var($purchase_order_net_price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['user_code'] = $_POST['user_code'];
 
-        $output = $purchase_order_model->updatePurchaseOrderByID($purchase_order_code , $data); 
+        $output = $purchase_order_model->updatePurchaseOrderByCode($purchase_order_code , $data); 
 
         $save_material_price = $_POST['save_material_price'];
         for($i=0; $i < count($save_material_price); $i++){
@@ -387,7 +387,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
                     $material_price = (float)filter_var($purchase_order_list_price[$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                 }
             }
-            $material_supplier_prices =  $material_supplier_model->getMaterialSupplierPriceByID($save_material_price[$i],$_POST['supplier_code']);
+            $material_supplier_prices =  $material_supplier_model->getMaterialSupplierPriceByCode($save_material_price[$i],$_POST['supplier_code']);
 
             $data = [];
             $data['material_code'] = $save_material_price[$i];
@@ -397,7 +397,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
             $data['material_supplier_status'] = 'Active';
 
             if(count($material_supplier_prices) > 0){ 
-                $material_supplier_model->updateMaterialSupplierPriceByID($data);
+                $material_supplier_model->updateMaterialSupplierPriceByCode($data);
             }else{
                 $material_supplier_model->insertMaterialSupplier($data);
             }

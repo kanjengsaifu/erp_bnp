@@ -37,7 +37,7 @@ if(!isset($_GET['action'])&&$menu['supplier']['view']==1){
 
 }else if ($_GET['action'] == 'detail'){ 
     
-    $supplier = $supplier_model->getSupplierByID($supplier_code);
+    $supplier = $supplier_model->getSupplierByCode($supplier_code);
     require_once($path.'detail.inc.php');
 
 }else if ($_GET['action'] == 'insert'  &&$menu['supplier']['add']==1){
@@ -47,13 +47,13 @@ if(!isset($_GET['action'])&&$menu['supplier']['view']==1){
 }else if ($_GET['action'] == 'update'  &&$menu['supplier']['edit']==1){
 
     
-    $supplier = $supplier_model->getSupplierByID($supplier_code);
-    // $user = $model_user->getUserByID($supplier['user_code']); 
+    $supplier = $supplier_model->getSupplierByCode($supplier_code);
+    // $user = $model_user->getUserByCode($supplier['user_code']); 
     require_once($path.'update.inc.php');
 
 }else if ($_GET['action'] == 'delete'  &&$menu['supplier']['delete']==1){
 
-    $supplier = $supplier_model->getSupplierByID($_GET['code']);
+    $supplier = $supplier_model->getSupplierByCode($_GET['code']);
     if(count($supplier) > 0){
        
         $target_file = $target_dir . $supplier["supplier_logo"];
@@ -259,7 +259,7 @@ if(!isset($_GET['action'])&&$menu['supplier']['view']==1){
         </script>
     <?php
         }else{
-            $code = $supplier_model->updateSupplierByID($_POST['supplier_code'],$data);
+            $code = $supplier_model->updateSupplierByCode($_POST['supplier_code'],$data);
             if($code != false){
     ?>
             <script>window.location="index.php?app=supplier&action=update&code=<?php echo $_POST['supplier_code'];?>"</script>

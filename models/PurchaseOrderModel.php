@@ -82,7 +82,7 @@ class PurchaseOrderModel extends BaseModel{
 
     }
 
-    function getPurchaseOrderViewByID($code){
+    function getPurchaseOrderViewByCode($code){
         $sql = " SELECT *   
         FROM tb_purchase_order 
         LEFT JOIN tb_user ON tb_purchase_order.user_code = tb_user.user_code 
@@ -102,7 +102,7 @@ class PurchaseOrderModel extends BaseModel{
 
     }
   
-    function getPurchaseOrderByID($code){
+    function getPurchaseOrderByCode($code){
         $sql = " SELECT * 
         FROM tb_purchase_order 
         LEFT JOIN tb_supplier ON tb_purchase_order.supplier_code = tb_supplier.supplier_code 
@@ -143,7 +143,7 @@ class PurchaseOrderModel extends BaseModel{
      
 
    
-    function cancelPurchaseOrderByID($code){
+    function cancelPurchaseOrderByCode($code){
         $sql = " UPDATE tb_purchase_order SET 
         purchase_order_cancelled = '1', 
         updateby = '".$data['updateby']."', 
@@ -158,7 +158,7 @@ class PurchaseOrderModel extends BaseModel{
         }
     }
 
-    function uncancelPurchaseOrderByID($code){
+    function uncancelPurchaseOrderByCode($code){
         $sql = " UPDATE tb_purchase_order SET 
         purchase_order_cancelled = '0', 
         updateby = '".$data['updateby']."', 
@@ -174,7 +174,7 @@ class PurchaseOrderModel extends BaseModel{
     }
 
 
-    function updatePurchaseOrderByID($code,$data = []){
+    function updatePurchaseOrderByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_order SET  
         supplier_code = '".$data['supplier_code']."', 
         user_code = '".$data['user_code']."',  
@@ -204,7 +204,7 @@ class PurchaseOrderModel extends BaseModel{
     } 
  
 
-    function updatePurchaseOrderStatusByID($id,$data = []){
+    function updatePurchaseOrderStatusByCode($id,$data = []){
         if ($data['updateby'] != ""){
             $str = "updateby = '".$data['updateby']."', ";
         }
@@ -282,7 +282,7 @@ class PurchaseOrderModel extends BaseModel{
     }
 
 
-    function deletePurchaseOrderByID($code){ 
+    function deletePurchaseOrderByCode($code){ 
 
         $sql = " DELETE FROM tb_purchase_order WHERE purchase_order_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);

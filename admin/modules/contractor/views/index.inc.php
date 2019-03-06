@@ -25,15 +25,15 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']!=1){
     $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['contractor']['edit']==1){
-    $contractor = $contractor_model->getContractorByID($contractor_code);
+    $contractor = $contractor_model->getContractorByCode($contractor_code);
     $contractor_position = $contractor_position_model->getContractorPositionBy();
     $contractor_status = $contractor_status_model->getContractorStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($contractor['amphur_id']); 
+    $add_amphur = $address_model->getAmphurByProviceCode($contractor['province_id']);
+    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['contractor']['delete']==1){
-    $contractor = $contractor_model->getContractorByID($contractor_code);
+    $contractor = $contractor_model->getContractorByCode($contractor_code);
     if ($contractor['contractor_image'] != ''){
         $target_file = $target_dir .$contractor['contractor_image'];
         if (file_exists($target_file)) {
@@ -87,7 +87,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']!=1){
         $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
         $data['contractor_status_code'] = $_POST['contractor_status_code']; 
 
-        $contractor = $contractor_model->updateContractorByID($_POST['contractor_code'],$data);
+        $contractor = $contractor_model->updateContractorByCode($_POST['contractor_code'],$data);
 
         if($contractor){  
 ?>

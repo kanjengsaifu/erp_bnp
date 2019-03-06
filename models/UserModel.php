@@ -62,7 +62,7 @@ class UserModel extends BaseModel{
         }
     }
 
-    function getUserByID($code){
+    function getUserByCode($code){
         $sql = " SELECT * 
         FROM tb_user 
         WHERE user_code = '$code' 
@@ -94,24 +94,9 @@ class UserModel extends BaseModel{
             return $data;
         }
     }
+ 
 
-    function getUserByCode($code){
-        $sql = " SELECT * 
-        FROM tb_user 
-        WHERE user_code = '$code' 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
-            $result->close();
-            return $data;
-        }
-    }
-
-    function updateUserByID($code,$data = []){
+    function updateUserByCode($code,$data = []){
         $sql = " UPDATE tb_user SET     
         user_prefix = '".static::$db->real_escape_string($data['user_prefix'])."', 
         user_name = '".static::$db->real_escape_string($data['user_name'])."', 
@@ -138,7 +123,7 @@ class UserModel extends BaseModel{
         }
     }
 
-    function updateUserProfileByID($code,$data = []){
+    function updateUserProfileByCode($code,$data = []){
         $sql = " UPDATE tb_user SET 
         
         user_image = '".static::$db->real_escape_string($data['user_image'])."',  
@@ -164,7 +149,7 @@ class UserModel extends BaseModel{
         }
     }
 
-    function updateUserProfileNoIMGByID($code,$data = []){
+    function updateUserProfileNoIMGByCode($code,$data = []){
         $sql = " UPDATE tb_user SET 
         
         user_prefix = '".static::$db->real_escape_string($data['user_prefix'])."', 
@@ -189,7 +174,7 @@ class UserModel extends BaseModel{
         }
     }
 
-    function updateUserSignatureByID($code,$data = []){
+    function updateUserSignatureByCode($code,$data = []){
         $sql = " UPDATE tb_user SET 
         user_signature = '".$data['user_signature']."' 
         WHERE user_code = '$code'
@@ -202,7 +187,7 @@ class UserModel extends BaseModel{
         }
     }
 
-    function updatePlayerIDByID($code,$user_player_code){
+    function updatePlayerIDByCode($code,$user_player_code){
         $sql = " UPDATE tb_user SET 
         user_player_code = '".$user_player_code."' 
         WHERE user_code = '$code' 
@@ -235,21 +220,21 @@ class UserModel extends BaseModel{
             user_status_code 
             )  VALUES ('".  
             $data['user_code']."','".
-            $data['user_prefix']."','".
-            $data['user_name']."','".
-            $data['user_lastname']."','".
-            $data['user_mobile']."','".
-            $data['user_email']."','".
-            $data['user_username']."','".
-            $data['user_password']."','".
-            $data['user_address']."','".
-            $data['province_id']."','".
-            $data['amphur_id']."','".
-            $data['district_id']."','".
-            $data['user_zipcode']."','".
-            $data['user_position_code']."','".
-            $data['license_code']."','".
-            $data['user_status_code']."' 
+            static::$db->real_escape_string($data['user_prefix'])."','".
+            static::$db->real_escape_string($data['user_name'])."','".
+            static::$db->real_escape_string($data['user_lastname'])."','".
+            static::$db->real_escape_string($data['user_mobile'])."','".
+            static::$db->real_escape_string($data['user_email'])."','".
+            static::$db->real_escape_string($data['user_username'])."','".
+            static::$db->real_escape_string($data['user_password'])."','".
+            static::$db->real_escape_string($data['user_address'])."','".
+            static::$db->real_escape_string($data['province_id'])."','".
+            static::$db->real_escape_string($data['amphur_id'])."','".
+            static::$db->real_escape_string($data['district_id'])."','".
+            static::$db->real_escape_string($data['user_zipcode'])."','".
+            static::$db->real_escape_string($data['user_position_code'])."','".
+            static::$db->real_escape_string($data['license_code'])."','".
+            static::$db->real_escape_string($data['user_status_code'])."' 
         ); 
         ";
 
@@ -260,7 +245,7 @@ class UserModel extends BaseModel{
         }
     }
 
-    function deleteUserByID($code){
+    function deleteUserByCode($code){
         $sql = " DELETE FROM tb_user WHERE user_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
     }

@@ -51,16 +51,16 @@ if ($_GET['action'] == 'insert' && $menu['invoice_supplier']['add']==1){
     $materials=$material_model->getMaterialBy(); 
     $users=$user_model->getUserBy();
 
-    $invoice_supplier = $invoice_supplier_model->getInvoiceSupplierByID($invoice_supplier_code);
+    $invoice_supplier = $invoice_supplier_model->getInvoiceSupplierByCode($invoice_supplier_code);
 
-    $supplier=$supplier_model->getSupplierByID($invoice_supplier['supplier_code']);
+    $supplier=$supplier_model->getSupplierByCode($invoice_supplier['supplier_code']);
     $suppliers=$supplier_model->getSupplierBy();
     // $sort = $supplier['supplier_domestic'];
     $invoice_supplier_lists = $invoice_supplier_list_model->getInvoiceSupplierListBy($invoice_supplier_code);
     // $invoice_supplier_import_duty_lists = $invoice_supplier_import_duty_list_model->getInvoiceSupplierImportDutyListBy($invoice_supplier_id);
     // $invoice_supplier_freight_in_lists = $invoice_supplier_freight_in_list_model->getInvoiceSupplierFreightInListBy($invoice_supplier_id);
 
-    // $exchange_rate_baht = $exchange_rate_baht_model->getExchangeRateBahtByCurrncyID($invoice_supplier['invoice_supplier_date_recieve'],$supplier['currency_id']);
+    // $exchange_rate_baht = $exchange_rate_baht_model->getExchangeRateBahtByCurrncyCode($invoice_supplier['invoice_supplier_date_recieve'],$supplier['currency_id']);
 
     // $invoice_suppliers = $invoice_supplier_model->getInvoiceSupplierBy("","","","","","0",$lock_1,$lock_2);
 
@@ -81,9 +81,9 @@ if ($_GET['action'] == 'insert' && $menu['invoice_supplier']['add']==1){
  
 
 }else if ($_GET['action'] == 'detail'&& $menu['invoice_supplier']['view']==1){ 
-    $invoice_supplier = $invoice_supplier_model->getInvoiceSupplierViewByID($invoice_supplier_code);
+    $invoice_supplier = $invoice_supplier_model->getInvoiceSupplierViewByCode($invoice_supplier_code);
 
-    $supplier=$supplier_model->getSupplierByID($invoice_supplier['supplier_code']); 
+    $supplier=$supplier_model->getSupplierByCode($invoice_supplier['supplier_code']); 
     // $sort = $supplier['supplier_domestic'];
     $invoice_supplier_lists = $invoice_supplier_list_model->getInvoiceSupplierListBy($invoice_supplier_code); 
     
@@ -101,8 +101,8 @@ if ($_GET['action'] == 'insert' && $menu['invoice_supplier']['add']==1){
 
 }else if ($_GET['action'] == 'delete' && $menu['invoice_supplier']['delete']==1){
 
-    // $notification_model->deleteNotificationByTypeID('Purchase Order',$invoice_supplier_code);
-    // $invoice_supplier_list_model->deletePurchaseOrderListByPurchaseOrderID($invoice_supplier_code);
+    // $notification_model->deleteNotificationByTypeCode('Purchase Order',$invoice_supplier_code);
+    // $invoice_supplier_list_model->deletePurchaseOrderListByPurchaseOrderCode($invoice_supplier_code);
     $invoice_suppliers = $invoice_supplier_model->deleteInvoiceSupplierById($invoice_supplier_code);
 ?>
     <script>window.location="index.php?app=invoice_supplier&purchase_order_code=<?PHP echo $_GET['purchase_order_code'];?>"</script>
@@ -252,7 +252,7 @@ if ($_GET['action'] == 'insert' && $menu['invoice_supplier']['add']==1){
         $invoice_supplier_list_remark = $_POST['invoice_supplier_list_remark'];
         $purchase_order_list_code = $_POST['purchase_order_list_code'];  
  
-        $invoice_supplier_list_model->deleteInvoiceSupplierListByInvoiceSupplierIDNotIN($invoice_supplier_code,$invoice_supplier_list_code);
+        $invoice_supplier_list_model->deleteInvoiceSupplierListByInvoiceSupplierCodeNotIN($invoice_supplier_code,$invoice_supplier_list_code);
         
         if(is_array($material_code)){
             for($i=0; $i < count($material_code) ; $i++){
@@ -346,7 +346,7 @@ if ($_GET['action'] == 'insert' && $menu['invoice_supplier']['add']==1){
         // print_r($data);
         // echo '</pre>';
 
-        $output = $invoice_supplier_model->updateInvoiceSupplierByID($invoice_supplier_code , $data); 
+        $output = $invoice_supplier_model->updateInvoiceSupplierByCode($invoice_supplier_code , $data); 
  
 
         if($output!='0'){ 

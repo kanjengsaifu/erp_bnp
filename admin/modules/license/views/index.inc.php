@@ -19,16 +19,16 @@ if ($_GET['action'] == 'insert'){
 }else if ($_GET['action'] == 'update'){ 
     
     $menus = $menus_model->getMenuBy();
-    $license = $license_model->getLicenseByID($license_code);
-    $license_permission = $license_permission_model->getLicensePermissionByID($license_code);
+    $license = $license_model->getLicenseByCode($license_code);
+    $license_permission = $license_permission_model->getLicensePermissionByCode($license_code);
     // echo '<pre>';
     // print_r($license_permission);
     // echo '</pre>';
     require_once($path.'update.inc.php');
 // }else if ($_GET['action'] == 'delete'&&$menus['license']['delete']==1){  
 }else if ($_GET['action'] == 'delete'){  
-    $license_permission_model->deleteLicensePermissionByID($license_code);
-    $license_model->deleteLicenseByID($license_code);
+    $license_permission_model->deleteLicensePermissionByCode($license_code);
+    $license_model->deleteLicenseByCode($license_code);
     $license = $license_model->getLicenseBy();
     require_once($path.'view.inc.php');
 // }else if ($_GET['action'] == 'add'&&$menus['license']['add']==1){
@@ -105,7 +105,7 @@ if ($_GET['action'] == 'insert'){
         // echo $license_code;
         $data = [];
         $data['license_name'] = $_POST['license_name']; 
-        $license_model->updateLicenseByID($license_code,$data);
+        $license_model->updateLicenseByCode($license_code,$data);
         if($license_code!=false){
             $menus = $menus_model->getMenuBy();
             $data_per =[];
@@ -139,7 +139,7 @@ if ($_GET['action'] == 'insert'){
                     $data_per[$i]['license_permission_delete'] = 0; 
                 }
                 if($data_per[$i]['license_permission_code']!=''){
-                    $license_permission_model->updateLicensePermissionByID($data_per[$i]['license_permission_code'],$data_per[$i]);
+                    $license_permission_model->updateLicensePermissionByCode($data_per[$i]['license_permission_code'],$data_per[$i]);
                 }else{
                     
                     $license_permission_code = "LP";
