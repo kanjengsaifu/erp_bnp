@@ -25,10 +25,12 @@ class ContractorModel extends BaseModel{
     }
 
     function getContractorBy($name = '', $mobile  = ''){
-        $sql = "SELECT contractor_code, contractor_prefix, CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) as name,
-        contractor_mobile, contractor_status_name  
+        $sql = "SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
+        contractor_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_contractor 
-        LEFT JOIN tb_contractor_status ON tb_contractor.contractor_status_code = tb_contractor_status.contractor_status_code 
+        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) LIKE ('%$name%') 
         AND contractor_mobile LIKE ('%$mobile%') 
         ORDER BY CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) 
@@ -61,8 +63,12 @@ class ContractorModel extends BaseModel{
     }
 
     function getContractorByStatus($code){
-        $sql = " SELECT * 
+        $sql = " SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
+        contractor_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_contractor 
+        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE contractor_status_code = '$code' 
         ";
 

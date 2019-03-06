@@ -134,18 +134,26 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <li>
                     <a href="?app=stock" <?PHP if($_GET["app"]=='stock'){ ?> class="active" <?PHP } ?>><i class="fa fa-cubes" aria-hidden="true"></i> คลัง</a>
                 </li>
+                <?php if ($menu['zone']['view']){ ?>
                 <li>
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
                 </li>
+                <?php } ?>
+                <?php if ($menu['agent']['view']){ ?>
                 <li>
-                    <a href="?app=songserm" <?PHP if($_GET['app'] == "songserm"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ส่งเสริม</a>
+                    <a href="?app=agent" <?PHP if($_GET['app'] == "agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> นายหน้า</a>
                 </li>
+                <?php } ?>
+                <?php if ($menu['contractor']['view']){ ?>
                 <li>
-                    <a href="?app=contractor" <?PHP if($_GET['app'] == "contractor"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ผู้รับเหมา</a>
+                    <a href="?app=contractor" <?PHP if($_GET['app'] == "contractor"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ผู้รับเหมา</a>
                 </li>
+                <?php } ?>
+                <?php if ($menu['songserm']['view']){ ?>
                 <li>
-                    <a href="?app=agent" <?PHP if($_GET['app'] == "agent"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> นายหน้า</a>
+                    <a href="?app=songserm" <?PHP if($_GET['app'] == "songserm"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ส่งเสริม</a>
                 </li>
+                <?php } ?>
                 <li
                 <?PHP 
                     if(

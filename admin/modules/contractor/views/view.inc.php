@@ -3,9 +3,12 @@
         <h1 class="page-header">จัดการผู้รับเหมา / Contractor Management</h1>
 
         <div style="margin-bottom: 10px;">
-            <a href="?app=contractor" class="btn btn-primary <?php if ($_GET['status'] != 'pending') echo 'active'; ?>">รายชื่อผู้รับเหมา / Contractor List</a>
+            <a href="?app=contractor" class="btn btn-primary <?php if ($_GET['status'] != 'pending' && $_GET['status'] != 'cease' ) echo 'active'; ?>">ผู้รับเหมา / Contractor List</a>
             <a href="?app=contractor&status=pending" class="btn btn-primary <?php if ($_GET['status'] == 'pending') echo 'active'; ?>">
                 รออนุมัติ / Pending <?php if($on_pending) { ?><span class="badge badge-danger" style="display: unset;font-weight: 400;"><? echo $on_pending; ?></span><? } ?>
+            </a> 
+            <a href="?app=contractor&status=cease" class="btn btn-primary <?php if ($_GET['status'] == 'cease') echo 'active'; ?>">
+                พักงาน / Cease
             </a> 
         </div>
 	</div>
@@ -32,10 +35,10 @@
                     <th style="text-align:center;">ลำดับ <br>No.</th>
                     <th style="text-align:center;">รหัส <br>ID</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
-                    <th style="text-align:center;">สถาณะ <br>Status</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>
-                    <th style="text-align:center;">อีเมล์ <br>Email</th>
-                    <th style="text-align:center;">สถานะ <br>Status</th>
+                    <th style="text-align:center;">จังหวัด <br>Province</th>
+                    <th style="text-align:center;">อำเภอ <br>Amphur</th>
+                    <th style="text-align:center;">ตำบล <br>Distict</th>
                     <th></th>
                 </tr>
             </thead>
@@ -47,11 +50,11 @@
                     <td><?php echo $i+1; ?></td>
                     <td><?php echo $contractor[$i]['contractor_code']; ?></td>
                     <td><?php echo $contractor[$i]['contractor_prefix'].$contractor[$i]['name']; ?></td>
-                    <td><?php echo $contractor[$i]['contractor_status_name']; ?></td>
-                    <td class="center"><?php echo $contractor[$i]['contractor_mobile']; ?></td>
-                    <td class="center"><?php echo $contractor[$i]['contractor_email']; ?></td>
-                    <td class="center"><?php echo $contractor[$i]['contractor_status_name']; ?></td>
-                    <td>
+                    <td style="text-align:center;"><?php echo $contractor[$i]['contractor_mobile']; ?></td>
+                    <td style="text-align:center;"><?php echo $contractor[$i]['PROVINCE_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $contractor[$i]['AMPHUR_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $contractor[$i]['DISTRICT_NAME']; ?></td>
+                    <td style="text-align:center;">
                     <?php if($menu['contractor']['view']){ ?> 
                         <a href="?app=contractor&action=profile&code=<?php echo $contractor[$i]['contractor_code'];?>">
                             <i class="fa fa-eye" aria-hidden="true"></i>

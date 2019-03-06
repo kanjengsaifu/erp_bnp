@@ -255,14 +255,17 @@
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
-
-                <div class="col-md-12">
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4">
                     <label>รูปผู้รับเหมา / Contractor image </label>
                     <div class="form-group" align="center">
                         <img id="img_contractor" src="../upload/<?php if($contractor['contractor_image'] != "") echo 'contractor/'.$contractor['contractor_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
                         <input accept=".jpg , .png" type="file" id="contractor_image" name="contractor_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
+            </div> 
+            <div class="row">
                 <div class="col-lg-4">
                     <label>สำเนาบัตรประชาชน / Copy of ID card </label>
                     <div class="form-group" align="center">

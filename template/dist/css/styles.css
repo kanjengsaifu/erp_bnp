@@ -140,3 +140,9 @@
     color: #fff !important;
     background-color: red !important;
 }
+.form-control{
+    border-radius: unset;
+}
+.btn {
+    border-radius: unset;
+}

@@ -123,13 +123,13 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">จัดการส่งเสริม / Songserm Management</h1>
+        <h1 class="page-header">จัดการทีมส่งเสริม / Songserm Management</h1>
     </div>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        เพิ่มส่งเสริม / Add songserm
+        เพิ่มทีมส่งเสริม / Add songserm
     </div>
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=songserm&action=add" enctype="multipart/form-data">
@@ -243,7 +243,7 @@
                 </div>
 
                 <div class="col-md-12">
-                    <label>รูปส่งเสริม / Songserm image </label>
+                    <label>รูปทีมส่งเสริม / Songserm image </label>
                     <div class="form-group" align="center">
                         <img id="img_songserm" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
                         <input accept=".jpg , .png" type="file" id="songserm_image" name="songserm_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
