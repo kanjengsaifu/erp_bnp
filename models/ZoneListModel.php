@@ -27,8 +27,8 @@ class ZoneListModel extends BaseModel{
     function getZoneListBy($name = ''){
         $sql = "SELECT *
         FROM tb_zone_list 
-        WHERE zone_list_name LIKE ('%$name%') 
-        ORDER BY zone_list_name
+        WHERE village_name LIKE ('%$name%') 
+        ORDER BY village_name
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -57,23 +57,37 @@ class ZoneListModel extends BaseModel{
         }
     }
 
+    function getZoneListByZone($code){
+        $sql = "SELECT *
+        FROM tb_zone_list 
+        LEFT JOIN tb_district ON tb_zone_list.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
+        WHERE zone_code = '$code'
+        ORDER BY PROVINCE_NAME
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
     function updateZoneListByCode($code,$data = []){
-        $sql = " UPDATE tb_zone_list SET     
-        zone_list_prefix = '".static::$db->real_escape_string($data['zone_list_prefix'])."', 
-        zone_list_name = '".static::$db->real_escape_string($data['zone_list_name'])."', 
-        zone_list_lastname = '".static::$db->real_escape_string($data['zone_list_lastname'])."', 
-        zone_list_mobile = '".static::$db->real_escape_string($data['zone_list_mobile'])."', 
-        zone_list_address = '".static::$db->real_escape_string($data['zone_list_address'])."', 
-        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
-        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
-        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
-        zone_list_zipcode = '".static::$db->real_escape_string($data['zone_list_zipcode'])."', 
-        zone_list_image = '".static::$db->real_escape_string($data['zone_list_image'])."', 
-        id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
-        house_regis_image = '".static::$db->real_escape_string($data['house_regis_image'])."', 
-        account_image = '".static::$db->real_escape_string($data['account_image'])."', 
-        zone_list_status_code = '".static::$db->real_escape_string($data['zone_list_status_code'])."' 
-        WHERE zone_list_code = '".static::$db->real_escape_string($code)."'
+        $data['village_name']=mysqli_real_escape_string(static::$db,$data['village_name']);
+
+        $sql = "UPDATE tb_zone_list SET
+        village_name = '".$data['village_name']."', 
+        province_id = '".$data['province_id']."', 
+        amphur_id = '".$data['amphur_id']."', 
+        district_id = '".$data['district_id']."', 
+        updateby = '".$data['updateby']."',
+        lastupdate = NOW() 
+        WHERE zone_list_code = '$code'
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -84,54 +98,33 @@ class ZoneListModel extends BaseModel{
     }
 
     function insertZoneList($data = []){
-        $data['zone_list_name']=mysqli_real_escape_string(static::$db,$data['zone_list_name']);
-        $data['zone_list_lastname']=mysqli_real_escape_string(static::$db,$data['zone_list_lastname']);
-        $data['zone_list_mobile']=mysqli_real_escape_string(static::$db,$data['zone_list_mobile']);
-        $data['zone_list_image']=mysqli_real_escape_string(static::$db,$data['zone_list_image']);
-        $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
-        $data['house_regis_image']=mysqli_real_escape_string(static::$db,$data['house_regis_image']);
-        $data['account_image']=mysqli_real_escape_string(static::$db,$data['account_image']);
-        $data['zone_list_address']=mysqli_real_escape_string(static::$db,$data['zone_list_address']);
-        $data['zone_list_zipcode']=mysqli_real_escape_string(static::$db,$data['zone_list_zipcode']);
+        $data['zone_code']=mysqli_real_escape_string(static::$db,$data['zone_code']);
+        $data['village_name']=mysqli_real_escape_string(static::$db,$data['village_name']);
 
         $sql = " INSERT INTO tb_zone_list ( 
             zone_list_code,
-            zone_list_prefix,
-            zone_list_name, 
-            zone_list_lastname,
-            zone_list_mobile,
-            zone_list_address,
+            zone_code,
+            village_name, 
             province_id,
             amphur_id,
             district_id,
-            zone_list_zipcode,
-            zone_list_image,
-            id_card_image,
-            house_regis_image,
-            account_image,
-            zone_list_status_code 
+            addby,
+            adddate 
             )  VALUES ('".  
             $data['zone_list_code']."','".
-            $data['zone_list_prefix']."','".
-            $data['zone_list_name']."','".
-            $data['zone_list_lastname']."','".
-            $data['zone_list_mobile']."','".
-            $data['zone_list_address']."','".
+            $data['zone_code']."','".
+            $data['village_name']."','".
             $data['province_id']."','".
             $data['amphur_id']."','".
             $data['district_id']."','".
-            $data['zone_list_zipcode']."','".
-            $data['zone_list_image']."','".
-            $data['id_card_image']."','".
-            $data['house_regis_image']."','".
-            $data['account_image']."','".
-            $data['zone_list_status_code']."')
+            $data['addby']."',
+            NOW())
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            return $data['zone_list_code'];
+            return true;
         }else {
-            return '';
+            return false;
         }
     }
 

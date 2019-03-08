@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-lg-8">
                     <div class="form-group">
-                        <label>รายละเอียด :  <font color="#F00"><b>*</b></font></label>
+                        <label>รายละเอียด : </label>
                         <input id="zone_description" name="zone_description" class="form-control" value="<? echo $zone['zone_description']; ?>" autocomplete="off">
                         <p class="help-block">Example : รายละเอียด.</p>
                     </div>
@@ -69,10 +69,13 @@
         รายชื่อพื้นที่การขาย / Zone List
     </div>
     <div class="panel-body">
-        <div>
+        <form role="form" method="get" onsubmit="return check();" action="index.php" enctype="multipart/form-data">
+            <input type="hidden" name="app" value="zone">
+            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="code" value="<?php echo $_GET['code']; ?>">
             <div class="form-group" style="display: inline-block; width: 150px;">
                 <span>จังหวัด : </span>
-                <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
+                <select id="province" name="province" data-live-search="true" class="form-control select" onchange="getAmphur()">
                     <option value="">select</option>
                     <?php 
                     for($i =  0 ; $i < count($province) ; $i++){
@@ -83,26 +86,29 @@
                     ?>
                 </select>
             </div>
-
             <div class="form-group" style="display: inline-block; width: 150px;">
                 <span>อำเภอ : </span>
-                <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
+                <select id="amphur" name="amphur" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                     <option value="">select</option>
                 </select>
             </div>
 
             <div class="form-group" style="display: inline-block; width: 150px;">
                 <span>ตำบล : </span>
-                <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                <select id="district" name="district" data-live-search="true" class="form-control select">
                     <option value="">select</option>
                 </select>
             </div>
-            
-            <div align="right">
-                <?php if($menu['zone']['add']){?> 
-                    <a class="btn btn-success " style="float:right;" href="?app=zone&action=insert" ><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
-                <?PHP } ?>
+
+            <div class="form-group" style="display: inline-block; width: 150px; vertical-align: bottom;">
+                <button type="submit" class="btn btn-primary">ค้นหา</button>
             </div>
+        </form>
+        
+        <div align="right">
+            <?php if($menu['zone']['add']){?> 
+            <a class="btn btn-success " style="float:right;" href="?app=zone&action=insert-list&code=<? echo $_GET['code']; ?>" ><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
+            <?PHP } ?>
         </div>
         
         <table width="100%" class="table table-striped table-bordered table-hover dataTables">
@@ -113,6 +119,8 @@
                     <th style="text-align:center;">อำเภอ</th>
                     <th style="text-align:center;">ตำบล</th>
                     <th style="text-align:center;">หมู่บ้าน</th>
+                    <th style="text-align:center;">นายหน้า</th>
+                    <th style="text-align:center;">ตัวเเทน</th>
                     <th style="text-align:center;">จัดการ</th>
                 </tr>
             </thead>
@@ -126,14 +134,16 @@
                     <td style="text-align:center;"><?php echo $zone_list[$i]['AMPHUR_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['DISTRICT_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['village_name']; ?></td>
+                    <td style="text-align:center;"><?php echo $zone_list[$i]['agent_name']; ?></td>
+                    <td style="text-align:center;"><?php echo $zone_list[$i]['name']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['zone']['edit']){ ?> 
-                        <a href="?app=zone&action=update&code=<?php echo $zone_list[$i]['zone_code'];?>">
+                        <a href="?app=zone&action=update-list&list=<?php echo $zone_list[$i]['zone_list_code'];?>">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a> 
                     <?PHP }?>
                     <?php if($menu['zone']['delete']){ ?> 
-                        <a href="?app=zone&action=delete&code=<?php echo $zone_list[$i]['zone_code'];?>" onclick="return confirm('You want to delete zone : <?php echo $zone_list[$i]['name']; ?>');" style="color:red;">
+                        <a href="?app=zone&action=delete-list&code=<? echo $_GET['code']; ?>&list=<?php echo $zone_list[$i]['zone_list_code'];?>" onclick="return confirm('You want to delete zone : <?php echo $zone_list[$i]['name']; ?>');" style="color:red;">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     <?PHP }?>
@@ -154,24 +164,17 @@
                 ทีมส่งเสริม / Songserm Team
             </div>
             <div class="panel-body">
-                <div>
-                    <div class="form-group" style="display: inline-block; width: 150px;">
-                        <span>ทีมส่งเสริม : </span>
-                        <select id="province_id" name="province_id" data-live-search="true" class="form-control select">
-                            <option value="">select</option>
-                            <?php 
-                            for($i =  0 ; $i < count($province) ; $i++){
-                            ?>
-                            <option value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
+                <form role="form" method="get" onsubmit="return check();" action="index.php" enctype="multipart/form-data">
+                    <input type="hidden" name="app" value="zone">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="code" value="<?php echo $_GET['code']; ?>">
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: middle;">
+                        <span>ค้นหา : </span>
+                        <input id="songserm" name="songserm" type="search" class="form-control" placeholder="search">
                     </div>
-
-                    <div class="form-group" style="display: inline-block; width: 150px;">
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: middle;">
                         <span>ตำเเหน่ง : </span>
-                        <select id="position_code" name="position_code" data-live-search="true"  class="form-control select">
+                        <select id="position" name="position" data-live-search="true"  class="form-control select">
                             <option value="">select</option>
                             <?php 
                             for($i =  0 ; $i < count($position) ; $i++){
@@ -182,14 +185,18 @@
                             ?>
                         </select>
                     </div>
-                    
-                    <div align="right">
-                        <?php if($menu['zone']['add']){?> 
-                            <a class="btn btn-success " style="float:right;" href="?app=zone&action=insert" ><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
-                        <?PHP } ?>
+
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: bottom;">
+                        <button type="submit" class="btn btn-primary">ค้นหา</button>
                     </div>
+                </form>
+
+                <div align="right">
+                    <?php if($menu['zone']['add']){?> 
+                    <a class="btn btn-success" style="float:right;" onclick="showSongsermList();"><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
+                    <?PHP } ?>
                 </div>
-                
+
                 <table width="100%" class="table table-striped table-bordered table-hover dataTables">
                     <thead>
                         <tr bgcolor="#92d051">
@@ -208,11 +215,6 @@
                             <td style="text-align:center;"><?php echo $songserm[$i]['songserm_name']; ?></td>
                             <td style="text-align:center;"><?php echo $songserm[$i]['songserm_type_name']; ?></td>
                             <td style="text-align:center;">
-                            <?php if($menu['zone']['edit']){ ?> 
-                                <a href="?app=zone&action=update&code=<?php echo $songserm[$i]['zone_code'];?>">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a> 
-                            <?PHP }?>
                             <?php if($menu['zone']['delete']){ ?> 
                                 <a href="?app=zone&action=delete&code=<?php echo $songserm[$i]['zone_code'];?>" onclick="return confirm('You want to delete zone : <?php echo $zone_list[$i]['name']; ?>');" style="color:red;">
                                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -231,42 +233,27 @@
     <div class="col-md-6">
         <div class="panel panel-default">
             <div class="panel-heading">
-                ผู้รับเหมา / Contractor
+                ฝ่ายบริการ / Call center
             </div>
             <div class="panel-body">
-                <div>
-                    <div class="form-group" style="display: inline-block; width: 150px;">
-                        <span>ผู้รับเหมา : </span>
-                        <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select">
-                            <option value="">select</option>
-                            <?php 
-                            for($i =  0 ; $i < count($contractor_type) ; $i++){
-                            ?>
-                            <option value="<?php echo $contractor_type[$i]['contractor_type_code'] ?>"><?php echo $contractor_type[$i]['contractor_type_name'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
+                <form role="form" method="get" onsubmit="return check();" action="index.php" enctype="multipart/form-data">
+                    <input type="hidden" name="app" value="zone">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="code" value="<?php echo $_GET['code']; ?>">
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: middle;">
+                        <span>ค้นหา : </span>
+                        <input id="call_center" name="call_center" type="search" class="form-control" placeholder="search">
                     </div>
-                    <div class="form-group" style="display: inline-block; width: 150px;">
-                        <span>ประเภท : </span>
-                        <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select">
-                            <option value="">select</option>
-                            <?php 
-                            for($i =  0 ; $i < count($contractor_type) ; $i++){
-                            ?>
-                            <option value="<?php echo $contractor_type[$i]['contractor_type_code'] ?>"><?php echo $contractor_type[$i]['contractor_type_name'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
+
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: bottom;">
+                        <button type="submit" class="btn btn-primary">ค้นหา</button>
                     </div>
-                    
-                    <div align="right">
-                        <?php if($menu['zone']['add']){?> 
-                            <a class="btn btn-success " style="float:right;" href="?app=zone&action=insert" ><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
-                        <?PHP } ?>
-                    </div>
+                </form>
+                
+                <div align="right">
+                    <?php if($menu['zone']['add']){?> 
+                    <a class="btn btn-success" style="float:right;" href="?app=zone&action=insert"><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
+                    <?PHP } ?>
                 </div>
                 
                 <table width="100%" class="table table-striped table-bordered table-hover dataTables">
@@ -274,26 +261,19 @@
                         <tr bgcolor="#92d051">
                             <th style="text-align:center;">#</th>
                             <th style="text-align:center;">ชื่อ</th>
-                            <th style="text-align:center;">ประเภท</th>
                             <th style="text-align:center;">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
-                        for($i=0; $i < count($contractor); $i++){
+                        for($i=0; $i < count($call_center); $i++){
                         ?>
                         <tr class="odd gradeX">
                             <td style="text-align:center;"><?php echo $i+1; ?></td>
-                            <td style="text-align:center;"><?php echo $contractor[$i]['contractor_name']; ?></td>
-                            <td style="text-align:center;"><?php echo $contractor[$i]['contractor_type_name']; ?></td>
+                            <td style="text-align:center;"><?php echo $call_center[$i]['name']; ?></td>
                             <td style="text-align:center;">
-                            <?php if($menu['zone']['edit']){ ?> 
-                                <a href="?app=zone&action=update&code=<?php echo $contractor[$i]['zone_code'];?>">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a> 
-                            <?PHP }?>
                             <?php if($menu['zone']['delete']){ ?> 
-                                <a href="?app=zone&action=delete&code=<?php echo $contractor[$i]['zone_code'];?>" onclick="return confirm('You want to delete zone : <?php echo $zone_list[$i]['name']; ?>');" style="color:red;">
+                                <a href="?app=zone&action=delete&code=<?php echo $call_center[$i]['call_center_code'];?>" onclick="return confirm('You want to delete call center : <?php echo $call_center[$i]['name']; ?>');" style="color:red;">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                             <?PHP }?>
@@ -309,26 +289,110 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-6">
+        
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                ผู้รับเหมา / Contractor
+            </div>
+            <div class="panel-body">
+                <form role="form" method="get" onsubmit="return check();" action="index.php" enctype="multipart/form-data">
+                    <input type="hidden" name="app" value="zone">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="code" value="<?php echo $_GET['code']; ?>">
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: middle;">
+                        <span>ค้นหา : </span>
+                        <input id="contractor" name="contractor" type="search" class="form-control" placeholder="search">
+                    </div>
+
+                    <div class="form-group" style="display: inline-block; width: 150px; vertical-align: bottom;">
+                        <button type="submit" class="btn btn-primary">ค้นหา</button>
+                    </div>
+                </form>
+                
+                <div align="right">
+                    <?php if($menu['zone']['add']){?> 
+                    <a class="btn btn-success" style="float:right;"><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
+                    <?PHP } ?>
+                </div>
+                
+                <table width="100%" class="table table-striped table-bordered table-hover dataTables">
+                    <thead>
+                        <tr bgcolor="#92d051">
+                            <th style="text-align:center;">#</th>
+                            <th style="text-align:center;">ชื่อ</th>
+                            <th style="text-align:center;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        for($i=0; $i < count($contractor); $i++){
+                        ?>
+                        <tr class="odd gradeX">
+                            <td style="text-align:center;"><?php echo $i+1; ?></td>
+                            <td style="text-align:center;"><?php echo $contractor[$i]['contractor_name']; ?></td>
+                            <td style="text-align:center;">
+                            <?php if($menu['zone']['delete']){ ?> 
+                                <a href="?app=zone&action=delete&code=<?php echo $contractor[$i]['contractor_code'];?>" onclick="return confirm('You want to delete zone : <?php echo $contractor[$i]['name']; ?>');" style="color:red;">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </a>
+                            <?PHP }?>
+                            </td>
+                        </tr>
+                        <?
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div id="modal_detail" class="modal-content"></div>
+	</div>
+</div>
+
 <script type="text/javascript">
     function getAmphur(){
-        var province = document.getElementById("province_id").value;
+        var province = document.getElementById("province").value;
 
         $.post("controllers/getAmphur.php", { 'province': province }, function( data ) {
-            $("#amphur_id").html(data);
-            $("#amphur_id").selectpicker('refresh');
+            $("#amphur").html(data);
+            $("#amphur").selectpicker('refresh');
         });
 
-        document.getElementById("amphur_id").value = "";
+        document.getElementById("amphur").value = "";
 
         getDistrict();
     }
 
     function getDistrict(){
-        var amphur = document.getElementById("amphur_id").value;
+        var amphur = document.getElementById("amphur").value;
 
         $.post("controllers/getDistrict.php", { 'amphur': amphur }, function( data ) {
-            $("#district_id").html(data);
-            $("#district_id").selectpicker('refresh');
+            $("#district").html(data);
+            $("#district").selectpicker('refresh');
         });
     }
+
+    function showSongsermList(){
+        var zone_code = document.getElementById("zone_code").value;
+
+		$.post("modules/zone/controllers/showSongsermList.php", { zone_code: zone_code }, function( data ) {
+            $("#modal_detail").html(data);
+			$('#modal').modal('show');
+
+            $('.dataTables-filter').DataTable({
+                "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
+                "pageLength": 100,
+                responsive: true,
+            });
+		});
+	}
 </script>

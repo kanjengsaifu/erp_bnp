@@ -210,6 +210,12 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     }else{
         ?> <script> window.location="index.php?app=contractor" </script> <?php
     }
+}else if ($_GET['action'] == 'approve'){
+    if(isset($_POST['contractor_code'])){
+        $contractor = $contractor_model->approveContractorByCode($_POST['contractor_code']);
+    }
+
+    ?> <script> window.location="index.php?app=contractor" </script> <?php
 }else if ($_GET['action'] == 'profile'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
     $contractor_status = $contractor_status_model->getContractorStatusBy();

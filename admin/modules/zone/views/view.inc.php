@@ -20,7 +20,7 @@
     </div>
 
     <div class="panel-body">
-        <table width="100%" class="table table-striped table-bordered table-hover dataTables">
+        <table width="100%" class="table table-striped table-bordered table-hover dataTables-filter">
             <thead>
                 <tr bgcolor="#92d051">
                     <th style="text-align:center;">ลำดับ</th>
@@ -38,11 +38,11 @@
                 ?>
                 <tr class="odd gradeX">
                     <td style="text-align:center;"><?php echo $i+1; ?></td>
-                    <td style="text-align:center;"><?php echo $zone[$i]['zone_code']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone[$i]['zone_name']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone[$i]['zone_dealer']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone[$i]['zone_agent']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone[$i]['zone_admin']; ?></td>
+                    <td ><?php echo $zone[$i]['zone_code']; ?></td>
+                    <td ><?php echo $zone[$i]['zone_name']; ?></td>
+                    <td ><?php echo $zone[$i]['zone_dealer']; ?></td>
+                    <td ><?php echo $zone[$i]['zone_agent']; ?></td>
+                    <td ><?php echo $zone[$i]['zone_admin']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['zone']['edit']){ ?> 
                         <a href="?app=zone&action=update&code=<?php echo $zone[$i]['zone_code'];?>">

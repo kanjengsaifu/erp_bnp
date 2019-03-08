@@ -1,16 +1,6 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">จัดการทีมส่งเสริม / Songserm Management</h1>
-
-        <div style="margin-bottom: 10px;">
-            <a href="?app=songserm" class="btn btn-primary <?php if ($_GET['status'] != 'pending' && $_GET['status'] != 'cease' ) echo 'active'; ?>">ทีมส่งเสริม / Songserm List</a>
-            <a href="?app=songserm&status=pending" class="btn btn-primary <?php if ($_GET['status'] == 'pending') echo 'active'; ?>">
-                รออนุมัติ / Pending <?php if($on_pending) { ?><span class="badge badge-danger" style="display: unset;font-weight: 400;"><? echo $on_pending; ?></span><? } ?>
-            </a> 
-            <a href="?app=songserm&status=cease" class="btn btn-primary <?php if ($_GET['status'] == 'cease') echo 'active'; ?>">
-                พักงาน / Cease
-            </a> 
-        </div>
 	</div>
 </div>
 

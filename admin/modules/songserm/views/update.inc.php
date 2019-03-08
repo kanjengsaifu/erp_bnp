@@ -83,42 +83,6 @@
             $('#img_songserm').attr('src', '../upload/default.png');
         }
     }
-
-    function readURL_id_card(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_id_card').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }else{
-            $('#img_id_card').attr('src', '../upload/default.png');
-        }
-    }
-
-    function readURL_house_regis(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_house_regis').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }else{
-            $('#img_house_regis').attr('src', '../upload/default.png');
-        }
-    }
-
-    function readURL_account(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_account').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }else{
-            $('#img_account').attr('src', '../upload/default.png');
-        }
-    }
 </script>
 
 <div class="row">

@@ -50,7 +50,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
 
     ?> <script> window.location="index.php?app=agent"</script> <?php
 }else if ($_GET['action'] == 'add'&&$menu['agent']['add']){
-    $agent_code = "AG";
+    $agent_code = "AG".$_POST['province_id'].$_POST['district_id'];
     $agent_code = $agent_model->getAgentLastCode($agent_code,4);  
 
     if($agent_code != '' && isset($_POST['agent_prefix'])){

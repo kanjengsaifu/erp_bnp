@@ -1,7 +1,7 @@
 <?php
 require_once("BaseModel.php");
 
-class UserStatusModel extends BaseModel{
+class SongsermPositionModel extends BaseModel{
 
     function __construct(){
         if(!static::$db){
@@ -9,8 +9,9 @@ class UserStatusModel extends BaseModel{
         }
     }
 
-    function getUserStatusBy($name = ''){
-        $sql = "SELECT * FROM tb_user_status WHERE  user_status_name LIKE ('%$name%') 
+    function getSongsermPositionBy(){
+        $sql = "SELECT * 
+        FROM tb_songserm_position 
         ";
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -20,13 +21,12 @@ class UserStatusModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
-    function getUserStatusByCode($id){
+    function getSongsermPositionByCode($id){
         $sql = " SELECT * 
-        FROM tb_user_status 
-        WHERE user_status_id = '$id' 
+        FROM tb_songserm_position 
+        WHERE songserm_position_code = '$id' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -37,25 +37,6 @@ class UserStatusModel extends BaseModel{
             $result->close();
             return $data;
         }
-
-    }
-
-    function updateUserStatusByCode($id,$data = []){
-        $sql = " SELECT * 
-        FROM tb_user_status 
-        WHERE user_status_id = '$id' 
-        ";
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $row = mysqli_fetch_array($result,MYSQLI_NUM);
-            $result->close();
-            return $row;
-        }
-
-    }
-
-    function deleteUserStatusByCode($id){
-        $sql = " DELETE FROM tb_user_status WHERE user_status_id = '$id' ";
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }
 }

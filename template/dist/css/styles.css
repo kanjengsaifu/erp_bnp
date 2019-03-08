@@ -146,3 +146,9 @@
 .btn {
     border-radius: unset;
 }
+.modal-content {
+    border-radius: 0px;
+}
+tr.highlight{
+    background-color: lavenderblush;
+}

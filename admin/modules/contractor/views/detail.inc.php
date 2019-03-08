@@ -112,8 +112,12 @@
 
         <div class="row">
             <div class="col-lg-offset-9 col-lg-3" align="right">
-                <a href="?app=contractor" class="btn btn-default">Back</a>
-                <button type="submit" class="btn btn-primary">Print</button>
+                <form role="form" method="post" action="index.php?app=contractor&action=approve" enctype="multipart/form-data">
+                    <a class="btn btn-default" href="?app=contractor">Back</a>
+                    <button class="btn btn-success" type="submit">Approve</button>
+                    <button class="btn btn-primary">Print</button>
+                    <input type="hidden" id="contractor_code" name="contractor_code" value="<?php echo $contractor_code; ?>">
+                </form>
             </div>
         </div>
     </div>
