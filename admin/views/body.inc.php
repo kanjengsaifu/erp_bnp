@@ -30,6 +30,12 @@
         require_once("modules/product_brand/views/index.inc.php");   
     }else if($_GET['app'] == "project"){
         require_once("modules/project/views/index.inc.php");   
+    }else if($_GET['app'] == "satisfaction"){
+        require_once("modules/satisfaction/views/index.inc.php");   
+    }else if($_GET['app'] == "contact_way"){
+        require_once("modules/contact_way/views/index.inc.php");   
+    }else if($_GET['app'] == "contact_type"){
+        require_once("modules/contact_type/views/index.inc.php");   
     }
     /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
     /* ----------------------------------- ระบบจัดการเขต --------------------------------- */

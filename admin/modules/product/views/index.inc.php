@@ -80,17 +80,17 @@ if ($_GET['action'] == 'insert' && $menu['product']['add']==1 ){
 }else if ($_GET['action'] == 'delete' && $menu['product']['delete']==1 ){
 
     if($product_supplier_code != ''){
-        $product_supplier_model->deleteProductSupplierById($product_supplier_code);    
+        $product_supplier_model->deleteProductSupplierByCode($product_supplier_code);    
         ?>
         <script>window.location="index.php?app=product&action=update&code=<?php echo $product_code;?>"</script>
         <?php
-    } else if($product_customer_id != ''){
-        $product_model_customer->deleteProductCustomerById($product_customer_id);   
+    }else if($product_material_code != ''){
+        $product_material_model->deleteProductMaterialByCode($product_material_code);   
         ?>
         <script>window.location="index.php?app=product&action=update&code=<?php echo $product_code;?>"</script>
         <?php
     }else{
-        $product_model->deleteProductById($product_code);     
+        $product_model->deleteProductByCode($product_code);     
         ?>
         <script>window.location="index.php?app=product"</script>
         <?php

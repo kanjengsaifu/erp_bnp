@@ -32,12 +32,45 @@ class ProductModel extends BaseModel{
         }
 
         
-        $sql = " SELECT tb_product.* 
+        $sql = " SELECT tb_product.* ,CONCAT(product_type_name,' ',product_brand_name,' ',product_name) AS name 
         FROM tb_product  
         LEFT JOIN tb_product_supplier ON tb_product.product_code = tb_product_supplier.product_code  
+        LEFT JOIN tb_product_type ON tb_product.product_type_code = tb_product_type.product_type_code  
+        LEFT JOIN tb_product_brand ON tb_product.product_brand_code = tb_product_brand.product_brand_code  
         WHERE 1 
         $supplier
         $sts_keyword 
+        GROUP BY tb_product.product_code
+        ORDER BY tb_product.product_code  
+        "; 
+        // echo $sql;
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) { 
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getProductByProjectCode($project_code = ''){
+
+        $str_project_code="";
+
+        if($project_code!=''){
+            $str_project_code = " AND tb_product.product_code NOT IN ( SELECT product_code 
+            FROM tb_project_product 
+            WHERE project_code = '$project_code'  ) ";
+        }
+         
+        $sql = " SELECT tb_product.* ,CONCAT(product_type_name,' ',product_brand_name,' ',product_name) AS name 
+        FROM tb_product   
+        LEFT JOIN tb_product_supplier ON tb_product.product_code = tb_product_supplier.product_code  
+        LEFT JOIN tb_product_type ON tb_product.product_type_code = tb_product_type.product_type_code  
+        LEFT JOIN tb_product_brand ON tb_product.product_brand_code = tb_product_brand.product_brand_code  
+        WHERE 1  
+        $str_project_code
         GROUP BY tb_product.product_code
         ORDER BY tb_product.product_code  
         "; 
@@ -137,6 +170,10 @@ class ProductModel extends BaseModel{
 
     function deleteProductByCode($code){
         $sql = " DELETE FROM tb_product WHERE product_code = '$code' ";
+        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
+        $sql = " DELETE FROM tb_product_supplier WHERE product_code = '$code' ";
+        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
+        $sql = " DELETE FROM tb_product_material WHERE product_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }

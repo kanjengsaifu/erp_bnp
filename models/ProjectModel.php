@@ -91,7 +91,7 @@ class ProjectModel extends BaseModel{
 
         //echo $sql;
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+           return $data['project_code'];
         }else {
             return false;
         }
@@ -101,6 +101,8 @@ class ProjectModel extends BaseModel{
 
     function deleteProjectByCode($code){
         $sql = " DELETE FROM tb_project WHERE project_code = '$code' ";
+        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
+        $sql = " DELETE FROM tb_project_product WHERE project_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }

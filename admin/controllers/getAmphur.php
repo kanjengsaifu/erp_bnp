@@ -3,7 +3,7 @@ require_once('../../models/AddressModel.php');
 
 $address_model = new AddressModel;
 
-$amphur = $address_model->getAmphurByProviceCode($_POST['province']);
+$amphur = $address_model->getAmphurByProviceID($_POST['province']);
 ?>
 <option value="">Select</option>
 <?php

@@ -30,7 +30,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
     $agent_status = $agent_status_model->getAgentStatusBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($agent['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($agent['amphur_id']); 
+    $add_district = $address_model->getDistrictByAmphurID($agent['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['agent']['delete']){
     $agent = $agent_model->getAgentByCode($agent_code);
@@ -207,7 +207,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
     $agent_status = $agent_status_model->getAgentStatusBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($agent['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($agent['amphur_id']); 
+    $add_district = $address_model->getDistrictByAmphurID($agent['amphur_id']); 
     require_once($path.'detail.inc.php');
 }else{
     $agent = $agent_model->getAgentBy();

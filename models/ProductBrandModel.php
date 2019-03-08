@@ -10,7 +10,7 @@ class ProductBrandModel extends BaseModel{
     }
     function getProductBrandLastCode($code,$digit){
         $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(product_brand_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
-        FROM tb_product_brand static::$db->real_escape_string(
+        FROM tb_product_brand 
         WHERE product_brand_code LIKE ('$code%') 
         ";
 

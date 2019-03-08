@@ -29,63 +29,7 @@
                 </div>
             </div>
             <!-- /.panel-heading -->
-            <div class="panel-body">
-                <form role="form" method="get" action="index.php?app=project">
-                    <input type="hidden" name="app" value="project" />
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>ผู้ขาย / Supplier </label>
-                                <select id="supplier_code" name="supplier_code" class="form-control select"  data-live-search="true">
-                                    <option value="">ทั้งหมด</option>
-                                    <?php 
-                                    for($i =  0 ; $i < count($suppliers) ; $i++){
-                                    ?>
-                                    <option <?php if($suppliers[$i]['supplier_code'] == $supplier_code){?> selected <?php }?> value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?> </option>
-                                    <?
-                                    }
-                                    ?>
-                                </select>
-                                <p class="help-block">Example : บริษัท ไทยซัมมิท โอโตโมทีฟ จำกัด.</p>
-                            </div>
-                        </div>
-                            
-                        <!-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label>ประเภท / Type </label>
-                                <select id="project_type_code" name="project_type_code" class="form-control select"  data-live-search="true">
-                                    <option value="">ทั้งหมด</option>
-                                    <?php 
-                                    for($i =  0 ; $i < count($project_type) ; $i++){
-                                    ?>
-                                    <option <?php if($project_type[$i]['project_type_code'] == $project_type_code){?> selected <?php }?> value="<?php echo $project_type[$i]['project_type_code'] ?>"><?php echo $project_type[$i]['project_type_name'] ?> </option>
-                                    <?
-                                    }
-                                    ?>
-                                </select>
-                                <p class="help-block">Example : - .</p>
-                            </div>
-                        </div> -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>คำค้น <font color="#F00"><b>*</b></font></label>
-                                <input id="keyword" name="keyword" class="form-control" value="<?PHP echo $keyword;?>" >
-                                <p class="help-block">Example : T001.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-primary" style="float:right; margin:0px 4px;" type="submit">Search</button>
-                            <a href="index.php?app=project" class="btn btn-default" style="float:right; margin:0px 4px;">Reset</a>
-                        </div>
-                    </div>
-                </form>
+            <div class="panel-body"> 
 
                 <div class="row">
                     <div class="col-sm-6">

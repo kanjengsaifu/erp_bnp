@@ -19,11 +19,7 @@
         }else if(project_price_per_rai.length == 0 ){
             alert("Please input price");
             document.getElementById("project_price_per_rai").focus();
-            return false;    
-        }else if(project_description.length == 0 ){
-            alert("Please input project description");
-            document.getElementById("project_description").focus();
-            return false;    
+            return false;         
         }else{
             return true;
         } 
@@ -189,7 +185,7 @@
                                     <?php 
                                     for($i =  0 ; $i < count($product) ; $i++){
                                     ?>
-                                    <option <?if($product[$i]['product_code'] == $project_product['product_code'] ){?> selected <?php } ?> value="<?php echo $product[$i]['product_code'] ?>"><?php echo $product[$i]['product_name'] ?> </option>
+                                    <option <?if($product[$i]['product_code'] == $project_product['product_code'] ){?> selected <?php } ?> value="<?php echo $product[$i]['product_code'] ?>"><?php echo $product[$i]['name'] ?> </option>
                                     <?
                                     }
                                     ?>
@@ -232,13 +228,13 @@
                         ?>
                         <tr class="odd gradeX">
                             <td><?php echo $i+1; ?></td>
-                            <td><?php echo $project_products[$i]['product_name']; ?></td>
+                            <td><?php echo $project_products[$i]['name']; ?></td>
                             <td class="center"><?php echo $project_products[$i]['project_product_amount']; ?></td> 
                             <td> 
-                                <a href="?app=project&action=update&code=<?php echo $project_code;?>&project_supplier_code=<?php echo $project_suppliers[$i]['project_supplier_code'];?>">
+                                <a href="?app=project&action=update&code=<?php echo $project_code;?>&project_product_code=<?php echo $project_products[$i]['project_product_code'];?>">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 </a>   
-                                <a href="?app=project&action=delete&code=<?php echo $project_code;?>&project_supplier_code=<?php echo $project_suppliers[$i]['project_supplier_code'];?>" onclick="return confirm('You want to delete supplier : <?php echo $project_suppliers[$i]['supplier_name_en']; ?> (<?php echo $project_suppliers[$i]['supplier_name_th']; ?>)');" style="color:red;">
+                                <a href="?app=project&action=delete&code=<?php echo $project_code;?>&project_product_code=<?php echo $project_products[$i]['project_product_code'];?>" onclick="return confirm('You want to delete product : <?php echo $project_products[$i]['name']; ?> ');" style="color:red;">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a> 
                             </td>

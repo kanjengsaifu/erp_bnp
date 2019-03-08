@@ -38,7 +38,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($songserm['amphur_id']); 
+    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['songserm']['delete']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
@@ -215,7 +215,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($songserm['amphur_id']); 
+    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
     require_once($path.'detail.inc.php');
 }else {
     $songserm = $songserm_model->getSongsermBy();
