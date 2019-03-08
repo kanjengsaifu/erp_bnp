@@ -132,7 +132,7 @@
         แก้ไขผู้รับเหมา / Edit contractor 
     </div>
     <div class="panel-body">
-        <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=edit" enctype="multipart/form-data">>
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=edit" enctype="multipart/form-data">
             <div class="row"> 
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">

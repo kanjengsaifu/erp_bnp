@@ -1,18 +1,82 @@
 <script>
-    function check_code(id){
-        var code = $(id).val();
-        $.post("controllers/getSongsermByCode.php", { 'songserm_code': code }, function( data ) {  
-            if(data != null){ 
-                alert("This "+code+" is already in the system.");
-                document.getElementById("songserm_code").focus();
-                $("#code_check").val(data.songserm_code);
-            } else{
-                $("#code_check").val("");
-            }
-        });
+    function check_code(){
+        var code = document.getElementById("songserm_code").value;
+
+        code = $.trim(code);
+
+        if(code.length == 0){
+            $('#alert_code').html('Example : STE0001.');
+            $('#alert_code').removeClass('alert-danger');
+            $('#alert_code').removeClass('alert-success');
+        }else{
+            $.post("modules/songserm/controllers/getSongsermByCode.php", { songserm_code: code })
+                .done(function(data) {
+                    if(data != null){ 
+                        document.getElementById("songserm_code").focus();
+                        $('#alert_code').html('This code : '+code+' is already in the system.');
+                        $('#alert_code').addClass('alert-danger');
+                        $('#alert_code').removeClass('alert-success');
+                    }else{
+                        $('#alert_code').html('Code : '+code+' can be used.');
+                        $('#alert_code').removeClass('alert-danger');
+                        $('#alert_code').addClass('alert-success');
+                    }
+            });
+        }
+    }
+
+    function check_username(){
+        var username = document.getElementById("songserm_username").value;
+
+        username = $.trim(username);
+
+        if(username.length == 0){
+            $('#alert_username').html('Example : STE0001.');
+            $('#alert_username').removeClass('alert-danger');
+            $('#alert_username').removeClass('alert-success');
+        }else if(username.length < 6 || username.length > 15){
+            $('#alert_username').html('length should be 6-15 characters');
+            $('#alert_username').addClass('alert-danger');
+            $('#alert_username').removeClass('alert-success');
+        }else{
+            $.post("modules/songserm/controllers/getSongsermByUsername.php", { username: username })
+                .done(function(data) {
+                    if(data != null){ 
+                        document.getElementById("songserm_username").focus();
+                        $('#alert_username').html('This username : '+username+' is already in the system.');
+                        $('#alert_username').addClass('alert-danger');
+                        $('#alert_username').removeClass('alert-success');
+                    }else{
+                        $('#alert_username').html('Username : '+username+' can be used.');
+                        $('#alert_username').removeClass('alert-danger');
+                        $('#alert_username').addClass('alert-success');
+                    }
+            });
+        }
+    }
+
+    function check_password(){
+        var password = document.getElementById("songserm_password").value;
+
+        password = $.trim(password);
+
+        if(password.length == 0){
+            $('#alert_password').html('Example : STE0001.');
+            $('#alert_password').removeClass('alert-danger');
+            $('#alert_password').removeClass('alert-success');
+        }else if(password.length < 6 || password.length > 15){
+            $('#alert_password').html('length should be 6-15 characters');
+            $('#alert_password').addClass('alert-danger');
+            $('#alert_password').removeClass('alert-success');
+        }else{
+            $('#alert_password').html('Password can be used.');
+            $('#alert_password').removeClass('alert-danger');
+            $('#alert_password').addClass('alert-success');
+        }
     }
 
     function check(){
+        var code = document.getElementById("songserm_code").value;
         var songserm_prefix = document.getElementById("songserm_prefix").value;
         var songserm_name = document.getElementById("songserm_name").value;
         var songserm_lastname = document.getElementById("songserm_lastname").value;
@@ -67,6 +131,12 @@
             alert("Please input songserm status");
             document.getElementById("songserm_status_code").focus();
             return false; 
+        }else if(code.length != 0 && $('#alert_code').hasClass('alert-danger')){
+            return false;
+        }else if($('#alert_username').hasClass('alert-danger')){
+            return false;
+        }else if($('#alert_password').hasClass('alert-danger')){
+            return false;
         }else{ 
             return true;
         }
@@ -81,42 +151,6 @@
             reader.readAsDataURL(input.files[0]);
         }else{
             $('#img_songserm').attr('src', '../upload/default.png');
-        }
-    }
-
-    function readURL_id_card(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_id_card').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }else{
-            $('#img_id_card').attr('src', '../upload/default.png');
-        }
-    }
-
-    function readURL_house_regis(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_house_regis').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }else{
-            $('#img_house_regis').attr('src', '../upload/default.png');
-        }
-    }
-
-    function readURL_account(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#img_account').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }else{
-            $('#img_account').attr('src', '../upload/default.png');
         }
     }
 </script>
@@ -136,9 +170,31 @@
             <div class="row"> 
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">
+                        <label>รหัสประจำตัว / code </label>
+                        <input id="songserm_code" name="songserm_code" class="form-control" autocomplete="off" onchange="check_code();">
+                        <p id="alert_code" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อบัญชีผู้ใช้ / user name <font color="#F00"><b>*</b></font></label>
+                        <input required id="songserm_username" name="songserm_username" class="form-control" autocomplete="off" onchange="check_username();">
+                        <p id="alert_username" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>รหัสผ่าน / password <font color="#F00"><b>* (6-15)</b></font></label>
+                        <input required id="songserm_password" name="songserm_password" class="form-control" autocomplete="off" onchange="check_password();">
+                        <p id="alert_password" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+            </div> 
+            <div class="row"> 
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
                         <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="songserm_prefix" name="songserm_prefix" class="form-control">
-                            <option value="">Select</option>
+                        <select required id="songserm_prefix" name="songserm_prefix" class="form-control select">
                             <option value="นาย">นาย</option>
                             <option value="นาง">นาง</option>
                             <option value="นาย">นางสาว</option>
@@ -149,22 +205,39 @@
                 <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="songserm_name" name="songserm_name" class="form-control" autocomplete="off">
+                        <input required id="songserm_name" name="songserm_name" class="form-control" autocomplete="off">
                         <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
                 <div class="col-md-8 col-lg-3">
                     <div class="form-group">
                         <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="songserm_lastname" name="songserm_lastname" class="form-control" autocomplete="off">
+                        <input required id="songserm_lastname" name="songserm_lastname" class="form-control" autocomplete="off">
                         <p class="help-block">Example : ชาญชัย.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
+                        <label>ตำเเหน่ง / Position <font color="#F00"><b>*</b></font> </label>
+                        <select required id="songserm_position_code" name="songserm_position_code" class="form-control select">
+                            <?php 
+                            for($i =  0 ; $i < count($songserm_position) ; $i++){
+                            ?>
+                            <option value="<?php echo $songserm_position[$i]['songserm_position_code'] ?>"><?php echo $songserm_position[$i]['songserm_position_name'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : ส่งเสริม.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="songserm_status_code" name="songserm_status_code">
-                            <option value="">Select</option>
+                        <select required id="songserm_status_code" name="songserm_status_code" class="form-control select">
                             <?php 
                             for($i =  0 ; $i < count($songserm_status) ; $i++){
                             ?>
@@ -176,9 +249,7 @@
                         <p class="help-block">Example : ทำงาน.</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
@@ -190,7 +261,7 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
-                        <input type="text" id="songserm_address" name="songserm_address" class="form-control" autocomplete="off">
+                        <input required type="text" id="songserm_address" name="songserm_address" class="form-control" autocomplete="off">
                         <p class="help-block">Example : 271/55.</p>
                     </div>
                 </div>
@@ -200,7 +271,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>จังหวัด / Province <font color="#F00"><b>*</b></font> </label>
-                        <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
+                        <select required id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
                             for($i =  0 ; $i < count($add_province) ; $i++){
@@ -217,7 +288,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
-                        <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
+                        <select required id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
                         </select>
                         <p class="help-block">Example : เมือง.</p>
@@ -227,7 +298,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select required id="district_id" name="district_id" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                         </select>
                         <p class="help-block">Example : ในเมือง.</p>
@@ -237,37 +308,16 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" autocomplete="off">
+                        <input required id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-6 col-lg-3">
                     <label>รูปทีมส่งเสริม / Songserm image </label>
                     <div class="form-group" align="center">
                         <img id="img_songserm" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
                         <input accept=".jpg , .png" type="file" id="songserm_image" name="songserm_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>สำเนาบัตรประชาชน / Copy of ID card </label>
-                    <div class="form-group" align="center">
-                        <img id="img_id_card" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
-                        <input accept=".jpg , .png" type="file" id="id_card_image" name="id_card_image" class="form-control" style="margin-top: 14px" onChange="readURL_id_card(this);">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>สำเนาทะเบียนบ้าน / Copy of House registration </label>
-                    <div class="form-group" align="center">
-                        <img id="img_house_regis" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
-                        <input accept=".jpg , .png" type="file" id="house_regis_image" name="house_regis_image" class="form-control" style="margin-top: 14px" onChange="readURL_house_regis(this);">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>สำเนาหน้าสมุดบัญชี / Copy of account book page </label>
-                    <div class="form-group" align="center">
-                        <img id="img_account" src="../upload/default.png" style="width: 100%;max-width: 320px;"> 
-                        <input accept=".jpg , .png" type="file" id="account_image" name="account_image" class="form-control" style="margin-top: 14px" onChange="readURL_account(this);">
                     </div>
                 </div>
             </div>

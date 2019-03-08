@@ -40,7 +40,7 @@ class AddressModel extends BaseModel{
         }
     }
 
-    function getDistricByAmphurID($id){
+    function getDistrictByAmphurID($id){
         $sql = "SELECT * 
         FROM tb_district
         WHERE AMPHUR_ID = '$id'

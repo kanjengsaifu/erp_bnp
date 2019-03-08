@@ -1,12 +1,14 @@
 <?php
 require_once('../models/SongsermModel.php');
 require_once('../models/SongsermStatusModel.php');
+require_once('../models/SongsermPositionModel.php');
 require_once('../models/AddressModel.php');
 
 $path = "modules/songserm/views/";
 
 $songserm_model = new SongsermModel;
 $songserm_status_model = new SongsermStatusModel; 
+$songserm_position_model = new SongsermPositionModel; 
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -21,21 +23,15 @@ $target_dir = "../upload/songserm/";
 
 $songserm_code = $_GET['code'];
 
-// foreach ($_POST as $key => $value) {
-//     echo "<div>";
-//     echo $key;
-//     echo " : ";
-//     echo $value;
-//     echo "</div>";
-// }
-
 if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){ 
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
+    $songserm_position = $songserm_position_model->getSongsermPositionBy();
     $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['songserm']['edit']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
+    $songserm_position = $songserm_position_model->getSongsermPositionBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
     $add_district = $address_model->getDistricByAmphurID($songserm['amphur_id']); 
@@ -43,7 +39,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
 }else if ($_GET['action'] == 'delete'&&$menu['songserm']['delete']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
 
-    $img_delete = ['songserm_image','id_card_image','house_regis_image','account_image'];
+    $img_delete = ['songserm_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
         if ($songserm[$img_delete[$i]] != ''){
@@ -58,24 +54,32 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
 
     ?> <script> window.location="index.php?app=songserm"</script> <?php
 }else if ($_GET['action'] == 'add'&&$menu['songserm']['add']){
-    $songserm_code = "CT";
-    $songserm_code = $songserm_model->getSongsermLastCode($songserm_code,4);  
+    if ($_POST['songserm_code'] == ''){
+        $code = "STE".date('y').date('m').date('d');
+        $songserm_code = $songserm_model->getSongsermLastCode($code,3);  
+    }else{
+        $songserm_code = $_POST['songserm_code'];
+    }
 
     if($songserm_code != '' && isset($_POST['songserm_prefix'])){
         $check = true;
         $data['songserm_code'] = $songserm_code;
+        $data['songserm_status_code'] = $_POST['songserm_status_code']; 
+        $data['songserm_position_code'] = $_POST['songserm_position_code'];
         $data['songserm_prefix'] = $_POST['songserm_prefix'];  
         $data['songserm_name'] = $_POST['songserm_name'];
         $data['songserm_lastname'] = $_POST['songserm_lastname'];
-        $data['songserm_mobile'] = $_POST['songserm_mobile'];
         $data['songserm_address'] = $_POST['songserm_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
         $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
-        $data['songserm_status_code'] = $_POST['songserm_status_code']; 
+        $data['songserm_mobile'] = $_POST['songserm_mobile'];
+        $data['songserm_username'] = $_POST['songserm_username'];
+        $data['songserm_password'] = $_POST['songserm_password'];
+        $data['addby'] = $login_user['user_code'];
 
-        $img_upload = ['songserm_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['songserm_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -147,7 +151,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
         $data['songserm_status_code'] = $_POST['songserm_status_code']; 
 
-        $img_upload = ['songserm_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['songserm_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){

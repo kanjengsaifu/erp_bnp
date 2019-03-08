@@ -28,12 +28,6 @@
 <script src="../template/dist/js/Chart.bundle.min.js"></script>
 <?php }?>
 
-<style>    
-div.dataTables_filter{
-    display: none;
-}
-</style>
-
 <script type="text/javascript">
     $(function() {
         var integer = $('input[class*="integer"]');
@@ -56,7 +50,14 @@ div.dataTables_filter{
         $('.dataTables').DataTable({
             "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
             "pageLength": 100,
+            bFilter: false,
             responsive: true 
+        });
+
+        $('.dataTables-filter').DataTable({
+            "lengthMenu": [[25, 50, 75, 100, 250, 500, -1 ],[25, 50, 75, 100, 250, 500, 'All' ]],
+            "pageLength": 100,
+            responsive: true,
         });
 
         $('.select').selectpicker();

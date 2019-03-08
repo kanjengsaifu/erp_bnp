@@ -6,7 +6,7 @@ class SongsermModel extends BaseModel{
     function __construct(){
        
         if(!static::$db){
-            static::$db = mysqli_connect($this->host, $this->songsermname, $this->password, $this->db_name);        
+            static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);        
         }
         mysqli_set_charset(static::$db,"utf8");
     }
@@ -60,36 +60,74 @@ class SongsermModel extends BaseModel{
         }
     }
 
-    function updateSongsermByCode($code,$data = []){
-        $sql = " UPDATE tb_songserm SET     
-        songserm_prefix = '".static::$db->real_escape_string($data['songserm_prefix'])."', 
-        songserm_name = '".static::$db->real_escape_string($data['songserm_name'])."', 
-        songserm_lastname = '".static::$db->real_escape_string($data['songserm_lastname'])."', 
-        songserm_mobile = '".static::$db->real_escape_string($data['songserm_mobile'])."', 
-        songserm_address = '".static::$db->real_escape_string($data['songserm_address'])."', 
-        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
-        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
-        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
-        songserm_zipcode = '".static::$db->real_escape_string($data['songserm_zipcode'])."', 
-        songserm_image = '".static::$db->real_escape_string($data['songserm_image'])."', 
-        id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
-        house_regis_image = '".static::$db->real_escape_string($data['house_regis_image'])."', 
-        account_image = '".static::$db->real_escape_string($data['account_image'])."', 
-        songserm_status_code = '".static::$db->real_escape_string($data['songserm_status_code'])."' 
-        WHERE songserm_code = '".static::$db->real_escape_string($code)."'
+    function getSongsermByUsername($user){
+        $sql = " SELECT * 
+        FROM tb_songserm 
+        WHERE songserm_username = '$user' 
         ";
 
-        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
-        }else {
-            return false;
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
+            }
+            $result->close();
+            return $data;
         }
     }
 
-    function updateSongsermSignatureByCode($code,$data = []){
-        $sql = " UPDATE tb_songserm SET 
-        songserm_signature = '".$data['songserm_signature']."' 
-        WHERE songserm_code = '$code'
+    function getSongsermNotInZone($code){
+        $sql = "SELECT * 
+        FROM tb_songserm 
+        LEFT JOIN tb_district ON tb_songserm.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
+        WHERE songserm_status_code != '00'
+        AND songserm_code NOT IN (
+            SELECT songserm_code
+            FROM tb_zone_songserm 
+            WHERE zone_code = '$code'
+            GROUP BY songserm_code
+        )
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function updateSongsermByCode($code,$data = []){
+        $data['songserm_code']=mysqli_real_escape_string(static::$db,$data['songserm_code']);
+        $data['songserm_name']=mysqli_real_escape_string(static::$db,$data['songserm_name']);
+        $data['songserm_lastname']=mysqli_real_escape_string(static::$db,$data['songserm_lastname']);
+        $data['songserm_address']=mysqli_real_escape_string(static::$db,$data['songserm_address']);
+        $data['songserm_zipcode']=mysqli_real_escape_string(static::$db,$data['songserm_zipcode']);
+        $data['songserm_username']=mysqli_real_escape_string(static::$db,$data['songserm_username']);
+        $data['songserm_password']=mysqli_real_escape_string(static::$db,$data['songserm_password']);
+        $data['songserm_image']=mysqli_real_escape_string(static::$db,$data['songserm_image']);
+
+        $sql = " UPDATE tb_songserm SET     
+        songserm_status_code = '".$data['songserm_status_code']."' 
+        songserm_prefix = '".$data['songserm_prefix']."', 
+        songserm_name = '".$data['songserm_name']."', 
+        songserm_lastname = '".$data['songserm_lastname']."', 
+        songserm_address = '".$data['songserm_address']."', 
+        province_id = '".$data['province_id']."', 
+        amphur_id = '".$data['amphur_id']."', 
+        district_id = '".$data['district_id']."', 
+        songserm_zipcode = '".$data['songserm_zipcode']."', 
+        songserm_mobile = '".$data['songserm_mobile']."', 
+        songserm_username = '".$data['songserm_username']."', 
+        songserm_password = '".$data['songserm_password']."',
+        songserm_image = '".$data['songserm_image']."', 
+        updateby = '".$data['updateby']."', 
+        lastupdate = NOW() 
+        WHERE songserm_code = '".$code."'
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -100,54 +138,57 @@ class SongsermModel extends BaseModel{
     }
 
     function insertSongserm($data = []){
+        $data['songserm_code']=mysqli_real_escape_string(static::$db,$data['songserm_code']);
         $data['songserm_name']=mysqli_real_escape_string(static::$db,$data['songserm_name']);
         $data['songserm_lastname']=mysqli_real_escape_string(static::$db,$data['songserm_lastname']);
-        $data['songserm_mobile']=mysqli_real_escape_string(static::$db,$data['songserm_mobile']);
-        $data['songserm_image']=mysqli_real_escape_string(static::$db,$data['songserm_image']);
-        $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
-        $data['house_regis_image']=mysqli_real_escape_string(static::$db,$data['house_regis_image']);
-        $data['account_image']=mysqli_real_escape_string(static::$db,$data['account_image']);
         $data['songserm_address']=mysqli_real_escape_string(static::$db,$data['songserm_address']);
         $data['songserm_zipcode']=mysqli_real_escape_string(static::$db,$data['songserm_zipcode']);
+        $data['songserm_username']=mysqli_real_escape_string(static::$db,$data['songserm_username']);
+        $data['songserm_password']=mysqli_real_escape_string(static::$db,$data['songserm_password']);
+        $data['songserm_image']=mysqli_real_escape_string(static::$db,$data['songserm_image']);
 
         $sql = " INSERT INTO tb_songserm ( 
             songserm_code,
+            songserm_position_code,
+            songserm_status_code,
             songserm_prefix,
             songserm_name, 
             songserm_lastname,
-            songserm_mobile,
             songserm_address,
             province_id,
             amphur_id,
             district_id,
             songserm_zipcode,
+            songserm_mobile,
+            songserm_username,
+            songserm_password,
             songserm_image,
-            id_card_image,
-            house_regis_image,
-            account_image,
-            songserm_status_code 
+            addby,
+            adddate
             )  VALUES ('".  
             $data['songserm_code']."','".
+            $data['songserm_position_code']."','".
+            $data['songserm_status_code']."','".
             $data['songserm_prefix']."','".
             $data['songserm_name']."','".
             $data['songserm_lastname']."','".
-            $data['songserm_mobile']."','".
             $data['songserm_address']."','".
             $data['province_id']."','".
             $data['amphur_id']."','".
             $data['district_id']."','".
             $data['songserm_zipcode']."','".
+            $data['songserm_mobile']."','".
+            $data['songserm_username']."','".
+            $data['songserm_password']."','".
             $data['songserm_image']."','".
-            $data['id_card_image']."','".
-            $data['house_regis_image']."','".
-            $data['account_image']."','".
-            $data['songserm_status_code']."')
+            $data['addby']."',
+            NOW())
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            return $data['songserm_code'];
+            return true;
         }else {
-            return '';
+            return false;
         }
     }
 

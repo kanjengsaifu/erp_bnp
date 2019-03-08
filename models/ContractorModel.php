@@ -6,9 +6,8 @@ class ContractorModel extends BaseModel{
     function __construct(){
        
         if(!static::$db){
-            static::$db = mysqli_connect($this->host, $this->contractorname, $this->password, $this->db_name);        
+            static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);        
         }
-        mysqli_set_charset(static::$db,"utf8");
     }
 
     function getContractorLastCode($code,$digit){
@@ -95,6 +94,31 @@ class ContractorModel extends BaseModel{
         }
     }
 
+    function getContractorNotInZone($code){
+        $sql = "SELECT * 
+        FROM tb_contractor 
+        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
+        WHERE contractor_status_code != '00'
+        AND contractor_code NOT IN (
+            SELECT contractor_code
+            FROM tb_zone_contractor 
+            WHERE zone_code = '$code'
+            GROUP BY contractor_code
+        )
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
     function updateContractorByCode($code,$data = []){
         $sql = " UPDATE tb_contractor SET     
         contractor_prefix = '".static::$db->real_escape_string($data['contractor_prefix'])."', 
@@ -121,9 +145,9 @@ class ContractorModel extends BaseModel{
         }
     }
 
-    function updateContractorSignatureByCode($code,$data = []){
+    function approveContractorByCode($code){
         $sql = " UPDATE tb_contractor SET 
-        contractor_signature = '".$data['contractor_signature']."' 
+        contractor_status_code = '01' 
         WHERE contractor_code = '$code'
         ";
 

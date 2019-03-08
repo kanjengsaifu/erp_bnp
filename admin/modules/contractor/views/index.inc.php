@@ -37,7 +37,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
     $contractor_status = $contractor_status_model->getContractorStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceCode($contractor['province_id']);
+    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
     $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['contractor']['delete']){
@@ -210,12 +210,18 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     }else{
         ?> <script> window.location="index.php?app=contractor" </script> <?php
     }
+}else if ($_GET['action'] == 'approve'){
+    if(isset($_POST['contractor_code'])){
+        $contractor = $contractor_model->approveContractorByCode($_POST['contractor_code']);
+    }
+
+    ?> <script> window.location="index.php?app=contractor" </script> <?php
 }else if ($_GET['action'] == 'profile'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
     $contractor_status = $contractor_status_model->getContractorStatusBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($contractor['amphur_id']); 
+    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
     require_once($path.'detail.inc.php');
 }else if ($_GET['status'] == 'pending'){
     $on_pending = $contractor_model->countContractorByStatus('00');
