@@ -34,7 +34,25 @@ class ContractorModel extends BaseModel{
         AND contractor_mobile LIKE ('%$mobile%') 
         ORDER BY CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) 
         ";
-
+        // echo $sql;
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+    function getContractorByUserCode($user_code){
+        $sql = "SELECT tb_contractor.contractor_code AS code,  CONCAT(contractor_prefix,' ',contractor_name,' ',contractor_lastname) as name 
+        FROM tb_contractor  
+        INNER JOIN tb_zone_contractor ON tb_contractor.contractor_code = tb_zone_contractor.contractor_code 
+        INNER JOIN tb_zone_call_center ON tb_zone_contractor.zone_code = tb_zone_call_center.zone_code 
+        WHERE tb_zone_call_center.user_code = '$user_code' 
+        ORDER BY CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) 
+        ";
+        // echo $sql;
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){

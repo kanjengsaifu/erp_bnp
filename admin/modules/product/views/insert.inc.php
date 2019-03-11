@@ -1,6 +1,33 @@
 <script>
 
      
+    function check_product_code(){ 
+        
+        var product_code = document.getElementById("product_code").value; 
+        
+        product_code = $.trim(product_code);
+
+        if(product_code.length == 0){
+            $('#alert_product_code').html('Example : STE0001.');
+            $('#alert_product_code').removeClass('alert-danger');
+            $('#alert_product_code').removeClass('alert-success');
+        }else{
+            $.post("modules/product/controllers/checkProductBy.php", { product_code: product_code })
+                .done(function(data) {
+                    // console.log(data);
+                    if(data != null){ 
+                        document.getElementById("product_code").focus();
+                        $('#alert_product_code').html('This code : '+product_code+' is already in the system.');
+                        $('#alert_product_code').addClass('alert-danger');
+                        $('#alert_product_code').removeClass('alert-success');
+                    }else{
+                        $('#alert_product_code').html('Code : '+product_code+' can be used.');
+                        $('#alert_product_code').removeClass('alert-danger');
+                        $('#alert_product_code').addClass('alert-success');
+                    }
+            });
+        } 
+    } 
 
     function check(){
 
@@ -102,6 +129,15 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <form id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=product&action=add" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label>รหัสผู้จำหน่าย / Supplier Code</label>
+                            <input id="product_code" name="product_code" class="form-control" onchange="check_product_code();" /> 
+                            <p id="alert_product_code" class="help-block">Example : STE0001.</p>
+                        </div>
+                    </div>
+                </div> 
                 <div class="row">
                     <div class="col-lg-8">
 

@@ -1,22 +1,81 @@
 <script>
-    function check_code(){ 
+    function check_user_code(){ 
         
-        var user_code = document.getElementById("user_code").value;
- 
-        $.post( "controllers/getUserByCode.php", { 'user_code': user_code }, function( data ) {  
-            if(data != null){ 
-                alert("This "+user_code+" is already in the system.");
-                document.getElementById("user_code").focus(); 
-            }else{ 
-                check();
-            }  
-        });
+        var user_code = document.getElementById("user_code").value; 
+        
+        user_code = $.trim(user_code);
+
+        if(user_code.length == 0){
+            $('#alert_user_code').html('Example : STE0001.');
+            $('#alert_user_code').removeClass('alert-danger');
+            $('#alert_user_code').removeClass('alert-success');
+        }else{
+            $.post("modules/user/controllers/checkUserBy.php", { user_code: user_code })
+                .done(function(data) {
+                    // console.log(data);
+                    if(data != null){ 
+                        document.getElementById("user_code").focus();
+                        $('#alert_user_code').html('This code : '+user_code+' is already in the system.');
+                        $('#alert_user_code').addClass('alert-danger');
+                        $('#alert_user_code').removeClass('alert-success');
+                    }else{
+                        $('#alert_user_code').html('Code : '+user_code+' can be used.');
+                        $('#alert_user_code').removeClass('alert-danger');
+                        $('#alert_user_code').addClass('alert-success');
+                    }
+            });
+        } 
+    } 
+    
+    function check_user_username(){ 
+        
+        var user_username = document.getElementById("user_username").value; 
+        
+        user_username = $.trim(user_username);
+
+        if(user_username.length == 0){
+            $('#alert_user_username').html('Example : thana.');
+            $('#alert_user_username').removeClass('alert-danger');
+            $('#alert_user_username').removeClass('alert-success');
+        }else{
+            $.post("modules/user/controllers/checkUserBy.php", { user_username: user_username })
+                .done(function(data) {
+                    // console.log(data);
+                    if(data != null){ 
+                        document.getElementById("user_username").focus();
+                        $('#alert_user_username').html('This username : '+user_username+' is already in the system.');
+                        $('#alert_user_username').addClass('alert-danger');
+                        $('#alert_user_username').removeClass('alert-success');
+                    }else{
+                        $('#alert_user_username').html('Username : '+user_username+' can be used.');
+                        $('#alert_user_username').removeClass('alert-danger');
+                        $('#alert_user_username').addClass('alert-success');
+                    }
+            });
+        } 
+    }  
+    
+    function check_password(){
+        var password = document.getElementById("user_password").value;
+
+        password = $.trim(password);
+
+        if(password.length == 0){
+            $('#alert_user_password').html('Example : STE0001.');
+            $('#alert_user_password').removeClass('alert-danger');
+            $('#alert_user_password').removeClass('alert-success');
+        }else if(password.length < 6 || password.length > 15){
+            $('#alert_user_password').html('length should be 6-15 characters');
+            $('#alert_user_password').addClass('alert-danger');
+            $('#alert_user_password').removeClass('alert-success');
+        }else{
+            $('#alert_user_password').html('Password can be used.');
+            $('#alert_user_password').removeClass('alert-danger');
+            $('#alert_user_password').addClass('alert-success');
+        }
     }
 
     function check(){
-
-        var check_status = true;
-        
         var user_code = document.getElementById("user_code").value;
         var user_prefix = document.getElementById("user_prefix").value;
         var user_name = document.getElementById("user_name").value;
@@ -32,7 +91,7 @@
         var user_zipcode = document.getElementById("user_zipcode").value;
         var user_position_code = document.getElementById("user_position_code").value;
         var license_code = document.getElementById("license_code").value;
-        var user_status_code = document.getElementById("user_status_code").value;   
+        var user_status_code = document.getElementById("user_status_code").value;  
 
         user_code = $.trim(user_code);
         user_prefix = $.trim(user_prefix);
@@ -49,60 +108,64 @@
         user_zipcode = $.trim(user_zipcode);
         user_position_code = $.trim(user_position_code);
         license_code = $.trim(license_code);
-        user_status_code = $.trim(user_status_code);   
+        user_status_code = $.trim(user_status_code); 
 
         if(user_prefix.length == 0){
             alert("Please input employee prefix");
             document.getElementById("user_prefix").focus();
-            check_status = false;
+            return false;
         }else if(user_name.length == 0){
             alert("Please input employee name");
             document.getElementById("user_name").focus();
-            check_status = false;
+            return false;
         }else if(user_lastname.length == 0){
             alert("Please input employee lastname");
             document.getElementById("user_lastname").focus();
-            check_status = false;
+            return false;
         }else if(user_username.length == 0){
             alert("Please input employee username");
             document.getElementById("user_username").focus();
-            check_status = false;
+            return false;
         }else if(user_password.length == 0){
             alert("Please input employee password");
             document.getElementById("user_password").focus();
-            check_status = false;
+            return false;
         }else if(user_address.length == 0){
             alert("Please input employee address");
             document.getElementById("user_address").focus();
-            check_status = false;
+            return false;
         }else if(province_id.length == 0){
             alert("Please input employee provice");
             document.getElementById("province_id").focus();
-            check_status = false;
+            return false;
         }else if(amphur_id.length == 0){
             alert("Please input employee amphur");
             document.getElementById("amphur_id").focus();
-            check_status = false;
+            return false;
         }else if(district_id.length == 0){
             alert("Please input employee district");
             document.getElementById("district_id").focus();
-            check_status = false;
+            return false;
         }else if(user_position_code.length == 0){
             alert("Please input employee position");
             document.getElementById("user_position_code").focus();
-            check_status = false;
+            return false;
         }else if(license_code.length == 0){
             alert("Please input employee license");
             document.getElementById("license_code").focus();
-            check_status = false;
+            return false;
         }else if(user_status_code.length == 0){
             alert("Please input employee status");
             document.getElementById("user_status_code").focus();
-            check_status = false; 
-        } 
-
-        if(check_status==true){
-            document.getElementById("form_target").submit(); 
+            return false; 
+        }else if(user_code.length != 0 && $('#alert_user_code').hasClass('alert-danger')){
+            return false;
+        }else if($('#alert_user_username').hasClass('alert-danger')){
+            return false;
+        }else if($('#alert_user_password').hasClass('alert-danger')){
+            return false;
+        }else{ 
+            return true;
         }
     }
 </script>
@@ -130,14 +193,14 @@
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <form  id="form_target" role="form" method="post" onsubmit=" " action="index.php?app=user&action=add" >
+        <form  id="form_target" role="form" method="post" action="index.php?app=user&action=add" onsubmit="return check();">
             <div class="row">
             
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>รหัสพนักงาน / Employee Code</label>
-                        <input id="user_code" name="user_code" class="form-control" onchange="" /> 
-                        <p class="help-block">Example : 0000001.</p>
+                        <input id="user_code" name="user_code" class="form-control" onchange="check_user_code();" /> 
+                        <p id="alert_user_code" class="help-block">Example : STE0001.</p>
                     </div>
                 </div>
             </div>
@@ -189,15 +252,15 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>ยูสเซอร์ / Username <font color="#F00"><b>*</b></font></label>
-                        <input id="user_username" name="user_username" class="form-control">
-                        <p class="help-block">Example : thana.</p>
+                        <input id="user_username" name="user_username" class="form-control" onchange="check_user_username()"> 
+                        <p id="alert_user_username" class="help-block">Example : thana.</p>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>รหัสผ่าน / Password <font color="#F00"><b>*</b></font></label>
-                        <input id="user_password" name="user_password" type="password" class="form-control">
-                        <p class="help-block">Example : thanaadmin.</p>
+                        <input id="user_password" name="user_password" type="password" class="form-control" onchange="check_password()">
+                        <p id="alert_user_password" class="help-block">Example : thanaadmin.</p>
                     </div>
                 </div>
             </div>
@@ -325,7 +388,7 @@
                 <div class="col-lg-offset-9 col-lg-3" align="right">
                     <a href="?app=user" class="btn btn-default">Back</a>
                     <button type="reset" class="btn btn-primary">Reset</button>
-                    <button  type="button"  class="btn btn-success" onclick="check_code()">Save</button>
+                    <button  type="submit"  class="btn btn-success"  >Save</button>
                 </div>
             </div>
         </form>

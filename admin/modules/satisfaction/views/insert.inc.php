@@ -1,5 +1,33 @@
 <script> 
 
+    function getMember(id){ 
+        if(id=='ผู้รับเหมา'){   
+            $.post("modules/satisfaction/controllers/getContractor.php", { 'user_code': '<?PHP echo $login_user['user_code'];?>' }, function( data ) {
+                // console.log(data);
+                $("#member_code").html(data);
+                $("#member_code").selectpicker('refresh');
+            }); 
+            document.getElementById("member_code").value = "";
+        }else if(id=='ตัวแทน'){   
+            $.post("modules/satisfaction/controllers/getFundAgent.php", { 'user_code': '<?PHP echo $login_user['user_code'];?>' }, function( data ) {
+                // console.log(data);
+                $("#member_code").html(data);
+                $("#member_code").selectpicker('refresh');
+            }); 
+            document.getElementById("member_code").value = "";
+        }else if(id=='เกษตรกร'){   
+            $.post("modules/satisfaction/controllers/getFundAgent.php", { 'user_code': '<?PHP echo $login_user['user_code'];?>' }, function( data ) {
+                // console.log(data);
+                $("#member_code").html(data);
+                $("#member_code").selectpicker('refresh');
+            }); 
+            document.getElementById("member_code").value = "";
+        }else{ 
+            $("#member_code").html('<option value="">Select</option>'); 
+            $("#member_code").selectpicker('refresh'); 
+        }
+    } 
+    
     function check(){
         var check_status = true;
         var check_empty_data = [
@@ -66,33 +94,22 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label>ประเภทผู้ติดต่อ / Member type <font color="#F00"><b>*</b></font> </label>
-                                <select id="member_type_code" name="member_type_code" class="form-control">
-                                    <option value="">Select</option>
-                                    <?php 
-                                    for($i =  0 ; $i < count($member_type) ; $i++){
-                                    ?>
-                                    <option value="<?php echo $member_type[$i]['member_type_code'] ?>"><?php echo $member_type[$i]['member_type_name'] ?></option>
-                                    <?
-                                    }
-                                    ?>
+                                <select id="member_type_code" name="member_type_code" class="form-control" onchange="getMember(this.value)">
+                                    <option value="">Select</option> 
+                                    <option value="ผู้รับเหมา">ผู้รับเหมา</option>
+                                    <option value="ตัวแทน">ตัวแทน</option>
+                                    <option value="เกษตรกร">เกษตรกร</option>
                                 </select>
                                 <p class="help-block">Example : ลิตร.</p>
                             </div>
                         </div>  
-                        <div class="col-lg-6">
+                        <div class="col-lg-6">   
                             <div class="form-group">
                                 <label>ผู้ติดต่อ / Contact name <font color="#F00"><b>*</b></font> </label>
-                                <select id="member_code" name="member_code" class="form-control">
-                                        <option value="">Select</option>
-                                        <?php 
-                                        for($i =  0 ; $i < count($member) ; $i++){
-                                        ?>
-                                        <option value="<?php echo $member[$i]['member_code'] ?>"><?php echo $member[$i]['member_name'] ?></option>
-                                        <?
-                                        }
-                                        ?>
-                                    </select>
-                                <p class="help-block">Example : ลิตร.</p>
+                                <select id="member_code" name="member_code" data-live-search="true" class="form-control select" >
+                                <option value="">Select</option>
+                                </select>
+                                <p class="help-block">Example : Thana.</p>
                             </div>
                         </div>  
                         <div class="col-lg-3">
@@ -159,3 +176,4 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
+ 

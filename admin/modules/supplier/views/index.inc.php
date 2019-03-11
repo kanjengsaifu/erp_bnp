@@ -67,10 +67,14 @@ if(!isset($_GET['action'])&&$menu['supplier']['view']==1){
     <script>window.location="index.php?app=supplier"</script>
 <?php
 
-}else if ($_GET['action'] == 'add'&&$menu['supplier']['add']==1){
+}else if ($_GET['action'] == 'add'&&$menu['supplier']['add']==1){ 
     
-    $supplier_code = "SP";
-    $supplier_code = $supplier_model->getSupplierLastCode($supplier_code,3);  
+    if ($_POST['supplier_code'] == ''){
+        $supplier_code = "SP".date('y').date('m').date('d');
+        $supplier_code = $supplier_model->getSupplierLastCode($supplier_code,3);  
+    }else{
+        $supplier_code = $_POST['supplier_code'];
+    }
     if($supplier_code!=""){
         $data = []; 
         $data['supplier_code'] = $supplier_code;

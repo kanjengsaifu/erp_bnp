@@ -1,17 +1,5 @@
-<script>
-    function check_code(id){
-        var code = $(id).val();
-        $.post( "controllers/getUserByCode.php", { 'user_code': code }, function( data ) {  
-            if(data != null){ 
-                alert("This "+code+" is already in the system.");
-                document.getElementById("user_code").focus();
-                $("#code_check").val(data.user_code);
-                
-            } else{
-                $("#code_check").val("");
-            }
-        });
-    }
+<script>  
+     
 
     function check(){
         var user_prefix = document.getElementById("user_prefix").value;
@@ -126,6 +114,16 @@
     <div class="panel-body">
         <form  id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=user&action=edit" >
             <input type="hidden"  id="user_code" name="user_code" value="<?php echo $user_code ?>" />
+            <div class="row">
+            
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>รหัสพนักงาน / Employee Code</label>
+                        <input id="user_code" name="user_code" class="form-control"  value="<?php echo $user['user_code']?>" readonly/> 
+                        <p id="alert_user_code" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+            </div>
             <div class="row"> 
                 <div class="col-lg-3">
                     <div class="form-group">
@@ -176,7 +174,7 @@
                 <div class="col-lg-3">
                     <div class="form-group">
                         <label>ยูสเซอร์ / Username <font color="#F00"><b>*</b></font></label>
-                        <input id="user_username" name="user_username" class="form-control" value="<?php echo $user['user_username']?>">
+                        <input id="user_username" name="user_username" class="form-control" value="<?php echo $user['user_username']?>" readonly>
                         <p class="help-block">Example : thana.</p>
                     </div>
                 </div>

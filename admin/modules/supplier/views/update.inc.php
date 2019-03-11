@@ -134,17 +134,21 @@
                 <form  id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=supplier&action=edit" enctype="multipart/form-data" >
                     <input type="hidden"  id="supplier_id" name="supplier_id" value="<?php echo $supplier_id ?>" />
                     <input type="hidden"  id="supplier_logo_o" name="supplier_logo_o" value="<?php echo $supplier['supplier_logo']; ?>" />    
+                    <div class="row">
+                    
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>รหัสผู้จำหน่าย / Supplier Code</label>
+                                <input id="supplier_code" name="supplier_code" class="form-control" onchange="check_supplier_code();" /> 
+                                <p id="alert_supplier_code" class="help-block">Example : STE0001.</p>
+                            </div>
+                        </div>
+                    </div> 
                         
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label>รหัสผู้จำหน่าย / Supplier code<font color="#F00"><b>*</b></font></label>
-                                        <input id="supplier_code" name="supplier_code" readonly="true" class="form-control" value="<? echo $supplier['supplier_code']?>" onchange="check_code()" />
-                                        <input id="code_check" type="hidden" value="" />
-                                        <p class="help-block">Example : R001.</p>
-                                    </div>
                                 </div>
                             </div>    
                             <div class="row">
