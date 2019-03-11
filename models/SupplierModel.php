@@ -38,6 +38,28 @@ class SupplierModel extends BaseModel{
 
     }
 
+    
+    function checkSupplierBy($code){
+        $str_code=""; 
+        if($code!=""){
+            $str_code = " AND supplier_code = '$code' ";
+        } 
+        $sql = " SELECT * 
+        FROM tb_supplier 
+        WHERE  1 
+        $str_code   
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
  
 
     function getSupplierByCode($code){

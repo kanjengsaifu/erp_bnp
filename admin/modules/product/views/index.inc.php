@@ -97,9 +97,14 @@ if ($_GET['action'] == 'insert' && $menu['product']['add']==1 ){
     }
 
 
-}else if ($_GET['action'] == 'add' && $menu['product']['add']==1 ){
-    $product_code = "MAT";
-    $product_code = $product_model->getProductLastCode($product_code,3);  
+}else if ($_GET['action'] == 'add' && $menu['product']['add']==1 ){ 
+    
+    if ($_POST['product_code'] == ''){
+        $product_code = "PD".date('y').date('m').date('d');
+        $product_code = $product_model->getProductLastCode($product_code,3);  
+    }else{
+        $product_code = $_POST['product_code'];
+    }
     if(isset($_POST['product_name'])){
 
         $data = [];

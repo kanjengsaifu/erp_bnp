@@ -50,12 +50,13 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     <script> window.location="index.php?app=user"</script>
     <?php
 
-}else if ($_GET['action'] == 'add'&&$menu['user']['add']==1){
-    if($_POST['user_code']==""){ 
-        $user_code = "U";
-        $user_code = $user_model->getUserLastCode($user_code,4);  
+}else if ($_GET['action'] == 'add'&&$menu['user']['add']==1){ 
+    
+    if ($_POST['user_code'] == ''){
+        $user_code = "U".date('y').date('m').date('d');
+        $user_code = $user_model->getUserLastCode($user_code,3);  
     }else{
-        $user_code = $_POST['user_code']; 
+        $user_code = $_POST['user_code'];
     }
     if($user_code!=false){
         $data['user_code'] = $user_code;

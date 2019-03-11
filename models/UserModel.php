@@ -77,6 +77,31 @@ class UserModel extends BaseModel{
             return $data;
         }
     }
+    function checkUserBy($code,$username){
+        $str_code="";
+        $str_username="";
+        if($code!=""){
+            $str_code = " AND user_code = '$code' ";
+        }
+        if($username!=""){
+            $str_username = " AND user_username = '$username' ";
+        }
+        $sql = " SELECT * 
+        FROM tb_user 
+        WHERE  1 
+        $str_code  
+        $str_username 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
 
 
     function getUserByUserPositionCode($code){

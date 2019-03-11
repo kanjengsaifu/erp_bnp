@@ -1,21 +1,36 @@
 <script>
 
-    function check_code(){
-        var code = $('#supplier_code').val();
-        $.post( "controllers/getSupplierByCode.php", { 'supplier_code': code }, function( data ) {  
-            if(data != null){ 
-                alert("This "+code+" is already in the system.");
-                document.getElementById("supplier_code").focus();
-                $("#code_check").val(data.supplier_id);
-                
-            } else{
-                $("#code_check").val("");
-            }
-        });
-    }
+    function check_supplier_code(){ 
+        
+        var supplier_code = document.getElementById("supplier_code").value; 
+        
+        supplier_code = $.trim(supplier_code);
+
+        if(supplier_code.length == 0){
+            $('#alert_supplier_code').html('Example : STE0001.');
+            $('#alert_supplier_code').removeClass('alert-danger');
+            $('#alert_supplier_code').removeClass('alert-success');
+        }else{
+            $.post("modules/supplier/controllers/checkSupplierBy.php", { supplier_code: supplier_code })
+                .done(function(data) {
+                    // console.log(data);
+                    if(data != null){ 
+                        document.getElementById("supplier_code").focus();
+                        $('#alert_supplier_code').html('This code : '+supplier_code+' is already in the system.');
+                        $('#alert_supplier_code').addClass('alert-danger');
+                        $('#alert_supplier_code').removeClass('alert-success');
+                    }else{
+                        $('#alert_supplier_code').html('Code : '+supplier_code+' can be used.');
+                        $('#alert_supplier_code').removeClass('alert-danger');
+                        $('#alert_supplier_code').addClass('alert-success');
+                    }
+            });
+        } 
+    } 
 
     function check(){
         
+        var supplier_code = document.getElementById("supplier_code").value;
         var supplier_name_th = document.getElementById("supplier_name_th").value;
         var supplier_name_en = document.getElementById("supplier_name_en").value; 
         var supplier_tax = document.getElementById("supplier_tax").value;
@@ -26,6 +41,7 @@
         var code_check = document.getElementById("code_check").value;  
        
        
+        supplier_code = $.trim(supplier_code);
         supplier_name_th = $.trim(supplier_name_th);
         supplier_name_en = $.trim(supplier_name_en); 
         supplier_tax = $.trim(supplier_tax);
@@ -53,6 +69,8 @@
         }else if(supplier_branch.length == 0){
             alert("Please input Supplier branch");
             document.getElementById("supplier_branch").focus();
+            return false;
+        }else if(supplier_code.length != 0 && $('#alert_supplier_code').hasClass('alert-danger')){
             return false;
         }else{
             return true;
@@ -82,23 +100,7 @@
             $('#img_logo').attr('src', '../upload/default.png');
         }
     }
-
-
-
-
-    function update_code(){
-        var supplier_name = document.getElementById("supplier_name_en").value;
-        supplier_name = $.trim(supplier_name);
-        if(supplier_name.length > 0){
-            $.post( "controllers/getSupplierCodeIndex.php", { 'char': supplier_name.split('')[0].toUpperCase() }, function( data ) {
-                var index = parseInt(data);
-                document.getElementById("supplier_code").value =  supplier_name.split('')[0].toUpperCase() + pad(index + 1,3);
-            });
-            
-        }else{
-            document.getElementById("supplier_code").value = "";
-        }
-    }
+ 
 
 </script>
 
@@ -117,7 +119,17 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form  id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=supplier&action=add" enctype="multipart/form-data"> 
+                <form  id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=supplier&action=add" enctype="multipart/form-data">
+                    <div class="row">
+                    
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>รหัสผู้จำหน่าย / Supplier Code</label>
+                                <input id="supplier_code" name="supplier_code" class="form-control" onchange="check_supplier_code();" /> 
+                                <p id="alert_supplier_code" class="help-block">Example : STE0001.</p>
+                            </div>
+                        </div>
+                    </div> 
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="row"> 

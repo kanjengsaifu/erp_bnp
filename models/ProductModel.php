@@ -21,6 +21,28 @@ class ProductModel extends BaseModel{
         }
     }
 
+    
+    function checkProductBy($code){
+        $str_code=""; 
+        if($code!=""){
+            $str_code = " AND product_code = '$code' ";
+        } 
+        $sql = " SELECT * 
+        FROM tb_product 
+        WHERE  1 
+        $str_code   
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
     function getProductBy($supplier_code = '', $keyword  = ''){
         
         if($supplier_code != ""){
