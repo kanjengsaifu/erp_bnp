@@ -1,7 +1,11 @@
 <?php 
 require_once('../models/ProjectModel.php');  
+require_once('../models/ProductModel.php');  
+require_once('../models/ProjectProductModel.php');  
  
 $project_model = new ProjectModel;    
+$product_model = new ProductModel;    
+$project_product_model = new ProjectProductModel;    
 
 $target_dir = "../upload/project/";
 $project_code = $_GET['code'];  
@@ -34,13 +38,9 @@ if ($_GET['action'] == 'insert' && $menu['project']['add']==1 ){
     
     $project = $project_model->getProjectByCode($project_code);  
   
-    $product = $product_model->getProductBy(); 
-
-    // echo '<pre>';
-    // print_r($material);
-    // echo '</pre>';
+    $product = $product_model->getProductByProjectCode($project_code);  
   
-    $project_products = $project_product_model->getProjectProductByProductCode($project_code);
+    $project_products = $project_product_model->getProjectProductByProjectCode($project_code);
   
 
     if($project_product_code != ''){
@@ -49,8 +49,18 @@ if ($_GET['action'] == 'insert' && $menu['project']['add']==1 ){
     
     require_once($path.'update.inc.php');
 
-}else if ($_GET['action'] == 'delete' && $menu['project']['delete']==1 ){
-    
+}else if ($_GET['action'] == 'delete' && $menu['project']['delete']==1 ){ 
+    if($project_product_code != ''){
+        $project_product_model->deleteProjectProductByCode($project_product_code);    
+        ?>
+        <script>window.location="index.php?app=project&action=update&code=<?php echo $project_code;?>"</script>
+        <?php 
+    }else{
+        $project_model->deleteProjectByCode($project_code);     
+        ?>
+        <script>window.location="index.php?app=project"</script>
+        <?php
+    }
 }else if ($_GET['action'] == 'add' && $menu['project']['add']==1 ){
      
     $project_code = "PJ";
@@ -186,17 +196,17 @@ if ($_GET['action'] == 'insert' && $menu['project']['add']==1 ){
             </script>
             <?php
         }else{
-            $result = $product_model->updateProductByCode($_POST['product_code'],$data);
+            $result = $project_model->updateProjectByCode($_POST['project_code'],$data);
 
             if($result){
                 ?>
                 <script>
-                window.location="index.php?app=product&action=update&code=<?php echo $_POST['product_code'];?>"</script>
+                window.location="index.php?app=project&action=update&code=<?php echo $_POST['project_code'];?>"</script>
                 <?php
             }else{
                 ?>
                 <script>
-                window.location="index.php?app=product&action=update&code=<?php echo $_POST['product_code'];?>"</script>
+                window.location="index.php?app=project&action=update&code=<?php echo $_POST['project_code'];?>"</script>
                 <?php
             }
                     
@@ -204,30 +214,30 @@ if ($_GET['action'] == 'insert' && $menu['project']['add']==1 ){
 
     }else{
         ?>
-        <script>window.location="index.php?app=product"</script>
+        <script>window.location="index.php?app=project"</script>
         <?php
     }
     
         
      
-}else if ($_GET['action'] == 'add_material' && $menu['project']['edit']==1){
-   
-    $project_material_code = "PDM";
-    $project_material_code = $project_material_model->getProductMaterialLastCode($project_material_code,3);  
+}else if ($_GET['action'] == 'add_product' && $menu['project']['edit']==1){
     
-    // echo $project_material_code;
-    if($project_material_code!=''&&$project_code!=''){
+    $project_product_code = "PDP";
+    $project_product_code = $project_product_model->getProjectProductLastCode($project_product_code,3);  
+    
+    // echo $project_product_code;
+    if($project_product_code!=''&&$project_code!=''){
 
         $data = [];
-        $data['project_material_code'] = $project_material_code;
+        $data['project_product_code'] = $project_product_code;
         $data['project_code'] = $project_code;
-        $data['material_code'] = $_POST['material_code']; 
-        $data['project_material_amount'] = $_POST['project_material_amount']; 
+        $data['product_code'] = $_POST['product_code']; 
+        $data['project_product_amount'] = $_POST['project_product_amount']; 
 
         // echo '<pre>';
         // print_r($data);
         // echo '</pre>';
-        $project_material_model->insertProductMaterial($data); 
+        $project_product_model->insertProjectProduct($data); 
         ?>
         <script>
         window.location="index.php?app=project&action=update&code=<?php echo $project_code?>"
@@ -241,17 +251,17 @@ if ($_GET['action'] == 'insert' && $menu['project']['add']==1 ){
         <?php
     }
     
-}else if ($_GET['action'] == 'edit_material' && $menu['project']['edit']==1 ){
+}else if ($_GET['action'] == 'edit_product' && $menu['project']['edit']==1 ){
     
-    if(isset($_POST['material_code'])){
+    if(isset($_POST['product_code'])){
         $data = [];
-        $data['material_code'] = $_POST['material_code']; 
-        $data['project_material_amount'] = $_POST['project_material_amount']; 
+        $data['product_code'] = $_POST['product_code']; 
+        $data['project_product_amount'] = $_POST['project_product_amount']; 
 
         // echo '<pre>';
         // print_r($data);
         // echo '</pre>'
-        $project_material_model->updateProductMaterialByCode($_POST['project_material_code'],$data);
+        $project_product_model->updateProjectProductByCode($_POST['project_product_code'],$data);
         
         ?>
             <script>window.location="index.php?app=project&action=update&code=<?php echo $project_code?>"</script>

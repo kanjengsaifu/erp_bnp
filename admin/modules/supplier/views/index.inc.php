@@ -60,7 +60,7 @@ if(!isset($_GET['action'])&&$menu['supplier']['view']==1){
         if (file_exists($target_file)) {
             unlink($target_file);
         }
-        $user = $supplier_model->deleteSupplierById($_GET['code']);
+        $user = $supplier_model->deleteSupplierByCode($_GET['code']);
     }
     
 ?>

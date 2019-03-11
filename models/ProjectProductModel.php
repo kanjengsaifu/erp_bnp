@@ -39,9 +39,11 @@ class ProjectProductModel extends BaseModel{
     }
 
     function getProjectProductByProjectCode($project_code = ''){
-        $sql = " SELECT *    
+        $sql = " SELECT * ,CONCAT(product_type_name,' ',product_brand_name,' ',product_name) AS name   
         FROM tb_project_product 
         LEFT JOIN tb_product ON tb_project_product.product_code = tb_product.product_code 
+        LEFT JOIN tb_product_type ON tb_product.product_type_code = tb_product_type.product_type_code  
+        LEFT JOIN tb_product_brand ON tb_product.product_brand_code = tb_product_brand.product_brand_code  
         WHERE project_code ='$project_code'  
         ";
         // echo $sql;

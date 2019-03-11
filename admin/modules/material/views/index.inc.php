@@ -63,9 +63,9 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
 
     // $material_customers = $model_material_customer->getMaterialCustomerBy($material_code);
     $material_suppliers = $model_material_supplier->getMaterialSupplierByMaterialCode($material_code);
-    echo '<pre>';
-    print_r($material_code);
-    echo '</pre>';
+    // echo '<pre>';
+    // print_r($material_code);
+    // echo '</pre>';
     
 
     // $customer = $model_customer->getCustomerBy();
@@ -84,17 +84,12 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
 }else if ($_GET['action'] == 'delete' && $menu['material']['delete']==1 ){
 
     if($material_supplier_code != ''){
-        $model_material_supplier->deleteMaterialSupplierById($material_supplier_code);    
-        ?>
-        <script>window.location="index.php?app=material&action=update&code=<?php echo $material_code;?>"</script>
-        <?php
-    } else if($material_customer_id != ''){
-        $model_material_customer->deleteMaterialCustomerById($material_customer_id);   
+        $model_material_supplier->deleteMaterialSupplierByCode($material_supplier_code);    
         ?>
         <script>window.location="index.php?app=material&action=update&code=<?php echo $material_code;?>"</script>
         <?php
     }else{
-        $model_material->deleteMaterialById($material_code);     
+        $model_material->deleteMaterialByCode($material_code);     
         ?>
         <script>window.location="index.php?app=material"</script>
         <?php
@@ -166,23 +161,23 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
         }
 
         if($check == false){
-    ?>
-        <script>
-            alert('<?php echo $error_msg; ?>');
-            window.history.back();
-        </script>
-    <?php
+            ?>
+                <script>
+                    alert('<?php echo $error_msg; ?>');
+                    window.history.back();
+                </script>
+            <?php
         }else{
             $code = $model_material->insertMaterial($data);
 
             if($code != false){
-    ?>
-            <script>window.location="index.php?app=material&action=update&code=<?php echo $code?>"</script>
-    <?php
+                ?>
+                <script>window.location="index.php?app=material&action=update&code=<?php echo $code?>"</script>
+                <?php
             }else{
-    ?>
-            <script>window.location="index.php?app=material"</script>
-    <?php
+                ?>
+                <script>window.location="index.php?app=material"</script>
+                <?php
             }
                     
         }
@@ -274,12 +269,14 @@ if ($_GET['action'] == 'insert' && $menu['material']['add']==1 ){
             if($result){
             ?>
             <script>
-            window.location="index.php?app=material&action=update&code=<?php echo $_POST['material_code'];?>"</script>
+            window.location="index.php?app=material&action=update&code=<?php echo $_POST['material_code'];?>"
+            </script>
             <?php
             }else{
             ?>
             <script>
-            window.location="index.php?app=material&action=update&code=<?php echo $_POST['material_code'];?>"</script>
+            window.location="index.php?app=material&action=update&code=<?php echo $_POST['material_code'];?>"
+            </script>
             <?php
             }
                     

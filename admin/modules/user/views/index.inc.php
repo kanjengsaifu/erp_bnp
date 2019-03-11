@@ -23,6 +23,8 @@ $date="$d1$d2$d3$d4$d5$d6";
 $target_dir = "../img_upload/user/";
 $user_code = $_GET['code'];
 if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){ 
+    $user_code = "U";
+    $user_code = $user_model->getUserLastCode($user_code,4);  
     $license = $license_model->getLicenseBy();
     $user_position = $user_position_model->getUserPositionBy();
     $user_status = $user_status_model->getUserStatusBy();
@@ -34,7 +36,7 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     $user_position = $user_position_model->getUserPositionBy();
     $user_status = $user_status_model->getUserStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceCode($user['province_id']);
+    $add_amphur = $address_model->getAmphurByProviceID($user['province_id']);
     $add_district = $address_model->getDistrictByAmphurID($user['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['user']['delete']==1){
@@ -43,14 +45,18 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
     if (file_exists($target_file)&& $_POST['user_image_o']!='') {
         unlink($target_file);
     }
-    $user = $user_model->deleteUserById($user_code);
+    $user = $user_model->deleteUserByCode($user_code);
     ?>
-    <script> window.location="index.php?content=user"</script>
+    <script> window.location="index.php?app=user"</script>
     <?php
 
 }else if ($_GET['action'] == 'add'&&$menu['user']['add']==1){
-    $user_code = "U";
-    $user_code = $user_model->getUserLastCode($user_code,4);  
+    if($_POST['user_code']==""){ 
+        $user_code = "U";
+        $user_code = $user_model->getUserLastCode($user_code,4);  
+    }else{
+        $user_code = $_POST['user_code']; 
+    }
     if($user_code!=false){
         $data['user_code'] = $user_code;
         $data['user_prefix'] = $_POST['user_prefix'];
@@ -73,10 +79,23 @@ if ($_GET['action'] == 'insert'&&$menu['user']['add']==1){
         // echo '</pre>';
         
         $user = $user_model->insertUser($data);
+        
+        
+        if($user != false){
+            ?>
+            <script>window.location="index.php?app=user&action=update&code=<?php echo $user_code?>"</script>
+            <?php
+        }else{
+            ?>
+            <script>window.location="index.php?app=user"</script>
+            <?php
+        }
     }else{
-    ?>
-        <script>window.location="index.php?app=user"</script>
-    <?php
+        ?>
+        <script>
+        window.location="index.php?app=user"
+        </script>
+        <?php
     }
 }else if ($_GET['action'] == 'edit'&&$menu['user']['edit']==1){
     if(isset($_POST['user_code'])){

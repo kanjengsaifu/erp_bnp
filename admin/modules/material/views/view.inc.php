@@ -1,62 +1,4 @@
-           
-<script src="../plugins/excel/xlsx.core.min.js"></script>  
-<script src="../plugins/excel/xls.core.min.js"></script> 
-
-<script>
-
-var number_error = 0; 
-
-function delete_row(id){
-    $(id).closest('tr').remove();
-} 
-
-function get_material_row(material,i){
-    $.post( "controllers/getMaterialByCode.php", { 'material_code': $.trim(material.material_code)}, function( data ) {
-        if(data != null){ 
-            number_error ++;
-            $('.number_error').html(number_error);
-            $("#bodyAdd").append(
-                '<tr class="odd gradeX not-find" >'+ 
-                    '<td style="background:#888;">'+   
-                        'มีวัตถุดิบรหัส "' + material.material_code + '" นี้ในระบบแล้ว' +
-                    '</td>'+
-                    '<td style="background:#888;" align="right">'+material.material_name+'</td>'+ 
-                    '<td style="background:#888;" >'+
-                        '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
-                            '<i class="fa fa-times" aria-hidden="true"></i>'+
-                        '</a>'+
-                    '</td>'+
-                '</tr>'
-            ); 
-        }else{
-            $("#bodyAdd").append(
-                '<tr class="odd gradeX find">'+  
-                    '<td align="right"><input type="text" class="form-control" style="text-align: right;"  name="material_code[]" value="'+material.material_code+'" readonly /></td>'+
-                    '<td align="right"><input type="text" class="form-control" style="text-align: right;"  name="material_name[]" value="'+material.material_name+'" readonly /></td>'+ 
-                    '<td>'+
-                        '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
-                            '<i class="fa fa-times" aria-hidden="true"></i>'+
-                        '</a>'+
-                    '</td>'+
-                '</tr>'
-            );
-        } 
-    });
-}
-
-function search_pop_like(id){ 
-
-    if($(id).is(':checked')){
-        $('tr[class="odd gradeX find"]').hide();
-        console.log("checked");
-    }else{
-        $('tr[class="odd gradeX find"]').show();
-        console.log("unchecked");
-    }
-}
- 
- 
-</script>
+             
 <div class="row">
     <div class="col-lg-6">
         <h1 class="page-header">Material Management</h1>
@@ -93,62 +35,7 @@ function search_pop_like(id){
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form role="form" method="get" action="index.php?app=material">
-                    <input type="hidden" name="app" value="material" />
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>ผู้ขาย / Supplier </label>
-                                <select id="supplier_code" name="supplier_code" class="form-control select"  data-live-search="true">
-                                    <option value="">ทั้งหมด</option>
-                                    <?php 
-                                    for($i =  0 ; $i < count($suppliers) ; $i++){
-                                    ?>
-                                    <option <?php if($suppliers[$i]['supplier_code'] == $supplier_code){?> selected <?php }?> value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?> </option>
-                                    <?
-                                    }
-                                    ?>
-                                </select>
-                                <p class="help-block">Example : บริษัท ไทยซัมมิท โอโตโมทีฟ จำกัด.</p>
-                            </div>
-                        </div>
-                            
-                        <!-- <div class="col-md-3">
-                            <div class="form-group">
-                                <label>ประเภท / Type </label>
-                                <select id="material_type_code" name="material_type_code" class="form-control select"  data-live-search="true">
-                                    <option value="">ทั้งหมด</option>
-                                    <?php 
-                                    for($i =  0 ; $i < count($material_type) ; $i++){
-                                    ?>
-                                    <option <?php if($material_type[$i]['material_type_code'] == $material_type_code){?> selected <?php }?> value="<?php echo $material_type[$i]['material_type_code'] ?>"><?php echo $material_type[$i]['material_type_name'] ?> </option>
-                                    <?
-                                    }
-                                    ?>
-                                </select>
-                                <p class="help-block">Example : - .</p>
-                            </div>
-                        </div> -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>คำค้น <font color="#F00"><b>*</b></font></label>
-                                <input id="keyword" name="keyword" class="form-control" value="<?PHP echo $keyword;?>" >
-                                <p class="help-block">Example : T001.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-primary" style="float:right; margin:0px 4px;" type="submit">Search</button>
-                            <a href="index.php?app=material" class="btn btn-default" style="float:right; margin:0px 4px;">Reset</a>
-                        </div>
-                    </div>
-                </form>
+              
 
                 <div class="row">
                     <div class="col-sm-6">
@@ -163,7 +50,7 @@ function search_pop_like(id){
                     </div>
                 </div>
 
-                    <div class="row" style="margin:0px;">
+                <div class="row" style="margin:0px;">
                     <div class="col-sm-6">
                         <div class="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">Showing <?PHP echo number_format($page * $page_size +1,0) ; ?> to <?PHP echo number_format($page * $page_size + $page_size,0) ; ?> of <?PHP echo number_format(count($material),0);?> entries</div>
                     </div>
@@ -319,49 +206,4 @@ function search_pop_like(id){
     </div>
     <!-- /.col-lg-12 -->
 </div>
-
-<form role="form" method="post"   action="index.php?app=material&action=import"   enctype="multipart/form-data"> 
-    <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg " role="document">
-            <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">เลือกรายการวัตถุดิบ / Choose material</h4>
-            </div>
-
-            <div  class="modal-body">
-            <div class="row">
-                <div class="col-md-offset-8 col-md-4" align="right">
-                    <input type="checkbox" id="search_pop" onchange="search_pop_like(this)"  /> แสดงรายการที่มีปัญหาจำนวน <span class="number_error"></span> รายการ
-                </div>
-            </div>
-            <br>
-
-            <div id="tb_import">
-                <table width="100%"  class="table table-striped table-bordered table-hover" >
-                    <thead>
-                        <tr> 
-                            <th>รหัสวัตถุดิบ</th>
-                            <th>ชื่อวัตถุดิบ</th> 
-                            <th>ลบ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyAdd">
-
-                    </tbody>
-                </table>
-            </div>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger"  onclick="export_error()" >Export Error (<span class="number_error"></span>)</button>
-                <button type="summit" class="btn btn-primary" > Import material list </button>
-            </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-</form>
+ 

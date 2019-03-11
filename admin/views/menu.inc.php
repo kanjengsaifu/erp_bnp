@@ -159,6 +159,14 @@ for($i = 0 ; $i < count($menu_list); $i++){
                     <a href="?app=songserm" <?PHP if($_GET['app'] == "songserm"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ส่งเสริม</a>
                 </li>
                 <?php } ?>
+                <?php if ($menu['satisfaction']['view']){ ?>
+                <li>
+                    <a href="?app=satisfaction" <?PHP if($_GET['app'] == "satisfaction"
+                                                        || $_GET["app"]=='contact_type'
+                                                        || $_GET["app"]=='contact_way'
+                                                        ){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ความพึงพอใจ</a>
+                </li>
+                <?php } ?>
                 <li
                 <?PHP 
                     if(

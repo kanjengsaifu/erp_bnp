@@ -138,6 +138,8 @@ class MaterialModel extends BaseModel{
     function deleteMaterialByCode($code){
         $sql = " DELETE FROM tb_material WHERE material_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
+        $sql = " DELETE FROM tb_material_supplier WHERE material_code = '$code' ";
+        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
     }
 }
