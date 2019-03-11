@@ -271,7 +271,7 @@
                     <label>รูปผู้รับเหมา / Contractor image </label>
                     <div class="form-group" align="center">
                         <img id="img_contractor" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="contractor_image" name="contractor_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <input accept=".jpg , .png" type="file" id="profile_image" name="profile_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
             </div>

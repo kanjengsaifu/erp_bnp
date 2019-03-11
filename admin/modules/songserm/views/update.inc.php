@@ -306,8 +306,8 @@
                 <div class="col-md-6 col-lg-3">
                     <label>รูปทีมส่งเสริม / Songserm image </label>
                     <div class="form-group" align="center">
-                        <img id="img_songserm" src="../upload/<?php if($songserm['songserm_image'] != "") echo 'songserm/'.$songserm['songserm_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="songserm_image" name="songserm_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <img id="img_songserm" src="../upload/<?php if($songserm['profile_image'] != "") echo 'songserm/'.$songserm['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                        <input accept=".jpg , .png" type="file" id="profile_image" name="profile_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
             </div>
@@ -319,7 +319,7 @@
                 </div>
             </div>
 
-            <input type="hidden" id="songserm_image_o" name="songserm_image_o" value="<?php echo $songserm['songserm_image']; ?>">
+            <input type="hidden" id="profile_image_o" name="profile_image_o" value="<?php echo $songserm['profile_image']; ?>">
             <input type="hidden" id="id_card_image_o" name="id_card_image_o" value="<?php echo $songserm['id_card_image']; ?>">
 
             <input type="hidden" id="songserm_code" name="songserm_code" value="<?php echo $songserm_code ?>">

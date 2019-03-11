@@ -110,7 +110,7 @@ class SongsermModel extends BaseModel{
         $data['songserm_zipcode']=mysqli_real_escape_string(static::$db,$data['songserm_zipcode']);
         $data['songserm_username']=mysqli_real_escape_string(static::$db,$data['songserm_username']);
         $data['songserm_password']=mysqli_real_escape_string(static::$db,$data['songserm_password']);
-        $data['songserm_image']=mysqli_real_escape_string(static::$db,$data['songserm_image']);
+        $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
 
         $sql = " UPDATE tb_songserm SET     
         songserm_position_code = '".$data['songserm_position_code']."' 
@@ -126,7 +126,7 @@ class SongsermModel extends BaseModel{
         songserm_mobile = '".$data['songserm_mobile']."', 
         songserm_username = '".$data['songserm_username']."', 
         songserm_password = '".$data['songserm_password']."',
-        songserm_image = '".$data['songserm_image']."', 
+        profile_image = '".$data['profile_image']."', 
         updateby = '".$data['updateby']."', 
         lastupdate = NOW() 
         WHERE songserm_code = '".$code."'
@@ -147,7 +147,7 @@ class SongsermModel extends BaseModel{
         $data['songserm_zipcode']=mysqli_real_escape_string(static::$db,$data['songserm_zipcode']);
         $data['songserm_username']=mysqli_real_escape_string(static::$db,$data['songserm_username']);
         $data['songserm_password']=mysqli_real_escape_string(static::$db,$data['songserm_password']);
-        $data['songserm_image']=mysqli_real_escape_string(static::$db,$data['songserm_image']);
+        $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
 
         $sql = " INSERT INTO tb_songserm ( 
             songserm_code,
@@ -164,7 +164,7 @@ class SongsermModel extends BaseModel{
             songserm_mobile,
             songserm_username,
             songserm_password,
-            songserm_image,
+            profile_image,
             addby,
             adddate
             )  VALUES ('".  
@@ -182,7 +182,7 @@ class SongsermModel extends BaseModel{
             $data['songserm_mobile']."','".
             $data['songserm_username']."','".
             $data['songserm_password']."','".
-            $data['songserm_image']."','".
+            $data['profile_image']."','".
             $data['addby']."',
             NOW()
         )";

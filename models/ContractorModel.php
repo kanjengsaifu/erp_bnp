@@ -143,7 +143,7 @@ class ContractorModel extends BaseModel{
         amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
         district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         contractor_zipcode = '".static::$db->real_escape_string($data['contractor_zipcode'])."', 
-        contractor_image = '".static::$db->real_escape_string($data['contractor_image'])."', 
+        profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         house_regis_image = '".static::$db->real_escape_string($data['house_regis_image'])."', 
         account_image = '".static::$db->real_escape_string($data['account_image'])."', 
@@ -162,7 +162,7 @@ class ContractorModel extends BaseModel{
         $data['contractor_name']=mysqli_real_escape_string(static::$db,$data['contractor_name']);
         $data['contractor_lastname']=mysqli_real_escape_string(static::$db,$data['contractor_lastname']);
         $data['contractor_mobile']=mysqli_real_escape_string(static::$db,$data['contractor_mobile']);
-        $data['contractor_image']=mysqli_real_escape_string(static::$db,$data['contractor_image']);
+        $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
         $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
         $data['house_regis_image']=mysqli_real_escape_string(static::$db,$data['house_regis_image']);
         $data['account_image']=mysqli_real_escape_string(static::$db,$data['account_image']);
@@ -180,7 +180,7 @@ class ContractorModel extends BaseModel{
             amphur_id,
             district_id,
             contractor_zipcode,
-            contractor_image,
+            profile_image,
             id_card_image,
             house_regis_image,
             account_image,
@@ -196,7 +196,7 @@ class ContractorModel extends BaseModel{
             $data['amphur_id']."','".
             $data['district_id']."','".
             $data['contractor_zipcode']."','".
-            $data['contractor_image']."','".
+            $data['profile_image']."','".
             $data['id_card_image']."','".
             $data['house_regis_image']."','".
             $data['account_image']."','".

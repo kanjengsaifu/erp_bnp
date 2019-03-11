@@ -85,7 +85,7 @@
             <div class="col-md-6 col-lg-4">
                 <label>รูปผู้รับเหมา / Contractor image </label>
                 <div class="form-group" align="center">
-                    <img id="img_contractor" src="../upload/<?php if($contractor['contractor_image'] != "") echo 'contractor/'.$contractor['contractor_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                    <img id="img_contractor" src="../upload/<?php if($contractor['profile_image'] != "") echo 'contractor/'.$contractor['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
                 </div>
             </div>
         </div>

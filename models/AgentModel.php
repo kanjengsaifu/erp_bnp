@@ -140,7 +140,7 @@ class AgentModel extends BaseModel{
         district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         agent_zipcode = '".static::$db->real_escape_string($data['agent_zipcode'])."',
         agent_mobile = '".static::$db->real_escape_string($data['agent_mobile'])."',  
-        agent_image = '".static::$db->real_escape_string($data['agent_image'])."', 
+        profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         agent_username = '".static::$db->real_escape_string($data['agent_username'])."', 
         agent_password = '".static::$db->real_escape_string($data['agent_password'])."', 
@@ -163,7 +163,7 @@ class AgentModel extends BaseModel{
         $data['agent_address']=mysqli_real_escape_string(static::$db,$data['agent_address']);
         $data['agent_zipcode']=mysqli_real_escape_string(static::$db,$data['agent_zipcode']);
         $data['agent_mobile']=mysqli_real_escape_string(static::$db,$data['agent_mobile']);
-        $data['agent_image']=mysqli_real_escape_string(static::$db,$data['agent_image']);
+        $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
         $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
         $data['agent_username']=mysqli_real_escape_string(static::$db,$data['agent_username']);
         $data['agent_password']=mysqli_real_escape_string(static::$db,$data['agent_password']);
@@ -180,7 +180,7 @@ class AgentModel extends BaseModel{
             district_id,
             agent_zipcode,
             agent_mobile,
-            agent_image,
+            profile_image,
             id_card_image,
             agent_username,
             agent_password,
@@ -198,7 +198,7 @@ class AgentModel extends BaseModel{
             $data['district_id']."','".
             $data['agent_zipcode']."','".
             $data['agent_mobile']."','".
-            $data['agent_image']."','".
+            $data['profile_image']."','".
             $data['id_card_image']."','".
             $data['agent_username']."','".
             $data['agent_password']."','".

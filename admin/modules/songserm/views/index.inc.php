@@ -39,7 +39,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
 }else if ($_GET['action'] == 'delete'&&$menu['songserm']['delete']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
 
-    $img_delete = ['songserm_image'];
+    $img_delete = ['profile_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
         if ($songserm[$img_delete[$i]] != ''){
@@ -79,7 +79,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['songserm_password'] = $_POST['songserm_password'];
         $data['addby'] = $login_user['user_code'];
 
-        $img_upload = ['songserm_image'];
+        $img_upload = ['profile_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -154,7 +154,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['songserm_password'] = $_POST['songserm_password'];
         $data['updateby'] = $login_user['user_code'];
 
-        $img_upload = ['songserm_image','id_card_image'];
+        $img_upload = ['profile_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){

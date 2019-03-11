@@ -255,8 +255,8 @@
                 <div class="col-md-6 col-lg-4">
                     <label>รูปผู้รับเหมา / Contractor image </label>
                     <div class="form-group" align="center">
-                        <img id="img_contractor" src="../upload/<?php if($contractor['contractor_image'] != "") echo 'contractor/'.$contractor['contractor_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="contractor_image" name="contractor_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <img id="img_contractor" src="../upload/<?php if($contractor['profile_image'] != "") echo 'contractor/'.$contractor['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                        <input accept=".jpg , .png" type="file" id="profile_image" name="profile_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
             </div> 
@@ -291,7 +291,7 @@
                 </div>
             </div>
 
-            <input type="hidden" id="contractor_image_o" name="contractor_image_o" value="<?php echo $contractor['contractor_image']; ?>">
+            <input type="hidden" id="profile_image_o" name="profile_image_o" value="<?php echo $contractor['profile_image']; ?>">
             <input type="hidden" id="id_card_image_o" name="id_card_image_o" value="<?php echo $contractor['id_card_image']; ?>">
             <input type="hidden" id="house_regis_image_o" name="house_regis_image_o" value="<?php echo $contractor['house_regis_image']; ?>">
             <input type="hidden" id="account_image_o" name="account_image_o" value="<?php echo $contractor['account_image']; ?>">

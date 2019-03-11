@@ -304,8 +304,8 @@
                 <div class="col-lg-4">
                     <label>รูปนายหน้า / Agent image </label>
                     <div class="form-group" align="center">
-                        <img id="img_agent" src="../upload/<?php if($agent['agent_image'] != "") echo 'agent/'.$agent['agent_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="agent_image" name="agent_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <img id="img_agent" src="../upload/<?php if($agent['profile_image'] != "") echo 'agent/'.$agent['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                        <input accept=".jpg , .png" type="file" id="profile_image" name="profile_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
             </div>
@@ -326,7 +326,7 @@
                 </div>
             </div>
 
-            <input type="hidden" id="agent_image_o" name="agent_image_o" value="<?php echo $agent['agent_image']; ?>">
+            <input type="hidden" id="profile_image_o" name="profile_image_o" value="<?php echo $agent['profile_image']; ?>">
             <input type="hidden" id="id_card_image_o" name="id_card_image_o" value="<?php echo $agent['id_card_image']; ?>">
 
             <input type="hidden" id="agent_code" name="agent_code" value="<?php echo $agent_code ?>">

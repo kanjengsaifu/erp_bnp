@@ -318,7 +318,7 @@
                     <label>รูปนายหน้า / Agent image </label>
                     <div class="form-group" align="center">
                         <img id="img_agent" src="../upload/default.png" style="width: 100%;max-width: 240px;"> 
-                        <input accept=".jpg , .png" type="file" id="agent_image" name="agent_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
+                        <input accept=".jpg , .png" type="file" id="profile_image" name="profile_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
                     </div>
                 </div>
             </div>

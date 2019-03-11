@@ -35,7 +35,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
 }else if ($_GET['action'] == 'delete'&&$menu['agent']['delete']){
     $agent = $agent_model->getAgentByCode($agent_code);
 
-    $img_delete = ['agent_image','id_card_image'];
+    $img_delete = ['profile_image','id_card_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
         if ($agent[$img_delete[$i]] != ''){
@@ -75,7 +75,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         $data['agent_password'] = $_POST['agent_password'];
         $data['addby'] = $login_user['user_code'];
 
-        $img_upload = ['agent_image','id_card_image'];
+        $img_upload = ['profile_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -145,7 +145,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         $data['agent_password'] = $_POST['agent_password'];
         $data['updateby'] = $login_user['user_code']; 
 
-        $img_upload = ['agent_image','id_card_image'];
+        $img_upload = ['profile_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){

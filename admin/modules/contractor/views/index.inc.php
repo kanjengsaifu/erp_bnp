@@ -43,7 +43,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
 }else if ($_GET['action'] == 'delete'&&$menu['contractor']['delete']){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
 
-    $img_delete = ['contractor_image','id_card_image','house_regis_image','account_image'];
+    $img_delete = ['profile_image','id_card_image','house_regis_image','account_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
         if ($contractor[$img_delete[$i]] != ''){
@@ -79,7 +79,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
         $data['status_code'] = $_POST['status_code']; 
 
-        $img_upload = ['contractor_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['profile_image','id_card_image','house_regis_image','account_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -151,7 +151,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
 
-        $img_upload = ['contractor_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['profile_image','id_card_image','house_regis_image','account_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){

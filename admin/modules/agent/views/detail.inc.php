@@ -15,7 +15,7 @@
                     <td>รูป / image</td>
                     <td>
                         <div class="form-group" align="center">
-                            <img src="../upload/<?php if($agent['agent_image'] != "") echo 'agent/'.$agent['agent_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                            <img src="../upload/<?php if($agent['profile_image'] != "") echo 'agent/'.$agent['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
                         </div>
                     </td>
                 </tr>
