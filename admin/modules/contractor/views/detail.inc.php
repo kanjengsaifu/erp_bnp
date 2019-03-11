@@ -28,23 +28,23 @@
                     <input class="form-control" value="<?php echo $contractor['contractor_lastname']?>" readonly>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <label>สถานะ / Status  </label>
-                    <input class="form-control" value="<?php echo $contractor['contractor_status_name']?>" readonly>
+                    <input class="form-control" value="<?php echo $contractor['status_name']?>" readonly>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <label>โทรศัพท์ / Mobile </label>
                     <input type="text" class="form-control" value="<?php echo $contractor['contractor_mobile']?>" readonly>
                 </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-sm-12 col-lg-6">
                 <div class="form-group">
                     <label>ที่อยู่ / Address  </label>
                     <input type="text" class="form-control" value="<?php echo $contractor['contractor_address']?>" readonly>
@@ -53,28 +53,28 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6 col-lg-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <label>จังหวัด / Province  </label>
                     <input type="text" class="form-control" value="<?php echo $contractor['PROVINCE_NAME']?>" readonly>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <label>อำเภอ / Amphur  </label>
                     <input type="text" class="form-control" value="<?php echo $contractor['AMPHUR_NAME']?>" readonly>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <label>ตำบล / Distict  </label>
                     <input type="text" class="form-control" value="<?php echo $contractor['DISTRICT_NAME']?>" readonly>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3">
+            <div class="col-sm-6 col-lg-3">
                 <div class="form-group">
                     <label>เลขไปรษณีย์ / Zipcode  </label>
                     <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" value="<?php echo $contractor['contractor_zipcode']?>"  readonly>
@@ -114,7 +114,9 @@
             <div class="col-lg-offset-9 col-lg-3" align="right">
                 <form role="form" method="post" action="index.php?app=contractor&action=approve" enctype="multipart/form-data">
                     <a class="btn btn-default" href="?app=contractor">Back</a>
+                    <?php if($contractor['status_code'] == '00'){ ?>
                     <button class="btn btn-success" type="submit">Approve</button>
+                    <?php } ?>
                     <button class="btn btn-primary">Print</button>
                     <input type="hidden" id="contractor_code" name="contractor_code" value="<?php echo $contractor_code; ?>">
                 </form>

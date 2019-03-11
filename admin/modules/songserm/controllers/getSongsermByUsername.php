@@ -7,7 +7,7 @@ require_once('../../../../models/SongsermModel.php');
 
 $songserm_model = new SongsermModel;
 
-$songserm = $songserm_model->getSongsermByUsername($_POST['username']);
+$songserm = $songserm_model->getSongsermByUsername($_POST['code'],$_POST['username']);
 
 echo json_encode($songserm);
 ?>

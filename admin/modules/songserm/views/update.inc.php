@@ -1,15 +1,54 @@
 <script>
-    function check_code(id){
-        var code = $(id).val();
-        $.post("controllers/getSongsermByCode.php", { 'songserm_code': code }, function( data ) {  
-            if(data != null){ 
-                alert("This "+code+" is already in the system.");
-                document.getElementById("songserm_code").focus();
-                $("#code_check").val(data.songserm_code);
-            } else{
-                $("#code_check").val("");
-            }
-        });
+    function check_username(){
+        var code = document.getElementById("songserm_code").value;
+        var username = document.getElementById("songserm_username").value;
+
+        code = $.trim(code);
+        username = $.trim(username);
+
+        if(username.length == 0){
+            $('#alert_username').html('Example : STE0001.');
+            $('#alert_username').removeClass('alert-danger');
+            $('#alert_username').removeClass('alert-success');
+        }else if(username.length < 6 || username.length > 15){
+            $('#alert_username').html('length should be 6-15 characters');
+            $('#alert_username').addClass('alert-danger');
+            $('#alert_username').removeClass('alert-success');
+        }else{
+            $.post("modules/songserm/controllers/getSongsermByUsername.php", { code: code, username: username })
+                .done(function(data) {
+                    if(data != null){ 
+                        document.getElementById("songserm_username").focus();
+                        $('#alert_username').html('This username : '+username+' is already in the system.');
+                        $('#alert_username').addClass('alert-danger');
+                        $('#alert_username').removeClass('alert-success');
+                    }else{
+                        $('#alert_username').html('Username : '+username+' can be used.');
+                        $('#alert_username').removeClass('alert-danger');
+                        $('#alert_username').addClass('alert-success');
+                    }
+            });
+        }
+    }
+
+    function check_password(){
+        var password = document.getElementById("songserm_password").value;
+
+        password = $.trim(password);
+
+        if(password.length == 0){
+            $('#alert_password').html('Example : STE0001.');
+            $('#alert_password').removeClass('alert-danger');
+            $('#alert_password').removeClass('alert-success');
+        }else if(password.length < 6 || password.length > 15){
+            $('#alert_password').html('length should be 6-15 characters');
+            $('#alert_password').addClass('alert-danger');
+            $('#alert_password').removeClass('alert-success');
+        }else{
+            $('#alert_password').html('Password can be used.');
+            $('#alert_password').removeClass('alert-danger');
+            $('#alert_password').addClass('alert-success');
+        }
     }
 
     function check(){
@@ -67,6 +106,12 @@
             alert("Please input songserm status");
             document.getElementById("songserm_status_code").focus();
             return false; 
+        }else if($('#alert_username').hasClass('alert-danger')){
+            document.getElementById("songserm_username").focus();
+            return false;
+        }else if($('#alert_password').hasClass('alert-danger')){
+            document.getElementById("songserm_password").focus();
+            return false;
         }else{ 
             return true;
         }
@@ -96,7 +141,30 @@
         แก้ไขทีมส่งเสริม / Edit songserm 
     </div>
     <div class="panel-body">
-        <form role="form" method="post" onsubmit="return check();" action="index.php?app=songserm&action=edit" enctype="multipart/form-data">>
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=songserm&action=edit" enctype="multipart/form-data">
+            <div class="row"> 
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>รหัสประจำตัว / code </label>
+                        <input id="songserm_code" name="songserm_code" class="form-control" value="<?php echo $songserm['songserm_code']?>" autocomplete="off" readonly>
+                        <p id="alert_code" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อบัญชีผู้ใช้ / user name <font color="#F00"><b>*</b></font></label>
+                        <input required id="songserm_username" name="songserm_username" class="form-control" value="<?php echo $songserm['songserm_username']?>" autocomplete="off" onchange="check_username();">
+                        <p id="alert_username" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-3">
+                    <div class="form-group">
+                        <label>รหัสผ่าน / password <font color="#F00"><b>* (6-15)</b></font></label>
+                        <input required id="songserm_password" name="songserm_password" class="form-control" value="<?php echo $songserm['songserm_password']?>" autocomplete="off" onchange="check_password();">
+                        <p id="alert_password" class="help-block">Example : STE0001.</p>
+                    </div>
+                </div>
+            </div> 
             <div class="row"> 
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">
@@ -126,6 +194,24 @@
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
+                        <label>ตำเเหน่ง / Position <font color="#F00"><b>*</b></font> </label>
+                        <select required id="songserm_position_code" name="songserm_position_code" class="form-control select">
+                            <?php 
+                            for($i =  0 ; $i < count($songserm_position) ; $i++){
+                            ?>
+                            <option <?php if($songserm['songserm_position_code'] == $songserm_position[$i]['songserm_position_code'] ){?> selected <?php } ?> value="<?php echo $songserm_position[$i]['songserm_position_code'] ?>"><?php echo $songserm_position[$i]['songserm_position_name'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : ส่งเสริม.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
                         <select class="form-control" id="songserm_status_code" name="songserm_status_code">
                             <option value="">Select</option>
@@ -140,10 +226,7 @@
                         <p class="help-block">Example : ทำงาน.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
                         <input id="songserm_mobile" name="songserm_mobile" type="text" class="form-control" value="<?php echo $songserm['songserm_mobile']?>" autocomplete="off">
@@ -151,7 +234,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
                         <input type="text" id="songserm_address" name="songserm_address" class="form-control" value="<?php echo $songserm['songserm_address']?>" autocomplete="off">
@@ -161,7 +244,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>จังหวัด / Province <font color="#F00"><b>*</b></font> </label>
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
@@ -178,7 +261,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
@@ -195,7 +278,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
                         <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
@@ -212,7 +295,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
                         <input id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" value="<?php echo $songserm['songserm_zipcode']?>"  autocomplete="off">
@@ -220,32 +303,11 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-6 col-lg-3">
                     <label>รูปทีมส่งเสริม / Songserm image </label>
                     <div class="form-group" align="center">
                         <img id="img_songserm" src="../upload/<?php if($songserm['songserm_image'] != "") echo 'songserm/'.$songserm['songserm_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
                         <input accept=".jpg , .png" type="file" id="songserm_image" name="songserm_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>สำเนาบัตรประชาชน / Copy of ID card </label>
-                    <div class="form-group" align="center">
-                        <img id="img_id_card" src="../upload/<?php if($songserm['id_card_image'] != "") echo 'songserm/'.$songserm['id_card_image']; else echo "default.png" ?>" style="width: 100%;max-width: 320px;"> 
-                        <input accept=".jpg , .png" type="file" id="id_card_image" name="id_card_image" class="form-control" style="margin-top: 14px" onChange="readURL_id_card(this);">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>สำเนาทะเบียนบ้าน / Copy of House registration </label>
-                    <div class="form-group" align="center">
-                        <img id="img_house_regis" src="../upload/<?php if($songserm['house_regis_image'] != "") echo 'songserm/'.$songserm['house_regis_image']; else echo "default.png" ?>" style="width: 100%;max-width: 320px;"> 
-                        <input accept=".jpg , .png" type="file" id="house_regis_image" name="house_regis_image" class="form-control" style="margin-top: 14px" onChange="readURL_house_regis(this);">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <label>สำเนาหน้าสมุดบัญชี / Copy of account book page </label>
-                    <div class="form-group" align="center">
-                        <img id="img_account" src="../upload/<?php if($songserm['account_image'] != "") echo 'songserm/'.$songserm['account_image']; else echo "default.png" ?>" style="width: 100%;max-width: 320px;"> 
-                        <input accept=".jpg , .png" type="file" id="account_image" name="account_image" class="form-control" style="margin-top: 14px" onChange="readURL_account(this);">
                     </div>
                 </div>
             </div>
@@ -259,8 +321,6 @@
 
             <input type="hidden" id="songserm_image_o" name="songserm_image_o" value="<?php echo $songserm['songserm_image']; ?>">
             <input type="hidden" id="id_card_image_o" name="id_card_image_o" value="<?php echo $songserm['id_card_image']; ?>">
-            <input type="hidden" id="house_regis_image_o" name="house_regis_image_o" value="<?php echo $songserm['house_regis_image']; ?>">
-            <input type="hidden" id="account_image_o" name="account_image_o" value="<?php echo $songserm['account_image']; ?>">
 
             <input type="hidden" id="songserm_code" name="songserm_code" value="<?php echo $songserm_code ?>">
         </form>

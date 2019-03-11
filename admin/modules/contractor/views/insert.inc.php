@@ -1,15 +1,28 @@
 <script>
-    function check_code(id){
-        var code = $(id).val();
-        $.post("controllers/getContractorByCode.php", { 'contractor_code': code }, function( data ) {  
-            if(data != null){ 
-                alert("This "+code+" is already in the system.");
-                document.getElementById("contractor_code").focus();
-                $("#code_check").val(data.contractor_code);
-            } else{
-                $("#code_check").val("");
-            }
-        });
+    function check_code(){
+        var code = document.getElementById("contractor_code").value;
+
+        code = $.trim(code);
+
+        if(code.length == 0){
+            $('#alert_code').html('Example : CT0001.');
+            $('#alert_code').removeClass('alert-danger');
+            $('#alert_code').removeClass('alert-success');
+        }else{
+            $.post("modules/contractor/controllers/getContractorByCode.php", { contractor_code: code })
+                .done(function(data) {
+                    if(data != null){ 
+                        document.getElementById("contractor_code").focus();
+                        $('#alert_code').html('This code : '+code+' is already in the system.');
+                        $('#alert_code').addClass('alert-danger');
+                        $('#alert_code').removeClass('alert-success');
+                    }else{
+                        $('#alert_code').html('Code : '+code+' can be used.');
+                        $('#alert_code').removeClass('alert-danger');
+                        $('#alert_code').addClass('alert-success');
+                    }
+            });
+        }
     }
 
     function check(){
@@ -22,7 +35,7 @@
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
         var contractor_zipcode = document.getElementById("contractor_zipcode").value;
-        var contractor_status_code = document.getElementById("contractor_status_code").value;  
+        var status_code = document.getElementById("status_code").value;  
 
         contractor_prefix = $.trim(contractor_prefix);
         contractor_name = $.trim(contractor_name);
@@ -33,7 +46,7 @@
         amphur_id = $.trim(amphur_id);
         district_id = $.trim(district_id);
         contractor_zipcode = $.trim(contractor_zipcode);
-        contractor_status_code = $.trim(contractor_status_code); 
+        status_code = $.trim(status_code); 
 
         if(contractor_prefix.length == 0){
             alert("Please input contractor prefix");
@@ -63,10 +76,13 @@
             alert("Please input contractor district");
             document.getElementById("district_id").focus();
             return false;
-        }else if(contractor_status_code.length == 0){
+        }else if(status_code.length == 0){
             alert("Please input contractor status");
-            document.getElementById("contractor_status_code").focus();
+            document.getElementById("status_code").focus();
             return false; 
+        }else if($('#alert_code').hasClass('alert-danger')){
+            document.getElementById("contractor_code").focus();
+            return false;
         }else{ 
             return true;
         }
@@ -134,41 +150,51 @@
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=add" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>รหัสประจำตัว / code </label>
+                        <input id="contractor_code" name="contractor_code" class="form-control" autocomplete="off" onchange="check_code();">
+                        <p id="alert_code" class="help-block">Example : CT0001.</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
                         <select id="contractor_prefix" name="contractor_prefix" class="form-control">
                             <option value="">Select</option>
                             <option value="นาย">นาย</option>
                             <option value="นาง">นาง</option>
-                            <option value="นาย">นางสาว</option>
+                            <option value="นางสาว">นางสาว</option>
                         </select>
                         <p class="help-block">Example : นาย.</p>
                     </div>
                 </div> 
-                <div class="col-md-8 col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
                         <input id="contractor_name" name="contractor_name" class="form-control" autocomplete="off">
                         <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
-                <div class="col-md-8 col-lg-3">
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
                         <input id="contractor_lastname" name="contractor_lastname" class="form-control" autocomplete="off">
                         <p class="help-block">Example : ชาญชัย.</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="contractor_status_code" name="contractor_status_code">
+                        <select class="form-control" id="status_code" name="status_code">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($contractor_status) ; $i++){
+                            for($i =  0 ; $i < count($status) ; $i++){
                             ?>
-                            <option value="<?php echo $contractor_status[$i]['contractor_status_code'] ?>"><?php echo $contractor_status[$i]['contractor_status_name'] ?></option>
+                            <option value="<?php echo $status[$i]['status_code'] ?>"><?php echo $status[$i]['status_name'] ?></option>
                             <?
                             }
                             ?>
@@ -176,10 +202,8 @@
                         <p class="help-block">Example : ทำงาน.</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
                         <input id="contractor_mobile" name="contractor_mobile" type="text" class="form-control" autocomplete="off">
@@ -187,7 +211,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
                         <input type="text" id="contractor_address" name="contractor_address" class="form-control" autocomplete="off">
@@ -197,7 +221,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>จังหวัด / Province <font color="#F00"><b>*</b></font> </label>
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
@@ -214,7 +238,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
@@ -224,7 +248,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
                         <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
@@ -234,7 +258,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
                         <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" autocomplete="off">

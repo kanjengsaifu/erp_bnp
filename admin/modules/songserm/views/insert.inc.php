@@ -76,7 +76,6 @@
     }
 
     function check(){
-        var code = document.getElementById("songserm_code").value;
         var songserm_prefix = document.getElementById("songserm_prefix").value;
         var songserm_name = document.getElementById("songserm_name").value;
         var songserm_lastname = document.getElementById("songserm_lastname").value;
@@ -131,11 +130,14 @@
             alert("Please input songserm status");
             document.getElementById("songserm_status_code").focus();
             return false; 
-        }else if(code.length != 0 && $('#alert_code').hasClass('alert-danger')){
+        }else if($('#alert_code').hasClass('alert-danger')){
+            document.getElementById("songserm_code").focus();
             return false;
         }else if($('#alert_username').hasClass('alert-danger')){
+            document.getElementById("songserm_username").focus();
             return false;
         }else if($('#alert_password').hasClass('alert-danger')){
+            document.getElementById("songserm_password").focus();
             return false;
         }else{ 
             return true;
@@ -197,7 +199,7 @@
                         <select required id="songserm_prefix" name="songserm_prefix" class="form-control select">
                             <option value="นาย">นาย</option>
                             <option value="นาง">นาง</option>
-                            <option value="นาย">นางสาว</option>
+                            <option value="นางสาว">นางสาว</option>
                         </select>
                         <p class="help-block">Example : นาย.</p>
                     </div>
@@ -234,7 +236,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
                         <select required id="songserm_status_code" name="songserm_status_code" class="form-control select">
@@ -250,7 +252,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
                         <input id="songserm_mobile" name="songserm_mobile" type="text" class="form-control" autocomplete="off">
@@ -258,7 +260,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
                         <input required type="text" id="songserm_address" name="songserm_address" class="form-control" autocomplete="off">
@@ -268,7 +270,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>จังหวัด / Province <font color="#F00"><b>*</b></font> </label>
                         <select required id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
@@ -285,7 +287,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>อำเภอ / Amphur <font color="#F00"><b>*</b></font> </label>
                         <select required id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
@@ -295,7 +297,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
                         <select required id="district_id" name="district_id" data-live-search="true" class="form-control select">
@@ -305,7 +307,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
                         <input required id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" autocomplete="off">

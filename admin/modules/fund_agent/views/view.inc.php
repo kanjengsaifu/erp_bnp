@@ -1,13 +1,13 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">จัดการนายหน้า / Agent Management</h1>
+        <h1 class="page-header">จัดการตัวเเทนกองทุน / Fund Agent Management</h1>
 
         <div style="margin-bottom: 10px;">
-            <a href="?app=agent" class="btn btn-primary <?php if ($_GET['status'] != 'pending' && $_GET['status'] != 'cease' ) echo 'active'; ?>">นายหน้า / Agent List</a>
-            <a href="?app=agent&status=pending" class="btn btn-primary <?php if ($_GET['status'] == 'pending') echo 'active'; ?>">
+            <a href="?app=fund_agent" class="btn btn-primary <?php if ($_GET['status'] != 'pending' && $_GET['status'] != 'cease' ) echo 'active'; ?>">ตัวเเทนกองทุน / Fund Agent List</a>
+            <a href="?app=fund_agent&status=pending" class="btn btn-primary <?php if ($_GET['status'] == 'pending') echo 'active'; ?>">
                 รออนุมัติ / Pending <?php if($on_pending) { ?><span class="badge badge-danger" style="display: unset;font-weight: 400;"><? echo $on_pending; ?></span><? } ?>
             </a> 
-            <a href="?app=agent&status=cease" class="btn btn-primary <?php if ($_GET['status'] == 'cease') echo 'active'; ?>">
+            <a href="?app=fund_agent&status=cease" class="btn btn-primary <?php if ($_GET['status'] == 'cease') echo 'active'; ?>">
                 ระงับการใช้งาน / Cease
             </a> 
         </div>
@@ -18,11 +18,11 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-md-8">
-                รายชื่อนายหน้า / Agent List
+                รายชื่อตัวเเทนกองทุน / Fund Agent List
             </div>
             <div class="col-md-4">
-                <?php if($menu['agent']['add']){?> 
-                    <a class="btn btn-success " style="float:right;" href="?app=agent&action=insert" ><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
+                <?php if($menu['fund_agent']['add']){?> 
+                    <a class="btn btn-success " style="float:right;" href="?app=fund_agent&action=insert" ><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
                 <?PHP } ?>
             </div>
         </div>
@@ -44,29 +44,29 @@
             </thead>
             <tbody>
                 <?php 
-                for($i=0; $i < count($agent); $i++){
+                for($i=0; $i < count($fund_agent); $i++){
                 ?>
                 <tr class="odd gradeX">
                     <td><?php echo $i+1; ?></td>
-                    <td><?php echo $agent[$i]['agent_code']; ?></td>
-                    <td><?php echo $agent[$i]['agent_prefix'].$agent[$i]['name']; ?></td>
-                    <td style="text-align:center;"><?php echo $agent[$i]['agent_mobile']; ?></td>
-                    <td style="text-align:center;"><?php echo $agent[$i]['PROVINCE_NAME']; ?></td>
-                    <td style="text-align:center;"><?php echo $agent[$i]['AMPHUR_NAME']; ?></td>
-                    <td style="text-align:center;"><?php echo $agent[$i]['DISTRICT_NAME']; ?></td>
+                    <td><?php echo $fund_agent[$i]['fund_agent_code']; ?></td>
+                    <td><?php echo $fund_agent[$i]['fund_agent_prefix'].$fund_agent[$i]['name']; ?></td>
+                    <td style="text-align:center;"><?php echo $fund_agent[$i]['fund_agent_mobile']; ?></td>
+                    <td style="text-align:center;"><?php echo $fund_agent[$i]['PROVINCE_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $fund_agent[$i]['AMPHUR_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $fund_agent[$i]['DISTRICT_NAME']; ?></td>
                     <td style="text-align:center;">
-                    <?php if($menu['agent']['view']){ ?> 
-                        <a href="?app=agent&action=detail&code=<?php echo $agent[$i]['agent_code'];?>">
+                    <?php if($menu['fund_agent']['view']){ ?> 
+                        <a href="?app=fund_agent&action=detail&code=<?php echo $fund_agent[$i]['fund_agent_code'];?>">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                     <?PHP }?>
-                    <?php if($menu['agent']['edit']){ ?> 
-                        <a href="?app=agent&action=update&code=<?php echo $agent[$i]['agent_code'];?>">
+                    <?php if($menu['fund_agent']['edit']){ ?> 
+                        <a href="?app=fund_agent&action=update&code=<?php echo $fund_agent[$i]['fund_agent_code'];?>">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a> 
                     <?PHP }?>
-                    <?php if($menu['agent']['delete']){ ?> 
-                        <a href="?app=agent&action=delete&code=<?php echo $agent[$i]['agent_code'];?>" onclick="return confirm('You want to delete agent : <?php echo $agent[$i]['name']; ?>');" style="color:red;">
+                    <?php if($menu['fund_agent']['delete']){ ?> 
+                        <a href="?app=fund_agent&action=delete&code=<?php echo $fund_agent[$i]['fund_agent_code'];?>" onclick="return confirm('You want to delete fund_agent : <?php echo $fund_agent[$i]['name']; ?>');" style="color:red;">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     <?PHP }?>

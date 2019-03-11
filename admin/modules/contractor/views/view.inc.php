@@ -56,7 +56,7 @@
                     <td style="text-align:center;"><?php echo $contractor[$i]['DISTRICT_NAME']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['contractor']['view']){ ?> 
-                        <a href="?app=contractor&action=profile&code=<?php echo $contractor[$i]['contractor_code'];?>">
+                        <a href="?app=contractor&action=detail&code=<?php echo $contractor[$i]['contractor_code'];?>">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                     <?PHP }?>
