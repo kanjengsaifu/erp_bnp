@@ -34,7 +34,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
     $songserm_position = $songserm_position_model->getSongsermPositionBy();
     $add_province = $address_model->getProvinceBy();
     $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistricByAmphurID($songserm['amphur_id']); 
+    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['songserm']['delete']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
@@ -139,24 +139,27 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
     if(isset($_POST['songserm_code'])){
         $check = true;
         $data = [];  
-        $data['songserm_code'] = $_POST['songserm_code'];
-        $data['songserm_prefix'] = $_POST['songserm_prefix'];
+        $data['songserm_status_code'] = $_POST['songserm_status_code']; 
+        $data['songserm_position_code'] = $_POST['songserm_position_code'];
+        $data['songserm_prefix'] = $_POST['songserm_prefix'];  
         $data['songserm_name'] = $_POST['songserm_name'];
         $data['songserm_lastname'] = $_POST['songserm_lastname'];
-        $data['songserm_mobile'] = $_POST['songserm_mobile'];
         $data['songserm_address'] = $_POST['songserm_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
         $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
-        $data['songserm_status_code'] = $_POST['songserm_status_code']; 
+        $data['songserm_mobile'] = $_POST['songserm_mobile'];
+        $data['songserm_username'] = $_POST['songserm_username'];
+        $data['songserm_password'] = $_POST['songserm_password'];
+        $data['updateby'] = $login_user['user_code'];
 
         $img_upload = ['songserm_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
             if($_FILES[$img_upload[$i]]['name'] == ""){
-                $data[$img_upload[$i]] = $_POST[$img_upload.'_o'];
+                $data[$img_upload[$i]] = $_POST[$img_upload[$i].'_o'];
                 $target_file[$i] = "";
             }else {
                 $target_file[$i] = $target_dir .$date.'-'.strtolower(basename($_FILES[$img_upload[$i]]['name']));

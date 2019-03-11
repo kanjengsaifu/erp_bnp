@@ -1,11 +1,11 @@
 <?php
-require_once('../models/ContractorModel.php');
+require_once('../models/FundAgentModel.php');
 require_once('../models/StatusModel.php');
 require_once('../models/AddressModel.php');
 
-$path = "modules/contractor/views/";
+$path = "modules/fund_agent/views/";
 
-$contractor_model = new ContractorModel;
+$fund_agent_model = new FundAgentModel;
 $status_model = new StatusModel; 
 $address_model = new AddressModel; 
 
@@ -17,69 +17,65 @@ $d5=date("i");
 $d6=date("s");
 $date="$d1$d2$d3$d4$d5$d6";
 
-$target_dir = "../upload/contractor/";
+$target_dir = "../upload/fund_agent/";
 
-$contractor_code = $_GET['code'];
+$fund_agent_code = $_GET['code'];
 
-// foreach ($_POST as $key => $value) {
-//     echo "<div>";
-//     echo $key;
-//     echo " : ";
-//     echo $value;
-//     echo "</div>";
-// }
-
-if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){ 
+if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){ 
     $status = $status_model->getStatusBy();
     $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
-}else if ($_GET['action'] == 'update'&&$menu['contractor']['edit']){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
+}else if ($_GET['action'] == 'update'&&$menu['fund_agent']['edit']){
+    $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
     $status = $status_model->getStatusBy();
     $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
+    $add_amphur = $address_model->getAmphurByProviceID($fund_agent['province_id']);
+    $add_district = $address_model->getDistrictByAmphurID($fund_agent['amphur_id']); 
     require_once($path.'update.inc.php');
-}else if ($_GET['action'] == 'delete'&&$menu['contractor']['delete']){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
+}else if ($_GET['action'] == 'delete'&&$menu['fund_agent']['delete']){
+    $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
 
-    $img_delete = ['contractor_image','id_card_image','house_regis_image','account_image'];
+    $img_delete = ['profile_image','id_card_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
-        if ($contractor[$img_delete[$i]] != ''){
-            $target_file = $target_dir .$contractor[$img_delete[$i]];
+        if ($fund_agent[$img_delete[$i]] != ''){
+            $target_file = $target_dir .$fund_agent[$img_delete[$i]];
             if (file_exists($target_file)) {
                 unlink($target_file);
             }
         }
     }
 
-    $result = $contractor_model->deleteContractorByCode($contractor_code);
+    $result = $fund_agent_model->deleteFundAgentByCode($fund_agent_code);
 
-    ?> <script> window.location="index.php?app=contractor"</script> <?php
-}else if ($_GET['action'] == 'add'&&$menu['contractor']['add']){
-    if ($_POST['contractor_code'] == ''){
-        $contractor_code = "CT".date('y').date('m').date('d');
-        $contractor_code = $contractor_model->getContractorLastCode($contractor_code,4);  
+    ?> <script> window.location="index.php?app=fund_agent"</script> <?php
+}else if ($_GET['action'] == 'add'&&$menu['fund_agent']['add']){
+
+    if ($_POST['fund_agent_code'] == ''){
+        $fund_agent_code = "AG".$_POST['province_id'].$_POST['district_id'];
+        $fund_agent_code = $fund_agent_model->getFundAgentLastCode($fund_agent_code,4);  
     }else{
-        $contractor_code = $_POST['contractor_code'];
+        $fund_agent_code = $_POST['fund_agent_code'];
     }
 
-    if($contractor_code != '' && isset($_POST['contractor_prefix'])){
+    if($fund_agent_code != '' && isset($_POST['fund_agent_prefix'])){
         $check = true;
-        $data['contractor_code'] = $contractor_code;
-        $data['contractor_prefix'] = $_POST['contractor_prefix'];  
-        $data['contractor_name'] = $_POST['contractor_name'];
-        $data['contractor_lastname'] = $_POST['contractor_lastname'];
-        $data['contractor_mobile'] = $_POST['contractor_mobile'];
-        $data['contractor_address'] = $_POST['contractor_address'];
+        $data['fund_agent_code'] = $fund_agent_code;
+        $data['status_code'] = $_POST['status_code']; 
+        $data['fund_agent_prefix'] = $_POST['fund_agent_prefix'];  
+        $data['fund_agent_name'] = $_POST['fund_agent_name'];
+        $data['fund_agent_lastname'] = $_POST['fund_agent_lastname'];
+        $data['fund_agent_address'] = $_POST['fund_agent_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
-        $data['status_code'] = $_POST['status_code']; 
+        $data['fund_agent_zipcode'] = $_POST['fund_agent_zipcode'];
+        $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
+        $data['fund_agent_username'] = $_POST['fund_agent_username'];
+        $data['fund_agent_password'] = $_POST['fund_agent_password'];
+        $data['addby'] = $login_user['user_code'];
 
-        $img_upload = ['contractor_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['profile_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -117,13 +113,9 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         }
 
         if($check){
-            $result = $contractor_model->insertContractor($data);
+            $result = $fund_agent_model->insertFundAgent($data);
 
-            if($result){
-                ?> <script> window.location="index.php?app=contractor" </script> <?php
-            }else{
-                ?> <script> window.history.back(); </script> <?php
-            }
+
         }else{
             ?> 
             <script> 
@@ -133,25 +125,27 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=contractor" </script> <?php
+        ?> <script> window.location="index.php?app=fund_agent" </script> <?php
     }
-}else if ($_GET['action'] == 'edit'&&$menu['contractor']['edit']){
-    if(isset($_POST['contractor_code'])){
+}else if ($_GET['action'] == 'edit'&&$menu['fund_agent']['edit']){
+    if(isset($_POST['fund_agent_code'])){
         $check = true;
         $data = [];  
-        $data['contractor_code'] = $_POST['contractor_code'];
         $data['status_code'] = $_POST['status_code']; 
-        $data['contractor_prefix'] = $_POST['contractor_prefix'];
-        $data['contractor_name'] = $_POST['contractor_name'];
-        $data['contractor_lastname'] = $_POST['contractor_lastname'];
-        $data['contractor_mobile'] = $_POST['contractor_mobile'];
-        $data['contractor_address'] = $_POST['contractor_address'];
+        $data['fund_agent_prefix'] = $_POST['fund_agent_prefix'];
+        $data['fund_agent_name'] = $_POST['fund_agent_name'];
+        $data['fund_agent_lastname'] = $_POST['fund_agent_lastname'];
+        $data['fund_agent_address'] = $_POST['fund_agent_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
+        $data['fund_agent_zipcode'] = $_POST['fund_agent_zipcode'];
+        $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
+        $data['fund_agent_username'] = $_POST['fund_agent_username'];
+        $data['fund_agent_password'] = $_POST['fund_agent_password'];
+        $data['updateby'] = $login_user['user_code']; 
 
-        $img_upload = ['contractor_image','id_card_image','house_regis_image','account_image'];
+        $img_upload = ['profile_image','id_card_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -196,10 +190,10 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         }
 
         if($check){
-            $result = $contractor_model->updateContractorByCode($_POST['contractor_code'],$data);
+            $result = $fund_agent_model->updateFundAgentByCode($_POST['fund_agent_code'],$data);
 
             if($result){
-                ?> <script> window.location="index.php?app=contractor" </script> <?php
+                ?> <script> window.location="index.php?app=fund_agent" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -212,32 +206,24 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=contractor" </script> <?php
+        ?> <script> window.location="index.php?app=fund_agent" </script> <?php
     }
 }else if ($_GET['action'] == 'approve'){
-    if(isset($_POST['contractor_code'])){
-        $result = $contractor_model->approveContractorByCode($_POST['contractor_code']);
+    if(isset($_POST['fund_agent_code'])){
+        $result = $fund_agent_model->approveFundAgentByCode($_POST['fund_agent_code']);
     }
 
-    ?> <script> window.location="index.php?app=contractor" </script> <?php
+    ?> <script> window.location="index.php?app=fund_agent" </script> <?php
 }else if ($_GET['action'] == 'detail'){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
-    $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
+    $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
     require_once($path.'detail.inc.php');
 }else if ($_GET['status'] == 'pending'){
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('00');
-    require_once($path.'view.inc.php');
-}else if ($_GET['status'] == 'cease'){
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('02');
+    $on_pending = $fund_agent_model->countFundAgentByStatus('00');
+    $fund_agent = $fund_agent_model->getFundAgentByStatus('00');
     require_once($path.'view.inc.php');
 }else{
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('01');
+    $on_pending = $fund_agent_model->countFundAgentByStatus('00');
+    $fund_agent = $fund_agent_model->getFundAgentByStatus('01');
     require_once($path.'view.inc.php');
 }
 ?>

@@ -68,7 +68,7 @@ class ContractorModel extends BaseModel{
         LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
-        WHERE contractor_status_code = '$code' 
+        WHERE status_code = '$code' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -84,7 +84,7 @@ class ContractorModel extends BaseModel{
     function countContractorByStatus($code){
         $sql = " SELECT COUNT(contractor_code) AS total
         FROM tb_contractor 
-        WHERE contractor_status_code = '$code' 
+        WHERE status_code = '$code' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -100,7 +100,7 @@ class ContractorModel extends BaseModel{
         LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
-        WHERE contractor_status_code != '00'
+        WHERE status_code != '00'
         AND contractor_code NOT IN (
             SELECT contractor_code
             FROM tb_zone_contractor 
@@ -119,6 +119,19 @@ class ContractorModel extends BaseModel{
         }
     }
 
+    function approveContractorByCode($code){
+        $sql = " UPDATE tb_contractor SET 
+        status_code = '01' 
+        WHERE contractor_code = '$code'
+        ";
+
+        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+           return true;
+        }else {
+            return false;
+        }
+    }
+
     function updateContractorByCode($code,$data = []){
         $sql = " UPDATE tb_contractor SET     
         contractor_prefix = '".static::$db->real_escape_string($data['contractor_prefix'])."', 
@@ -134,21 +147,8 @@ class ContractorModel extends BaseModel{
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         house_regis_image = '".static::$db->real_escape_string($data['house_regis_image'])."', 
         account_image = '".static::$db->real_escape_string($data['account_image'])."', 
-        contractor_status_code = '".static::$db->real_escape_string($data['contractor_status_code'])."' 
+        status_code = '".static::$db->real_escape_string($data['status_code'])."' 
         WHERE contractor_code = '".static::$db->real_escape_string($code)."'
-        ";
-
-        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
-        }else {
-            return false;
-        }
-    }
-
-    function approveContractorByCode($code){
-        $sql = " UPDATE tb_contractor SET 
-        contractor_status_code = '01' 
-        WHERE contractor_code = '$code'
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -184,7 +184,7 @@ class ContractorModel extends BaseModel{
             id_card_image,
             house_regis_image,
             account_image,
-            contractor_status_code 
+            status_code 
             )  VALUES ('".  
             $data['contractor_code']."','".
             $data['contractor_prefix']."','".
@@ -200,7 +200,7 @@ class ContractorModel extends BaseModel{
             $data['id_card_image']."','".
             $data['house_regis_image']."','".
             $data['account_image']."','".
-            $data['contractor_status_code']."')
+            $data['status_code']."')
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {

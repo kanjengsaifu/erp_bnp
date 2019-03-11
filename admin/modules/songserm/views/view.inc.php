@@ -23,12 +23,11 @@
             <thead>
                 <tr>
                     <th style="text-align:center;">ลำดับ <br>No.</th>
-                    <th style="text-align:center;">รหัส <br>ID</th>
+                    <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>
-                    <th style="text-align:center;">จังหวัด <br>Province</th>
-                    <th style="text-align:center;">อำเภอ <br>Amphur</th>
-                    <th style="text-align:center;">ตำบล <br>Distict</th>
+                    <th style="text-align:center;">ตำเเหน่ง <br>Position</th>
+                    <th style="text-align:center;">สถาณะ <br>ฆtatus</th>
                     <th></th>
                 </tr>
             </thead>
@@ -41,9 +40,8 @@
                     <td><?php echo $songserm[$i]['songserm_code']; ?></td>
                     <td><?php echo $songserm[$i]['songserm_prefix'].$songserm[$i]['name']; ?></td>
                     <td style="text-align:center;"><?php echo $songserm[$i]['songserm_mobile']; ?></td>
-                    <td style="text-align:center;"><?php echo $songserm[$i]['PROVINCE_NAME']; ?></td>
-                    <td style="text-align:center;"><?php echo $songserm[$i]['AMPHUR_NAME']; ?></td>
-                    <td style="text-align:center;"><?php echo $songserm[$i]['DISTRICT_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $songserm[$i]['songserm_position_name']; ?></td>
+                    <td style="text-align:center;"><?php echo $songserm[$i]['songserm_status_name']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['songserm']['view']){ ?> 
                         <a href="?app=songserm&action=profile&code=<?php echo $songserm[$i]['songserm_code'];?>">

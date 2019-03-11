@@ -26,9 +26,10 @@ class SongsermModel extends BaseModel{
 
     function getSongsermBy($name = '', $mobile  = ''){
         $sql = "SELECT songserm_code, songserm_prefix, CONCAT(tb_songserm.songserm_name,' ',tb_songserm.songserm_lastname) as name,
-        songserm_mobile, songserm_status_name  
+        songserm_mobile, songserm_status_name, songserm_position_name
         FROM tb_songserm 
         LEFT JOIN tb_songserm_status ON tb_songserm.songserm_status_code = tb_songserm_status.songserm_status_code 
+        LEFT JOIN tb_songserm_position ON tb_songserm.songserm_position_code = tb_songserm_position.songserm_position_code 
         WHERE CONCAT(tb_songserm.songserm_name,' ',tb_songserm.songserm_lastname) LIKE ('%$name%') 
         AND songserm_mobile LIKE ('%$mobile%') 
         ORDER BY CONCAT(tb_songserm.songserm_name,' ',tb_songserm.songserm_lastname) 
@@ -60,10 +61,10 @@ class SongsermModel extends BaseModel{
         }
     }
 
-    function getSongsermByUsername($user){
-        $sql = " SELECT * 
+    function getSongsermByUsername($code,$user){
+        $sql = "SELECT * 
         FROM tb_songserm 
-        WHERE songserm_username = '$user' 
+        WHERE songserm_code != '$code' AND songserm_username = '$user' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -112,6 +113,7 @@ class SongsermModel extends BaseModel{
         $data['songserm_image']=mysqli_real_escape_string(static::$db,$data['songserm_image']);
 
         $sql = " UPDATE tb_songserm SET     
+        songserm_position_code = '".$data['songserm_position_code']."' 
         songserm_status_code = '".$data['songserm_status_code']."' 
         songserm_prefix = '".$data['songserm_prefix']."', 
         songserm_name = '".$data['songserm_name']."', 
@@ -182,8 +184,8 @@ class SongsermModel extends BaseModel{
             $data['songserm_password']."','".
             $data['songserm_image']."','".
             $data['addby']."',
-            NOW())
-        ";
+            NOW()
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return true;
