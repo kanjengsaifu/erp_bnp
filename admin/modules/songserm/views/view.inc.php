@@ -26,6 +26,7 @@
                     <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>
+                    <th style="text-align:center;">ไลน์ไอดี <br>LINE ID</th>
                     <th style="text-align:center;">ตำเเหน่ง <br>Position</th>
                     <th style="text-align:center;">สถาณะ <br>ฆtatus</th>
                     <th></th>
@@ -40,6 +41,7 @@
                     <td><?php echo $songserm[$i]['songserm_code']; ?></td>
                     <td><?php echo $songserm[$i]['songserm_prefix'].$songserm[$i]['name']; ?></td>
                     <td style="text-align:center;"><?php echo $songserm[$i]['songserm_mobile']; ?></td>
+                    <td style="text-align:center;"><?php echo $songserm[$i]['songserm_line']; ?></td>
                     <td style="text-align:center;"><?php echo $songserm[$i]['songserm_position_name']; ?></td>
                     <td style="text-align:center;"><?php echo $songserm[$i]['songserm_status_name']; ?></td>
                     <td style="text-align:center;">

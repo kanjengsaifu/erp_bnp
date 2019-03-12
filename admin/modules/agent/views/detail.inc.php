@@ -32,6 +32,10 @@
                     <td><?php echo $agent['agent_mobile']?></td>
                 </tr>
                 <tr>
+                    <td>ไลน์ไอดี / LINE ID</td>
+                    <td><?php echo $agent['agent_line']?></td>
+                </tr>
+                <tr>
                     <td>ที่อยู่ / Address</td>
                     <td><?php echo $agent['agent_address']?></td>
                 </tr>

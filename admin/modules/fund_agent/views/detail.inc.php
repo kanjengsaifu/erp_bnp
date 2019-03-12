@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">จัดการตัวเเทนกองทุน / Fund Agent Management</h1>
+        <h1 class="page-header">จัดการตัวเเทนจำหน่าย / Fund Agent Management</h1>
     </div>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        ข้อมูลตัวเเทนกองทุน / fund agent infomation
+        ข้อมูลตัวเเทนจำหน่าย / fund agent infomation
     </div>
     <div class="panel-body">
         <table class="table table-bordered">
@@ -15,7 +15,7 @@
                     <td>รูป / image</td>
                     <td>
                         <div class="form-group" align="center">
-                            <img src="../upload/<?php if($fund_agent['fund_agent_image'] != "") echo 'fund_agent/'.$fund_agent['fund_agent_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
+                            <img src="../upload/<?php if($fund_agent['profile_image'] != "") echo 'fund_agent/'.$fund_agent['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
                         </div>
                     </td>
                 </tr>
@@ -32,24 +32,18 @@
                     <td><?php echo $fund_agent['fund_agent_mobile']?></td>
                 </tr>
                 <tr>
+                    <td>ไลน์ไอดี / LINE ID</td>
+                    <td><?php echo $fund_agent['fund_agent_line']?></td>
+                </tr>
+                <tr>
                     <td>ที่อยู่ / Address</td>
-                    <td><?php echo $fund_agent['fund_agent_address']?></td>
-                </tr>
-                <tr>
-                    <td>จังหวัด / Province</td>
-                    <td><?php echo $fund_agent['PROVINCE_NAME']?></td>
-                </tr>
-                <tr>
-                    <td>อำเภอ / Amphur</td>
-                    <td><?php echo $fund_agent['AMPHUR_NAME']?></td>
-                </tr>
-                <tr>
-                    <td>ตำบล / Distict</td>
-                    <td><?php echo $fund_agent['DISTRICT_NAME']?></td>
-                </tr>
-                <tr>
-                    <td>เลขไปรษณีย์ / Zipcode</td>
-                    <td><?php echo $fund_agent['fund_agent_zipcode']?></td>
+                    <td>
+                        <?php echo $fund_agent['fund_agent_address']?>
+                        ตำบล<?php echo $fund_agent['AMPHUR_NAME']?>
+                        อำเภอ<?php echo $fund_agent['AMPHUR_NAME']?>
+                        จังหวัด<?php echo $fund_agent['PROVINCE_NAME']?>
+                        <?php echo $fund_agent['fund_agent_zipcode']?>
+                    </td>
                 </tr>
             </tbody>
         </table>

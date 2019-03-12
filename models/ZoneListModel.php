@@ -58,8 +58,11 @@ class ZoneListModel extends BaseModel{
     }
 
     function getZoneListByZone($code){
-        $sql = "SELECT *
+        $sql = "SELECT tb_zone_list.*, CONCAT(agent_name,' ',agent_lastname) as agent_name, CONCAT(fund_agent_name,' ',fund_agent_lastname) as fund_agent_name,
+        PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_zone_list 
+        LEFT JOIN tb_agent  ON tb_zone_list.agent_code  = tb_agent.agent_code  
+        LEFT JOIN tb_fund_agent ON tb_zone_list.fund_agent_code = tb_fund_agent.fund_agent_code 
         LEFT JOIN tb_district ON tb_zone_list.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
@@ -85,6 +88,8 @@ class ZoneListModel extends BaseModel{
         province_id = '".$data['province_id']."', 
         amphur_id = '".$data['amphur_id']."', 
         district_id = '".$data['district_id']."', 
+        agent_code = '".$data['agent_code']."', 
+        fund_agent_code = '".$data['fund_agent_code']."', 
         updateby = '".$data['updateby']."',
         lastupdate = NOW() 
         WHERE zone_list_code = '$code'
@@ -101,25 +106,29 @@ class ZoneListModel extends BaseModel{
         $data['zone_code']=mysqli_real_escape_string(static::$db,$data['zone_code']);
         $data['village_name']=mysqli_real_escape_string(static::$db,$data['village_name']);
 
-        $sql = " INSERT INTO tb_zone_list ( 
-            zone_list_code,
-            zone_code,
-            village_name, 
-            province_id,
-            amphur_id,
-            district_id,
-            addby,
-            adddate 
-            )  VALUES ('".  
-            $data['zone_list_code']."','".
-            $data['zone_code']."','".
-            $data['village_name']."','".
-            $data['province_id']."','".
-            $data['amphur_id']."','".
-            $data['district_id']."','".
-            $data['addby']."',
-            NOW())
-        ";
+        $sql = "INSERT INTO tb_zone_list ( 
+        zone_list_code,
+        zone_code,
+        village_name, 
+        province_id,
+        amphur_id,
+        district_id,
+        agent_code,
+        fund_agent_code,
+        addby,
+        adddate 
+        )  VALUES ('".  
+        $data['zone_list_code']."','".
+        $data['zone_code']."','".
+        $data['village_name']."','".
+        $data['province_id']."','".
+        $data['amphur_id']."','".
+        $data['district_id']."','".
+        $data['agent_code']."','".
+        $data['fund_agent_code']."','".
+        $data['addby']."',
+        NOW()
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return true;

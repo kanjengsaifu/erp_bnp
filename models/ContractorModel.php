@@ -11,7 +11,7 @@ class ContractorModel extends BaseModel{
     }
 
     function getContractorLastCode($code,$digit){
-        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(contractor_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
+        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(contractor_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0')) AS lastcode 
         FROM tb_contractor 
         WHERE contractor_code LIKE ('$code%') 
         ";
@@ -25,7 +25,7 @@ class ContractorModel extends BaseModel{
 
     function getContractorBy($name = '', $mobile  = ''){
         $sql = "SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
-        contractor_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_contractor 
         LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -34,7 +34,7 @@ class ContractorModel extends BaseModel{
         AND contractor_mobile LIKE ('%$mobile%') 
         ORDER BY CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -44,6 +44,7 @@ class ContractorModel extends BaseModel{
             return $data;
         }
     }
+
     function getContractorByUserCode($user_code){
         $sql = "SELECT tb_contractor.contractor_code AS code,  CONCAT(contractor_prefix,' ',contractor_name,' ',contractor_lastname) as name 
         FROM tb_contractor  
@@ -52,7 +53,7 @@ class ContractorModel extends BaseModel{
         WHERE tb_zone_call_center.user_code = '$user_code' 
         ORDER BY CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -66,6 +67,10 @@ class ContractorModel extends BaseModel{
     function getContractorByCode($code){
         $sql = " SELECT * 
         FROM tb_contractor 
+        LEFT JOIN tb_status ON tb_contractor.status_code = tb_status.status_code 
+        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE contractor_code = '$code' 
         ";
 
@@ -81,7 +86,7 @@ class ContractorModel extends BaseModel{
 
     function getContractorByStatus($code){
         $sql = " SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
-        contractor_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_contractor 
         LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -113,7 +118,8 @@ class ContractorModel extends BaseModel{
     }
 
     function getContractorNotInZone($code){
-        $sql = "SELECT * 
+        $sql = "SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
+        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_contractor 
         LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -155,17 +161,20 @@ class ContractorModel extends BaseModel{
         contractor_prefix = '".static::$db->real_escape_string($data['contractor_prefix'])."', 
         contractor_name = '".static::$db->real_escape_string($data['contractor_name'])."', 
         contractor_lastname = '".static::$db->real_escape_string($data['contractor_lastname'])."', 
-        contractor_mobile = '".static::$db->real_escape_string($data['contractor_mobile'])."', 
         contractor_address = '".static::$db->real_escape_string($data['contractor_address'])."', 
         province_id = '".static::$db->real_escape_string($data['province_id'])."', 
         amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
         district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         contractor_zipcode = '".static::$db->real_escape_string($data['contractor_zipcode'])."', 
+        contractor_mobile = '".static::$db->real_escape_string($data['contractor_mobile'])."', 
+        contractor_line = '".static::$db->real_escape_string($data['contractor_line'])."', 
         profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         house_regis_image = '".static::$db->real_escape_string($data['house_regis_image'])."', 
         account_image = '".static::$db->real_escape_string($data['account_image'])."', 
-        status_code = '".static::$db->real_escape_string($data['status_code'])."' 
+        status_code = '".static::$db->real_escape_string($data['status_code'])."',
+        updateby = '".$data['updateby']."', 
+        lastupdate = NOW() 
         WHERE contractor_code = '".static::$db->real_escape_string($code)."'
         ";
 
@@ -177,54 +186,62 @@ class ContractorModel extends BaseModel{
     }
 
     function insertContractor($data = []){
+        $data['contractor_code']=mysqli_real_escape_string(static::$db,$data['contractor_code']);
         $data['contractor_name']=mysqli_real_escape_string(static::$db,$data['contractor_name']);
         $data['contractor_lastname']=mysqli_real_escape_string(static::$db,$data['contractor_lastname']);
+        $data['contractor_address']=mysqli_real_escape_string(static::$db,$data['contractor_address']);
+        $data['contractor_zipcode']=mysqli_real_escape_string(static::$db,$data['contractor_zipcode']);
         $data['contractor_mobile']=mysqli_real_escape_string(static::$db,$data['contractor_mobile']);
+        $data['contractor_line']=mysqli_real_escape_string(static::$db,$data['contractor_line']);
         $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
         $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
         $data['house_regis_image']=mysqli_real_escape_string(static::$db,$data['house_regis_image']);
         $data['account_image']=mysqli_real_escape_string(static::$db,$data['account_image']);
-        $data['contractor_address']=mysqli_real_escape_string(static::$db,$data['contractor_address']);
-        $data['contractor_zipcode']=mysqli_real_escape_string(static::$db,$data['contractor_zipcode']);
 
         $sql = " INSERT INTO tb_contractor ( 
             contractor_code,
+            status_code,
             contractor_prefix,
             contractor_name, 
             contractor_lastname,
-            contractor_mobile,
             contractor_address,
             province_id,
             amphur_id,
             district_id,
             contractor_zipcode,
+            contractor_mobile,
+            contractor_line,
             profile_image,
             id_card_image,
             house_regis_image,
             account_image,
-            status_code 
+            addby,
+            adddate
             )  VALUES ('".  
             $data['contractor_code']."','".
+            $data['status_code']."','".
             $data['contractor_prefix']."','".
             $data['contractor_name']."','".
             $data['contractor_lastname']."','".
-            $data['contractor_mobile']."','".
             $data['contractor_address']."','".
             $data['province_id']."','".
             $data['amphur_id']."','".
             $data['district_id']."','".
             $data['contractor_zipcode']."','".
+            $data['contractor_mobile']."','".
+            $data['contractor_line']."','".
             $data['profile_image']."','".
             $data['id_card_image']."','".
             $data['house_regis_image']."','".
             $data['account_image']."','".
-            $data['status_code']."')
-        ";
+            $data['addby']."',
+            NOW()
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            return $data['contractor_code'];
+            return true;
         }else {
-            return '';
+            return false;
         }
     }
 

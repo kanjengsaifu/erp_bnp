@@ -1,14 +1,10 @@
 <?php
-require_once('../models/SongsermModel.php');
-require_once('../models/SongsermStatusModel.php');
-require_once('../models/SongsermPositionModel.php');
+require_once('../models/FarmerModel.php');
 require_once('../models/AddressModel.php');
 
-$path = "modules/songserm/views/";
+$path = "modules/farmer/views/";
 
-$songserm_model = new SongsermModel;
-$songserm_status_model = new SongsermStatusModel; 
-$songserm_position_model = new SongsermPositionModel; 
+$farmer_model = new FarmerModel;
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -19,65 +15,65 @@ $d5=date("i");
 $d6=date("s");
 $date="$d1$d2$d3$d4$d5$d6";
 
-$target_dir = "../upload/songserm/";
+$target_dir = "../upload/farmer/";
 
-$songserm_code = $_GET['code'];
+$farmer_code = $_GET['code'];
 
-if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){ 
-    $songserm_status = $songserm_status_model->getSongsermStatusBy();
-    $songserm_position = $songserm_position_model->getSongsermPositionBy();
+// foreach ($_POST as $key => $value) {
+//     echo "<div>";
+//     echo $key;
+//     echo " : ";
+//     echo $value;
+//     echo "</div>";
+// }
+
+if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){ 
     $add_province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
-}else if ($_GET['action'] == 'update'&&$menu['songserm']['edit']){
-    $songserm = $songserm_model->getSongsermByCode($songserm_code);
-    $songserm_status = $songserm_status_model->getSongsermStatusBy();
-    $songserm_position = $songserm_position_model->getSongsermPositionBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
+}else if ($_GET['action'] == 'update'&&$menu['farmer']['edit']){
+    $farmer = $farmer_model->getFarmerByCode($farmer_code);
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($farmer['province_id']);
+    $district = $address_model->getDistrictByAmphurID($farmer['amphur_id']); 
     require_once($path.'update.inc.php');
-}else if ($_GET['action'] == 'delete'&&$menu['songserm']['delete']){
-    $songserm = $songserm_model->getSongsermByCode($songserm_code);
+}else if ($_GET['action'] == 'delete'&&$menu['farmer']['delete']){
+    $farmer = $farmer_model->getFarmerByCode($farmer_code);
 
     $img_delete = ['profile_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
-        if ($songserm[$img_delete[$i]] != ''){
-            $target_file = $target_dir .$songserm[$img_delete[$i]];
+        if ($farmer[$img_delete[$i]] != ''){
+            $target_file = $target_dir .$farmer[$img_delete[$i]];
             if (file_exists($target_file)) {
                 unlink($target_file);
             }
         }
     }
 
-    $result = $songserm_model->deleteSongsermByCode($songserm_code);
+    $result = $farmer_model->deleteFarmerByCode($farmer_code);
 
-    ?> <script> window.location="index.php?app=songserm"</script> <?php
-}else if ($_GET['action'] == 'add'&&$menu['songserm']['add']){
-    if ($_POST['songserm_code'] == ''){
-        $code = "STE".date('y').date('m').date('d');
-        $songserm_code = $songserm_model->getSongsermLastCode($code,3);  
+    ?> <script> window.location="index.php?app=farmer"</script> <?php
+}else if ($_GET['action'] == 'add'&&$menu['farmer']['add']){
+    if ($_POST['farmer_code'] == ''){
+        $farmer_code = date('y').date('m').$_POST['district_id'];
+        $farmer_code = $farmer_model->getFarmerLastCode($farmer_code,4);  
     }else{
-        $songserm_code = $_POST['songserm_code'];
+        $farmer_code = $_POST['farmer_code'];
     }
 
-    if($songserm_code != '' && isset($_POST['songserm_prefix'])){
+    if($farmer_code != '' && isset($_POST['farmer_prefix'])){
         $check = true;
-        $data['songserm_code'] = $songserm_code;
-        $data['songserm_status_code'] = $_POST['songserm_status_code']; 
-        $data['songserm_position_code'] = $_POST['songserm_position_code'];
-        $data['songserm_prefix'] = $_POST['songserm_prefix'];  
-        $data['songserm_name'] = $_POST['songserm_name'];
-        $data['songserm_lastname'] = $_POST['songserm_lastname'];
-        $data['songserm_address'] = $_POST['songserm_address'];
+        $data['farmer_code'] = $farmer_code;
+        $data['farmer_prefix'] = $_POST['farmer_prefix'];  
+        $data['farmer_name'] = $_POST['farmer_name'];
+        $data['farmer_lastname'] = $_POST['farmer_lastname'];
+        $data['farmer_address'] = $_POST['farmer_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
-        $data['songserm_mobile'] = $_POST['songserm_mobile'];
-        $data['songserm_line'] = $_POST['songserm_line'];
-        $data['songserm_username'] = $_POST['songserm_username'];
-        $data['songserm_password'] = $_POST['songserm_password'];
+        $data['farmer_zipcode'] = $_POST['farmer_zipcode'];
+        $data['farmer_mobile'] = $_POST['farmer_mobile'];
+        $data['farmer_line'] = $_POST['farmer_line'];
         $data['addby'] = $login_user['user_code'];
 
         $img_upload = ['profile_image'];
@@ -118,10 +114,10 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         }
 
         if($check){
-            $result = $songserm_model->insertSongserm($data);
+            $result = $farmer_model->insertFarmer($data);
 
             if($result){
-                ?> <script> window.location="index.php?app=songserm" </script> <?php
+                ?> <script> window.location="index.php?app=farmer" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -134,29 +130,26 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=songserm" </script> <?php
+        ?> <script> window.location="index.php?app=farmer" </script> <?php
     }
-}else if ($_GET['action'] == 'edit'&&$menu['songserm']['edit']){
-    if(isset($_POST['songserm_code'])){
+}else if ($_GET['action'] == 'edit'&&$menu['farmer']['edit']){
+    if(isset($_POST['farmer_code'])){
         $check = true;
         $data = [];  
-        $data['songserm_status_code'] = $_POST['songserm_status_code']; 
-        $data['songserm_position_code'] = $_POST['songserm_position_code'];
-        $data['songserm_prefix'] = $_POST['songserm_prefix'];  
-        $data['songserm_name'] = $_POST['songserm_name'];
-        $data['songserm_lastname'] = $_POST['songserm_lastname'];
-        $data['songserm_address'] = $_POST['songserm_address'];
+        $data['farmer_code'] = $_POST['farmer_code'];
+        $data['farmer_prefix'] = $_POST['farmer_prefix'];
+        $data['farmer_name'] = $_POST['farmer_name'];
+        $data['farmer_lastname'] = $_POST['farmer_lastname'];
+        $data['farmer_address'] = $_POST['farmer_address'];
         $data['province_id'] = $_POST['province_id'];
         $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
-        $data['songserm_mobile'] = $_POST['songserm_mobile'];
-        $data['songserm_line'] = $_POST['songserm_line'];
-        $data['songserm_username'] = $_POST['songserm_username'];
-        $data['songserm_password'] = $_POST['songserm_password'];
+        $data['farmer_zipcode'] = $_POST['farmer_zipcode'];
+        $data['farmer_mobile'] = $_POST['farmer_mobile'];
+        $data['farmer_line'] = $_POST['farmer_line'];
         $data['updateby'] = $login_user['user_code'];
 
-        $img_upload = ['profile_image','id_card_image'];
+        $img_upload = ['profile_image'];
 
         $target_file = [];
         for ($i=0; $i<count($img_upload); $i++){
@@ -201,10 +194,10 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         }
 
         if($check){
-            $result = $songserm_model->updateSongsermByCode($_POST['songserm_code'],$data);
+            $result = $farmer_model->updateFarmerByCode($_POST['farmer_code'],$data);
 
             if($result){
-                ?> <script> window.location="index.php?app=songserm" </script> <?php
+                ?> <script> window.location="index.php?app=farmer" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -217,17 +210,16 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=songserm" </script> <?php
+        ?> <script> window.location="index.php?app=farmer" </script> <?php
     }
-}else if ($_GET['action'] == 'profile'){
-    $songserm = $songserm_model->getSongsermByCode($songserm_code);
-    $songserm_status = $songserm_status_model->getSongsermStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
+}else if ($_GET['action'] == 'detail'){
+    $farmer = $farmer_model->getFarmerByCode($farmer_code);
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($farmer['province_id']);
+    $district = $address_model->getDistrictByAmphurID($farmer['amphur_id']); 
     require_once($path.'detail.inc.php');
-}else {
-    $songserm = $songserm_model->getSongsermBy();
+}else{
+    $farmer = $farmer_model->getFarmerBy();
     require_once($path.'view.inc.php');
 }
 ?>

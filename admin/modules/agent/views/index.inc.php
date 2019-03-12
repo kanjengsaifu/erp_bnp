@@ -71,6 +71,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['agent_zipcode'] = $_POST['agent_zipcode'];
         $data['agent_mobile'] = $_POST['agent_mobile'];
+        $data['agent_line'] = $_POST['agent_line'];
         $data['agent_username'] = $_POST['agent_username'];
         $data['agent_password'] = $_POST['agent_password'];
         $data['addby'] = $login_user['user_code'];
@@ -141,6 +142,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['agent_zipcode'] = $_POST['agent_zipcode'];
         $data['agent_mobile'] = $_POST['agent_mobile'];
+        $data['agent_line'] = $_POST['agent_line'];
         $data['agent_username'] = $_POST['agent_username'];
         $data['agent_password'] = $_POST['agent_password'];
         $data['updateby'] = $login_user['user_code']; 

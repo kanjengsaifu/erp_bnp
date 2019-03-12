@@ -26,7 +26,7 @@ class FundAgentModel extends BaseModel{
 
     function getFundAgentBy($name = '', $mobile  = ''){
         $sql = "SELECT fund_agent_code, fund_agent_prefix, CONCAT(fund_agent_name,' ',fund_agent_lastname) as name,
-        fund_agent_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        fund_agent_mobile, fund_agent_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_fund_agent 
         LEFT JOIN tb_district ON tb_fund_agent.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -68,7 +68,7 @@ class FundAgentModel extends BaseModel{
 
     function getFundAgentByStatus($code){
         $sql = " SELECT fund_agent_code, fund_agent_prefix, CONCAT(fund_agent_name,' ',fund_agent_lastname) as name,
-        fund_agent_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        fund_agent_mobile, fund_agent_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_fund_agent 
         LEFT JOIN tb_district ON tb_fund_agent.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -80,6 +80,22 @@ class FundAgentModel extends BaseModel{
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                 $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getFundAgentByUsername($code,$user){
+        $sql = "SELECT * 
+        FROM tb_fund_agent 
+        WHERE fund_agent_code != '$code' AND fund_agent_username = '$user' 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
             }
             $result->close();
             return $data;
@@ -99,16 +115,16 @@ class FundAgentModel extends BaseModel{
         }
     }
 
-    function getFundAgentByUsername($code,$user){
-        $sql = "SELECT * 
+    function getFundAgentByDistrict($id){
+        $sql = "SELECT fund_agent_code, fund_agent_prefix, CONCAT(fund_agent_name,' ',fund_agent_lastname) as name
         FROM tb_fund_agent 
-        WHERE fund_agent_code != '$code' AND fund_agent_username = '$user' 
+        WHERE district_id = '$id' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
+            $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
+                $data[] = $row;
             }
             $result->close();
             return $data;
@@ -140,6 +156,7 @@ class FundAgentModel extends BaseModel{
         district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         fund_agent_zipcode = '".static::$db->real_escape_string($data['fund_agent_zipcode'])."',
         fund_agent_mobile = '".static::$db->real_escape_string($data['fund_agent_mobile'])."',  
+        fund_agent_line = '".static::$db->real_escape_string($data['fund_agent_line'])."',  
         profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         fund_agent_username = '".static::$db->real_escape_string($data['fund_agent_username'])."', 
@@ -163,6 +180,7 @@ class FundAgentModel extends BaseModel{
         $data['fund_agent_address']=mysqli_real_escape_string(static::$db,$data['fund_agent_address']);
         $data['fund_agent_zipcode']=mysqli_real_escape_string(static::$db,$data['fund_agent_zipcode']);
         $data['fund_agent_mobile']=mysqli_real_escape_string(static::$db,$data['fund_agent_mobile']);
+        $data['fund_agent_line']=mysqli_real_escape_string(static::$db,$data['fund_agent_line']);
         $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
         $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
         $data['fund_agent_username']=mysqli_real_escape_string(static::$db,$data['fund_agent_username']);
@@ -180,6 +198,7 @@ class FundAgentModel extends BaseModel{
             district_id,
             fund_agent_zipcode,
             fund_agent_mobile,
+            fund_agent_line,
             profile_image,
             id_card_image,
             fund_agent_username,
@@ -198,6 +217,7 @@ class FundAgentModel extends BaseModel{
             $data['district_id']."','".
             $data['fund_agent_zipcode']."','".
             $data['fund_agent_mobile']."','".
+            $data['fund_agent_line']."','".
             $data['profile_image']."','".
             $data['id_card_image']."','".
             $data['fund_agent_username']."','".

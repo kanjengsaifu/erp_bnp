@@ -7,7 +7,7 @@
         username = $.trim(username);
 
         if(username.length == 0){
-            $('#alert_username').html('Example : AG0001.');
+            $('#alert_username').html('Example : FG0001.');
             $('#alert_username').removeClass('alert-danger');
             $('#alert_username').removeClass('alert-success');
         }else if(username.length < 6 || username.length > 15){
@@ -37,7 +37,7 @@
         password = $.trim(password);
 
         if(password.length == 0){
-            $('#alert_password').html('Example : AG0001.');
+            $('#alert_password').html('Example : FG0001.');
             $('#alert_password').removeClass('alert-danger');
             $('#alert_password').removeClass('alert-success');
         }else if(password.length < 6 || password.length > 15){
@@ -144,13 +144,13 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">จัดการตัวเเทนกองทุน / FundAgent Management</h1>
+        <h1 class="page-header">จัดการตัวเเทนจำหน่าย / FundAgent Management</h1>
     </div>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        แก้ไขตัวเเทนกองทุน / Edit fund_agent 
+        แก้ไขตัวเเทนจำหน่าย / Edit fund_agent 
     </div>
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=fund_agent&action=edit" enctype="multipart/form-data">
@@ -159,54 +159,25 @@
                     <div class="form-group">
                         <label>รหัสประจำตัว / code </label>
                         <input id="fund_agent_code" name="fund_agent_code" class="form-control" value="<?php echo $fund_agent['fund_agent_code']?>" autocomplete="off" readonly>
-                        <p id="alert_code" class="help-block">Example : AG0001.</p>
+                        <p id="alert_code" class="help-block">Example : FG0001.</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อบัญชีผู้ใช้ / user name <font color="#F00"><b>*</b></font></label>
                         <input required id="fund_agent_username" name="fund_agent_username" class="form-control" value="<?php echo $fund_agent['fund_agent_username']?>" autocomplete="off" onchange="check_username();">
-                        <p id="alert_username" class="help-block">Example : AG0001.</p>
+                        <p id="alert_username" class="help-block">Example : FG0001.</p>
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>รหัสผ่าน / password <font color="#F00"><b>* (6-15)</b></font></label>
                         <input required id="fund_agent_password" name="fund_agent_password" class="form-control" value="<?php echo $fund_agent['fund_agent_password']?>" autocomplete="off" onchange="check_password();">
-                        <p id="alert_password" class="help-block">Example : AG0001.</p>
+                        <p id="alert_password" class="help-block">Example : FG0001.</p>
                     </div>
                 </div>
             </div>
             <div class="row"> 
-                <div class="col-md-4 col-lg-3">
-                    <div class="form-group">
-                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="fund_agent_prefix" name="fund_agent_prefix" class="form-control select">
-                            <option value="">Select</option>
-                            <option <?php if($fund_agent['fund_agent_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
-                            <option <?php if($fund_agent['fund_agent_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
-                            <option <?php if($fund_agent['fund_agent_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
-                        </select>
-                        <p class="help-block">Example : นาย.</p>
-                    </div>
-                </div> 
-                <div class="col-md-8 col-lg-3">
-                    <div class="form-group">
-                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="fund_agent_name" name="fund_agent_name" class="form-control" value="<?php echo $fund_agent['fund_agent_name']?>" autocomplete="off">
-                        <p class="help-block">Example : วินัย.</p>
-                    </div>
-                </div>
-                <div class="col-md-8 col-lg-3">
-                    <div class="form-group">
-                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="fund_agent_lastname" name="fund_agent_lastname" class="form-control" value="<?php echo $fund_agent['fund_agent_lastname']?>" autocomplete="off">
-                        <p class="help-block">Example : ชาญชัย.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
@@ -225,12 +196,47 @@
                 </div>
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
+                        <select id="fund_agent_prefix" name="fund_agent_prefix" class="form-control select">
+                            <option value="">Select</option>
+                            <option <?php if($fund_agent['fund_agent_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
+                            <option <?php if($fund_agent['fund_agent_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
+                            <option <?php if($fund_agent['fund_agent_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
+                        </select>
+                        <p class="help-block">Example : นาย.</p>
+                    </div>
+                </div> 
+                <div class="col-sm-8 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
+                        <input id="fund_agent_name" name="fund_agent_name" class="form-control" value="<?php echo $fund_agent['fund_agent_name']?>" autocomplete="off">
+                        <p class="help-block">Example : วินัย.</p>
+                    </div>
+                </div>
+                <div class="col-sm-8 col-lg-3">
+                    <div class="form-group">
+                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
+                        <input id="fund_agent_lastname" name="fund_agent_lastname" class="form-control" value="<?php echo $fund_agent['fund_agent_lastname']?>" autocomplete="off">
+                        <p class="help-block">Example : ชาญชัย.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
                         <input id="fund_agent_mobile" name="fund_agent_mobile" type="text" class="form-control" value="<?php echo $fund_agent['fund_agent_mobile']?>" autocomplete="off">
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ไลน์ไอดี / LINE ID </label>
+                        <input id="fund_agent_line" name="fund_agent_line" type="text" class="form-control" value="<?php echo $fund_agent['fund_agent_line']?>" autocomplete="off">
+                        <p class="help-block">Example : 0610243003.</p>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
@@ -302,7 +308,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-4">
-                    <label>รูปตัวเเทนกองทุน / FundAgent image </label>
+                    <label>รูปตัวเเทนจำหน่าย / FundAgent image </label>
                     <div class="form-group" align="center">
                         <img id="img_profile" src="../upload/<?php if($fund_agent['profile_image'] != "") echo 'fund_agent/'.$fund_agent['profile_image']; else echo "default.png" ?>" style="width: 100%;max-width: 240px;"> 
                         <input accept=".jpg , .png" type="file" id="profile_image" name="profile_image" class="form-control" style="margin-top: 14px" onChange="readURL(this);">

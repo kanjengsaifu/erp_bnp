@@ -36,6 +36,7 @@
                     <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>
+                    <th style="text-align:center;">ไลน์ไอดี <br>LINE ID</th>
                     <th style="text-align:center;">จังหวัด <br>Province</th>
                     <th style="text-align:center;">อำเภอ <br>Amphur</th>
                     <th style="text-align:center;">ตำบล <br>Distict</th>
@@ -51,6 +52,7 @@
                     <td><?php echo $agent[$i]['agent_code']; ?></td>
                     <td><?php echo $agent[$i]['agent_prefix'].$agent[$i]['name']; ?></td>
                     <td style="text-align:center;"><?php echo $agent[$i]['agent_mobile']; ?></td>
+                    <td style="text-align:center;"><?php echo $agent[$i]['agent_line']; ?></td>
                     <td style="text-align:center;"><?php echo $agent[$i]['PROVINCE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $agent[$i]['AMPHUR_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $agent[$i]['DISTRICT_NAME']; ?></td>

@@ -71,6 +71,7 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['fund_agent_zipcode'] = $_POST['fund_agent_zipcode'];
         $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
+        $data['fund_agent_line'] = $_POST['fund_agent_line'];
         $data['fund_agent_username'] = $_POST['fund_agent_username'];
         $data['fund_agent_password'] = $_POST['fund_agent_password'];
         $data['addby'] = $login_user['user_code'];
@@ -141,6 +142,7 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['fund_agent_zipcode'] = $_POST['fund_agent_zipcode'];
         $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
+        $data['fund_agent_line'] = $_POST['fund_agent_line'];
         $data['fund_agent_username'] = $_POST['fund_agent_username'];
         $data['fund_agent_password'] = $_POST['fund_agent_password'];
         $data['updateby'] = $login_user['user_code']; 

@@ -139,6 +139,11 @@ for($i = 0 ; $i < count($menu_list); $i++){
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
                 </li>
                 <?php } ?>
+                <?php if ($menu['farmer']['view']){ ?>
+                <li>
+                    <a href="?app=farmer" <?PHP if($_GET['app'] == "farmer"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> เกษตรกร</a>
+                </li>
+                <?php } ?>
                 <?php if ($menu['agent']['view']){ ?>
                 <li>
                     <a href="?app=agent" <?PHP if($_GET['app'] == "agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> นายหน้า</a>
@@ -146,7 +151,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <?php } ?>
                 <?php if ($menu['fund_agent']['view']){ ?>
                 <li>
-                    <a href="?app=fund_agent" <?PHP if($_GET['app'] == "fund_agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ตัวเเทนกองทุน</a>
+                    <a href="?app=fund_agent" <?PHP if($_GET['app'] == "fund_agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ตัวเเทนจำหน่าย</a>
                 </li>
                 <?php } ?>
                 <?php if ($menu['contractor']['view']){ ?>

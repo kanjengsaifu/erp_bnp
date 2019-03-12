@@ -26,7 +26,7 @@ class AgentModel extends BaseModel{
 
     function getAgentBy($name = '', $mobile  = ''){
         $sql = "SELECT agent_code, agent_prefix, CONCAT(agent_name,' ',agent_lastname) as name,
-        agent_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        agent_mobile, agent_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_agent 
         LEFT JOIN tb_district ON tb_agent.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -68,7 +68,7 @@ class AgentModel extends BaseModel{
 
     function getAgentByStatus($code){
         $sql = " SELECT agent_code, agent_prefix, CONCAT(agent_name,' ',agent_lastname) as name,
-        agent_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        agent_mobile, agent_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
         FROM tb_agent 
         LEFT JOIN tb_district ON tb_agent.district_id = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -80,6 +80,22 @@ class AgentModel extends BaseModel{
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                 $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getAgentByUsername($code,$user){
+        $sql = "SELECT * 
+        FROM tb_agent 
+        WHERE agent_code != '$code' AND agent_username = '$user' 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
             }
             $result->close();
             return $data;
@@ -99,16 +115,16 @@ class AgentModel extends BaseModel{
         }
     }
 
-    function getAgentByUsername($code,$user){
-        $sql = "SELECT * 
+    function getAgentByDistrict($id){
+        $sql = " SELECT agent_code, agent_prefix, CONCAT(agent_name,' ',agent_lastname) as name
         FROM tb_agent 
-        WHERE agent_code != '$code' AND agent_username = '$user' 
+        WHERE district_id = '$id' 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
+            $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
+                $data[] = $row;
             }
             $result->close();
             return $data;
@@ -140,6 +156,7 @@ class AgentModel extends BaseModel{
         district_id = '".static::$db->real_escape_string($data['district_id'])."', 
         agent_zipcode = '".static::$db->real_escape_string($data['agent_zipcode'])."',
         agent_mobile = '".static::$db->real_escape_string($data['agent_mobile'])."',  
+        agent_line = '".static::$db->real_escape_string($data['agent_line'])."',  
         profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         agent_username = '".static::$db->real_escape_string($data['agent_username'])."', 
@@ -163,6 +180,7 @@ class AgentModel extends BaseModel{
         $data['agent_address']=mysqli_real_escape_string(static::$db,$data['agent_address']);
         $data['agent_zipcode']=mysqli_real_escape_string(static::$db,$data['agent_zipcode']);
         $data['agent_mobile']=mysqli_real_escape_string(static::$db,$data['agent_mobile']);
+        $data['agent_line']=mysqli_real_escape_string(static::$db,$data['agent_line']);
         $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
         $data['id_card_image']=mysqli_real_escape_string(static::$db,$data['id_card_image']);
         $data['agent_username']=mysqli_real_escape_string(static::$db,$data['agent_username']);
@@ -180,6 +198,7 @@ class AgentModel extends BaseModel{
             district_id,
             agent_zipcode,
             agent_mobile,
+            agent_line,
             profile_image,
             id_card_image,
             agent_username,
@@ -198,6 +217,7 @@ class AgentModel extends BaseModel{
             $data['district_id']."','".
             $data['agent_zipcode']."','".
             $data['agent_mobile']."','".
+            $data['agent_line']."','".
             $data['profile_image']."','".
             $data['id_card_image']."','".
             $data['agent_username']."','".

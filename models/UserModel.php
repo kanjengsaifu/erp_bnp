@@ -103,13 +103,38 @@ class UserModel extends BaseModel{
         }
     }
 
-
     function getUserByUserPositionCode($code){
         $sql = " SELECT user_code , CONCAT(user_prefix,' ',user_name,' ',user_lastname ) AS user_name 
         FROM tb_user 
         WHERE user_position_code = '$code' 
         ";
-        // echo $sql;
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data=[];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getCallCenterNotInZone($code){
+        $sql = "SELECT user_code, user_prefix, CONCAT(user_name,' ',user_lastname) as name,
+        user_mobile, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        FROM tb_user 
+        LEFT JOIN tb_district ON tb_user.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
+        LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
+        WHERE user_status_code != 'US002' AND user_position_code = 'UP005'
+        AND user_code NOT IN (
+            SELECT user_code
+            FROM tb_zone_call_center 
+            WHERE zone_code = '$code'
+            GROUP BY user_code
+        )
+        ";
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data=[];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -120,7 +145,6 @@ class UserModel extends BaseModel{
         }
     }
  
-
     function updateUserByCode($code,$data = []){
         $sql = " UPDATE tb_user SET     
         user_prefix = '".static::$db->real_escape_string($data['user_prefix'])."', 

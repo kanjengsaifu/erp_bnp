@@ -121,46 +121,20 @@
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=edit" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-8 col-lg-3">
                     <div class="form-group">
                         <label>รหัสประจำตัว / code </label>
                         <input id="contractor_code" name="contractor_code" class="form-control" value="<?php echo $contractor['contractor_code']?>" autocomplete="off" readonly>
                         <p id="alert_code" class="help-block">Example : CT0001.</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="form-group">
-                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="contractor_prefix" name="contractor_prefix" class="form-control">
-                            <option value="">Select</option>
-                            <option <?php if($contractor['contractor_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
-                            <option <?php if($contractor['contractor_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
-                            <option <?php if($contractor['contractor_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
-                        </select>
-                        <p class="help-block">Example : นาย.</p>
-                    </div>
-                </div> 
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_name" name="contractor_name" class="form-control" value="<?php echo $contractor['contractor_name']?>" autocomplete="off">
-                        <p class="help-block">Example : วินัย.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" value="<?php echo $contractor['contractor_lastname']?>" autocomplete="off">
-                        <p class="help-block">Example : ชาญชัย.</p>
-                    </div>
-                </div>
             </div>
 
-            <div class="row">
+            <div class="row"> 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="status_code" name="status_code">
+                        <select id="status_code" name="status_code" class="form-control select">
                             <option value="">Select</option>
                             <?php 
                             for($i =  0 ; $i < count($status) ; $i++){
@@ -173,7 +147,35 @@
                         <p class="help-block">Example : ทำงาน.</p>
                     </div>
                 </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
+                        <select id="contractor_prefix" name="contractor_prefix" class="form-control select">
+                            <option value="">Select</option>
+                            <option <?php if($contractor['contractor_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
+                            <option <?php if($contractor['contractor_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
+                            <option <?php if($contractor['contractor_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
+                        </select>
+                        <p class="help-block">Example : นาย.</p>
+                    </div>
+                </div> 
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
+                        <input id="contractor_name" name="contractor_name" class="form-control" value="<?php echo $contractor['contractor_name']?>" autocomplete="off">
+                        <p class="help-block">Example : วินัย.</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
+                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" value="<?php echo $contractor['contractor_lastname']?>" autocomplete="off">
+                        <p class="help-block">Example : ชาญชัย.</p>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
@@ -181,7 +183,13 @@
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ไลน์ไอดี / LINE ID </label>
+                        <input id="contractor_line" name="contractor_line" type="text" class="form-control" value="<?php echo $contractor['contractor_line']?>" autocomplete="off">
+                        <p class="help-block">Example : Line_ID.</p>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>

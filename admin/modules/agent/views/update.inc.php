@@ -155,21 +155,21 @@
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=agent&action=edit" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-8 col-lg-3">
                     <div class="form-group">
                         <label>รหัสประจำตัว / code </label>
                         <input id="agent_code" name="agent_code" class="form-control" value="<?php echo $agent['agent_code']?>" autocomplete="off" readonly>
                         <p id="alert_code" class="help-block">Example : AG0001.</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อบัญชีผู้ใช้ / user name <font color="#F00"><b>*</b></font></label>
                         <input required id="agent_username" name="agent_username" class="form-control" value="<?php echo $agent['agent_username']?>" autocomplete="off" onchange="check_username();">
                         <p id="alert_username" class="help-block">Example : AG0001.</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>รหัสผ่าน / password <font color="#F00"><b>* (6-15)</b></font></label>
                         <input required id="agent_password" name="agent_password" class="form-control" value="<?php echo $agent['agent_password']?>" autocomplete="off" onchange="check_password();">
@@ -178,35 +178,6 @@
                 </div>
             </div>
             <div class="row"> 
-                <div class="col-md-4 col-lg-3">
-                    <div class="form-group">
-                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="agent_prefix" name="agent_prefix" class="form-control select">
-                            <option value="">Select</option>
-                            <option <?php if($agent['agent_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
-                            <option <?php if($agent['agent_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
-                            <option <?php if($agent['agent_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
-                        </select>
-                        <p class="help-block">Example : นาย.</p>
-                    </div>
-                </div> 
-                <div class="col-md-8 col-lg-3">
-                    <div class="form-group">
-                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="agent_name" name="agent_name" class="form-control" value="<?php echo $agent['agent_name']?>" autocomplete="off">
-                        <p class="help-block">Example : วินัย.</p>
-                    </div>
-                </div>
-                <div class="col-md-8 col-lg-3">
-                    <div class="form-group">
-                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="agent_lastname" name="agent_lastname" class="form-control" value="<?php echo $agent['agent_lastname']?>" autocomplete="off">
-                        <p class="help-block">Example : ชาญชัย.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
@@ -225,12 +196,47 @@
                 </div>
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
+                        <select id="agent_prefix" name="agent_prefix" class="form-control select">
+                            <option value="">Select</option>
+                            <option <?php if($agent['agent_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
+                            <option <?php if($agent['agent_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
+                            <option <?php if($agent['agent_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
+                        </select>
+                        <p class="help-block">Example : นาย.</p>
+                    </div>
+                </div> 
+                <div class="col-sm-8 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
+                        <input id="agent_name" name="agent_name" class="form-control" value="<?php echo $agent['agent_name']?>" autocomplete="off">
+                        <p class="help-block">Example : วินัย.</p>
+                    </div>
+                </div>
+                <div class="col-sm-8 col-lg-3">
+                    <div class="form-group">
+                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
+                        <input id="agent_lastname" name="agent_lastname" class="form-control" value="<?php echo $agent['agent_lastname']?>" autocomplete="off">
+                        <p class="help-block">Example : ชาญชัย.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
                         <input id="agent_mobile" name="agent_mobile" type="text" class="form-control" value="<?php echo $agent['agent_mobile']?>" autocomplete="off">
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ไลน์ไอดี / LINE ID </label>
+                        <input id="agent_line" name="agent_line" type="text" class="form-control" value="<?php echo $agent['agent_line']?>" autocomplete="off">
+                        <p class="help-block">Example : Line_ID</p>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
