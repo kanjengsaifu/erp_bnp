@@ -33,8 +33,9 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
 }else if ($_GET['action'] == 'update'&&$menu['farmer']['edit']){
     $farmer = $farmer_model->getFarmerByCode($farmer_code);
     $province = $address_model->getProvinceBy();
-    $amphur = $address_model->getAmphurByProviceID($farmer['province_id']);
-    $district = $address_model->getDistrictByAmphurID($farmer['amphur_id']); 
+    $amphur = $address_model->getAmphurByProviceID($farmer['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($farmer['AMPHUR_ID']); 
+    $village = $address_model->getVillageByDistrictID($farmer['DISTRICT_ID']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['farmer']['delete']){
     $farmer = $farmer_model->getFarmerByCode($farmer_code);
@@ -68,9 +69,7 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
         $data['farmer_name'] = $_POST['farmer_name'];
         $data['farmer_lastname'] = $_POST['farmer_lastname'];
         $data['farmer_address'] = $_POST['farmer_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
+        $data['village_id'] = $_POST['village_id'];
         $data['farmer_zipcode'] = $_POST['farmer_zipcode'];
         $data['farmer_mobile'] = $_POST['farmer_mobile'];
         $data['farmer_line'] = $_POST['farmer_line'];
@@ -141,9 +140,7 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
         $data['farmer_name'] = $_POST['farmer_name'];
         $data['farmer_lastname'] = $_POST['farmer_lastname'];
         $data['farmer_address'] = $_POST['farmer_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
+        $data['village_id'] = $_POST['village_id'];
         $data['farmer_zipcode'] = $_POST['farmer_zipcode'];
         $data['farmer_mobile'] = $_POST['farmer_mobile'];
         $data['farmer_line'] = $_POST['farmer_line'];
@@ -214,9 +211,6 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
     }
 }else if ($_GET['action'] == 'detail'){
     $farmer = $farmer_model->getFarmerByCode($farmer_code);
-    $province = $address_model->getProvinceBy();
-    $amphur = $address_model->getAmphurByProviceID($farmer['province_id']);
-    $district = $address_model->getDistrictByAmphurID($farmer['amphur_id']); 
     require_once($path.'detail.inc.php');
 }else{
     $farmer = $farmer_model->getFarmerBy();

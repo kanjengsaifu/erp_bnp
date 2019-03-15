@@ -39,10 +39,11 @@
                     <td>ที่อยู่ / Address</td>
                     <td>
                         <?php echo $fund_agent['fund_agent_address']?>
-                        ตำบล<?php echo $fund_agent['AMPHUR_NAME']?>
+                        <?php echo $fund_agent['VILLAGE_NAME']?>
+                        ตำบล<?php echo $fund_agent['DISTRICT_NAME']?>
                         อำเภอ<?php echo $fund_agent['AMPHUR_NAME']?>
                         จังหวัด<?php echo $fund_agent['PROVINCE_NAME']?>
-                        <?php echo $fund_agent['fund_agent_zipcode']?>
+                        <?php echo $fund_agent['POSTCODE']?>
                     </td>
                 </tr>
             </tbody>

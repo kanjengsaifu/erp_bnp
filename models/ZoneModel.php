@@ -25,7 +25,13 @@ class ZoneModel extends BaseModel{
     }
 
     function getZoneBy($name = ''){
-        $sql = "SELECT *
+        $sql = "SELECT * , (
+            SELECT CONCAT(songserm_name,' ',songserm_lastname)
+            FROM tb_zone_songserm 
+            LEFT JOIN tb_songserm ON tb_zone_songserm.songserm_code = tb_songserm.songserm_code 
+            WHERE tb_zone_songserm.zone_code = tb_zone.zone_code AND songserm_position_code = 'STP002'
+            LIMIT 1
+            ) AS zone_admin
         FROM tb_zone 
         WHERE zone_name LIKE ('%$name%') 
         ORDER BY zone_name

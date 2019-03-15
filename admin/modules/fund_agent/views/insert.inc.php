@@ -261,7 +261,7 @@
                     <div class="form-group">
                         <label>ไลน์ไอดี / LINE ID </label>
                         <input id="fund_agent_line" name="fund_agent_line" type="text" class="form-control" autocomplete="off">
-                        <p class="help-block">Example : 0610243003.</p>
+                        <p class="help-block">Example : Line_ID.</p>
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-6">
@@ -304,10 +304,20 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                         </select>
                         <p class="help-block">Example : ในเมือง.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>หมู่บ้าน : Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
                     </div>
                 </div>
 
@@ -372,6 +382,15 @@
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
             $("#fund_agent_zipcode").val(data);
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
         });
     }
 </script>

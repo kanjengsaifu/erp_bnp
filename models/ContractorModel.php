@@ -25,9 +25,10 @@ class ContractorModel extends BaseModel{
 
     function getContractorBy($name = '', $mobile  = ''){
         $sql = "SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
-        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_contractor 
-        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_contractor.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) LIKE ('%$name%') 
@@ -68,7 +69,8 @@ class ContractorModel extends BaseModel{
         $sql = " SELECT * 
         FROM tb_contractor 
         LEFT JOIN tb_status ON tb_contractor.status_code = tb_status.status_code 
-        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_contractor.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE contractor_code = '$code' 
@@ -86,9 +88,10 @@ class ContractorModel extends BaseModel{
 
     function getContractorByStatus($code){
         $sql = " SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
-        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_contractor 
-        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_contractor.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE status_code = '$code' 
@@ -119,9 +122,10 @@ class ContractorModel extends BaseModel{
 
     function getContractorNotInZone($code){
         $sql = "SELECT contractor_code, contractor_prefix, CONCAT(contractor_name,' ',contractor_lastname) as name,
-        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        contractor_mobile, contractor_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_contractor 
-        LEFT JOIN tb_district ON tb_contractor.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_contractor.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE status_code != '00'
@@ -162,10 +166,7 @@ class ContractorModel extends BaseModel{
         contractor_name = '".static::$db->real_escape_string($data['contractor_name'])."', 
         contractor_lastname = '".static::$db->real_escape_string($data['contractor_lastname'])."', 
         contractor_address = '".static::$db->real_escape_string($data['contractor_address'])."', 
-        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
-        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
-        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
-        contractor_zipcode = '".static::$db->real_escape_string($data['contractor_zipcode'])."', 
+        village_id = '".static::$db->real_escape_string($data['village_id'])."', 
         contractor_mobile = '".static::$db->real_escape_string($data['contractor_mobile'])."', 
         contractor_line = '".static::$db->real_escape_string($data['contractor_line'])."', 
         profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
@@ -190,7 +191,6 @@ class ContractorModel extends BaseModel{
         $data['contractor_name']=mysqli_real_escape_string(static::$db,$data['contractor_name']);
         $data['contractor_lastname']=mysqli_real_escape_string(static::$db,$data['contractor_lastname']);
         $data['contractor_address']=mysqli_real_escape_string(static::$db,$data['contractor_address']);
-        $data['contractor_zipcode']=mysqli_real_escape_string(static::$db,$data['contractor_zipcode']);
         $data['contractor_mobile']=mysqli_real_escape_string(static::$db,$data['contractor_mobile']);
         $data['contractor_line']=mysqli_real_escape_string(static::$db,$data['contractor_line']);
         $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
@@ -205,10 +205,7 @@ class ContractorModel extends BaseModel{
             contractor_name, 
             contractor_lastname,
             contractor_address,
-            province_id,
-            amphur_id,
-            district_id,
-            contractor_zipcode,
+            village_id,
             contractor_mobile,
             contractor_line,
             profile_image,
@@ -224,10 +221,7 @@ class ContractorModel extends BaseModel{
             $data['contractor_name']."','".
             $data['contractor_lastname']."','".
             $data['contractor_address']."','".
-            $data['province_id']."','".
-            $data['amphur_id']."','".
-            $data['district_id']."','".
-            $data['contractor_zipcode']."','".
+            $data['village_id']."','".
             $data['contractor_mobile']."','".
             $data['contractor_line']."','".
             $data['profile_image']."','".

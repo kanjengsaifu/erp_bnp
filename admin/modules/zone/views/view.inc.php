@@ -26,7 +26,7 @@
                     <th style="text-align:center;">ลำดับ <br>No. </th>
                     <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">เขตการขาย <br>Sales area</th>
-                    <th style="text-align:center;">ผู้ดูเเล <br>Manager</th>
+                    <th style="text-align:center;">ผู้จัดการ <br>Manager</th>
                     <th style="text-align:center;"> </th>
                 </tr>
             </thead>
@@ -38,7 +38,7 @@
                     <td style="text-align:center;"><?php echo $i+1; ?></td>
                     <td ><?php echo $zone[$i]['zone_code']; ?></td>
                     <td ><?php echo $zone[$i]['zone_name']; ?></td>
-                    <td ><?php echo $zone[$i]['zone_admin']; ?></td>
+                    <td style="text-align:center;"><?php echo $zone[$i]['zone_admin']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['zone']['edit']){ ?> 
                         <a href="?app=zone&action=update&code=<?php echo $zone[$i]['zone_code'];?>">

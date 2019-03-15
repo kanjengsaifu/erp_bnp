@@ -23,14 +23,15 @@ $fund_agent_code = $_GET['code'];
 
 if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){ 
     $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();  
+    $province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['fund_agent']['edit']){
     $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
     $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($fund_agent['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($fund_agent['amphur_id']); 
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($fund_agent['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($fund_agent['AMPHUR_ID']); 
+    $village = $address_model->getVillageByDistrictID($fund_agent['DISTRICT_ID']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['fund_agent']['delete']){
     $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
@@ -66,10 +67,7 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
         $data['fund_agent_name'] = $_POST['fund_agent_name'];
         $data['fund_agent_lastname'] = $_POST['fund_agent_lastname'];
         $data['fund_agent_address'] = $_POST['fund_agent_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
-        $data['fund_agent_zipcode'] = $_POST['fund_agent_zipcode'];
+        $data['village_id'] = $_POST['village_id'];
         $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
         $data['fund_agent_line'] = $_POST['fund_agent_line'];
         $data['fund_agent_username'] = $_POST['fund_agent_username'];
@@ -137,10 +135,7 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
         $data['fund_agent_name'] = $_POST['fund_agent_name'];
         $data['fund_agent_lastname'] = $_POST['fund_agent_lastname'];
         $data['fund_agent_address'] = $_POST['fund_agent_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
-        $data['fund_agent_zipcode'] = $_POST['fund_agent_zipcode'];
+        $data['village_id'] = $_POST['village_id'];
         $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
         $data['fund_agent_line'] = $_POST['fund_agent_line'];
         $data['fund_agent_username'] = $_POST['fund_agent_username'];
@@ -222,6 +217,10 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
 }else if ($_GET['status'] == 'pending'){
     $on_pending = $fund_agent_model->countFundAgentByStatus('00');
     $fund_agent = $fund_agent_model->getFundAgentByStatus('00');
+    require_once($path.'view.inc.php');
+}else if ($_GET['status'] == 'cease'){
+    $on_pending = $fund_agent_model->countFundAgentByStatus('00');
+    $fund_agent = $fund_agent_model->getFundAgentByStatus('02');
     require_once($path.'view.inc.php');
 }else{
     $on_pending = $fund_agent_model->countFundAgentByStatus('00');

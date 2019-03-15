@@ -36,6 +36,8 @@
         require_once("modules/contact_way/views/index.inc.php");   
     }else if($_GET['app'] == "contact_type"){
         require_once("modules/contact_type/views/index.inc.php");   
+    }else if($_GET['app'] == "address" && $menu['address']['view']){
+        require_once("modules/address/views/index.inc.php");   
     }
     /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
 

@@ -60,7 +60,7 @@
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var agent_zipcode = document.getElementById("agent_zipcode").value;
+        var village_id = document.getElementById("village_id").value;
         var agent_mobile = document.getElementById("agent_mobile").value;
 
         status_code = $.trim(status_code); 
@@ -68,44 +68,47 @@
         agent_name = $.trim(agent_name);
         agent_lastname = $.trim(agent_lastname);
         agent_address = $.trim(agent_address);
-        province_id = $.trim(province_id);
-        amphur_id = $.trim(amphur_id);
-        district_id = $.trim(district_id);
-        agent_zipcode = $.trim(agent_zipcode);
         agent_mobile = $.trim(agent_mobile);
 
         if(agent_prefix.length == 0){
-            alert("Please input agent prefix");
+            alert("Please input prefix");
             document.getElementById("agent_prefix").focus();
             return false;
         }else if(agent_name.length == 0){
-            alert("Please input agent name");
+            alert("Please input name");
             document.getElementById("agent_name").focus();
             return false;
         }else if(agent_lastname.length == 0){
-            alert("Please input agent lastname");
+            alert("Please input lastname");
             document.getElementById("agent_lastname").focus();
             return false;
         }else if(agent_address.length == 0){
-            alert("Please input agent address");
+            alert("Please input address");
             document.getElementById("agent_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input agent provice");
+            alert("Please input provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input agent amphur");
+            alert("Please input amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input agent district");
+            alert("Please input district");
             document.getElementById("district_id").focus();
             return false;
+        }else if(village_id.length == 0){
+            alert("Please input village");
+            document.getElementById("village_id").focus();
+            return false;
         }else if(status_code.length == 0){
-            alert("Please input agent status");
+            alert("Please input status");
             document.getElementById("status_code").focus();
             return false; 
+        }else if($('#alert_code').hasClass('alert-danger')){
+            document.getElementById("agent_code").focus();
+            return false;
         }else if($('#alert_username').hasClass('alert-danger')){
             document.getElementById("agent_username").focus();
             return false;
@@ -253,9 +256,9 @@
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_province) ; $i++){
+                            for($i =  0 ; $i < count($province) ; $i++){
                             ?>
-                            <option <?php if($agent['province_id'] == $add_province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($agent['PROVINCE_ID'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -270,9 +273,9 @@
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_amphur) ; $i++){
+                            for($i =  0 ; $i < count($amphur) ; $i++){
                             ?>
-                            <option <?php if($agent['amphur_id'] == $add_amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_ID'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($agent['AMPHUR_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -284,12 +287,12 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_district) ; $i++){
+                            for($i =  0 ; $i < count($district) ; $i++){
                             ?>
-                            <option <?php if($agent['district_id'] == $add_district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_ID'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
+                            <option <?php if($agent['DISTRICT_ID'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -300,8 +303,25 @@
 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>หมู่บ้าน / Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($village) ; $i++){
+                            ?>
+                            <option <?php if($agent['village_id'] == $village[$i]['VILLAGE_ID'] ){?> selected <?php } ?> value="<?php echo $village[$i]['VILLAGE_ID'] ?>"><?php echo $village[$i]['VILLAGE_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="agent_zipcode" name="agent_zipcode" type="text" readonly class="form-control" value="<?php echo $agent['agent_zipcode']?>"  autocomplete="off">
+                        <input id="agent_zipcode" name="agent_zipcode" type="text" readonly class="form-control" value="<?php echo $agent['POSTCODE']?>" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>

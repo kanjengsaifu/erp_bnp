@@ -34,45 +34,45 @@
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var farmer_zipcode = document.getElementById("farmer_zipcode").value;
+        var village_id = document.getElementById("village_id").value;
 
         farmer_prefix = $.trim(farmer_prefix);
         farmer_name = $.trim(farmer_name);
         farmer_lastname = $.trim(farmer_lastname);
         farmer_mobile = $.trim(farmer_mobile);
         farmer_address = $.trim(farmer_address);
-        province_id = $.trim(province_id);
-        amphur_id = $.trim(amphur_id);
-        district_id = $.trim(district_id);
-        farmer_zipcode = $.trim(farmer_zipcode);
 
         if(farmer_prefix.length == 0){
-            alert("Please input farmer prefix");
+            alert("Please input prefix");
             document.getElementById("farmer_prefix").focus();
             return false;
         }else if(farmer_name.length == 0){
-            alert("Please input farmer name");
+            alert("Please input name");
             document.getElementById("farmer_name").focus();
             return false;
         }else if(farmer_lastname.length == 0){
-            alert("Please input farmer lastname");
+            alert("Please input lastname");
             document.getElementById("farmer_lastname").focus();
             return false;
         }else if(farmer_address.length == 0){
-            alert("Please input farmer address");
+            alert("Please input address");
             document.getElementById("farmer_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input farmer provice");
+            alert("Please input provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input farmer amphur");
+            alert("Please input amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input farmer district");
+            alert("Please input district");
             document.getElementById("district_id").focus();
+            return false;
+        }else if(village_id.length == 0){
+            alert("Please input village");
+            document.getElementById("village_id").focus();
             return false;
         }else if($('#alert_code').hasClass('alert-danger')){
             document.getElementById("farmer_code").focus();
@@ -198,7 +198,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                         </select>
                         <p class="help-block">Example : ในเมือง.</p>
@@ -207,8 +207,18 @@
 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>หมู่บ้าน / Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="farmer_zipcode" name="farmer_zipcode" type="text" readonly class="form-control" autocomplete="off">
+                        <input id="farmer_zipcode" name="farmer_zipcode" type="text" class="form-control" autocomplete="off" readonly>
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
@@ -258,6 +268,15 @@
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
             $("#farmer_zipcode").val(data);
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
         });
     }
 </script>

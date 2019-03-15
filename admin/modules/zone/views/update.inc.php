@@ -133,7 +133,7 @@
                     <td style="text-align:center;"><?php echo $zone_list[$i]['PROVINCE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['AMPHUR_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['DISTRICT_NAME']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone_list[$i]['village_name']; ?></td>
+                    <td style="text-align:center;"><?php echo $zone_list[$i]['VILLAGE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['agent_name']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['fund_agent_name']; ?></td>
                     <td style="text-align:center;">
@@ -439,12 +439,21 @@
     function addSongserm(){
         var zone_code = document.getElementById("zone_code").value;
         var checkbox = document.getElementsByName('ckb_songserm[]');
-        
+        var manager = document.getElementsByName('manager');
+
         var songserm = [];
         for(var i=0; i<checkbox.length; i++){
             if(checkbox[i].checked){
                 songserm.push({
                     songserm_code: checkbox[i].value,
+                });
+            }
+        }
+
+        for(var i=0; i<manager.length; i++){
+            if(manager[i].checked){
+                songserm.push({
+                    songserm_code: manager[i].value,
                 });
             }
         }

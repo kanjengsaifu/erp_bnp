@@ -215,6 +215,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         || $_GET["app"]=='product_type'
                         || $_GET["app"]=='product_brand'
                         || $_GET["app"]=='project'
+                        || $_GET["app"]=='address'
                     ){
                         echo ' class="active" ';
                     }
@@ -260,6 +261,11 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <?PHP if($menu['supplier']['view']==1){ ?>
                         <li>
                             <a href="?app=supplier" <?PHP if($_GET['app'] == "supplier"){?> class="active" <?PHP } ?> ><i class="fa fa-building-o" aria-hidden="true"></i> ผู้ขาย (Supplier)</a>
+                        </li> 
+                        <?PHP }?> 
+                        <?PHP if($menu['address']['view']==1){ ?>
+                        <li>
+                            <a href="?app=address" <?PHP if($_GET['app'] == "address"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ข้อมูลพื้นที่ (Area)</a>
                         </li> 
                         <?PHP }?> 
                     </ul>

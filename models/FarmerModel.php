@@ -25,9 +25,10 @@ class FarmerModel extends BaseModel{
 
     function getFarmerBy($name = '', $mobile  = ''){
         $sql = "SELECT farmer_code, farmer_prefix, CONCAT(farmer_name,' ',farmer_lastname) as name,
-        farmer_mobile, farmer_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        farmer_mobile, farmer_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_farmer 
-        LEFT JOIN tb_district ON tb_farmer.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_farmer.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE CONCAT(tb_farmer.farmer_name,' ',tb_farmer.farmer_lastname) LIKE ('%$name%') 
@@ -48,7 +49,8 @@ class FarmerModel extends BaseModel{
     function getFarmerByCode($code){
         $sql = " SELECT * 
         FROM tb_farmer 
-        LEFT JOIN tb_district ON tb_farmer.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_farmer.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE farmer_code = '$code' 
@@ -70,10 +72,7 @@ class FarmerModel extends BaseModel{
         farmer_name = '".static::$db->real_escape_string($data['farmer_name'])."', 
         farmer_lastname = '".static::$db->real_escape_string($data['farmer_lastname'])."', 
         farmer_address = '".static::$db->real_escape_string($data['farmer_address'])."', 
-        province_id = '".static::$db->real_escape_string($data['province_id'])."', 
-        amphur_id = '".static::$db->real_escape_string($data['amphur_id'])."', 
-        district_id = '".static::$db->real_escape_string($data['district_id'])."', 
-        farmer_zipcode = '".static::$db->real_escape_string($data['farmer_zipcode'])."', 
+        village_id = '".static::$db->real_escape_string($data['village_id'])."', 
         farmer_mobile = '".static::$db->real_escape_string($data['farmer_mobile'])."', 
         farmer_line = '".static::$db->real_escape_string($data['farmer_line'])."', 
         profile_image = '".static::$db->real_escape_string($data['profile_image'])."', 
@@ -94,7 +93,6 @@ class FarmerModel extends BaseModel{
         $data['farmer_name']=mysqli_real_escape_string(static::$db,$data['farmer_name']);
         $data['farmer_lastname']=mysqli_real_escape_string(static::$db,$data['farmer_lastname']);
         $data['farmer_address']=mysqli_real_escape_string(static::$db,$data['farmer_address']);
-        $data['farmer_zipcode']=mysqli_real_escape_string(static::$db,$data['farmer_zipcode']);
         $data['farmer_mobile']=mysqli_real_escape_string(static::$db,$data['farmer_mobile']);
         $data['farmer_line']=mysqli_real_escape_string(static::$db,$data['farmer_line']);
         $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
@@ -108,7 +106,7 @@ class FarmerModel extends BaseModel{
             province_id,
             amphur_id,
             district_id,
-            farmer_zipcode,
+            village_id,
             farmer_mobile,
             farmer_line,
             profile_image,
@@ -123,7 +121,7 @@ class FarmerModel extends BaseModel{
             $data['province_id']."','".
             $data['amphur_id']."','".
             $data['district_id']."','".
-            $data['farmer_zipcode']."','".
+            $data['village_id']."','".
             $data['farmer_mobile']."','".
             $data['farmer_line']."','".
             $data['profile_image']."','".

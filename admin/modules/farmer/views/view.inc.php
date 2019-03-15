@@ -30,6 +30,7 @@
                     <th style="text-align:center;">จังหวัด <br>Province</th>
                     <th style="text-align:center;">อำเภอ <br>Amphur</th>
                     <th style="text-align:center;">ตำบล <br>Distict</th>
+                    <th style="text-align:center;">หมู่บ้าน <br>Village</th>
                     <th></th>
                 </tr>
             </thead>
@@ -46,6 +47,7 @@
                     <td style="text-align:center;"><?php echo $farmer[$i]['PROVINCE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $farmer[$i]['AMPHUR_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $farmer[$i]['DISTRICT_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $farmer[$i]['VILLAGE_NAME']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['farmer']['view']){ ?> 
                         <a href="?app=farmer&action=detail&code=<?php echo $farmer[$i]['farmer_code'];?>">

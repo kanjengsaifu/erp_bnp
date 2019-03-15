@@ -27,8 +27,8 @@ class ZoneListModel extends BaseModel{
     function getZoneListBy($name = ''){
         $sql = "SELECT *
         FROM tb_zone_list 
-        WHERE village_name LIKE ('%$name%') 
-        ORDER BY village_name
+        WHERE village_id LIKE ('%$name%') 
+        ORDER BY village_id
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -44,6 +44,8 @@ class ZoneListModel extends BaseModel{
     function getZoneListByCode($code){
         $sql = " SELECT * 
         FROM tb_zone_list 
+        LEFT JOIN tb_village ON tb_zone_list.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         WHERE zone_list_code = '$code' 
         ";
 
@@ -59,11 +61,12 @@ class ZoneListModel extends BaseModel{
 
     function getZoneListByZone($code){
         $sql = "SELECT tb_zone_list.*, CONCAT(agent_name,' ',agent_lastname) as agent_name, CONCAT(fund_agent_name,' ',fund_agent_lastname) as fund_agent_name,
-        PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME
+        PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_zone_list 
-        LEFT JOIN tb_agent  ON tb_zone_list.agent_code  = tb_agent.agent_code  
+        LEFT JOIN tb_agent ON tb_zone_list.agent_code  = tb_agent.agent_code  
         LEFT JOIN tb_fund_agent ON tb_zone_list.fund_agent_code = tb_fund_agent.fund_agent_code 
-        LEFT JOIN tb_district ON tb_zone_list.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_zone_list.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE zone_code = '$code'
@@ -81,13 +84,9 @@ class ZoneListModel extends BaseModel{
     }
 
     function updateZoneListByCode($code,$data = []){
-        $data['village_name']=mysqli_real_escape_string(static::$db,$data['village_name']);
-
         $sql = "UPDATE tb_zone_list SET
-        village_name = '".$data['village_name']."', 
-        province_id = '".$data['province_id']."', 
-        amphur_id = '".$data['amphur_id']."', 
-        district_id = '".$data['district_id']."', 
+        zone_list_code = '".$data['zone_list_code']."', 
+        village_id = '".$data['village_id']."', 
         agent_code = '".$data['agent_code']."', 
         fund_agent_code = '".$data['fund_agent_code']."', 
         updateby = '".$data['updateby']."',
@@ -103,16 +102,10 @@ class ZoneListModel extends BaseModel{
     }
 
     function insertZoneList($data = []){
-        $data['zone_code']=mysqli_real_escape_string(static::$db,$data['zone_code']);
-        $data['village_name']=mysqli_real_escape_string(static::$db,$data['village_name']);
-
         $sql = "INSERT INTO tb_zone_list ( 
         zone_list_code,
         zone_code,
-        village_name, 
-        province_id,
-        amphur_id,
-        district_id,
+        village_id, 
         agent_code,
         fund_agent_code,
         addby,
@@ -120,10 +113,7 @@ class ZoneListModel extends BaseModel{
         )  VALUES ('".  
         $data['zone_list_code']."','".
         $data['zone_code']."','".
-        $data['village_name']."','".
-        $data['province_id']."','".
-        $data['amphur_id']."','".
-        $data['district_id']."','".
+        $data['village_id']."','".
         $data['agent_code']."','".
         $data['fund_agent_code']."','".
         $data['addby']."',

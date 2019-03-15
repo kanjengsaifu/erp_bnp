@@ -8,52 +8,54 @@
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var farmer_zipcode = document.getElementById("farmer_zipcode").value;
-        var farmer_line = document.getElementById("farmer_line").value;  
+        var village_id = document.getElementById("village_id").value;
 
         farmer_prefix = $.trim(farmer_prefix);
         farmer_name = $.trim(farmer_name);
         farmer_lastname = $.trim(farmer_lastname);
         farmer_mobile = $.trim(farmer_mobile);
         farmer_address = $.trim(farmer_address);
-        province_id = $.trim(province_id);
-        amphur_id = $.trim(amphur_id);
-        district_id = $.trim(district_id);
-        farmer_zipcode = $.trim(farmer_zipcode);
-        farmer_line = $.trim(farmer_line); 
 
         if(farmer_prefix.length == 0){
-            alert("Please input farmer prefix");
+            alert("Please input prefix");
             document.getElementById("farmer_prefix").focus();
             return false;
         }else if(farmer_name.length == 0){
-            alert("Please input farmer name");
+            alert("Please input name");
             document.getElementById("farmer_name").focus();
             return false;
         }else if(farmer_lastname.length == 0){
-            alert("Please input farmer lastname");
+            alert("Please input lastname");
             document.getElementById("farmer_lastname").focus();
             return false;
         }else if(farmer_address.length == 0){
-            alert("Please input farmer address");
+            alert("Please input address");
             document.getElementById("farmer_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input farmer provice");
+            alert("Please input provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input farmer amphur");
+            alert("Please input amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input farmer district");
+            alert("Please input district");
             document.getElementById("district_id").focus();
+            return false;
+        }else if(village_id.length == 0){
+            alert("Please input village");
+            document.getElementById("village_id").focus();
+            return false;
+        }else if($('#alert_code').hasClass('alert-danger')){
+            document.getElementById("farmer_code").focus();
             return false;
         }else{ 
             return true;
         }
     }
+
 
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -149,7 +151,7 @@
                             <?php 
                             for($i =  0 ; $i < count($province) ; $i++){
                             ?>
-                            <option <?php if($farmer['province_id'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($farmer['PROVINCE_ID'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -166,7 +168,7 @@
                             <?php 
                             for($i =  0 ; $i < count($amphur) ; $i++){
                             ?>
-                            <option <?php if($farmer['amphur_id'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($farmer['DISTRICT_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -183,7 +185,7 @@
                             <?php 
                             for($i =  0 ; $i < count($district) ; $i++){
                             ?>
-                            <option <?php if($farmer['district_id'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
+                            <option <?php if($farmer['DISTRICT_ID'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -194,8 +196,25 @@
 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>หมู่บ้าน / Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($village) ; $i++){
+                            ?>
+                            <option <?php if($farmer['village_id'] == $village[$i]['VILLAGE_ID'] ){?> selected <?php } ?> value="<?php echo $village[$i]['VILLAGE_ID'] ?>"><?php echo $village[$i]['VILLAGE_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="farmer_zipcode" name="farmer_zipcode" type="text" readonly class="form-control" value="<?php echo $farmer['farmer_zipcode']?>"  autocomplete="off">
+                        <input id="farmer_zipcode" name="farmer_zipcode" type="text" class="form-control" value="<?php echo $farmer['farmer_zipcode']?>" autocomplete="off" readonly>
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>

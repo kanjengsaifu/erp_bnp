@@ -49,7 +49,8 @@ class SongsermModel extends BaseModel{
         $sql = " SELECT * 
         FROM tb_songserm 
         LEFT JOIN tb_songserm_status ON tb_songserm.songserm_status_code = tb_songserm_status.songserm_status_code 
-        LEFT JOIN tb_district ON tb_songserm.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_songserm.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE songserm_code = '$code' 
@@ -83,10 +84,11 @@ class SongsermModel extends BaseModel{
 
     function getSongsermNotInZone($code){
         $sql = "SELECT songserm_code, songserm_prefix, CONCAT(songserm_name,' ',songserm_lastname) as name,
-        songserm_mobile, songserm_line, songserm_position_name
+        songserm_mobile, songserm_line, songserm_position_name, tb_songserm.songserm_position_code
         FROM tb_songserm 
         LEFT JOIN tb_songserm_position ON tb_songserm.songserm_position_code = tb_songserm_position.songserm_position_code 
-        LEFT JOIN tb_district ON tb_songserm.district_id = tb_district.DISTRICT_ID 
+        LEFT JOIN tb_village ON tb_songserm.village_id = tb_village.VILLAGE_ID 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
         LEFT JOIN tb_province ON tb_district.PROVINCE_ID = tb_province.PROVINCE_ID 
         WHERE songserm_status_code != '00'
@@ -133,8 +135,6 @@ class SongsermModel extends BaseModel{
         songserm_name = '".$data['songserm_name']."', 
         songserm_lastname = '".$data['songserm_lastname']."', 
         songserm_address = '".$data['songserm_address']."', 
-        province_id = '".$data['province_id']."', 
-        amphur_id = '".$data['amphur_id']."', 
         district_id = '".$data['district_id']."', 
         songserm_zipcode = '".$data['songserm_zipcode']."', 
         songserm_mobile = '".$data['songserm_mobile']."', 
@@ -174,8 +174,6 @@ class SongsermModel extends BaseModel{
             songserm_name, 
             songserm_lastname,
             songserm_address,
-            province_id,
-            amphur_id,
             district_id,
             songserm_zipcode,
             songserm_mobile,
@@ -193,8 +191,6 @@ class SongsermModel extends BaseModel{
             $data['songserm_name']."','".
             $data['songserm_lastname']."','".
             $data['songserm_address']."','".
-            $data['province_id']."','".
-            $data['amphur_id']."','".
             $data['district_id']."','".
             $data['songserm_zipcode']."','".
             $data['songserm_mobile']."','".

@@ -39,10 +39,11 @@
                     <td>ที่อยู่ / Address</td>
                     <td>
                         <?php echo $contractor['contractor_address']?>
+                        <?php echo $contractor['VILLAGE_NAME']?>
                         ตำบล<?php echo $contractor['AMPHUR_NAME']?>
                         อำเภอ<?php echo $contractor['AMPHUR_NAME']?>
                         จังหวัด<?php echo $contractor['PROVINCE_NAME']?>
-                        <?php echo $contractor['contractor_zipcode']?>
+                        <?php echo $contractor['POSTCODE']?>
                     </td>
                 </tr>
             </tbody>

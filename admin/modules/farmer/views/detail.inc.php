@@ -35,10 +35,11 @@
                     <td>ที่อยู่ / Address</td>
                     <td>
                         <?php echo $farmer['farmer_address']?>
+                        <?php echo $farmer['VILLAGE_NAME']?>
                         ตำบล<?php echo $farmer['AMPHUR_NAME']?>
                         อำเภอ<?php echo $farmer['AMPHUR_NAME']?>
                         จังหวัด<?php echo $farmer['PROVINCE_NAME']?>
-                        <?php echo $farmer['farmer_zipcode']?>
+                        <?php echo $farmer['POSTCODE']?>
                     </td>
                 </tr>
             </tbody>

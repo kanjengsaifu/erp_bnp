@@ -234,7 +234,7 @@
                     <div class="form-group">
                         <label>ไลน์ไอดี / LINE ID </label>
                         <input id="fund_agent_line" name="fund_agent_line" type="text" class="form-control" value="<?php echo $fund_agent['fund_agent_line']?>" autocomplete="off">
-                        <p class="help-block">Example : 0610243003.</p>
+                        <p class="help-block">Example : Line_ID.</p>
                     </div>
                 </div>
                 <div class="col-sm-12 col-lg-6">
@@ -253,9 +253,9 @@
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_province) ; $i++){
+                            for($i =  0 ; $i < count($province) ; $i++){
                             ?>
-                            <option <?php if($fund_agent['province_id'] == $add_province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($fund_agent['PROVINCE_ID'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -270,9 +270,9 @@
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_amphur) ; $i++){
+                            for($i =  0 ; $i < count($amphur) ; $i++){
                             ?>
-                            <option <?php if($fund_agent['amphur_id'] == $add_amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_ID'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($fund_agent['AMPHUR_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -287,9 +287,9 @@
                         <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_district) ; $i++){
+                            for($i =  0 ; $i < count($district) ; $i++){
                             ?>
-                            <option <?php if($fund_agent['district_id'] == $add_district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_ID'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
+                            <option <?php if($fund_agent['DISTRICT_ID'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -300,8 +300,25 @@
 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>หมู่บ้าน : Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select" onchange="getVillage()">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($village) ; $i++){
+                            ?>
+                            <option <?php if($fund_agent['village_id'] == $village[$i]['VILLAGE_ID'] ){?> selected <?php } ?> value="<?php echo $village[$i]['VILLAGE_ID'] ?>"><?php echo $village[$i]['VILLAGE_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="fund_agent_zipcode" name="fund_agent_zipcode" type="text" readonly class="form-control" value="<?php echo $fund_agent['fund_agent_zipcode']?>"  autocomplete="off">
+                        <input id="fund_agent_zipcode" name="fund_agent_zipcode" type="text" readonly class="form-control" value="<?php echo $fund_agent['POSTCODE']?>"  autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
@@ -364,6 +381,15 @@
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
             $("#fund_agent_zipcode").val(data);
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
         });
     }
 </script>
