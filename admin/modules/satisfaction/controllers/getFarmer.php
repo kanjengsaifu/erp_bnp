@@ -1,9 +1,9 @@
 <?php 
-require_once('../../../../models/ContractorModel.php');
+require_once('../../../../models/FarmerModel.php');
 
-$member_model = new ContractorModel;
+$member_model = new FarmerModel;
 
-$member = $member_model->getContractorByUserCode($_POST['user_code']);
+$member = $member_model->getFarmerByUserCode($_POST['user_code']);
 ?>
 <option value="">Select</option>
 <?php

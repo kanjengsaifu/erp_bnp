@@ -1,9 +1,9 @@
 <?php 
-require_once('../../../../models/ContractorModel.php');
+require_once('../../../../models/AgentModel.php');
 
-$member_model = new ContractorModel;
+$member_model = new AgentModel;
 
-$member = $member_model->getContractorByUserCode($_POST['user_code']);
+$member = $member_model->getAgentByUserCode($_POST['user_code']);
 ?>
 <option value="">Select</option>
 <?php

@@ -33,12 +33,30 @@ class SongsermModel extends BaseModel{
         WHERE CONCAT(tb_songserm.songserm_name,' ',tb_songserm.songserm_lastname) LIKE ('%$name%') 
         AND songserm_mobile LIKE ('%$mobile%') 
         ORDER BY CONCAT(tb_songserm.songserm_name,' ',tb_songserm.songserm_lastname) 
-        ";
-
+        "; 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                 $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getSongsermLogin($username, $password){
+        $username = static::$db->real_escape_string($username);
+        $password = static::$db->real_escape_string($password);
+
+        $sql ="SELECT * 
+        FROM tb_songserm 
+        WHERE songserm_username = '$username' 
+        AND songserm_password = '$password' ";
+        // echo $sql;
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
             }
             $result->close();
             return $data;

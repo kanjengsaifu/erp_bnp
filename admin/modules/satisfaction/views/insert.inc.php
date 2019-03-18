@@ -15,8 +15,15 @@
                 $("#member_code").selectpicker('refresh');
             }); 
             document.getElementById("member_code").value = "";
+        }else if(id=='นายหน้า'){   
+            $.post("modules/satisfaction/controllers/getAgent.php", { 'user_code': '<?PHP echo $login_user['user_code'];?>' }, function( data ) {
+                // console.log(data);
+                $("#member_code").html(data);
+                $("#member_code").selectpicker('refresh');
+            }); 
+            document.getElementById("member_code").value = "";
         }else if(id=='เกษตรกร'){   
-            $.post("modules/satisfaction/controllers/getFundAgent.php", { 'user_code': '<?PHP echo $login_user['user_code'];?>' }, function( data ) {
+            $.post("modules/satisfaction/controllers/getFarmer.php", { 'user_code': '<?PHP echo $login_user['user_code'];?>' }, function( data ) {
                 // console.log(data);
                 $("#member_code").html(data);
                 $("#member_code").selectpicker('refresh');
@@ -31,7 +38,7 @@
     function check(){
         var check_status = true;
         var check_empty_data = [
-            "member_type_code",
+            "member_type",
             "member_code",
             "contact_way_code",
             "contact_type_code",
@@ -88,16 +95,17 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=material&action=add" enctype="multipart/form-data">
+                <form id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=satisfaction&action=add" enctype="multipart/form-data">
                  
                     <div class="row"> 
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label>ประเภทผู้ติดต่อ / Member type <font color="#F00"><b>*</b></font> </label>
-                                <select id="member_type_code" name="member_type_code" class="form-control" onchange="getMember(this.value)">
+                                <select id="member_type" name="member_type" class="form-control" onchange="getMember(this.value)">
                                     <option value="">Select</option> 
                                     <option value="ผู้รับเหมา">ผู้รับเหมา</option>
                                     <option value="ตัวแทน">ตัวแทน</option>
+                                    <option value="นายหน้า">นายหน้า</option>
                                     <option value="เกษตรกร">เกษตรกร</option>
                                 </select>
                                 <p class="help-block">Example : ลิตร.</p>
@@ -147,7 +155,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>รายละเอียด / Detail <font color="#F00"><b>*</b></font></label>
-                                <input id="satisfaction_detail" name="satisfaction_detail" type="number" class="form-control" value=""  >
+                                <input id="satisfaction_detail" name="satisfaction_detail" class="form-control" value=""  >
                                 <p class="help-block">Example : รายละเอียด...</p>
                             </div>
                         </div>  
@@ -156,8 +164,8 @@
                     <div class="row">  
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <label>คะแนน / Score <font color="#F00"><b>*</b></font></label>
-                                <input id="satisfaction_score" name="satisfaction_score" type="number" class="form-control" value="" min="1" max="10">
+                                <label>คะแนน (10/10) / Score <font color="#F00"><b>*</b></font></label>
+                                <input id="satisfaction_score" name="satisfaction_score" type="number" class="form-control" value="" min="0" max="10" >
                                 <p class="help-block">Example : 50.</p>
                             </div>
                         </div> 
