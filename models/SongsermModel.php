@@ -45,6 +45,25 @@ class SongsermModel extends BaseModel{
         }
     }
 
+    function getSongsermLogin($username, $password){
+        $username = static::$db->real_escape_string($username);
+        $password = static::$db->real_escape_string($password);
+
+        $sql ="SELECT * 
+        FROM tb_songserm 
+        WHERE songserm_username = '$username' 
+        AND songserm_password = '$password' ";
+        // echo $sql;
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data;
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
     function getSongsermByCode($code){
         $sql = " SELECT * 
         FROM tb_songserm 

@@ -1,4 +1,12 @@
-             
+<script>
+    function search(){ 
+        var date_start = $("#date_start").val(); 
+        var date_end = $("#date_end").val();  
+
+        window.location = "index.php?app=satisfaction&date_start="+date_start+"&date_end="+date_end  ;
+    } 
+</script>
+           
 <div class="row">
     <div class="col-lg-6">
         <h1 class="page-header">Satisfaction Management</h1>
@@ -38,6 +46,37 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">  
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>ถึงวันที่</label> 
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="text" id="date_start" name="date_start" value="<?PHP echo $date_start;?>"  class="form-control calendar" readonly/>
+                                </div>
+                                <div class="col-md-1" align="center">
+                                    -
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" id="date_end" name="date_end" value="<?PHP echo $date_end;?>"  class="form-control calendar" readonly/>
+                                </div>
+                            </div>
+                            <p class="help-block">01-12-2018 - 31-12-2018 </p>
+                        </div>
+                    </div>   
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-4"> 
+                        <button class="btn btn-primary" style="float:right; margin:0px 4px;" onclick="search('');">Search</button>
+                        <a href="index.php?app=satisfaction" class="btn btn-default" style="float:right; margin:0px 4px;">Reset</a>
+                    </div>
+                </div>
+                <br>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="dataTables_length" id="dataTables-example_length">
@@ -110,6 +149,7 @@
                             <thead>
                                 <tr>
                                     <th>No.</th> 
+                                    <th>วันที่ <br>Date </th> 
                                     <th>ประเภทผู้ติดต่อ <br>Contact type </th>
                                     <th>ชื่อผู้ติดต่อ <br>Contact name </th> 
                                     <th>ช่องทางติดต่อ <br>Contact way </th> 
@@ -126,11 +166,12 @@
 
                                 <tr class="odd gradeX">
                                     <td><?php echo $i+1; ?></td> 
-                                    <td><?php echo $satisfaction[$i]['satisfaction_name']; ?></td> 
-                                    <td><?php echo $satisfaction[$i]['satisfaction_name']; ?></td> 
-                                    <td><?php echo $satisfaction[$i]['satisfaction_name']; ?></td> 
-                                    <td><?php echo $satisfaction[$i]['satisfaction_name']; ?></td> 
-                                    <td><?php echo $satisfaction[$i]['satisfaction_name']; ?></td> 
+                                    <td><?php echo date_format(date_create($satisfaction[$i]['satisfaction_date']),"d-m-Y"); ?></td>  
+                                    <td><?php echo $satisfaction[$i]['member_type']; ?></td> 
+                                    <td><?php echo $satisfaction[$i]['name']; ?></td> 
+                                    <td><?php echo $satisfaction[$i]['contact_way_name']; ?></td> 
+                                    <td><?php echo $satisfaction[$i]['contact_type_name']; ?></td> 
+                                    <td><?php echo $satisfaction[$i]['satisfaction_score']; ?></td> 
                                     <td> 
                                     <?php if($menu['satisfaction']['edit']==1){ ?> 
                                         <a href="?app=satisfaction&action=update&code=<?php echo $satisfaction[$i]['satisfaction_code'];?>">

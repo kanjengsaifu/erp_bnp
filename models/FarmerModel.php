@@ -21,6 +21,17 @@ class FarmerModel extends BaseModel{
             $result->close();
             return $row['lastcode'];
         }
+    }  
+    
+    function getFarmerByUserCode($user_code){
+        $sql = "SELECT tb_farmer.farmer_code AS code,  CONCAT(farmer_prefix,' ',farmer_name,' ',farmer_lastname) as name 
+        FROM tb_farmer   
+        INNER JOIN tb_zone_list ON tb_farmer.district_id = tb_zone_list.district_id 
+        INNER JOIN tb_zone_call_center ON tb_zone_list.zone_code = tb_zone_call_center.zone_code 
+        WHERE tb_zone_call_center.user_code = '$user_code' 
+        ORDER BY CONCAT(tb_farmer.farmer_name,' ',tb_farmer.farmer_lastname) 
+        ";
+        // echo $sql;
     }
 
     function getFarmerBy($name = '', $mobile  = ''){

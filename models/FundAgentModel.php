@@ -46,6 +46,26 @@ class FundAgentModel extends BaseModel{
             return $data;
         }
     }
+    
+    function getFundAgentByUserCode($user_code){
+        $sql = "SELECT tb_fund_agent.fund_agent_code AS code,  CONCAT(fund_agent_prefix,' ',fund_agent_name,' ',fund_agent_lastname) as name 
+        FROM tb_fund_agent  
+        INNER JOIN tb_zone_list_fund_agent ON tb_fund_agent.fund_agent_code = tb_zone_list_fund_agent.fund_agent_code 
+        INNER JOIN tb_zone_list ON tb_zone_list_fund_agent.zone_list_code = tb_zone_list.zone_list_code 
+        INNER JOIN tb_zone_call_center ON tb_zone_list.zone_code = tb_zone_call_center.zone_code 
+        WHERE tb_zone_call_center.user_code = '$user_code' 
+        ORDER BY CONCAT(tb_fund_agent.fund_agent_name,' ',tb_fund_agent.fund_agent_lastname) 
+        ";
+        // echo $sql;
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
 
     function getFundAgentByCode($code){
         $sql = " SELECT * 
