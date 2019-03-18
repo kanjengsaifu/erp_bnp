@@ -37,23 +37,14 @@
                 </tr>
                 <tr>
                     <td>ที่อยู่ / Address</td>
-                    <td><?php echo $agent['agent_address']?></td>
-                </tr>
-                <tr>
-                    <td>จังหวัด / Province</td>
-                    <td><?php echo $agent['PROVINCE_NAME']?></td>
-                </tr>
-                <tr>
-                    <td>อำเภอ / Amphur</td>
-                    <td><?php echo $agent['AMPHUR_NAME']?></td>
-                </tr>
-                <tr>
-                    <td>ตำบล / Distict</td>
-                    <td><?php echo $agent['DISTRICT_NAME']?></td>
-                </tr>
-                <tr>
-                    <td>เลขไปรษณีย์ / Zipcode</td>
-                    <td><?php echo $agent['agent_zipcode']?></td>
+                    <td>
+                        <?php echo $agent['agent_address']?>
+                        <?php echo $agent['VILLAGE_NAME']?>
+                        ตำบล<?php echo $agent['AMPHUR_NAME']?>
+                        อำเภอ<?php echo $agent['AMPHUR_NAME']?>
+                        จังหวัด<?php echo $agent['PROVINCE_NAME']?>
+                        <?php echo $agent['POSTCODE']?>
+                    </td>
                 </tr>
             </tbody>
         </table>

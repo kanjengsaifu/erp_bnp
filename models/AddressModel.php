@@ -182,7 +182,7 @@ class AddressModel extends BaseModel{
         $sql = "SELECT * 
         FROM tb_village 
         WHERE DISTRICT_ID = '$id'
-        ORDER BY VILLAGE_NO DESC,VILLAGE_NAME";
+        ORDER BY VILLAGE_NO,VILLAGE_NAME";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -197,6 +197,7 @@ class AddressModel extends BaseModel{
     function getVillageByID($id){
         $sql = "SELECT * 
         FROM tb_village 
+        LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID
         WHERE VILLAGE_ID = '$id'
         ";
 
@@ -235,8 +236,6 @@ class AddressModel extends BaseModel{
         VILLAGE_CODE = '".$data['VILLAGE_CODE']."',
         VILLAGE_NO = '".$data['VILLAGE_NO']."', 
         DISTRICT_ID = '".$data['DISTRICT_ID']."', 
-        AMPHUR_ID = '".$data['AMPHUR_ID']."', 
-        PROVINCE_ID = '".$data['PROVINCE_ID']."', 
         VILLAGE_NAME = '".$data['VILLAGE_NAME']."'
         WHERE VILLAGE_ID = '$id'
         ";
@@ -257,15 +256,11 @@ class AddressModel extends BaseModel{
             VILLAGE_CODE,
             VILLAGE_NO, 
             DISTRICT_ID,
-            AMPHUR_ID,
-            PROVINCE_ID,
             VILLAGE_NAME
             )  VALUES ('".  
             $data['VILLAGE_CODE']."','".
             $data['VILLAGE_NO']."','".
             $data['DISTRICT_ID']."','".
-            $data['AMPHUR_ID']."','".
-            $data['PROVINCE_ID']."','".
             $data['VILLAGE_NAME']."'
         )";
 

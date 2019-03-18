@@ -386,4 +386,13 @@
             $("#agent_zipcode").val(data);
         });
     }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
+        });
+    }
 </script>

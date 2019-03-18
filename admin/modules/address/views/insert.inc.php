@@ -1,45 +1,31 @@
 <script>
-    function check_code(){
-        var code = document.getElementById("address_code").value;
-
-        code = $.trim(code);
-
-        if(code.length == 0){
-            $('#alert_code').html('Example : ZONE0001.');
-            $('#alert_code').removeClass('alert-danger');
-            $('#alert_code').removeClass('alert-success');
-        }else{
-            $.post("modules/address/controllers/getZoneByCode.php", { address_code: code })
-                .done(function(data) {
-                    if(data != null){ 
-                        document.getElementById("address_code").focus();
-                        $('#alert_code').html('This code : '+code+' is already in the system.');
-                        $('#alert_code').addClass('alert-danger');
-                        $('#alert_code').removeClass('alert-success');
-                    }else{
-                        $('#alert_code').html('This code : '+code+' can be used.');
-                        $('#alert_code').removeClass('alert-danger');
-                        $('#alert_code').addClass('alert-success');
-                    }
-            });
-        }
-    }
-
     function check(){
-        var code = document.getElementById("address_code").value;
-        var address_name = document.getElementById("address_name").value;
-        var address_description = document.getElementById("address_description").value;
+        var village_code = document.getElementById("village_code").value;
+        var village_no = document.getElementById("village_no").value;
+        var village_name = document.getElementById("village_name").value;
+        var province_id = document.getElementById("province_id").value;
+        var amphur_id = document.getElementById("amphur_id").value;
+        var district_id = document.getElementById("district_id").value;
 
-        code = $.trim(code);
-        address_name = $.trim(address_name);
-        address_description = $.trim(address_description);
+        village_code = $.trim(village_code);
+        village_no = $.trim(village_no);
+        village_name = $.trim(village_name);
 
-        if(address_name.length == 0){
-            alert('Please input address name');
-            document.getElementById("address_name").focus();
+        if(village_name.length == 0){
+            alert('Please input village name');
+            document.getElementById("village_name").focus();
             return false;
-        }else if(code.length != 0 && $('#alert_code').hasClass('alert-danger')){
-            alert('This code : '+code+' is already in the system.');
+        }else if(province_id.length == 0){
+            alert('Please input district');
+            document.getElementById("province_id").focus();
+            return false;
+        }else if(amphur_id.length == 0){
+            alert('Please input district');
+            document.getElementById("amphur_id").focus();
+            return false;
+        }else if(district_id.length == 0){
+            alert('Please input district');
+            document.getElementById("district_id").focus();
             return false;
         }else{ 
             return true;
@@ -89,7 +75,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <span>จังหวัด : <font color="#F00"><b>*</b></font></span>
-                        <select id="province" name="province" data-live-search="true" class="form-control select" onchange="getAmphur()">
+                        <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
                             for($i=0; $i<count($province); $i++){
@@ -104,7 +90,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <span>อำเภอ : <font color="#F00"><b>*</b></font></span>
-                        <select id="amphur" name="amphur" data-live-search="true"  class="form-control select" onchange="getDistrict()">
+                        <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
                             <?php 
                             for($i=0; $i<count($amphur); $i++){
@@ -119,7 +105,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <span>ตำบล : <font color="#F00"><b>*</b></font></span>
-                        <select id="district" name="district" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                             <?php 
                             for($i=0 ;$i<count($district); $i++){
@@ -135,7 +121,7 @@
 
             <div class="row">
                 <div class="col-lg-offset-9 col-lg-3" align="right">
-                    <a href="?app=address" class="btn btn-default">Back</a>
+                    <a href="?app=address&action=district&district=<?php echo $district_id; ?>" class="btn btn-default">Back</a>
                     <button type="reset" class="btn btn-primary">Reset</button>
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
@@ -146,24 +132,24 @@
 
 <script>
     function getAmphur(){
-        var province = document.getElementById("province").value;
+        var province = document.getElementById("province_id").value;
 
         $.post("controllers/getAmphur.php", { province: province }, function( data ) {
-            $("#amphur").html(data);
-            $("#amphur").selectpicker('refresh');
+            $("#amphur_id").html(data);
+            $("#amphur_id").selectpicker('refresh');
         });
 
-        document.getElementById("amphur").value = "";
+        document.getElementById("amphur_id").value = "";
 
         getDistrict();
     }
 
     function getDistrict(){
-        var amphur = document.getElementById("amphur").value;
+        var amphur = document.getElementById("amphur_id").value;
 
         $.post("controllers/getDistrict.php", { amphur: amphur }, function( data ) {
-            $("#district").html(data);
-            $("#district").selectpicker('refresh');
+            $("#district_id").html(data);
+            $("#district_id").selectpicker('refresh');
         });
     }
 </script>

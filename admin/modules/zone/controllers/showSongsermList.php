@@ -22,8 +22,10 @@ $songserm = $songserm_model->getSongsermNotInZone($_POST['zone_code']);
             for($i=0; $i < count($songserm); $i++){
             ?>
             <tr class="odd gradeX">
-                <?php if ($songserm[$i]['songserm_position_code'] == 'STP002'){ ?>
+                <?php if ($songserm[$i]['songserm_position_code'] == 'STP003'){ ?>
                 <td style="text-align:center;"><input type="radio" name="manager" value="<?php echo $songserm[$i]['songserm_code']; ?>"></td>
+                <?php }else if ($songserm[$i]['songserm_position_code'] == 'STP002'){ ?>
+                <td style="text-align:center;"><input type="radio" name="assis_director" value="<?php echo $songserm[$i]['songserm_code']; ?>"></td>
                 <?php }else{ ?>
                 <td style="text-align:center;"><input type="checkbox" name="ckb_songserm[]" data-type="songserm" value="<?php echo $songserm[$i]['songserm_code']; ?>" onclick="ckbChecked(this)"></td>
                 <?php }?>

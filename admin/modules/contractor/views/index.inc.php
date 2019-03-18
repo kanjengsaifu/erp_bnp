@@ -1,12 +1,14 @@
 <?php
 require_once('../models/ContractorModel.php');
 require_once('../models/StatusModel.php');
+require_once('../models/ZoneContractorModel.php');
 require_once('../models/AddressModel.php');
 
 $path = "modules/contractor/views/";
 
 $contractor_model = new ContractorModel;
 $status_model = new StatusModel; 
+$zone_contractor_model = new ZoneContractorModel;
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -55,6 +57,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         }
     }
 
+    $result = $zone_contractor_model->deleteZoneContractorByContractor($contractor_code);
     $result = $contractor_model->deleteContractorByCode($contractor_code);
 
     ?> <script> window.location="index.php?app=contractor"</script> <?php

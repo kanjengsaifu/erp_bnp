@@ -42,11 +42,6 @@
         contractor_lastname = $.trim(contractor_lastname);
         contractor_mobile = $.trim(contractor_mobile);
         contractor_address = $.trim(contractor_address);
-        province_id = $.trim(province_id);
-        amphur_id = $.trim(amphur_id);
-        district_id = $.trim(district_id);
-        village_id = $.trim(village_id);
-        status_code = $.trim(status_code); 
 
         if(contractor_prefix.length == 0){
             alert("Please input prefix");

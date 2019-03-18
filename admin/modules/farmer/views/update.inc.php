@@ -168,7 +168,7 @@
                             <?php 
                             for($i =  0 ; $i < count($amphur) ; $i++){
                             ?>
-                            <option <?php if($farmer['DISTRICT_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($farmer['AMPHUR_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -180,7 +180,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                             <?php 
                             for($i =  0 ; $i < count($district) ; $i++){
@@ -214,7 +214,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="farmer_zipcode" name="farmer_zipcode" type="text" class="form-control" value="<?php echo $farmer['farmer_zipcode']?>" autocomplete="off" readonly>
+                        <input id="farmer_zipcode" name="farmer_zipcode" type="text" class="form-control" value="<?php echo $farmer['POSTCODE']?>" autocomplete="off" readonly>
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
@@ -268,6 +268,15 @@
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
             $("#farmer_zipcode").val(data);
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
         });
     }
 </script>
