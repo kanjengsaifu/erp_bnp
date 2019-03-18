@@ -40,62 +40,106 @@
         เเก้ไขพื้นที่ / Add Zone
     </div>
     <div class="panel-body">
-        <form role="form" method="post" onsubmit="return check();" action="index.php?app=zone&action=update-list" enctype="multipart/form-data">
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=zone&action=edit-list" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-md-8 col-lg-6">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
-                        <label>ชื่อหมู่บ้าน : <font color="#F00"><b>*</b></font></label>
-                        <input id="village_name" name="village_name" class="form-control" autocomplete="off" value="<? echo $zone_list['village_name']; ?>">
-                        <p class="help-block">Example : บ้านส้ม.</p>
+                        <label>จังหวัด : <font color="#F00"><b>*</b></font></label>
+                        <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i=0; $i<count($province); $i++){
+                            ?>
+                            <option <?php if($zone_list['PROVINCE_ID'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : นครราชสีมา.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>อำเภอ : <font color="#F00"><b>*</b></font></label>
+                        <select id="amphur_id" name="amphur_id" data-live-search="true" class="form-control select" onchange="getDistrict()">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i=0; $i<count($amphur); $i++){
+                            ?>
+                            <option <?php if($zone_list['AMPHUR_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ตำบล : <font color="#F00"><b>*</b></font></label>
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i=0 ;$i<count($district); $i++){
+                            ?>
+                            <option <?php if($zone_list['DISTRICT_ID'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>หมู่บ้าน : Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i=0 ;$i<count($village); $i++){
+                            ?>
+                            <option <?php if($zone_list['VILLAGE_ID'] == $village[$i]['VILLAGE_ID'] ){?> selected <?php } ?> value="<?php echo $village[$i]['VILLAGE_ID'] ?>"><?php echo $village[$i]['VILLAGE_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
                     </div>
                 </div>
             </div>
+
             <div class="row"> 
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
-                        <span>จังหวัด : <font color="#F00"><b>*</b></font></span>
-                        <select id="province" name="province" data-live-search="true" class="form-control select" onchange="getAmphur()">
-                            <option value="">select</option>
+                        <label>นายหน้า : </label>
+                        <select id="agent_code" name="agent_code" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($province) ; $i++){
+                            for($i= 0; $i<count($agent); $i++){
                             ?>
-                            <option <?php if($zone_list['province_id'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($zone_list['agent_code'] == $agent[$i]['agent_code'] ){?> selected <?php } ?> value="<?php echo $agent[$i]['agent_code']?>"><?php echo $agent[$i]['name']?></option>
                             <?
                             }
                             ?>
                         </select>
+                        <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
-
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
-                        <span>อำเภอ : <font color="#F00"><b>*</b></font></span>
-                        <select id="amphur" name="amphur" data-live-search="true"  class="form-control select" onchange="getDistrict()">
-                            <option value="">select</option>
+                        <label>ตัวเเทนกองทุนหมู่บ้าน : </label>
+                        <select id="fund_agent_code" name="fund_agent_code" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($amphur) ; $i++){
+                            for($i=0; $i<count($fund_agent); $i++){
                             ?>
-                            <option <?php if($zone_list['amphur_id'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($zone_list['fund_agent_code'] == $fund_agent[$i]['fund_agent_code'] ){?> selected <?php } ?> value="<?php echo $fund_agent[$i]['fund_agent_code']?>"><?php echo $fund_agent[$i]['name']?></option>
                             <?
                             }
                             ?>
                         </select>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4">
-                    <div class="form-group">
-                        <span>ตำบล : <font color="#F00"><b>*</b></font></span>
-                        <select id="district" name="district" data-live-search="true" class="form-control select">
-                            <option value="">select</option>
-                            <?php 
-                            for($i =  0 ; $i < count($district) ; $i++){
-                            ?>
-                            <option <?php if($zone_list['district_id'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
+                        <p class="help-block">Example : วินัย.</p>
                     </div>
                 </div>
             </div>
@@ -115,24 +159,43 @@
 </div>
 <script>
     function getAmphur(){
-        var province = document.getElementById("province").value;
+        var province = document.getElementById("province_id").value;
 
-        $.post("controllers/getAmphur.php", { 'province': province }, function( data ) {
-            $("#amphur").html(data);
-            $("#amphur").selectpicker('refresh');
+        $.post("controllers/getAmphur.php", { province: province }, function( data ) {
+            $("#amphur_id").html(data);
+            $("#amphur_id").selectpicker('refresh');
         });
 
-        document.getElementById("amphur").value = "";
+        document.getElementById("amphur_id").value = "";
 
         getDistrict();
     }
 
     function getDistrict(){
-        var amphur = document.getElementById("amphur").value;
+        var amphur = document.getElementById("amphur_id").value;
 
-        $.post("controllers/getDistrict.php", { 'amphur': amphur }, function( data ) {
-            $("#district").html(data);
-            $("#district").selectpicker('refresh');
+        $.post("controllers/getDistrict.php", { amphur: amphur }, function( data ) {
+            $("#district_id").html(data);
+            $("#district_id").selectpicker('refresh');
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
+        });
+
+        $.post("modules/zone/controllers/getAgentByDistrict.php", { district: district }, function( data ) {
+            $("#agent_code").html(data);
+            $("#agent_code").selectpicker('refresh');
+        });
+
+        $.post("modules/zone/controllers/getFundAgentByDistrict.php", { district: district }, function( data ) {
+            $("#fund_agent_code").html(data);
+            $("#fund_agent_code").selectpicker('refresh');
         });
     }
 </script>

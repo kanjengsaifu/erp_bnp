@@ -63,14 +63,14 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>รหัสเขตการขาย : </label>
-                        <input id="zone_code" name="zone_code" class="form-control" autocomplete="off" onchange="check_code();">
+                        <input id="zone_code" name="zone_code" class="form-control" autocomplete="off" onchange="check_code();" maxlength="50">
                         <p id="alert_code" class="help-block">Example : ZONE0001.</p>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อเขตการขาย : <font color="#F00"><b>*</b></font></label>
-                        <input id="zone_name" name="zone_name" class="form-control" autocomplete="off">
+                        <input id="zone_name" name="zone_name" class="form-control" autocomplete="off" maxlength="150">
                         <p class="help-block">Example : โคราช-ในเมือง.</p>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                 <div class="col-lg-8">
                     <div class="form-group">
                         <label>รายละเอียด : </label>
-                        <input id="zone_description" name="zone_description" class="form-control" autocomplete="off">
+                        <input id="zone_description" name="zone_description" class="form-control" autocomplete="off" maxlength="200"
                         <p class="help-block">Example : รายละเอียด.</p>
                     </div>
                 </div>

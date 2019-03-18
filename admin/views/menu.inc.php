@@ -139,6 +139,11 @@ for($i = 0 ; $i < count($menu_list); $i++){
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
                 </li>
                 <?php } ?>
+                <?php if ($menu['farmer']['view']){ ?>
+                <li>
+                    <a href="?app=farmer" <?PHP if($_GET['app'] == "farmer"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> เกษตรกร</a>
+                </li>
+                <?php } ?>
                 <?php if ($menu['agent']['view']){ ?>
                 <li>
                     <a href="?app=agent" <?PHP if($_GET['app'] == "agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> นายหน้า</a>
@@ -146,7 +151,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <?php } ?>
                 <?php if ($menu['fund_agent']['view']){ ?>
                 <li>
-                    <a href="?app=fund_agent" <?PHP if($_GET['app'] == "fund_agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ตัวเเทนกองทุน</a>
+                    <a href="?app=fund_agent" <?PHP if($_GET['app'] == "fund_agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ตัวเเทนจำหน่าย</a>
                 </li>
                 <?php } ?>
                 <?php if ($menu['contractor']['view']){ ?>
@@ -210,6 +215,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         || $_GET["app"]=='product_type'
                         || $_GET["app"]=='product_brand'
                         || $_GET["app"]=='project'
+                        || $_GET["app"]=='address'
                     ){
                         echo ' class="active" ';
                     }
@@ -255,6 +261,11 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <?PHP if($menu['supplier']['view']==1){ ?>
                         <li>
                             <a href="?app=supplier" <?PHP if($_GET['app'] == "supplier"){?> class="active" <?PHP } ?> ><i class="fa fa-building-o" aria-hidden="true"></i> ผู้ขาย (Supplier)</a>
+                        </li> 
+                        <?PHP }?> 
+                        <?PHP if($menu['address']['view']==1){ ?>
+                        <li>
+                            <a href="?app=address" <?PHP if($_GET['app'] == "address"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ข้อมูลพื้นที่ (Area)</a>
                         </li> 
                         <?PHP }?> 
                     </ul>

@@ -31,14 +31,15 @@ $contractor_code = $_GET['code'];
 
 if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){ 
     $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();  
+    $province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['contractor']['edit']){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
     $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($contractor['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($contractor['AMPHUR_ID']); 
+    $village = $address_model->getVillageByDistrictID($contractor['DISTRICT_ID']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['contractor']['delete']){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
@@ -59,7 +60,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     ?> <script> window.location="index.php?app=contractor"</script> <?php
 }else if ($_GET['action'] == 'add'&&$menu['contractor']['add']){
     if ($_POST['contractor_code'] == ''){
-        $contractor_code = "CT".date('y').date('m').date('d');
+        $contractor_code = "CT".$_POST['district_id'];
         $contractor_code = $contractor_model->getContractorLastCode($contractor_code,4);  
     }else{
         $contractor_code = $_POST['contractor_code'];
@@ -68,16 +69,15 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     if($contractor_code != '' && isset($_POST['contractor_prefix'])){
         $check = true;
         $data['contractor_code'] = $contractor_code;
+        $data['status_code'] = $_POST['status_code']; 
         $data['contractor_prefix'] = $_POST['contractor_prefix'];  
         $data['contractor_name'] = $_POST['contractor_name'];
         $data['contractor_lastname'] = $_POST['contractor_lastname'];
-        $data['contractor_mobile'] = $_POST['contractor_mobile'];
         $data['contractor_address'] = $_POST['contractor_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
-        $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
-        $data['status_code'] = $_POST['status_code']; 
+        $data['village_id'] = $_POST['village_id'];
+        $data['contractor_mobile'] = $_POST['contractor_mobile'];
+        $data['contractor_line'] = $_POST['contractor_line'];
+        $data['addby'] = $login_user['user_code'];
 
         $img_upload = ['profile_image','id_card_image','house_regis_image','account_image'];
 
@@ -139,17 +139,15 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     if(isset($_POST['contractor_code'])){
         $check = true;
         $data = [];  
-        $data['contractor_code'] = $_POST['contractor_code'];
         $data['status_code'] = $_POST['status_code']; 
         $data['contractor_prefix'] = $_POST['contractor_prefix'];
         $data['contractor_name'] = $_POST['contractor_name'];
         $data['contractor_lastname'] = $_POST['contractor_lastname'];
-        $data['contractor_mobile'] = $_POST['contractor_mobile'];
         $data['contractor_address'] = $_POST['contractor_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
-        $data['contractor_zipcode'] = $_POST['contractor_zipcode'];
+        $data['village_id'] = $_POST['village_id'];
+        $data['contractor_mobile'] = $_POST['contractor_mobile'];
+        $data['contractor_line'] = $_POST['contractor_line'];
+        $data['updateby'] = $login_user['user_code'];
 
         $img_upload = ['profile_image','id_card_image','house_regis_image','account_image'];
 
@@ -222,10 +220,6 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     ?> <script> window.location="index.php?app=contractor" </script> <?php
 }else if ($_GET['action'] == 'detail'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
-    $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($contractor['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($contractor['amphur_id']); 
     require_once($path.'detail.inc.php');
 }else if ($_GET['status'] == 'pending'){
     $on_pending = $contractor_model->countContractorByStatus('00');

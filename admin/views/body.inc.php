@@ -36,6 +36,8 @@
         require_once("modules/contact_way/views/index.inc.php");   
     }else if($_GET['app'] == "contact_type"){
         require_once("modules/contact_type/views/index.inc.php");   
+    }else if($_GET['app'] == "address" && $menu['address']['view']){
+        require_once("modules/address/views/index.inc.php");   
     }
     /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
 
@@ -46,7 +48,10 @@
     /* ----------------------------------- //ระบบจัดการเขต// ---------------------------------------------- */
 
     /* ----------------------------------- ระบบจัดการตัวเเทน ผู้รับเหมา --------------------------------- */
-    else if($_GET['app'] == "agent" && $menu['agent']['view']){
+
+    else if($_GET['app'] == "farmer" && $menu['farmer']['view']){
+        require_once("modules/farmer/views/index.inc.php");   
+    }else if($_GET['app'] == "agent" && $menu['agent']['view']){
         require_once("modules/agent/views/index.inc.php");   
     }else if($_GET['app'] == "fund_agent" && $menu['fund_agent']['view']){
         require_once("modules/fund_agent/views/index.inc.php");   

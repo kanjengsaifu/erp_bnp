@@ -84,7 +84,7 @@
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var agent_zipcode = document.getElementById("agent_zipcode").value;
+        var village_id = document.getElementById("village_id").value;
         var agent_mobile = document.getElementById("agent_mobile").value;
 
         status_code = $.trim(status_code); 
@@ -92,42 +92,42 @@
         agent_name = $.trim(agent_name);
         agent_lastname = $.trim(agent_lastname);
         agent_address = $.trim(agent_address);
-        province_id = $.trim(province_id);
-        amphur_id = $.trim(amphur_id);
-        district_id = $.trim(district_id);
-        agent_zipcode = $.trim(agent_zipcode);
         agent_mobile = $.trim(agent_mobile);
 
         if(agent_prefix.length == 0){
-            alert("Please input agent prefix");
+            alert("Please input prefix");
             document.getElementById("agent_prefix").focus();
             return false;
         }else if(agent_name.length == 0){
-            alert("Please input agent name");
+            alert("Please input name");
             document.getElementById("agent_name").focus();
             return false;
         }else if(agent_lastname.length == 0){
-            alert("Please input agent lastname");
+            alert("Please input lastname");
             document.getElementById("agent_lastname").focus();
             return false;
         }else if(agent_address.length == 0){
-            alert("Please input agent address");
+            alert("Please input address");
             document.getElementById("agent_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input agent provice");
+            alert("Please input provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input agent amphur");
+            alert("Please input amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input agent district");
+            alert("Please input district");
             document.getElementById("district_id").focus();
             return false;
+        }else if(village_id.length == 0){
+            alert("Please input village");
+            document.getElementById("village_id").focus();
+            return false;
         }else if(status_code.length == 0){
-            alert("Please input agent status");
+            alert("Please input status");
             document.getElementById("status_code").focus();
             return false; 
         }else if($('#alert_code').hasClass('alert-danger')){
@@ -182,21 +182,21 @@
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=agent&action=add" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-8 col-lg-3">
                     <div class="form-group">
                         <label>รหัสประจำตัว / code </label>
                         <input id="agent_code" name="agent_code" class="form-control" autocomplete="off" onchange="check_code();">
                         <p id="alert_code" class="help-block">Example : AG0001.</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อบัญชีผู้ใช้ / user name <font color="#F00"><b>*</b></font></label>
                         <input required id="agent_username" name="agent_username" class="form-control" autocomplete="off" onchange="check_username();">
                         <p id="alert_username" class="help-block">Example : AG0001.</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>รหัสผ่าน / password <font color="#F00"><b>* (6-15)</b></font></label>
                         <input required id="agent_password" name="agent_password" class="form-control" autocomplete="off" onchange="check_password();">
@@ -205,35 +205,6 @@
                 </div>
             </div>
             <div class="row"> 
-                <div class="col-md-4 col-lg-3">
-                    <div class="form-group">
-                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="agent_prefix" name="agent_prefix" class="form-control select">
-                            <option value="">Select</option>
-                            <option value="นาย">นาย</option>
-                            <option value="นาง">นาง</option>
-                            <option value="นางสาว">นางสาว</option>
-                        </select>
-                        <p class="help-block">Example : นาย.</p>
-                    </div>
-                </div> 
-                <div class="col-md-8 col-lg-3">
-                    <div class="form-group">
-                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="agent_name" name="agent_name" class="form-control" autocomplete="off">
-                        <p class="help-block">Example : วินัย.</p>
-                    </div>
-                </div>
-                <div class="col-md-8 col-lg-3">
-                    <div class="form-group">
-                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="agent_lastname" name="agent_lastname" class="form-control" autocomplete="off">
-                        <p class="help-block">Example : ชาญชัย.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
@@ -252,12 +223,47 @@
                 </div>
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
+                        <select id="agent_prefix" name="agent_prefix" class="form-control select">
+                            <option value="">Select</option>
+                            <option value="นาย">นาย</option>
+                            <option value="นาง">นาง</option>
+                            <option value="นางสาว">นางสาว</option>
+                        </select>
+                        <p class="help-block">Example : นาย.</p>
+                    </div>
+                </div> 
+                <div class="col-sm-8 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
+                        <input id="agent_name" name="agent_name" class="form-control" autocomplete="off">
+                        <p class="help-block">Example : วินัย.</p>
+                    </div>
+                </div>
+                <div class="col-sm-8 col-lg-3">
+                    <div class="form-group">
+                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
+                        <input id="agent_lastname" name="agent_lastname" class="form-control" autocomplete="off">
+                        <p class="help-block">Example : ชาญชัย.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
                         <input id="agent_mobile" name="agent_mobile" type="text" class="form-control" autocomplete="off">
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ไลน์ไอดี / LINE ID </label>
+                        <input id="agent_line" name="agent_line" type="text" class="form-control" autocomplete="off">
+                        <p class="help-block">Example : Line_ID.</p>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
@@ -274,9 +280,9 @@
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_province) ; $i++){
+                            for($i =  0 ; $i < count($province) ; $i++){
                             ?>
-                            <option value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                            <option value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -298,10 +304,20 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                         </select>
                         <p class="help-block">Example : ในเมือง.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>หมู่บ้าน / Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
                     </div>
                 </div>
 
@@ -366,6 +382,15 @@
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
             $("#agent_zipcode").val(data);
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
         });
     }
 </script>

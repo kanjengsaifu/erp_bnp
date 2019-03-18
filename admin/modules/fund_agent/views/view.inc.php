@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">จัดการตัวเเทนกองทุน / Fund Agent Management</h1>
+        <h1 class="page-header">จัดการตัวเเทนจำหน่าย / Fund Agent Management</h1>
 
         <div style="margin-bottom: 10px;">
-            <a href="?app=fund_agent" class="btn btn-primary <?php if ($_GET['status'] != 'pending' && $_GET['status'] != 'cease' ) echo 'active'; ?>">ตัวเเทนกองทุน / Fund Agent List</a>
+            <a href="?app=fund_agent" class="btn btn-primary <?php if ($_GET['status'] != 'pending' && $_GET['status'] != 'cease' ) echo 'active'; ?>">ตัวเเทนจำหน่าย / Fund Agent List</a>
             <a href="?app=fund_agent&status=pending" class="btn btn-primary <?php if ($_GET['status'] == 'pending') echo 'active'; ?>">
                 รออนุมัติ / Pending <?php if($on_pending) { ?><span class="badge badge-danger" style="display: unset;font-weight: 400;"><? echo $on_pending; ?></span><? } ?>
             </a> 
@@ -18,7 +18,7 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-md-8">
-                รายชื่อตัวเเทนกองทุน / Fund Agent List
+                รายชื่อตัวเเทนจำหน่าย / Fund Agent List
             </div>
             <div class="col-md-4">
                 <?php if($menu['fund_agent']['add']){?> 
@@ -36,6 +36,7 @@
                     <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>
+                    <th style="text-align:center;">ไลน์ไอดี <br>LINE ID</th>
                     <th style="text-align:center;">จังหวัด <br>Province</th>
                     <th style="text-align:center;">อำเภอ <br>Amphur</th>
                     <th style="text-align:center;">ตำบล <br>Distict</th>
@@ -51,6 +52,7 @@
                     <td><?php echo $fund_agent[$i]['fund_agent_code']; ?></td>
                     <td><?php echo $fund_agent[$i]['fund_agent_prefix'].$fund_agent[$i]['name']; ?></td>
                     <td style="text-align:center;"><?php echo $fund_agent[$i]['fund_agent_mobile']; ?></td>
+                    <td style="text-align:center;"><?php echo $fund_agent[$i]['fund_agent_line']; ?></td>
                     <td style="text-align:center;"><?php echo $fund_agent[$i]['PROVINCE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $fund_agent[$i]['AMPHUR_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $fund_agent[$i]['DISTRICT_NAME']; ?></td>

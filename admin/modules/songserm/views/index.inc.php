@@ -75,6 +75,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
         $data['songserm_mobile'] = $_POST['songserm_mobile'];
+        $data['songserm_line'] = $_POST['songserm_line'];
         $data['songserm_username'] = $_POST['songserm_username'];
         $data['songserm_password'] = $_POST['songserm_password'];
         $data['addby'] = $login_user['user_code'];
@@ -150,6 +151,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['district_id'] = $_POST['district_id'];
         $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
         $data['songserm_mobile'] = $_POST['songserm_mobile'];
+        $data['songserm_line'] = $_POST['songserm_line'];
         $data['songserm_username'] = $_POST['songserm_username'];
         $data['songserm_password'] = $_POST['songserm_password'];
         $data['updateby'] = $login_user['user_code'];

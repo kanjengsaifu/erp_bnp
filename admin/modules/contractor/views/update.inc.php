@@ -8,7 +8,7 @@
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
-        var contractor_zipcode = document.getElementById("contractor_zipcode").value;
+        var village_id = document.getElementById("village_id").value;
         var status_code = document.getElementById("status_code").value;  
 
         contractor_prefix = $.trim(contractor_prefix);
@@ -19,39 +19,43 @@
         province_id = $.trim(province_id);
         amphur_id = $.trim(amphur_id);
         district_id = $.trim(district_id);
-        contractor_zipcode = $.trim(contractor_zipcode);
+        village_id = $.trim(village_id);
         status_code = $.trim(status_code); 
 
         if(contractor_prefix.length == 0){
-            alert("Please input contractor prefix");
+            alert("Please input prefix");
             document.getElementById("contractor_prefix").focus();
             return false;
         }else if(contractor_name.length == 0){
-            alert("Please input contractor name");
+            alert("Please input name");
             document.getElementById("contractor_name").focus();
             return false;
         }else if(contractor_lastname.length == 0){
-            alert("Please input contractor lastname");
+            alert("Please input lastname");
             document.getElementById("contractor_lastname").focus();
             return false;
         }else if(contractor_address.length == 0){
-            alert("Please input contractor address");
+            alert("Please input address");
             document.getElementById("contractor_address").focus();
             return false;
         }else if(province_id.length == 0){
-            alert("Please input contractor provice");
+            alert("Please input provice");
             document.getElementById("province_id").focus();
             return false;
         }else if(amphur_id.length == 0){
-            alert("Please input contractor amphur");
+            alert("Please input amphur");
             document.getElementById("amphur_id").focus();
             return false;
         }else if(district_id.length == 0){
-            alert("Please input contractor district");
+            alert("Please input district");
             document.getElementById("district_id").focus();
             return false;
+        }else if(village_id.length == 0){
+            alert("Please input village");
+            document.getElementById("village_id").focus();
+            return false;
         }else if(status_code.length == 0){
-            alert("Please input contractor status");
+            alert("Please input status");
             document.getElementById("status_code").focus();
             return false; 
         }else{ 
@@ -121,46 +125,20 @@
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=contractor&action=edit" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-sm-6 col-lg-3">
+                <div class="col-sm-8 col-lg-3">
                     <div class="form-group">
                         <label>รหัสประจำตัว / code </label>
                         <input id="contractor_code" name="contractor_code" class="form-control" value="<?php echo $contractor['contractor_code']?>" autocomplete="off" readonly>
                         <p id="alert_code" class="help-block">Example : CT0001.</p>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                    <div class="form-group">
-                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="contractor_prefix" name="contractor_prefix" class="form-control">
-                            <option value="">Select</option>
-                            <option <?php if($contractor['contractor_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
-                            <option <?php if($contractor['contractor_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
-                            <option <?php if($contractor['contractor_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
-                        </select>
-                        <p class="help-block">Example : นาย.</p>
-                    </div>
-                </div> 
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_name" name="contractor_name" class="form-control" value="<?php echo $contractor['contractor_name']?>" autocomplete="off">
-                        <p class="help-block">Example : วินัย.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
-                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" value="<?php echo $contractor['contractor_lastname']?>" autocomplete="off">
-                        <p class="help-block">Example : ชาญชัย.</p>
-                    </div>
-                </div>
             </div>
 
-            <div class="row">
+            <div class="row"> 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="status_code" name="status_code">
+                        <select id="status_code" name="status_code" class="form-control select">
                             <option value="">Select</option>
                             <?php 
                             for($i =  0 ; $i < count($status) ; $i++){
@@ -173,7 +151,35 @@
                         <p class="help-block">Example : ทำงาน.</p>
                     </div>
                 </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
+                        <select id="contractor_prefix" name="contractor_prefix" class="form-control select">
+                            <option value="">Select</option>
+                            <option <?php if($contractor['contractor_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
+                            <option <?php if($contractor['contractor_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
+                            <option <?php if($contractor['contractor_prefix'] == 'นางสาว'){?> selected <?php } ?> >นางสาว</option>
+                        </select>
+                        <p class="help-block">Example : นาย.</p>
+                    </div>
+                </div> 
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อ / Name <font color="#F00"><b>*</b></font></label>
+                        <input id="contractor_name" name="contractor_name" class="form-control" value="<?php echo $contractor['contractor_name']?>" autocomplete="off">
+                        <p class="help-block">Example : วินัย.</p>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-3">
+                    <div class="form-group">
+                        <label>นามสกุล / Lastname <font color="#F00"><b>*</b></font></label>
+                        <input id="contractor_lastname" name="contractor_lastname" class="form-control" value="<?php echo $contractor['contractor_lastname']?>" autocomplete="off">
+                        <p class="help-block">Example : ชาญชัย.</p>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
@@ -181,7 +187,13 @@
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ไลน์ไอดี / LINE ID </label>
+                        <input id="contractor_line" name="contractor_line" type="text" class="form-control" value="<?php echo $contractor['contractor_line']?>" autocomplete="off">
+                        <p class="help-block">Example : Line_ID.</p>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
@@ -198,9 +210,9 @@
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_province) ; $i++){
+                            for($i =  0 ; $i < count($province) ; $i++){
                             ?>
-                            <option <?php if($contractor['province_id'] == $add_province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($contractor['PROVINCE_ID'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -215,9 +227,9 @@
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_amphur) ; $i++){
+                            for($i =  0 ; $i < count($amphur) ; $i++){
                             ?>
-                            <option <?php if($contractor['amphur_id'] == $add_amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_ID'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($contractor['AMPHUR_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -229,12 +241,12 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_district) ; $i++){
+                            for($i =  0 ; $i < count($district) ; $i++){
                             ?>
-                            <option <?php if($contractor['district_id'] == $add_district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_ID'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
+                            <option <?php if($contractor['DISTRICT_ID'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID'] ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -245,8 +257,25 @@
 
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
+                        <label>หมู่บ้าน / Village <font color="#F00"><b>*</b></font> </label>
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
+                            <option value="">Select</option>
+                            <?php 
+                            for($i =  0 ; $i < count($village) ; $i++){
+                            ?>
+                            <option <?php if($contractor['village_id'] == $village[$i]['VILLAGE_ID'] ){?> selected <?php } ?> value="<?php echo $village[$i]['VILLAGE_ID'] ?>"><?php echo $village[$i]['VILLAGE_NAME'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : บ้าน.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" value="<?php echo $contractor['contractor_zipcode']?>"  autocomplete="off">
+                        <input id="contractor_zipcode" name="contractor_zipcode" type="text" readonly class="form-control" value="<?php echo $contractor['POSTCODE']?>" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>
@@ -325,6 +354,15 @@
 
         $.post("controllers/getZipcode.php", { 'amphur': amphur }, function( data ) {
             $("#contractor_zipcode").val(data);
+        });
+    }
+
+    function getVillage(){
+        var district = document.getElementById("district_id").value;
+
+        $.post("controllers/getVillage.php", { district: district }, function( data ) {
+            $("#village_id").html(data);
+            $("#village_id").selectpicker('refresh');
         });
     }
 </script>

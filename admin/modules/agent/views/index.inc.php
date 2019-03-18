@@ -28,9 +28,10 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
 }else if ($_GET['action'] == 'update'&&$menu['agent']['edit']){
     $agent = $agent_model->getAgentByCode($agent_code);
     $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($agent['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($agent['amphur_id']); 
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($agent['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($agent['AMPHUR_ID']); 
+    $village = $address_model->getVillageByDistrictID($agent['DISTRICT_ID']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['agent']['delete']){
     $agent = $agent_model->getAgentByCode($agent_code);
@@ -52,7 +53,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
 }else if ($_GET['action'] == 'add'&&$menu['agent']['add']){
 
     if ($_POST['agent_code'] == ''){
-        $agent_code = "AG".$_POST['province_id'].$_POST['district_id'];
+        $agent_code = "AG".$_POST['village_id'];
         $agent_code = $agent_model->getAgentLastCode($agent_code,4);  
     }else{
         $agent_code = $_POST['agent_code'];
@@ -66,11 +67,9 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         $data['agent_name'] = $_POST['agent_name'];
         $data['agent_lastname'] = $_POST['agent_lastname'];
         $data['agent_address'] = $_POST['agent_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
-        $data['agent_zipcode'] = $_POST['agent_zipcode'];
+        $data['village_id'] = $_POST['village_id'];
         $data['agent_mobile'] = $_POST['agent_mobile'];
+        $data['agent_line'] = $_POST['agent_line'];
         $data['agent_username'] = $_POST['agent_username'];
         $data['agent_password'] = $_POST['agent_password'];
         $data['addby'] = $login_user['user_code'];
@@ -136,11 +135,9 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         $data['agent_name'] = $_POST['agent_name'];
         $data['agent_lastname'] = $_POST['agent_lastname'];
         $data['agent_address'] = $_POST['agent_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
-        $data['district_id'] = $_POST['district_id'];
-        $data['agent_zipcode'] = $_POST['agent_zipcode'];
+        $data['village_id'] = $_POST['village_id'];
         $data['agent_mobile'] = $_POST['agent_mobile'];
+        $data['agent_line'] = $_POST['agent_line'];
         $data['agent_username'] = $_POST['agent_username'];
         $data['agent_password'] = $_POST['agent_password'];
         $data['updateby'] = $login_user['user_code']; 
@@ -220,6 +217,10 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
 }else if ($_GET['status'] == 'pending'){
     $on_pending = $agent_model->countAgentByStatus('00');
     $agent = $agent_model->getAgentByStatus('00');
+    require_once($path.'view.inc.php');
+}else if ($_GET['status'] == 'cease'){
+    $on_pending = $agent_model->countAgentByStatus('00');
+    $agent = $agent_model->getAgentByStatus('02');
     require_once($path.'view.inc.php');
 }else{
     $on_pending = $agent_model->countAgentByStatus('00');

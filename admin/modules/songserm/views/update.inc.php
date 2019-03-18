@@ -143,33 +143,63 @@
     <div class="panel-body">
         <form role="form" method="post" onsubmit="return check();" action="index.php?app=songserm&action=edit" enctype="multipart/form-data">
             <div class="row"> 
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>รหัสประจำตัว / code </label>
                         <input id="songserm_code" name="songserm_code" class="form-control" value="<?php echo $songserm['songserm_code']?>" autocomplete="off" readonly>
                         <p id="alert_code" class="help-block">Example : STE0001.</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ชื่อบัญชีผู้ใช้ / user name <font color="#F00"><b>*</b></font></label>
                         <input required id="songserm_username" name="songserm_username" class="form-control" value="<?php echo $songserm['songserm_username']?>" autocomplete="off" onchange="check_username();">
                         <p id="alert_username" class="help-block">Example : STE0001.</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>รหัสผ่าน / password <font color="#F00"><b>* (6-15)</b></font></label>
                         <input required id="songserm_password" name="songserm_password" class="form-control" value="<?php echo $songserm['songserm_password']?>" autocomplete="off" onchange="check_password();">
                         <p id="alert_password" class="help-block">Example : STE0001.</p>
                     </div>
                 </div>
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ตำเเหน่ง / Position <font color="#F00"><b>*</b></font> </label>
+                        <select required id="songserm_position_code" name="songserm_position_code" class="form-control select">
+                            <?php 
+                            for($i =  0 ; $i < count($songserm_position) ; $i++){
+                            ?>
+                            <option <?php if($songserm['songserm_position_code'] == $songserm_position[$i]['songserm_position_code'] ){?> selected <?php } ?> value="<?php echo $songserm_position[$i]['songserm_position_code'] ?>"><?php echo $songserm_position[$i]['songserm_position_name'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : ส่งเสริม.</p>
+                    </div>
+                </div>
             </div> 
             <div class="row"> 
-                <div class="col-md-4 col-lg-3">
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
+                        <select required id="songserm_status_code" name="songserm_status_code" class="form-control select">
+                            <?php 
+                            for($i =  0 ; $i < count($songserm_status) ; $i++){
+                            ?>
+                            <option <?php if($songserm['songserm_status_code'] == $songserm_status[$i]['songserm_status_code'] ){?> selected <?php } ?> value="<?php echo $songserm_status[$i]['songserm_status_code'] ?>"><?php echo $songserm_status[$i]['songserm_status_name'] ?></option>
+                            <?
+                            }
+                            ?>
+                        </select>
+                        <p class="help-block">Example : ทำงาน.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>คำนำหน้าชื่อ / Prename <font color="#F00"><b>*</b></font></label>
-                        <select id="songserm_prefix" name="songserm_prefix" class="form-control">
+                        <select id="songserm_prefix" name="songserm_prefix" class="form-control select">
                             <option value="">Select</option>
                             <option <?php if($songserm['songserm_prefix'] == 'นาย'){?> selected <?php } ?> >นาย</option>
                             <option <?php if($songserm['songserm_prefix'] == 'นาง'){?> selected <?php } ?> >นาง</option>
@@ -192,40 +222,9 @@
                         <p class="help-block">Example : ชาญชัย.</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label>ตำเเหน่ง / Position <font color="#F00"><b>*</b></font> </label>
-                        <select required id="songserm_position_code" name="songserm_position_code" class="form-control select">
-                            <?php 
-                            for($i =  0 ; $i < count($songserm_position) ; $i++){
-                            ?>
-                            <option <?php if($songserm['songserm_position_code'] == $songserm_position[$i]['songserm_position_code'] ){?> selected <?php } ?> value="<?php echo $songserm_position[$i]['songserm_position_code'] ?>"><?php echo $songserm_position[$i]['songserm_position_name'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
-                        <p class="help-block">Example : ส่งเสริม.</p>
-                    </div>
-                </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6 col-lg-3">
-                    <div class="form-group">
-                        <label>สถานะ / Status <font color="#F00"><b>*</b></font> </label>
-                        <select class="form-control" id="songserm_status_code" name="songserm_status_code">
-                            <option value="">Select</option>
-                            <?php 
-                            for($i =  0 ; $i < count($songserm_status) ; $i++){
-                            ?>
-                            <option <?php if($songserm['songserm_status_code'] == $songserm_status[$i]['songserm_status_code'] ){?> selected <?php } ?> value="<?php echo $songserm_status[$i]['songserm_status_code'] ?>"><?php echo $songserm_status[$i]['songserm_status_name'] ?></option>
-                            <?
-                            }
-                            ?>
-                        </select>
-                        <p class="help-block">Example : ทำงาน.</p>
-                    </div>
-                </div>
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>โทรศัพท์ / Mobile </label>
@@ -233,7 +232,13 @@
                         <p class="help-block">Example : 0610243003.</p>
                     </div>
                 </div>
-
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ไลน์ไอดี / LINE ID </label>
+                        <input id="songserm_line" name="songserm_line" type="text" class="form-control" value="<?php echo $songserm['songserm_line']?>" autocomplete="off">
+                        <p class="help-block">Example : Line_ID</p>
+                    </div>
+                </div>
                 <div class="col-sm-12 col-lg-6">
                     <div class="form-group">
                         <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font> </label>
