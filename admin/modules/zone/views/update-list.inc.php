@@ -129,12 +129,12 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <label>ตัวเเทนกองทุนหมู่บ้าน : </label>
-                        <select id="fund_agent_code" name="fund_agent_code" data-live-search="true" class="form-control select">
+                        <select id="dealer_code" name="dealer_code" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                             <?php 
-                            for($i=0; $i<count($fund_agent); $i++){
+                            for($i=0; $i<count($dealer); $i++){
                             ?>
-                            <option <?php if($zone_list['fund_agent_code'] == $fund_agent[$i]['fund_agent_code'] ){?> selected <?php } ?> value="<?php echo $fund_agent[$i]['fund_agent_code']?>"><?php echo $fund_agent[$i]['name']?></option>
+                            <option <?php if($zone_list['dealer_code'] == $dealer[$i]['dealer_code'] ){?> selected <?php } ?> value="<?php echo $dealer[$i]['dealer_code']?>"><?php echo $dealer[$i]['name']?></option>
                             <?
                             }
                             ?>
@@ -193,9 +193,9 @@
             $("#agent_code").selectpicker('refresh');
         });
 
-        $.post("modules/zone/controllers/getFundAgentByDistrict.php", { district: district }, function( data ) {
-            $("#fund_agent_code").html(data);
-            $("#fund_agent_code").selectpicker('refresh');
+        $.post("modules/zone/controllers/getDealerByDistrict.php", { district: district }, function( data ) {
+            $("#dealer_code").html(data);
+            $("#dealer_code").selectpicker('refresh');
         });
     }
 </script>

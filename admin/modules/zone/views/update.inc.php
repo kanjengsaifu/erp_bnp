@@ -135,7 +135,7 @@
                     <td style="text-align:center;"><?php echo $zone_list[$i]['DISTRICT_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['VILLAGE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['agent_name']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone_list[$i]['fund_agent_name']; ?></td>
+                    <td style="text-align:center;"><?php echo $zone_list[$i]['dealer_name']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['zone']['edit']){ ?> 
                         <a href="?app=zone&action=update-list&list=<?php echo $zone_list[$i]['zone_list_code'];?>">

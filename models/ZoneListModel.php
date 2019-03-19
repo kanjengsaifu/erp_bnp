@@ -60,11 +60,11 @@ class ZoneListModel extends BaseModel{
     }
 
     function getZoneListByZone($code){
-        $sql = "SELECT tb_zone_list.*, CONCAT(agent_name,' ',agent_lastname) as agent_name, CONCAT(fund_agent_name,' ',fund_agent_lastname) as fund_agent_name,
+        $sql = "SELECT tb_zone_list.*, CONCAT(agent_name,' ',agent_lastname) as agent_name, CONCAT(dealer_name,' ',dealer_lastname) as dealer_name,
         PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_zone_list 
         LEFT JOIN tb_agent ON tb_zone_list.agent_code  = tb_agent.agent_code  
-        LEFT JOIN tb_fund_agent ON tb_zone_list.fund_agent_code = tb_fund_agent.fund_agent_code 
+        LEFT JOIN tb_dealer ON tb_zone_list.dealer_code = tb_dealer.dealer_code 
         LEFT JOIN tb_village ON tb_zone_list.village_id = tb_village.VILLAGE_ID 
         LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
         LEFT JOIN tb_amphur ON tb_district.AMPHUR_ID = tb_amphur.AMPHUR_ID 
@@ -88,7 +88,7 @@ class ZoneListModel extends BaseModel{
         zone_list_code = '".$data['zone_list_code']."', 
         village_id = '".$data['village_id']."', 
         agent_code = '".$data['agent_code']."', 
-        fund_agent_code = '".$data['fund_agent_code']."', 
+        dealer_code = '".$data['dealer_code']."', 
         updateby = '".$data['updateby']."',
         lastupdate = NOW() 
         WHERE zone_list_code = '$code'
@@ -107,7 +107,7 @@ class ZoneListModel extends BaseModel{
         zone_code,
         village_id, 
         agent_code,
-        fund_agent_code,
+        dealer_code,
         addby,
         adddate 
         )  VALUES ('".  
@@ -115,7 +115,7 @@ class ZoneListModel extends BaseModel{
         $data['zone_code']."','".
         $data['village_id']."','".
         $data['agent_code']."','".
-        $data['fund_agent_code']."','".
+        $data['dealer_code']."','".
         $data['addby']."',
         NOW()
         )";

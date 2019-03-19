@@ -1,11 +1,13 @@
 <?php
 require_once('../models/AgentModel.php');
+require_once('../models/AgentLocationModel.php');
 require_once('../models/StatusModel.php');
 require_once('../models/AddressModel.php');
 
 $path = "modules/agent/views/";
 
 $agent_model = new AgentModel;
+$agent_location_model = new AgentLocationModel;
 $status_model = new StatusModel; 
 $address_model = new AddressModel; 
 
@@ -20,6 +22,7 @@ $date="$d1$d2$d3$d4$d5$d6";
 $target_dir = "../upload/agent/";
 
 $agent_code = $_GET['code'];
+$location_code = $_GET['location'];
 
 if ($_GET['action'] == 'insert'&&$menu['agent']['add']){ 
     $status = $status_model->getStatusBy();
@@ -27,6 +30,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['agent']['edit']){
     $agent = $agent_model->getAgentByCode($agent_code);
+    $location = $agent_location_model->getAgentLocationBy($agent_code);
     $status = $status_model->getStatusBy();
     $province = $address_model->getProvinceBy();
     $amphur = $address_model->getAmphurByProviceID($agent['PROVINCE_ID']);
@@ -47,6 +51,7 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
         }
     }
 
+    $result = $agent_location_model->deleteAgentLocationBy($agent_code);
     $result = $agent_model->deleteAgentByCode($agent_code);
 
     ?> <script> window.location="index.php?app=agent"</script> <?php
@@ -211,6 +216,64 @@ if ($_GET['action'] == 'insert'&&$menu['agent']['add']){
     }
 
     ?> <script> window.location="index.php?app=agent" </script> <?php
+}else if ($_GET['action'] == 'insert-location'&&$menu['agent']['add']){ 
+    require_once($path.'insert-location.inc.php');
+}else if ($_GET['action'] == 'update-location'&&$menu['agent']['edit']){ 
+    $location = $agent_location_model->getAgentLocationByCode($location_code);
+    require_once($path.'update-location.inc.php');
+}else if ($_GET['action'] == 'add-location'&&$menu['agent']['add']){
+    $code = date('y').$_POST['agent_code'];
+    $location_code = $agent_location_model->getAgentLocationLastCode($code,3);  
+
+    if($location_code != '' && isset($_POST['agent_code'])){
+        $check = true;
+        $data['location_code'] = $location_code;
+        $data['agent_code'] = $_POST['agent_code'];
+        $data['location_lat'] = $_POST['location_lat'];
+        $data['location_long'] = $_POST['location_long'];
+        $data['addby'] = $login_user['user_code'];
+
+        $result = $agent_location_model->insertAgentLocation($data);
+
+        if($result){
+            ?> <script> window.location="index.php?app=agent&action=update&code=<?php echo $_POST['agent_code']; ?>" </script> <?php
+        }else{
+            ?> <script> window.history.back(); </script> <?php
+        }
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
+}else if ($_GET['action'] == 'edit-location'&&$menu['agent']['edit']){
+    $code = date('y').$_POST['agent_code'];
+    $location_code = $agent_location_model->getAgentLocationLastCode($code,3);  
+
+    if($location_code != '' && isset($_POST['agent_code'])){
+        $check = true;
+        $data['location_code'] = $location_code;
+        $data['agent_code'] = $_POST['agent_code'];
+        $data['location_lat'] = $_POST['location_lat'];
+        $data['location_long'] = $_POST['location_long'];
+        $data['addby'] = $login_user['user_code'];
+
+        $result = $agent_location_model->insertAgentLocation($data);
+
+        if($result){
+            ?> <script> window.location="index.php?app=agent&action=update&code=<?php echo $_POST['agent_code']; ?>" </script> <?php
+        }else{
+            ?> <script> window.history.back(); </script> <?php
+        }
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
+}else if ($_GET['action'] == 'delete-location'&&$menu['agent']['delete']){
+    $location = $agent_location_model->getAgentLocationByCode($location_code);
+    $result = $agent_location_model->deleteAgentLocationByCode($location_code);
+
+    if($result){
+        ?> <script> window.location="index.php?app=agent&action=update&code=<?php echo $location['agent_code']; ?>" </script> <?php
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
 }else if ($_GET['action'] == 'detail'){
     $agent = $agent_model->getAgentByCode($agent_code);
     require_once($path.'detail.inc.php');

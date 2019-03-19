@@ -1,11 +1,11 @@
 <?php
-require_once('../models/FundAgentModel.php');
+require_once('../models/DealerModel.php');
 require_once('../models/StatusModel.php');
 require_once('../models/AddressModel.php');
 
-$path = "modules/fund_agent/views/";
+$path = "modules/dealer/views/";
 
-$fund_agent_model = new FundAgentModel;
+$dealer_model = new DealerModel;
 $status_model = new StatusModel; 
 $address_model = new AddressModel; 
 
@@ -17,61 +17,61 @@ $d5=date("i");
 $d6=date("s");
 $date="$d1$d2$d3$d4$d5$d6";
 
-$target_dir = "../upload/fund_agent/";
+$target_dir = "../upload/dealer/";
 
-$fund_agent_code = $_GET['code'];
+$dealer_code = $_GET['code'];
 
-if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){ 
+if ($_GET['action'] == 'insert'&&$menu['dealer']['add']){ 
     $status = $status_model->getStatusBy();
     $province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
-}else if ($_GET['action'] == 'update'&&$menu['fund_agent']['edit']){
-    $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
+}else if ($_GET['action'] == 'update'&&$menu['dealer']['edit']){
+    $dealer = $dealer_model->getDealerByCode($dealer_code);
     $status = $status_model->getStatusBy();
     $province = $address_model->getProvinceBy();
-    $amphur = $address_model->getAmphurByProviceID($fund_agent['PROVINCE_ID']);
-    $district = $address_model->getDistrictByAmphurID($fund_agent['AMPHUR_ID']); 
-    $village = $address_model->getVillageByDistrictID($fund_agent['DISTRICT_ID']); 
+    $amphur = $address_model->getAmphurByProviceID($dealer['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($dealer['AMPHUR_ID']); 
+    $village = $address_model->getVillageByDistrictID($dealer['DISTRICT_ID']); 
     require_once($path.'update.inc.php');
-}else if ($_GET['action'] == 'delete'&&$menu['fund_agent']['delete']){
-    $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
+}else if ($_GET['action'] == 'delete'&&$menu['dealer']['delete']){
+    $dealer = $dealer_model->getDealerByCode($dealer_code);
 
     $img_delete = ['profile_image','id_card_image'];
 
     for ($i=0; $i<count($img_delete); $i++){
-        if ($fund_agent[$img_delete[$i]] != ''){
-            $target_file = $target_dir .$fund_agent[$img_delete[$i]];
+        if ($dealer[$img_delete[$i]] != ''){
+            $target_file = $target_dir .$dealer[$img_delete[$i]];
             if (file_exists($target_file)) {
                 unlink($target_file);
             }
         }
     }
 
-    $result = $fund_agent_model->deleteFundAgentByCode($fund_agent_code);
+    $result = $dealer_model->deleteDealerByCode($dealer_code);
 
-    ?> <script> window.location="index.php?app=fund_agent"</script> <?php
-}else if ($_GET['action'] == 'add'&&$menu['fund_agent']['add']){
+    ?> <script> window.location="index.php?app=dealer"</script> <?php
+}else if ($_GET['action'] == 'add'&&$menu['dealer']['add']){
 
-    if ($_POST['fund_agent_code'] == ''){
-        $fund_agent_code = "AG".$_POST['province_id'].$_POST['district_id'];
-        $fund_agent_code = $fund_agent_model->getFundAgentLastCode($fund_agent_code,4);  
+    if ($_POST['dealer_code'] == ''){
+        $dealer_code = "AG".$_POST['province_id'].$_POST['district_id'];
+        $dealer_code = $dealer_model->getDealerLastCode($dealer_code,4);  
     }else{
-        $fund_agent_code = $_POST['fund_agent_code'];
+        $dealer_code = $_POST['dealer_code'];
     }
 
-    if($fund_agent_code != '' && isset($_POST['fund_agent_prefix'])){
+    if($dealer_code != '' && isset($_POST['dealer_prefix'])){
         $check = true;
-        $data['fund_agent_code'] = $fund_agent_code;
+        $data['dealer_code'] = $dealer_code;
         $data['status_code'] = $_POST['status_code']; 
-        $data['fund_agent_prefix'] = $_POST['fund_agent_prefix'];  
-        $data['fund_agent_name'] = $_POST['fund_agent_name'];
-        $data['fund_agent_lastname'] = $_POST['fund_agent_lastname'];
-        $data['fund_agent_address'] = $_POST['fund_agent_address'];
+        $data['dealer_prefix'] = $_POST['dealer_prefix'];  
+        $data['dealer_name'] = $_POST['dealer_name'];
+        $data['dealer_lastname'] = $_POST['dealer_lastname'];
+        $data['dealer_address'] = $_POST['dealer_address'];
         $data['village_id'] = $_POST['village_id'];
-        $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
-        $data['fund_agent_line'] = $_POST['fund_agent_line'];
-        $data['fund_agent_username'] = $_POST['fund_agent_username'];
-        $data['fund_agent_password'] = $_POST['fund_agent_password'];
+        $data['dealer_mobile'] = $_POST['dealer_mobile'];
+        $data['dealer_line'] = $_POST['dealer_line'];
+        $data['dealer_username'] = $_POST['dealer_username'];
+        $data['dealer_password'] = $_POST['dealer_password'];
         $data['addby'] = $login_user['user_code'];
 
         $img_upload = ['profile_image','id_card_image'];
@@ -112,7 +112,7 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
         }
 
         if($check){
-            $result = $fund_agent_model->insertFundAgent($data);
+            $result = $dealer_model->insertDealer($data);
 
 
         }else{
@@ -124,22 +124,22 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=fund_agent" </script> <?php
+        ?> <script> window.location="index.php?app=dealer" </script> <?php
     }
-}else if ($_GET['action'] == 'edit'&&$menu['fund_agent']['edit']){
-    if(isset($_POST['fund_agent_code'])){
+}else if ($_GET['action'] == 'edit'&&$menu['dealer']['edit']){
+    if(isset($_POST['dealer_code'])){
         $check = true;
         $data = [];  
         $data['status_code'] = $_POST['status_code']; 
-        $data['fund_agent_prefix'] = $_POST['fund_agent_prefix'];
-        $data['fund_agent_name'] = $_POST['fund_agent_name'];
-        $data['fund_agent_lastname'] = $_POST['fund_agent_lastname'];
-        $data['fund_agent_address'] = $_POST['fund_agent_address'];
+        $data['dealer_prefix'] = $_POST['dealer_prefix'];
+        $data['dealer_name'] = $_POST['dealer_name'];
+        $data['dealer_lastname'] = $_POST['dealer_lastname'];
+        $data['dealer_address'] = $_POST['dealer_address'];
         $data['village_id'] = $_POST['village_id'];
-        $data['fund_agent_mobile'] = $_POST['fund_agent_mobile'];
-        $data['fund_agent_line'] = $_POST['fund_agent_line'];
-        $data['fund_agent_username'] = $_POST['fund_agent_username'];
-        $data['fund_agent_password'] = $_POST['fund_agent_password'];
+        $data['dealer_mobile'] = $_POST['dealer_mobile'];
+        $data['dealer_line'] = $_POST['dealer_line'];
+        $data['dealer_username'] = $_POST['dealer_username'];
+        $data['dealer_password'] = $_POST['dealer_password'];
         $data['updateby'] = $login_user['user_code']; 
 
         $img_upload = ['profile_image','id_card_image'];
@@ -187,10 +187,10 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
         }
 
         if($check){
-            $result = $fund_agent_model->updateFundAgentByCode($_POST['fund_agent_code'],$data);
+            $result = $dealer_model->updateDealerByCode($_POST['dealer_code'],$data);
 
             if($result){
-                ?> <script> window.location="index.php?app=fund_agent" </script> <?php
+                ?> <script> window.location="index.php?app=dealer" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -203,28 +203,28 @@ if ($_GET['action'] == 'insert'&&$menu['fund_agent']['add']){
             <?php
         }
     }else{
-        ?> <script> window.location="index.php?app=fund_agent" </script> <?php
+        ?> <script> window.location="index.php?app=dealer" </script> <?php
     }
 }else if ($_GET['action'] == 'approve'){
-    if(isset($_POST['fund_agent_code'])){
-        $result = $fund_agent_model->approveFundAgentByCode($_POST['fund_agent_code']);
+    if(isset($_POST['dealer_code'])){
+        $result = $dealer_model->approveDealerByCode($_POST['dealer_code']);
     }
 
-    ?> <script> window.location="index.php?app=fund_agent" </script> <?php
+    ?> <script> window.location="index.php?app=dealer" </script> <?php
 }else if ($_GET['action'] == 'detail'){
-    $fund_agent = $fund_agent_model->getFundAgentByCode($fund_agent_code);
+    $dealer = $dealer_model->getDealerByCode($dealer_code);
     require_once($path.'detail.inc.php');
 }else if ($_GET['status'] == 'pending'){
-    $on_pending = $fund_agent_model->countFundAgentByStatus('00');
-    $fund_agent = $fund_agent_model->getFundAgentByStatus('00');
+    $on_pending = $dealer_model->countDealerByStatus('00');
+    $dealer = $dealer_model->getDealerByStatus('00');
     require_once($path.'view.inc.php');
 }else if ($_GET['status'] == 'cease'){
-    $on_pending = $fund_agent_model->countFundAgentByStatus('00');
-    $fund_agent = $fund_agent_model->getFundAgentByStatus('02');
+    $on_pending = $dealer_model->countDealerByStatus('00');
+    $dealer = $dealer_model->getDealerByStatus('02');
     require_once($path.'view.inc.php');
 }else{
-    $on_pending = $fund_agent_model->countFundAgentByStatus('00');
-    $fund_agent = $fund_agent_model->getFundAgentByStatus('01');
+    $on_pending = $dealer_model->countDealerByStatus('00');
+    $dealer = $dealer_model->getDealerByStatus('01');
     require_once($path.'view.inc.php');
 }
 ?>

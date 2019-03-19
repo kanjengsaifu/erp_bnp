@@ -325,6 +325,71 @@
     </div>
 </div>
 
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-8">
+                พิกัดผู้รับเหมา / Contractor Location
+            </div>
+            <div class="col-md-4">
+                <?php if($menu['contractor']['add']){?> 
+                    <a class="btn btn-success" style="float:right;" href="?app=contractor&action=insert-location&code=<?php echo $contractor_code; ?>"><i class="fa fa-plus" aria-hidden="true"></i> เพิ่ม</a>
+                <?PHP } ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body">
+        <table width="100%" class="table table-striped table-bordered table-hover dataTables">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">ลำดับ <br>No.</th>
+                    <th style="text-align:center;">พิกัด <br>Location</th>
+                    <th style="text-align:center;">ละติจูด <br>Latitude</th>
+                    <th style="text-align:center;">ลองติจูด <br>Longitude</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                for($i=0; $i < count($location); $i++){
+                ?>
+                <tr class="odd gradeX">
+                    <td style="text-align:center;"><?php echo $i+1; ?></td>
+                    <td style="text-align:center;">
+                        <fieldset class="gllpLatlonPicker">
+                            <div class="gllpMap"></div>
+                            <input required class="gllpLongitude form-control" value="<?php echo $location[$i]['location_long']; ?>" type="hidden">
+                            <input required class="gllpLatitude form-control" value="<?php echo $location[$i]['location_lat']; ?>" type="hidden">
+                            <input type="hidden" class="gllpZoom" value="8"/>
+                        </fieldset>
+                    </td>
+                    <td style="text-align:center;"><?php echo $location[$i]['location_long']; ?></td>
+                    <td style="text-align:center;"><?php echo $location[$i]['location_lat']; ?></td>
+                    <td style="text-align:center;">
+                    <?php if($menu['contractor']['edit']){ ?> 
+                        <a href="?app=contractor&action=update-location&location=<?php echo $location[$i]['location_code'];?>">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a> 
+                    <?PHP }?>
+                    <?php if($menu['contractor']['delete']){ ?> 
+                        <a href="?app=contractor&action=delete-location&location=<?php echo $location[$i]['location_code'];?>" onclick="return confirm('คุณต้องการลบพิกัดนี้ ?');" style="color:red;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
+                    <?PHP }?>
+                    </td>
+                </tr>
+                <? } ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://maps-api-ssl.google.com/maps/api/js?key=AIzaSyBPYt_mZGd-2iotzhpiZKw1_GpZ6H9w3vs&sensor=false"></script>
+
+<link rel="stylesheet" type="text/css" href="../template/map/css/jquery-gmaps-latlon-picker.css"/>
+<script src="../template/map/js/jquery-gmaps-latlon-picker.js"></script>
+
 <script type="text/javascript">
     function getAmphur(){
         var province = document.getElementById("province_id").value;
