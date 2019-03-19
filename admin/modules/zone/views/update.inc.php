@@ -135,7 +135,7 @@
                     <td style="text-align:center;"><?php echo $zone_list[$i]['DISTRICT_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['VILLAGE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $zone_list[$i]['agent_name']; ?></td>
-                    <td style="text-align:center;"><?php echo $zone_list[$i]['fund_agent_name']; ?></td>
+                    <td style="text-align:center;"><?php echo $zone_list[$i]['dealer_name']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['zone']['edit']){ ?> 
                         <a href="?app=zone&action=update-list&list=<?php echo $zone_list[$i]['zone_list_code'];?>">
@@ -439,6 +439,7 @@
     function addSongserm(){
         var zone_code = document.getElementById("zone_code").value;
         var checkbox = document.getElementsByName('ckb_songserm[]');
+        var assis_director = document.getElementsByName('assis_director');
         var manager = document.getElementsByName('manager');
 
         var songserm = [];
@@ -457,6 +458,15 @@
                 });
             }
         }
+
+        for(var i=0; i<assis_director.length; i++){
+            if(assis_director[i].checked){
+                songserm.push({
+                    songserm_code: assis_director[i].value,
+                });
+            }
+        }
+
 
         if (songserm.length){
             $.post("modules/zone/controllers/addSongserm.php", { zone_code: zone_code, songserm: JSON.stringify(songserm) })

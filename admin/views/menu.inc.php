@@ -149,9 +149,9 @@ for($i = 0 ; $i < count($menu_list); $i++){
                     <a href="?app=agent" <?PHP if($_GET['app'] == "agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> นายหน้า</a>
                 </li>
                 <?php } ?>
-                <?php if ($menu['fund_agent']['view']){ ?>
+                <?php if ($menu['dealer']['view']){ ?>
                 <li>
-                    <a href="?app=fund_agent" <?PHP if($_GET['app'] == "fund_agent"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ตัวเเทนจำหน่าย</a>
+                    <a href="?app=dealer" <?PHP if($_GET['app'] == "dealer"){?> class="active" <?PHP } ?> ><i class="fa fa-users" aria-hidden="true"></i> ตัวเเทนจำหน่าย</a>
                 </li>
                 <?php } ?>
                 <?php if ($menu['contractor']['view']){ ?>

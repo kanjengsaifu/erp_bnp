@@ -1,12 +1,16 @@
 <?php
 require_once('../models/ContractorModel.php');
 require_once('../models/StatusModel.php');
+require_once('../models/ZoneContractorModel.php');
+require_once('../models/ContractorLocationModel.php');
 require_once('../models/AddressModel.php');
 
 $path = "modules/contractor/views/";
 
 $contractor_model = new ContractorModel;
 $status_model = new StatusModel; 
+$zone_contractor_model = new ZoneContractorModel;
+$contractor_location_model = new ContractorLocationModel;
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -20,6 +24,7 @@ $date="$d1$d2$d3$d4$d5$d6";
 $target_dir = "../upload/contractor/";
 
 $contractor_code = $_GET['code'];
+$location_code = $_GET['location'];
 
 // foreach ($_POST as $key => $value) {
 //     echo "<div>";
@@ -35,6 +40,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['contractor']['edit']){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
+    $location = $contractor_location_model->getContractorLocationBy($contractor_code);
     $status = $status_model->getStatusBy();
     $province = $address_model->getProvinceBy();
     $amphur = $address_model->getAmphurByProviceID($contractor['PROVINCE_ID']);
@@ -55,6 +61,8 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
         }
     }
 
+    $result = $zone_contractor_model->deleteZoneContractorByContractor($contractor_code);
+    $result = $contractor_location_model->deleteContractorLocationBy($contractor_code);
     $result = $contractor_model->deleteContractorByCode($contractor_code);
 
     ?> <script> window.location="index.php?app=contractor"</script> <?php
@@ -120,7 +128,7 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
             $result = $contractor_model->insertContractor($data);
 
             if($result){
-                ?> <script> window.location="index.php?app=contractor" </script> <?php
+                ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $contractor_code; ?>" </script> <?php
             }else{
                 ?> <script> window.history.back(); </script> <?php
             }
@@ -218,6 +226,64 @@ if ($_GET['action'] == 'insert'&&$menu['contractor']['add']){
     }
 
     ?> <script> window.location="index.php?app=contractor" </script> <?php
+}else if ($_GET['action'] == 'insert-location'&&$menu['contractor']['add']){ 
+    require_once($path.'insert-location.inc.php');
+}else if ($_GET['action'] == 'update-location'&&$menu['contractor']['edit']){ 
+    $location = $contractor_location_model->getContractorLocationByCode($location_code);
+    require_once($path.'update-location.inc.php');
+}else if ($_GET['action'] == 'add-location'&&$menu['contractor']['add']){
+    $code = date('y').$_POST['contractor_code'];
+    $location_code = $contractor_location_model->getContractorLocationLastCode($code,3);  
+
+    if($location_code != '' && isset($_POST['contractor_code'])){
+        $check = true;
+        $data['location_code'] = $location_code;
+        $data['contractor_code'] = $_POST['contractor_code'];
+        $data['location_lat'] = $_POST['location_lat'];
+        $data['location_long'] = $_POST['location_long'];
+        $data['addby'] = $login_user['user_code'];
+
+        $result = $contractor_location_model->insertContractorLocation($data);
+
+        if($result){
+            ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $_POST['contractor_code']; ?>" </script> <?php
+        }else{
+            ?> <script> window.history.back(); </script> <?php
+        }
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
+}else if ($_GET['action'] == 'edit-location'&&$menu['contractor']['edit']){
+    $code = date('y').$_POST['contractor_code'];
+    $location_code = $contractor_location_model->getContractorLocationLastCode($code,3);  
+
+    if($location_code != '' && isset($_POST['contractor_code'])){
+        $check = true;
+        $data['location_code'] = $location_code;
+        $data['contractor_code'] = $_POST['contractor_code'];
+        $data['location_lat'] = $_POST['location_lat'];
+        $data['location_long'] = $_POST['location_long'];
+        $data['addby'] = $login_user['user_code'];
+
+        $result = $contractor_location_model->insertContractorLocation($data);
+
+        if($result){
+            ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $_POST['contractor_code']; ?>" </script> <?php
+        }else{
+            ?> <script> window.history.back(); </script> <?php
+        }
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
+}else if ($_GET['action'] == 'delete-location'&&$menu['contractor']['delete']){
+    $location = $contractor_location_model->getContractorLocationByCode($location_code);
+    $result = $contractor_location_model->deleteContractorLocationByCode($location_code);
+
+    if($result){
+        ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $location['contractor_code']; ?>" </script> <?php
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
 }else if ($_GET['action'] == 'detail'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
     require_once($path.'detail.inc.php');

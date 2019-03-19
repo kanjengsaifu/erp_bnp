@@ -110,5 +110,15 @@ class ZoneCallCenterModel extends BaseModel{
             return false;
         }
     }
+
+    function deleteZoneCallCenterByUser($code){
+        $sql = " DELETE FROM tb_zone_call_center WHERE user_code = '$code' ";
+
+        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
 ?>

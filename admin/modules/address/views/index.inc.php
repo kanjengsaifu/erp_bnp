@@ -30,14 +30,12 @@ if ($_GET['action'] == 'insert'&&$menu['address']['add']){
         $data['VILLAGE_CODE'] = $_POST['village_code'];
         $data['VILLAGE_NO'] = $_POST['village_no'];
         $data['VILLAGE_NAME'] = $_POST['village_name'];
-        $data['PROVINCE_ID'] = $_POST['province'];
-        $data['AMPHUR_ID'] = $_POST['amphur'];
-        $data['DISTRICT_ID'] = $_POST['district'];
+        $data['DISTRICT_ID'] = $_POST['district_id'];
 
         $result = $address_model->insertVillage($data);
 
         if($result){
-            ?> <script> window.location="index.php?app=address&action=district&district=<?php echo $_POST['district']; ?>"; </script> <?php
+            ?> <script> window.location="index.php?app=address&action=district&district=<?php echo $_POST['district_id']; ?>"; </script> <?php
         }else{
             ?> <script> window.history.back(); </script> <?php
         }
@@ -50,14 +48,12 @@ if ($_GET['action'] == 'insert'&&$menu['address']['add']){
         $data['VILLAGE_CODE'] = $_POST['village_code'];
         $data['VILLAGE_NO'] = $_POST['village_no'];
         $data['VILLAGE_NAME'] = $_POST['village_name'];
-        $data['PROVINCE_ID'] = $_POST['province'];
-        $data['AMPHUR_ID'] = $_POST['amphur'];
-        $data['DISTRICT_ID'] = $_POST['district'];
+        $data['DISTRICT_ID'] = $_POST['district_id'];
 
         $result = $address_model->updateVillageByID($_POST['village_id'],$data);
 
         if($result){
-            ?> <script> window.location="index.php?app=address&action=district&district=<?php echo $_POST['district']; ?>"; </script> <?php
+            ?> <script> window.location="index.php?app=address&action=district&district=<?php echo $_POST['district_id']; ?>"; </script> <?php
         }else{
             ?> <script> window.history.back(); </script> <?php
         }

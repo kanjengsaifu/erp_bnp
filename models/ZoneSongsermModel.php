@@ -96,5 +96,16 @@ class ZoneSongsermModel extends BaseModel{
             return false;
         }
     }
+
+    
+    function deleteZoneSongsermBySongserm($code){
+        $sql = " DELETE FROM tb_zone_songserm WHERE songserm_code = '$code' ";
+
+        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
 ?>

@@ -1,10 +1,12 @@
 <?php
 require_once('../models/FarmerModel.php');
+require_once('../models/FarmerLocationModel.php');
 require_once('../models/AddressModel.php');
 
 $path = "modules/farmer/views/";
 
 $farmer_model = new FarmerModel;
+$farmer_location_model = new FarmerLocationModel;
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -18,6 +20,7 @@ $date="$d1$d2$d3$d4$d5$d6";
 $target_dir = "../upload/farmer/";
 
 $farmer_code = $_GET['code'];
+$location_code = $_GET['location'];
 
 // foreach ($_POST as $key => $value) {
 //     echo "<div>";
@@ -32,6 +35,7 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['farmer']['edit']){
     $farmer = $farmer_model->getFarmerByCode($farmer_code);
+    $location = $farmer_location_model->getFarmerLocationBy($farmer_code);
     $province = $address_model->getProvinceBy();
     $amphur = $address_model->getAmphurByProviceID($farmer['PROVINCE_ID']);
     $district = $address_model->getDistrictByAmphurID($farmer['AMPHUR_ID']); 
@@ -52,6 +56,7 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
     }
 
     $result = $farmer_model->deleteFarmerByCode($farmer_code);
+    $result = $farmer_location_model->deleteFarmerLocationBy($farmer_code);
 
     ?> <script> window.location="index.php?app=farmer"</script> <?php
 }else if ($_GET['action'] == 'add'&&$menu['farmer']['add']){
@@ -208,6 +213,64 @@ if ($_GET['action'] == 'insert'&&$menu['farmer']['add']){
         }
     }else{
         ?> <script> window.location="index.php?app=farmer" </script> <?php
+    }
+}else if ($_GET['action'] == 'insert-location'&&$menu['farmer']['add']){ 
+    require_once($path.'insert-location.inc.php');
+}else if ($_GET['action'] == 'update-location'&&$menu['farmer']['edit']){ 
+    $location = $farmer_location_model->getFarmerLocationByCode($location_code);
+    require_once($path.'update-location.inc.php');
+}else if ($_GET['action'] == 'add-location'&&$menu['farmer']['add']){
+    $code = date('y').$_POST['farmer_code'];
+    $location_code = $farmer_location_model->getFarmerLocationLastCode($code,3);  
+
+    if($location_code != '' && isset($_POST['farmer_code'])){
+        $check = true;
+        $data['location_code'] = $location_code;
+        $data['farmer_code'] = $_POST['farmer_code'];
+        $data['location_lat'] = $_POST['location_lat'];
+        $data['location_long'] = $_POST['location_long'];
+        $data['addby'] = $login_user['user_code'];
+
+        $result = $farmer_location_model->insertFarmerLocation($data);
+
+        if($result){
+            ?> <script> window.location="index.php?app=farmer&action=update&code=<?php echo $_POST['farmer_code']; ?>" </script> <?php
+        }else{
+            ?> <script> window.history.back(); </script> <?php
+        }
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
+}else if ($_GET['action'] == 'edit-location'&&$menu['farmer']['edit']){
+    $code = date('y').$_POST['farmer_code'];
+    $location_code = $farmer_location_model->getFarmerLocationLastCode($code,3);  
+
+    if($location_code != '' && isset($_POST['farmer_code'])){
+        $check = true;
+        $data['location_code'] = $location_code;
+        $data['farmer_code'] = $_POST['farmer_code'];
+        $data['location_lat'] = $_POST['location_lat'];
+        $data['location_long'] = $_POST['location_long'];
+        $data['addby'] = $login_user['user_code'];
+
+        $result = $farmer_location_model->insertFarmerLocation($data);
+
+        if($result){
+            ?> <script> window.location="index.php?app=farmer&action=update&code=<?php echo $_POST['farmer_code']; ?>" </script> <?php
+        }else{
+            ?> <script> window.history.back(); </script> <?php
+        }
+    }else{
+        ?> <script> window.history.back(); </script> <?php
+    }
+}else if ($_GET['action'] == 'delete-location'&&$menu['farmer']['delete']){
+    $location = $farmer_location_model->getFarmerLocationByCode($location_code);
+    $result = $farmer_location_model->deleteFarmerLocationByCode($location_code);
+
+    if($result){
+        ?> <script> window.location="index.php?app=farmer&action=update&code=<?php echo $location['farmer_code']; ?>" </script> <?php
+    }else{
+        ?> <script> window.history.back(); </script> <?php
     }
 }else if ($_GET['action'] == 'detail'){
     $farmer = $farmer_model->getFarmerByCode($farmer_code);

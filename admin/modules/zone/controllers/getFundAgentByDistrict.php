@@ -1,15 +1,15 @@
 <?php 
-require_once('../../../../models/FundAgentModel.php');
+require_once('../../../../models/DealerModel.php');
 
-$fund_agent_model = new FundAgentModel;
+$dealer_model = new DealerModel;
 
-$fund_agent = $fund_agent_model->getFundAgentByDistrict($_POST['district']);
+$dealer = $dealer_model->getDealerByDistrict($_POST['district']);
 ?>
 <option value="">Select</option>
 <?php
-for($i=0; $i < count($fund_agent); $i++){
+for($i=0; $i < count($dealer); $i++){
 ?>
-<option value="<?php echo $fund_agent[$i]['fund_agent_code']?>"><?php echo $fund_agent[$i]['name']?></option>
+<option value="<?php echo $dealer[$i]['dealer_code']?>"><?php echo $dealer[$i]['name']?></option>
 <?
 }
 ?>

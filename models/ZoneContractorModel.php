@@ -97,5 +97,15 @@ class ZoneContractorModel extends BaseModel{
             return false;
         }
     }
+
+    function deleteZoneContractorByContractor($code){
+        $sql = " DELETE FROM tb_zone_contractor WHERE contractor_code = '$code' ";
+
+        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
 ?>

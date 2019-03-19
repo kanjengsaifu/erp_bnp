@@ -68,7 +68,7 @@
                         </a> 
                     <?PHP }?>
                     <?php if($menu['contractor']['delete']){ ?> 
-                        <a href="?app=contractor&action=delete&code=<?php echo $contractor[$i]['contractor_code'];?>" onclick="return confirm('You want to delete contractor : <?php echo $contractor[$i]['name']; ?>');" style="color:red;">
+                        <a href="?app=contractor&action=delete&code=<?php echo $contractor[$i]['contractor_code'];?>" onclick="return confirm('คุณต้องการลบผู้รับเหมา : <?php echo $contractor[$i]['name']; ?>');" style="color:red;">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     <?PHP }?>

@@ -255,9 +255,9 @@
                         <select id="province_id" name="province_id" data-live-search="true" class="form-control select" onchange="getAmphur()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_province) ; $i++){
+                            for($i =  0 ; $i < count($province) ; $i++){
                             ?>
-                            <option <?php if($songserm['province_id'] == $add_province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $add_province[$i]['PROVINCE_ID'] ?>"><?php echo $add_province[$i]['PROVINCE_NAME'] ?></option>
+                            <option <?php if($songserm['PROVINCE_ID'] == $province[$i]['PROVINCE_ID'] ){?> selected <?php } ?> value="<?php echo $province[$i]['PROVINCE_ID'] ?>"><?php echo $province[$i]['PROVINCE_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -272,9 +272,9 @@
                         <select id="amphur_id" name="amphur_id" data-live-search="true"  class="form-control select" onchange="getDistrict()">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_amphur) ; $i++){
+                            for($i =  0 ; $i < count($amphur) ; $i++){
                             ?>
-                            <option <?php if($songserm['amphur_id'] == $add_amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $add_amphur[$i]['AMPHUR_ID'] ?>"><?php echo $add_amphur[$i]['AMPHUR_NAME'] ?></option>
+                            <option <?php if($songserm['AMPHUR_ID'] == $amphur[$i]['AMPHUR_ID'] ){?> selected <?php } ?> value="<?php echo $amphur[$i]['AMPHUR_ID'] ?>"><?php echo $amphur[$i]['AMPHUR_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -289,9 +289,9 @@
                         <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                             <?php 
-                            for($i =  0 ; $i < count($add_district) ; $i++){
+                            for($i =  0 ; $i < count($district) ; $i++){
                             ?>
-                            <option <?php if($songserm['district_id'] == $add_district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $add_district[$i]['DISTRICT_ID'] ?>"><?php echo $add_district[$i]['DISTRICT_NAME'] ?></option>
+                            <option <?php if($songserm['district_id'] == $district[$i]['DISTRICT_ID'] ){?> selected <?php } ?> value="<?php echo $district[$i]['DISTRICT_ID']; ?>"><?php echo $district[$i]['DISTRICT_NAME'] ?></option>
                             <?
                             }
                             ?>
@@ -303,7 +303,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" value="<?php echo $songserm['songserm_zipcode']?>"  autocomplete="off">
+                        <input id="songserm_zipcode" name="songserm_zipcode" type="text" readonly class="form-control" value="<?php echo $songserm['POSTCODE']; ?>" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
                     </div>
                 </div>

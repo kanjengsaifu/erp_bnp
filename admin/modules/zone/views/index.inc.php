@@ -5,7 +5,7 @@ require_once('../models/ZoneSongsermModel.php');
 require_once('../models/ZoneContractorModel.php');
 require_once('../models/ZoneCallCenterModel.php');
 require_once('../models/AgentModel.php');
-require_once('../models/FundAgentModel.php');
+require_once('../models/DealerModel.php');
 require_once('../models/SongsermPositionModel.php');
 require_once('../models/AddressModel.php');
 
@@ -17,7 +17,7 @@ $zone_songserm_model = new ZoneSongsermModel;
 $zone_contractor_model = new ZoneContractorModel; 
 $zone_call_center_model = new ZoneCallCenterModel; 
 $agent_model = new AgentModel;
-$fund_agent_model = new FundAgentModel;
+$dealer_model = new DealerModel;
 $songserm_position_model = new SongsermPositionModel; 
 $address_model = new AddressModel; 
 
@@ -39,7 +39,7 @@ if ($_GET['action'] == 'insert'&&$menu['zone']['add']){
 }else if ($_GET['action'] == 'add'&&$menu['zone']['add']){
     if ($_POST['zone_code'] == ''){
         $code = "ZO".date('y').date('m').date('d');
-        $zone_code = $zone_model->getZoneLastCode($code,5);  
+        $zone_code = $zone_model->getZoneLastCode($code,4);  
     }else{
         $zone_code = $_POST['zone_code'];
     }
@@ -98,7 +98,7 @@ if ($_GET['action'] == 'insert'&&$menu['zone']['add']){
         $data['zone_code'] = $_POST['zone_code'];
         $data['village_id'] = $_POST['village_id'];
         $data['agent_code'] = $_POST['agent_code'];
-        $data['fund_agent_code'] = $_POST['fund_agent_code'];
+        $data['dealer_code'] = $_POST['dealer_code'];
         $data['addby'] = $login_user['user_code'];
 
         $result = $zone_list_model->insertZoneList($data);
@@ -116,7 +116,7 @@ if ($_GET['action'] == 'insert'&&$menu['zone']['add']){
     $zone_list = $zone_list_model->getZoneListByCode($zone_list_code);
     $province = $address_model->getProvinceBy();
     $agent = $agent_model->getAgentByDistrict($zone_list['DISTRICT_ID']);
-    $fund_agent = $fund_agent_model->getFundAgentByDistrict($zone_list['DISTRICT_ID']);
+    $dealer = $dealer_model->getDealerByDistrict($zone_list['DISTRICT_ID']);
     $district = $address_model->getDistrictByAmphurID($zone_list['AMPHUR_ID']); 
     $amphur = $address_model->getAmphurByProviceID($zone_list['PROVINCE_ID']);
 
@@ -127,7 +127,7 @@ if ($_GET['action'] == 'insert'&&$menu['zone']['add']){
         $data['zone_list_code'] = $_POST['zone_code'].$_POST['village_id'];
         $data['village_id'] = $_POST['village_id'];
         $data['agent_code'] = $_POST['agent_code'];
-        $data['fund_agent_code'] = $_POST['fund_agent_code'];
+        $data['dealer_code'] = $_POST['dealer_code'];
         $data['updateby'] = $login_user['user_code'];
 
         $result = $zone_list_model->updateZoneListByCode($_POST['zone_list_code'],$data);

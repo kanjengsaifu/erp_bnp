@@ -101,7 +101,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <label>ตัวเเทนกองทุนหมู่บ้าน : </label>
-                        <select id="fund_agent_code" name="fund_agent_code" data-live-search="true" class="form-control select">
+                        <select id="dealer_code" name="dealer_code" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                         </select>
                         <p class="help-block">Example : วินัย.</p>
@@ -158,9 +158,9 @@
             $("#agent_code").selectpicker('refresh');
         });
 
-        $.post("modules/zone/controllers/getFundAgentByDistrict.php", { district: district }, function( data ) {
-            $("#fund_agent_code").html(data);
-            $("#fund_agent_code").selectpicker('refresh');
+        $.post("modules/zone/controllers/getDealerByDistrict.php", { district: district }, function( data ) {
+            $("#dealer_code").html(data);
+            $("#dealer_code").selectpicker('refresh');
         });
     }
 </script>

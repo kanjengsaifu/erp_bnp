@@ -2,6 +2,7 @@
 require_once('../models/SongsermModel.php');
 require_once('../models/SongsermStatusModel.php');
 require_once('../models/SongsermPositionModel.php');
+require_once('../models/ZoneSongsermModel.php');
 require_once('../models/AddressModel.php');
 
 $path = "modules/songserm/views/";
@@ -9,6 +10,7 @@ $path = "modules/songserm/views/";
 $songserm_model = new SongsermModel;
 $songserm_status_model = new SongsermStatusModel; 
 $songserm_position_model = new SongsermPositionModel; 
+$zone_songserm_model = new ZoneSongsermModel; 
 $address_model = new AddressModel; 
 
 $d1=date("d");
@@ -26,15 +28,15 @@ $songserm_code = $_GET['code'];
 if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){ 
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
     $songserm_position = $songserm_position_model->getSongsermPositionBy();
-    $add_province = $address_model->getProvinceBy();  
+    $province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['songserm']['edit']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
     $songserm_position = $songserm_position_model->getSongsermPositionBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($songserm['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($songserm['AMPHUR_ID']); 
     require_once($path.'update.inc.php');
 }else if ($_GET['action'] == 'delete'&&$menu['songserm']['delete']){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
@@ -50,6 +52,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         }
     }
 
+    $result = $zone_songserm_model->deleteZoneSongsermBySongserm($songserm_code);
     $result = $songserm_model->deleteSongsermByCode($songserm_code);
 
     ?> <script> window.location="index.php?app=songserm"</script> <?php
@@ -70,10 +73,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['songserm_name'] = $_POST['songserm_name'];
         $data['songserm_lastname'] = $_POST['songserm_lastname'];
         $data['songserm_address'] = $_POST['songserm_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
         $data['songserm_mobile'] = $_POST['songserm_mobile'];
         $data['songserm_line'] = $_POST['songserm_line'];
         $data['songserm_username'] = $_POST['songserm_username'];
@@ -146,10 +146,7 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
         $data['songserm_name'] = $_POST['songserm_name'];
         $data['songserm_lastname'] = $_POST['songserm_lastname'];
         $data['songserm_address'] = $_POST['songserm_address'];
-        $data['province_id'] = $_POST['province_id'];
-        $data['amphur_id'] = $_POST['amphur_id'];
         $data['district_id'] = $_POST['district_id'];
-        $data['songserm_zipcode'] = $_POST['songserm_zipcode'];
         $data['songserm_mobile'] = $_POST['songserm_mobile'];
         $data['songserm_line'] = $_POST['songserm_line'];
         $data['songserm_username'] = $_POST['songserm_username'];
@@ -222,9 +219,9 @@ if ($_GET['action'] == 'insert'&&$menu['songserm']['add']){
 }else if ($_GET['action'] == 'profile'){
     $songserm = $songserm_model->getSongsermByCode($songserm_code);
     $songserm_status = $songserm_status_model->getSongsermStatusBy();
-    $add_province = $address_model->getProvinceBy();
-    $add_amphur = $address_model->getAmphurByProviceID($songserm['province_id']);
-    $add_district = $address_model->getDistrictByAmphurID($songserm['amphur_id']); 
+    $province = $address_model->getProvinceBy();
+    $amphur = $address_model->getAmphurByProviceID($songserm['PROVINCE_ID']);
+    $district = $address_model->getDistrictByAmphurID($songserm['AMPHUR_ID']); 
     require_once($path.'detail.inc.php');
 }else {
     $songserm = $songserm_model->getSongsermBy();
