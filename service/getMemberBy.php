@@ -12,10 +12,10 @@ $json = file_get_contents('php://input');
     
 $obj = json_decode($json,true);  
 
-if (isset($obj['user_code']) && isset($obj['member_type'])) {
+if (isset($obj['user_code']) ) {
  
     $data=[]; 
-    $member = $MemberModel->getMemberBy($obj['user_code'],$obj['member_type']);
+    $member = $MemberModel->getMemberBy($obj['user_code'],$obj['member_type'],$obj['keyword']);
     // echo '<pre>';
     // print_r($songserm);
     // echo '</pre>';
@@ -23,7 +23,7 @@ if (isset($obj['user_code']) && isset($obj['member_type'])) {
         $data ['data'] = $member ;
         $data ['result'] = true;
     } else {
-        $data ['result_text'] = $obj['user_code'] ;
+        $data ['result_text'] = 'user_code=='.$obj['user_code'].'|||member_type=='.$obj['member_type'];
         $data ['result'] = false ;
     }
 } else {
