@@ -51,8 +51,8 @@ class AgentModel extends BaseModel{
     function getAgentByUserCode($user_code){
         $sql = "SELECT tb_agent.agent_code AS code,  CONCAT(agent_prefix,' ',agent_name,' ',agent_lastname) as name 
         FROM tb_agent  
-        INNER JOIN tb_zone_list_fund_agent ON tb_fund_agent.fund_agent_code = tb_zone_list_fund_agent.fund_agent_code   
-        INNER JOIN tb_zone_list ON tb_zone_list_fund_agent.zone_list_code = tb_zone_list.zone_list_code 
+        INNER JOIN tb_zone_list_dealer ON tb_dealer.dealer_code = tb_zone_list_dealer.dealer_code   
+        INNER JOIN tb_zone_list ON tb_zone_list_dealer.zone_list_code = tb_zone_list.zone_list_code 
         INNER JOIN tb_zone_call_center ON tb_zone_list.zone_code = tb_zone_call_center.zone_code 
         WHERE tb_zone_call_center.user_code = '$user_code' 
         ORDER BY CONCAT(tb_agent.agent_name,' ',tb_agent.agent_lastname) 
