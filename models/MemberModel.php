@@ -36,16 +36,16 @@ class MemberModel extends BaseModel{
         WHERE tb_zone_songserm.songserm_code = '$songserm_code' 
         ORDER BY CONCAT(tb_contractor.contractor_name,' ',tb_contractor.contractor_lastname) ) 
         union 
-        (SELECT tb_fund_agent.fund_agent_code AS code,  CONCAT(fund_agent_prefix,' ',fund_agent_name,' ',fund_agent_lastname) as name , CONCAT('fund_agent') AS member_type ,profile_image  , amphur_name , province_name 
-        FROM tb_fund_agent  
-        INNER JOIN tb_village ON tb_fund_agent.village_id = tb_village.village_id 
+        (SELECT tb_dealer.dealer_code AS code,  CONCAT(dealer_prefix,' ',dealer_name,' ',dealer_lastname) as name , CONCAT('dealer') AS member_type ,profile_image  , amphur_name , province_name 
+        FROM tb_dealer  
+        INNER JOIN tb_village ON tb_dealer.village_id = tb_village.village_id 
         INNER JOIN tb_district ON tb_village.district_id = tb_district.district_id 
         INNER JOIN tb_amphur ON tb_district.amphur_id = tb_amphur.amphur_id 
         INNER JOIN tb_province ON tb_amphur.province_id = tb_province.province_id 
-        INNER JOIN tb_zone_list ON tb_fund_agent.fund_agent_code = tb_zone_list.fund_agent_code  
+        INNER JOIN tb_zone_list ON tb_dealer.dealer_code = tb_zone_list.dealer_code  
         INNER JOIN tb_zone_songserm ON tb_zone_list.zone_code = tb_zone_songserm.zone_code 
         WHERE tb_zone_songserm.songserm_code = '$songserm_code' 
-        ORDER BY CONCAT(tb_fund_agent.fund_agent_name,' ',tb_fund_agent.fund_agent_lastname) ) 
+        ORDER BY CONCAT(tb_dealer.dealer_name,' ',tb_dealer.dealer_lastname) ) 
         union 
         (SELECT tb_agent.agent_code AS code,  CONCAT(agent_prefix,' ',agent_name,' ',agent_lastname) as name , CONCAT('agent') AS member_type  ,profile_image  , amphur_name , province_name 
         FROM tb_agent  
@@ -72,7 +72,7 @@ class MemberModel extends BaseModel{
         $str_member_type 
         $str_keyword
         ";
-        // echo $sql;
+        echo $sql;
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){

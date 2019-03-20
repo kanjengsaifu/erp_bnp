@@ -23,7 +23,7 @@ if (isset($obj['user_code']) ) {
         $data ['data'] = $member ;
         $data ['result'] = true;
     } else {
-        $data ['result_text'] = 'user_code=='.$obj['user_code'].'|||member_type=='.$obj['member_type'];
+        $data ['result_text'] = 'user_code=='.$obj['user_code'].'|||member_type=='.$obj['member_type'].'|||member_type=='.$obj['member_type'];
         $data ['result'] = false ;
     }
 } else {
