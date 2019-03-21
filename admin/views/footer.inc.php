@@ -62,7 +62,7 @@
 
         $('.select').selectpicker();
         
-        $( ".calendar" ).datepicker({ dateFormat: 'dd-mm-yy' });
+        $(".calendar").datepicker({ dateFormat: 'dd-mm-yy' });
 
         loadedScreen();
     });

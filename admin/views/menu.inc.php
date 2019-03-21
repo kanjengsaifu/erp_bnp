@@ -131,9 +131,11 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <!-- <li>
                     <a href="?app=product" <?PHP if($_GET["app"]=='product'){ ?> class="active" <?PHP } ?>><i class="fa fa-th" aria-hidden="true"></i> สินค้า</a>
                 </li> -->
+                <?php if ($menu['stock']['view']){ ?>
                 <li>
                     <a href="?app=stock" <?PHP if($_GET["app"]=='stock'){ ?> class="active" <?PHP } ?>><i class="fa fa-cubes" aria-hidden="true"></i> คลัง</a>
                 </li>
+                <?php } ?>
                 <?php if ($menu['zone']['view']){ ?>
                 <li>
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
@@ -216,6 +218,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         || $_GET["app"]=='product_brand'
                         || $_GET["app"]=='project'
                         || $_GET["app"]=='address'
+                        || $_GET["app"]=='check_in'
                     ){
                         echo ' class="active" ';
                     }
@@ -263,11 +266,16 @@ for($i = 0 ; $i < count($menu_list); $i++){
                             <a href="?app=supplier" <?PHP if($_GET['app'] == "supplier"){?> class="active" <?PHP } ?> ><i class="fa fa-building-o" aria-hidden="true"></i> ผู้ขาย (Supplier)</a>
                         </li> 
                         <?PHP }?> 
-                        <?PHP if($menu['address']['view']==1){ ?>
+                        <?PHP if($menu['address']['view']){ ?>
                         <li>
                             <a href="?app=address" <?PHP if($_GET['app'] == "address"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ข้อมูลพื้นที่ (Area)</a>
                         </li> 
                         <?PHP }?> 
+                        <?php if ($menu['check_in']['view']){ ?>
+                        <li>
+                            <a href="?app=check_in" <?PHP if($_GET['app'] == "check_in"){?> class="active" <?PHP } ?> ><i class="fa fa-sticky-note" aria-hidden="true"></i> การเช็คอิน</a>
+                        </li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <li

@@ -38,17 +38,18 @@
         require_once("modules/contact_type/views/index.inc.php");   
     }else if($_GET['app'] == "address" && $menu['address']['view']){
         require_once("modules/address/views/index.inc.php");   
+    }else if($_GET['app'] == "zone" && $menu['zone']['view']){
+        require_once("modules/zone/views/index.inc.php");   
+    }else if($_GET['app'] == "check_in" && $menu['check_in']['view']){
+        require_once("modules/check_in/views/index.inc.php");   
     }
     /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
 
-    /* ----------------------------------- ระบบจัดการเขต --------------------------------- */
-    else if($_GET['app'] == "zone" && $menu['zone']['view']){
-        require_once("modules/zone/views/index.inc.php");   
+    else if($_GET['app'] == "stock" && $menu['stock']['view']){
+        require_once("modules/stock/views/index.inc.php");
     }
-    /* ----------------------------------- //ระบบจัดการเขต// ---------------------------------------------- */
 
     /* ----------------------------------- ระบบจัดการตัวเเทน ผู้รับเหมา --------------------------------- */
-
     else if($_GET['app'] == "farmer" && $menu['farmer']['view']){
         require_once("modules/farmer/views/index.inc.php");   
     }else if($_GET['app'] == "agent" && $menu['agent']['view']){
@@ -61,5 +62,4 @@
         require_once("modules/songserm/views/index.inc.php");   
     }
     /* ----------------------------------- //ระบบจัดการตัวเเทน ผู้รับเหมา// ---------------------------------------------- */
-    
 ?>

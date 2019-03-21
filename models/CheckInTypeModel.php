@@ -1,0 +1,42 @@
+<?php
+require_once("BaseModel.php");
+
+class CheckInTypeModel extends BaseModel{
+
+    function __construct(){
+       
+        if(!static::$db){
+            static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);        
+        }
+        mysqli_set_charset(static::$db,"utf8");
+    }
+
+    function getCheckInTypeBy(){
+        $sql = "SELECT *
+        FROM tb_check_in_type
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getCheckInTypeByCode($code){
+        $sql = " SELECT * 
+        FROM tb_check_in_type 
+        WHERE check_in_type_code = '$code' 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
+            $result->close();
+            return $data;
+        }
+    }
+}
+?>

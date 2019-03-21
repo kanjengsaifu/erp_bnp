@@ -1,7 +1,4 @@
 <?php
-session_start();
-$user = $_SESSION['user'];
-
 require_once('../models/PurchaseOrderModel.php');
 require_once('../models/PurchaseOrderListModel.php'); 
 require_once('../models/UserModel.php'); 
@@ -12,9 +9,8 @@ require_once('../models/CompanyModel.php');
 
 require_once('../functions/CodeGenerateFunction.func.php'); 
 
-date_default_timezone_set('asia/bangkok');
-
 $path = "modules/purchase_order/views/";
+
 $user_model = new UserModel;
 $material_model = new MaterialModel;
 $supplier_model = new SupplierModel; 
@@ -23,18 +19,16 @@ $purchase_order_list_model = new PurchaseOrderListModel;
 $material_supplier_model = new MaterialSupplierModel;
 $company_model = new CompanyModel; 
 
-
-
 $purchase_order_code = $_GET['purchase_order_code'];
 $purchase_order_list_code = $_GET['purchase_order_list_code']; 
 $supplier_code = $_GET['supplier_code']; 
-$type = strtoupper($_GET['type']);
- 
 
-if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
+$type = strtoupper($_GET['type']);
+
+if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
      
-    $suppliers=$supplier_model->getSupplierBy();
-    $users=$user_model->getUserBy(); 
+    $suppliers = $supplier_model->getSupplierBy();
+    $users = $user_model->getUserBy(); 
       
     if($supplier_code != ""){
         $supplier=$supplier_model->getSupplierByCode($supplier_code);
@@ -43,16 +37,10 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
         }else{
             $vat = $invoice_supplier['vat'];
         }
-        //$materials=$material_supplier_model->getMaterialBySupplierCode(/*$supplier_code*/);
-        $materials=$material_model->getMaterialBy('','','','Active');
 
-        if($supplier['supplier_domestic'] == "ภายในประเทศ"){
-            $paper = $paper_model->getPaperByCode('11');
-        }else{
-            $paper = $paper_model->getPaperByCode('10');
-        }
+        $materials = $material_model->getMaterialBy();
 
-        $user=$user_model->getUserByCode($admin_id);
+        $user = $user_model->getUserByCode($admin_id);
         
         $data = [];
         $data['year'] = date("Y");
@@ -76,10 +64,8 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     }
     $first_date = date("d")."-".date("m")."-".date("Y"); 
     
-
     require_once($path.'insert.inc.php');
-
-}else if ($_GET['action'] == 'update' && $menu['purchase_order']['edit']==1){
+}else if ($_GET['action'] == 'update' && $menu['purchase_order']['edit']){
     
     $suppliers=$supplier_model->getSupplierBy();
     $users=$user_model->getUserBy();
@@ -99,7 +85,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     // echo "</pre>";
     require_once($path.'update.inc.php');
 
-}else if ($_GET['action'] == 'detail'&& $menu['purchase_order']['view']==1){ 
+}else if ($_GET['action'] == 'detail'&& $menu['purchase_order']['view']){ 
     $purchase_order = $purchase_order_model->getPurchaseOrderViewByCode($purchase_order_code);
     $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
     // if($supplier['vat_type'] == '0'){
@@ -112,7 +98,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     // echo "</pre>";
     require_once($path.'detail.inc.php');
 
-}else if ($_GET['action'] == 'delete' && $menu['purchase_order']['delete']==1){
+}else if ($_GET['action'] == 'delete' && $menu['purchase_order']['delete']){
 
     // $notification_model->deleteNotificationByTypeCode('Purchase Order',$purchase_order_code);
     // $purchase_order_list_model->deletePurchaseOrderListByPurchaseOrderCode($purchase_order_code);
@@ -121,7 +107,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     <script>window.location="index.php?app=purchase_order"</script>
 <?php
 
-}else if ($_GET['action'] == 'cancelled' && $menu['purchase_order']['delete']==1){
+}else if ($_GET['action'] == 'cancelled' && $menu['purchase_order']['delete']){
     $purchase_order_model->cancelPurchaseOrderByCode($purchase_order_code);
 ?>
     <script>
@@ -129,7 +115,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     </script>
 <?php
 
-}else if ($_GET['action'] == 'uncancelled' && $menu['purchase_order']['delete']==1){
+}else if ($_GET['action'] == 'uncancelled' && $menu['purchase_order']['delete']){
     $purchase_order_model->uncancelPurchaseOrderByCode($purchase_order_code);
 ?>
      <script>
@@ -137,7 +123,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']==1){
     </script>
 <?php
 
-}else if ($_GET['action'] == 'add' && $menu['purchase_order']['add']==1){
+}else if ($_GET['action'] == 'add' && $menu['purchase_order']['add']){
     $purchase_order_code = "PO";
     $purchase_order_code = $purchase_order_model->getPurchaseOrderLastCode($purchase_order_code,7);  
     if($purchase_order_code!=''){

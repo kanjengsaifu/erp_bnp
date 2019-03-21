@@ -1,30 +1,69 @@
 <?php
 require_once("BaseModel.php");
-require_once("StockReportModel.php"); 
 
 class StockModel extends BaseModel{
-
-    private $stock_report;
 
     function __construct(){
         if(!static::$db){
             static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
         }
         mysqli_set_charset(static::$db,"utf8");
-        $this->stock_report =  new StockReportModel;
     }
-
     
     function getStockLastCode($code,$digit){
         $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(stock_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
         FROM tb_stock 
         WHERE stock_code LIKE ('$code%') 
         ";
-        // echo $sql.'<br><br>';
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $row['lastcode'];
+        }
+    }
+
+    function getStockBy(){
+        $sql = "SELECT * 
+        FROM tb_stock_type 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getStockByCode(){
+        $sql = "SELECT * 
+        FROM tb_stock_type 
+        WHERE stock_code = '$code'
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getStockByGroup($code){
+        $sql = "SELECT * 
+        FROM tb_stock
+        WHERE stock_group_code = '$code'
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
         }
     }
 

@@ -25,8 +25,6 @@ class AmphurModel extends BaseModel{
         }
     }
 
-    
-
     function getAmphurByID($id){
         $sql = " SELECT * 
         FROM tb_amphur 
@@ -42,6 +40,7 @@ class AmphurModel extends BaseModel{
             return $data;
         }
     } 
+    
     function getAmphurByProvinceID($id){
         $sql = " SELECT * 
         FROM tb_amphur  

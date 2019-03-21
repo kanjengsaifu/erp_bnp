@@ -46,12 +46,9 @@ class ZoneCallCenterModel extends BaseModel{
         LEFT JOIN tb_user ON tb_zone_call_center.user_code = tb_user.user_code
         WHERE zone_call_center_code = '$code' 
         ";
-
+        
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
