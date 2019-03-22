@@ -131,11 +131,6 @@ for($i = 0 ; $i < count($menu_list); $i++){
                 <!-- <li>
                     <a href="?app=product" <?PHP if($_GET["app"]=='product'){ ?> class="active" <?PHP } ?>><i class="fa fa-th" aria-hidden="true"></i> สินค้า</a>
                 </li> -->
-                <?php if ($menu['stock']['view']){ ?>
-                <li>
-                    <a href="?app=stock" <?PHP if($_GET["app"]=='stock'){ ?> class="active" <?PHP } ?>><i class="fa fa-cubes" aria-hidden="true"></i> คลัง</a>
-                </li>
-                <?php } ?>
                 <?php if ($menu['zone']['view']){ ?>
                 <li>
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
@@ -202,6 +197,37 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <li>
                             <a href="?app=billing"><i class="fa  fa-cubes fa-fw" aria-hidden="true"></i> ค่าใช้จ่าย</a>
                         </li>
+                    </ul>
+                </li>
+                <li
+                <?PHP 
+                    if($_GET["app"]=='stock'
+                        || $_GET["app"]=='search_product'
+                        || $_GET["app"]=='stock_move'
+                        || $_GET["app"]=='stock_issue'
+                    ){
+                        echo ' class="active" ';
+                    }
+                ?> 
+                >
+                    <a style="cursor: pointer;" class="nav-title">
+                        <i class="fa fa-database" aria-hidden="true"></i> ระบบคลังสินค้า <span class="glyphicon arrow"></span>
+                    </a>
+                    <ul class="collapse"> 
+                        <?php if ($menu['stock']['view']){ ?>
+                        <li>
+                            <a href="?app=search_product" <?PHP if($_GET["app"]=='search_product'){ ?> class="active" <?PHP } ?>><i class="fa fa-search fa-fw" aria-hidden="true"></i> ค้นหาสินค้า</a>
+                        </li>
+                        <li>
+                            <a href="?app=stock" <?PHP if($_GET["app"]=='stock'){ ?> class="active" <?PHP } ?>><i class="fa fa-cubes" aria-hidden="true"></i> คลังสินค้า</a>
+                        </li>
+                        <li>
+                            <a href="?app=stock_move" <?PHP if($_GET["app"]=='stock_move'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i>  ใบโอนคลังสินค้า</a>
+                        </li>
+                        <li>
+                            <a href="?app=stock_issue" <?PHP if($_GET["app"]=='stock_issue'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i>  ใบนำออกสินค้า</a>
+                        </li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <li

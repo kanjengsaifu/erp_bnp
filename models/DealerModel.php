@@ -26,7 +26,7 @@ class DealerModel extends BaseModel{
 
     function getDealerBy($name = '', $mobile  = ''){
         $sql = "SELECT dealer_code, dealer_prefix, CONCAT(dealer_name,' ',dealer_lastname) as name,
-        dealer_mobile, dealer_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
+        dealer_mobile, dealer_line, dealer_fund_name, dealer_fund_budget, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_dealer 
         LEFT JOIN tb_village ON tb_dealer.village_id = tb_village.VILLAGE_ID 
         LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
@@ -90,7 +90,7 @@ class DealerModel extends BaseModel{
 
     function getDealerByStatus($code){
         $sql = " SELECT dealer_code, dealer_prefix, CONCAT(dealer_name,' ',dealer_lastname) as name,
-        dealer_mobile, dealer_line, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
+        dealer_mobile, dealer_line, dealer_fund_name, dealer_fund_budget, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
         FROM tb_dealer 
         LEFT JOIN tb_village ON tb_dealer.village_id = tb_village.VILLAGE_ID 
         LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
@@ -174,6 +174,8 @@ class DealerModel extends BaseModel{
         dealer_name = '".static::$db->real_escape_string($data['dealer_name'])."', 
         dealer_lastname = '".static::$db->real_escape_string($data['dealer_lastname'])."', 
         dealer_address = '".static::$db->real_escape_string($data['dealer_address'])."', 
+        dealer_fund_name = '".static::$db->real_escape_string($data['dealer_fund_name'])."', 
+        dealer_fund_budget = '".static::$db->real_escape_string($data['dealer_fund_budget'])."', 
         village_id = '".static::$db->real_escape_string($data['village_id'])."', 
         dealer_mobile = '".static::$db->real_escape_string($data['dealer_mobile'])."',  
         dealer_line = '".static::$db->real_escape_string($data['dealer_line'])."',  
@@ -198,6 +200,8 @@ class DealerModel extends BaseModel{
         $data['dealer_name']=mysqli_real_escape_string(static::$db,$data['dealer_name']);
         $data['dealer_lastname']=mysqli_real_escape_string(static::$db,$data['dealer_lastname']);
         $data['dealer_address']=mysqli_real_escape_string(static::$db,$data['dealer_address']);
+        $data['dealer_fund_name']=mysqli_real_escape_string(static::$db,$data['dealer_fund_name']);
+        $data['dealer_fund_budget']=mysqli_real_escape_string(static::$db,$data['dealer_fund_budget']);
         $data['dealer_mobile']=mysqli_real_escape_string(static::$db,$data['dealer_mobile']);
         $data['dealer_line']=mysqli_real_escape_string(static::$db,$data['dealer_line']);
         $data['profile_image']=mysqli_real_escape_string(static::$db,$data['profile_image']);
@@ -212,6 +216,8 @@ class DealerModel extends BaseModel{
             dealer_name, 
             dealer_lastname,
             dealer_address,
+            dealer_fund_name,
+            dealer_fund_budget,
             village_id,
             dealer_mobile,
             dealer_line,
@@ -228,6 +234,8 @@ class DealerModel extends BaseModel{
             $data['dealer_name']."','".
             $data['dealer_lastname']."','".
             $data['dealer_address']."','".
+            $data['dealer_fund_name']."','".
+            $data['dealer_fund_budget']."','".
             $data['village_id']."','".
             $data['dealer_mobile']."','".
             $data['dealer_line']."','".

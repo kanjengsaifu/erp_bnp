@@ -66,7 +66,7 @@ class ContractorModel extends BaseModel{
     }
 
     function getContractorByCode($code){
-        $sql = " SELECT * 
+        $sql = " SELECT * , CONCAT(contractor_name,' ',contractor_lastname) as name
         FROM tb_contractor 
         LEFT JOIN tb_status ON tb_contractor.status_code = tb_status.status_code 
         LEFT JOIN tb_village ON tb_contractor.village_id = tb_village.VILLAGE_ID 

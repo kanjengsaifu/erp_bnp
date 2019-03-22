@@ -26,6 +26,7 @@ for($i=0; $i < count($stock_type); $i++){
             <thead>
                 <tr bgcolor="#92d051">
                     <th width="48px" style="text-align:center;">ลำดับ <br>(No.)</th>
+                    <th style="text-align:center;">รหัสคลังสินค้า <br>(Stock Code)</th>
                     <th style="text-align:center;">คลังสินค้า <br>(Stock Name)</th>
                     <th width="96px"></th>
                 </tr>
@@ -36,7 +37,8 @@ for($i=0; $i < count($stock_type); $i++){
             ?>
                 <tr class="odd gradeX">
                     <td><?php echo $j+1; ?></td>
-                    <td><?php echo '- '.$stock_group[$j]['stock_group_name'];?></td>
+                    <td><?php echo $stock_group[$j]['stock_group_code']; ?></td>
+                    <td><?php echo '- '.$stock_group[$j]['stock_group_name']; ?></td>
                     <td style="<?php if($j==0){ echo 'border-top: unset;'; }?>text-align:center;">
                         <?php if($menu['stock']['edit']){ ?> 
                         <a href="?app=stock&action=stock_list&code=<?php echo $stock_group[$j]['stock_group_code'];?>">

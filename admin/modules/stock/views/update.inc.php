@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <label>รหัสคลังสินค้า / Stock Group Code.</label>
                         <input id="stock_group_code" name="stock_group_code" class="form-control" value="<?PHP echo $stock_group['stock_group_code'];?>" autocomplete="off" readonly>
-                        <p class="help-block">Example : STG001</p>
+                        <p class="help-block">Example : 0000001</p>
                     </div>
                 </div>
                 <div class="col-lg-4">

@@ -10,9 +10,9 @@ class StockGroupModel extends BaseModel{
     }
 
     function getStockGroupLastCode($code,$digit){
-        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(stock_type_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS lastcode 
+        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(stock_group_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS lastcode 
         FROM tb_stock_group 
-        WHERE stock_type_code LIKE ('$code%') 
+        WHERE stock_group_code LIKE ('$code%') 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -57,8 +57,8 @@ class StockGroupModel extends BaseModel{
         $sql = "SELECT * 
         FROM tb_stock_group 
         LEFT JOIN tb_stock_type ON tb_stock_group.stock_type_code = tb_stock_type.stock_type_code 
-        LEFT JOIN tb_stock_report ON tb_stock_group.stock_group_code = tb_stock_report.stock_group_code 
-        WHERE tb_stock_report.product_code = '$product_code' 
+        LEFT JOIN tb_stock ON tb_stock_group.stock_group_code = tb_stock.stock_group_code 
+        WHERE tb_stock.product_code = '$product_code' 
         AND stock_report_qty > 0 
         GROUP BY tb_stock_group.stock_group_code ";
         
@@ -75,6 +75,7 @@ class StockGroupModel extends BaseModel{
     function getStockGroupByCode($code){
         $sql = "SELECT * 
         FROM tb_stock_group 
+        LEFT JOIN tb_stock_type ON tb_stock_group.stock_type_code = tb_stock_type.stock_type_code 
         WHERE stock_group_code = '$code'
         ";
 
@@ -87,7 +88,7 @@ class StockGroupModel extends BaseModel{
 
     function getQtyBy($code,$product_code){
         $sql = "SELECT * 
-        FROM tb_stock_report 
+        FROM tb_stock 
         WHERE stock_group_code = '$code' AND product_code = '$product_code'
         "; 
 

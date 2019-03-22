@@ -74,8 +74,8 @@
                 <div class="col-lg-4">
                     <div class="form-group">
                         <label>รหัสคลังสินค้า / Stock Group Code. </label>
-                        <input type="text" id="stock_group_code" name="stock_group_code" class="form-control" onchange="check_code()" autocomplete="off" maxlength="50">
-                        <p id="alert_code" class="help-block">Example : STG001</p>
+                        <input type="text" id="stock_group_code" name="stock_group_code" class="form-control integer" onchange="check_code()" autocomplete="off" maxlength="50">
+                        <p id="alert_code" class="help-block">Example : 0000001</p>
                     </div>
                 </div>
                 <div class="col-lg-4">

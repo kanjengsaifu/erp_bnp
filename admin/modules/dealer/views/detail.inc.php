@@ -36,6 +36,12 @@
                     <td><?php echo $dealer['dealer_line']?></td>
                 </tr>
                 <tr>
+                    <td>กองทุน / Fund Name</td>
+                    <td>
+                        <?php echo $dealer['dealer_fund_name']?>
+                    </td>
+                </tr>
+                <tr>
                     <td>ที่อยู่ / Address</td>
                     <td>
                         <?php echo $dealer['dealer_address']?>

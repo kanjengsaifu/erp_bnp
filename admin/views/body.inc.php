@@ -43,13 +43,21 @@
     }else if($_GET['app'] == "check_in" && $menu['check_in']['view']){
         require_once("modules/check_in/views/index.inc.php");   
     }
-    /* ----------------------------------- //ระบบพื้นฐาน// ---------------------------------------------- */
+    /* ----------------------------------- //ระบบพื้นฐาน// ----------------------------------- */
 
-    else if($_GET['app'] == "stock" && $menu['stock']['view']){
+    /* -----------------------------------   ระบบคลังสินค้า   ----------------------------------- */
+    else if($_GET['app'] == "search_product" && $menu['stock']['view']){
+        require_once("modules/search_product/views/index.inc.php");
+    }else if($_GET['app'] == "stock" && $menu['stock']['view']){
         require_once("modules/stock/views/index.inc.php");
+    }else if($_GET['app'] == "stock_move" && $menu['stock']['view']){
+        require_once("modules/stock_move/views/index.inc.php");
+    }else if($_GET['app'] == "stock_issue" && $menu['stock']['view']){
+        require_once("modules/stock_issue/views/index.inc.php");
     }
+    /* ----------------------------------- //ระบบคลังสินค้า// ----------------------------------- */
 
-    /* ----------------------------------- ระบบจัดการตัวเเทน ผู้รับเหมา --------------------------------- */
+    /* ----------------------------------- ระบบจัดการตัวเเทน ผู้รับเหมา ----------------------------------- */
     else if($_GET['app'] == "farmer" && $menu['farmer']['view']){
         require_once("modules/farmer/views/index.inc.php");   
     }else if($_GET['app'] == "agent" && $menu['agent']['view']){

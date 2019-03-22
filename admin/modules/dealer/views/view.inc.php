@@ -36,10 +36,11 @@
                     <th style="text-align:center;">รหัส <br>Code</th>
                     <th style="text-align:center;">ชื่อ <br>Name</th>
                     <th style="text-align:center;">โทรศัพท์ <br>Mobile</th>
-                    <th style="text-align:center;">ไลน์ไอดี <br>LINE ID</th>
+                    <th style="text-align:center;">กองทุนที่ดูเเล <br>Fund Name</th>
                     <th style="text-align:center;">จังหวัด <br>Province</th>
                     <th style="text-align:center;">อำเภอ <br>Amphur</th>
                     <th style="text-align:center;">ตำบล <br>Distict</th>
+                    <th style="text-align:center;">หมู่บ้าน <br>Village</th>
                     <th></th>
                 </tr>
             </thead>
@@ -52,10 +53,11 @@
                     <td><?php echo $dealer[$i]['dealer_code']; ?></td>
                     <td><?php echo $dealer[$i]['dealer_prefix'].$dealer[$i]['name']; ?></td>
                     <td style="text-align:center;"><?php echo $dealer[$i]['dealer_mobile']; ?></td>
-                    <td style="text-align:center;"><?php echo $dealer[$i]['dealer_line']; ?></td>
+                    <td style="text-align:center;"><?php echo $dealer[$i]['dealer_fund_name']; ?></td>
                     <td style="text-align:center;"><?php echo $dealer[$i]['PROVINCE_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $dealer[$i]['AMPHUR_NAME']; ?></td>
                     <td style="text-align:center;"><?php echo $dealer[$i]['DISTRICT_NAME']; ?></td>
+                    <td style="text-align:center;"><?php echo $dealer[$i]['VILLAGE_NAME']; ?></td>
                     <td style="text-align:center;">
                     <?php if($menu['dealer']['view']){ ?> 
                         <a href="?app=dealer&action=detail&code=<?php echo $dealer[$i]['dealer_code'];?>">

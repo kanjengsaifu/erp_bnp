@@ -67,6 +67,8 @@ if ($_GET['action'] == 'insert'&&$menu['dealer']['add']){
         $data['dealer_name'] = $_POST['dealer_name'];
         $data['dealer_lastname'] = $_POST['dealer_lastname'];
         $data['dealer_address'] = $_POST['dealer_address'];
+        $data['dealer_fund_name'] = $_POST['dealer_fund_name'];
+        $data['dealer_fund_budget'] = $_POST['dealer_fund_budget'];
         $data['village_id'] = $_POST['village_id'];
         $data['dealer_mobile'] = $_POST['dealer_mobile'];
         $data['dealer_line'] = $_POST['dealer_line'];
@@ -135,6 +137,8 @@ if ($_GET['action'] == 'insert'&&$menu['dealer']['add']){
         $data['dealer_name'] = $_POST['dealer_name'];
         $data['dealer_lastname'] = $_POST['dealer_lastname'];
         $data['dealer_address'] = $_POST['dealer_address'];
+        $data['dealer_fund_name'] = $_POST['dealer_fund_name'];
+        $data['dealer_fund_budget'] = $_POST['dealer_fund_budget'];
         $data['village_id'] = $_POST['village_id'];
         $data['dealer_mobile'] = $_POST['dealer_mobile'];
         $data['dealer_line'] = $_POST['dealer_line'];

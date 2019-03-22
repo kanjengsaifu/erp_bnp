@@ -63,7 +63,7 @@ class UserModel extends BaseModel{
     }
 
     function getUserByCode($code){
-        $sql = " SELECT * 
+        $sql = " SELECT * ,CONCAT(user_name,' ',user_lastname) as name
         FROM tb_user 
         WHERE user_code = '$code' 
         ";
