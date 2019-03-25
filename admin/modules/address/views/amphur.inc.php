@@ -1,13 +1,19 @@
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">จัดการข้อมูลพื้นที่ / Area Management</h1>
-        <a class="btn btn-default" href="?app=address&action=province&province=<?php echo $amphur['PROVINCE_ID']; ?>">Back</a>
     </div>
 </div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        ข้อมูลอำเภอ / amphur information 
+        <div class="row">
+            <div class="col-sm-8">
+                ข้อมูลอำเภอ / amphur information 
+            </div>
+            <div class="col-sm-4">
+                <a class="btn btn-default" style="float:right;" href="?app=address&action=province&province=<?php echo $amphur['PROVINCE_ID']; ?>">Back</a>
+            </div>
+        </div>
     </div>
 
     <table class="table table-bordered">

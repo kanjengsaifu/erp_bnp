@@ -92,14 +92,10 @@ class PurchaseOrderModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
   
     function getPurchaseOrderByCode($code){
@@ -111,38 +107,12 @@ class PurchaseOrderModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
 
-    function getPurchaseOrderByCode($code){
-        $sql = " SELECT * 
-        FROM tb_purchase_order 
-        LEFT JOIN tb_supplier ON tb_purchase_order.supplier_code = tb_supplier.supplier_code 
-        LEFT JOIN tb_user ON tb_purchase_order.user_code = tb_user.user_id 
-        WHERE purchase_order_code = '$code' 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
-            $result->close();
-            return $data;
-        }
-
-    } 
-
-     
-
-   
     function cancelPurchaseOrderByCode($code){
         $sql = " UPDATE tb_purchase_order SET 
         purchase_order_cancelled = '1', 
@@ -213,7 +183,7 @@ class PurchaseOrderModel extends BaseModel{
         purchase_order_status = '".$data['purchase_order_status']."', 
         $str 
         lastupdate = NOW() 
-        WHERE purchase_order_id = '$id' 
+        WHERE purchase_order_code = '$id' 
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -278,19 +248,16 @@ class PurchaseOrderModel extends BaseModel{
         }else {
             return false;
         }
-
     }
 
 
     function deletePurchaseOrderByCode($code){ 
-
         $sql = " DELETE FROM tb_purchase_order WHERE purchase_order_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
         
         $sql = " DELETE FROM tb_purchase_order_list WHERE purchase_order_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT); 
         
-
     }
 }
 ?>

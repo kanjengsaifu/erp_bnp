@@ -93,8 +93,20 @@
         agent_lastname = $.trim(agent_lastname);
         agent_address = $.trim(agent_address);
         agent_mobile = $.trim(agent_mobile);
+        
+        check_code();
+        check_username();
 
-        if(agent_prefix.length == 0){
+        if($('#alert_code').hasClass('alert-danger')){
+            document.getElementById("agent_code").focus();
+            return false;
+        }else if($('#alert_username').hasClass('alert-danger')){
+            document.getElementById("agent_username").focus();
+            return false;
+        }else if($('#alert_password').hasClass('alert-danger')){
+            document.getElementById("agent_password").focus();
+            return false;
+        }else if(agent_prefix.length == 0){
             alert("Please input prefix");
             document.getElementById("agent_prefix").focus();
             return false;
@@ -130,15 +142,6 @@
             alert("Please input status");
             document.getElementById("status_code").focus();
             return false; 
-        }else if($('#alert_code').hasClass('alert-danger')){
-            document.getElementById("agent_code").focus();
-            return false;
-        }else if($('#alert_username').hasClass('alert-danger')){
-            document.getElementById("agent_username").focus();
-            return false;
-        }else if($('#alert_password').hasClass('alert-danger')){
-            document.getElementById("agent_password").focus();
-            return false;
         }else{ 
             return true;
         }

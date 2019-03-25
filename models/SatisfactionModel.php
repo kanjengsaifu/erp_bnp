@@ -1,6 +1,6 @@
 <?php
-
 require_once("BaseModel.php");
+
 class SatisfactionModel extends BaseModel{
 
     function __construct(){

@@ -57,6 +57,8 @@
         var dealer_name = document.getElementById("dealer_name").value;
         var dealer_lastname = document.getElementById("dealer_lastname").value;
         var dealer_address = document.getElementById("dealer_address").value;
+        var dealer_fund_name = document.getElementById("dealer_fund_name").value;
+        var dealer_fund_budget = document.getElementById("dealer_fund_budget").value;
         var province_id = document.getElementById("province_id").value;
         var amphur_id = document.getElementById("amphur_id").value;
         var district_id = document.getElementById("district_id").value;
@@ -68,13 +70,21 @@
         dealer_name = $.trim(dealer_name);
         dealer_lastname = $.trim(dealer_lastname);
         dealer_address = $.trim(dealer_address);
+        dealer_fund_name = $.trim(dealer_fund_name);
+        dealer_fund_budget = $.trim(dealer_fund_budget);
         province_id = $.trim(province_id);
         amphur_id = $.trim(amphur_id);
         district_id = $.trim(district_id);
         dealer_zipcode = $.trim(dealer_zipcode);
         dealer_mobile = $.trim(dealer_mobile);
 
-        if(dealer_prefix.length == 0){
+        if($('#alert_username').hasClass('alert-danger')){
+            document.getElementById("dealer_username").focus();
+            return false;
+        }else if($('#alert_password').hasClass('alert-danger')){
+            document.getElementById("dealer_password").focus();
+            return false;
+        }else if(dealer_prefix.length == 0){
             alert("Please input dealer prefix");
             document.getElementById("dealer_prefix").focus();
             return false;
@@ -86,6 +96,10 @@
             alert("Please input dealer lastname");
             document.getElementById("dealer_lastname").focus();
             return false;
+        }else if(status_code.length == 0){
+            alert("Please input dealer status");
+            document.getElementById("status_code").focus();
+            return false; 
         }else if(dealer_address.length == 0){
             alert("Please input dealer address");
             document.getElementById("dealer_address").focus();
@@ -102,15 +116,13 @@
             alert("Please input dealer district");
             document.getElementById("district_id").focus();
             return false;
-        }else if(status_code.length == 0){
-            alert("Please input dealer status");
-            document.getElementById("status_code").focus();
-            return false; 
-        }else if($('#alert_username').hasClass('alert-danger')){
-            document.getElementById("dealer_username").focus();
+        }else if(dealer_fund_name.length == 0){
+            alert("Please input fund name");
+            document.getElementById("dealer_fund_name").focus();
             return false;
-        }else if($('#alert_password').hasClass('alert-danger')){
-            document.getElementById("dealer_password").focus();
+        }else if(dealer_fund_budget.length == 0){
+            alert("Please input fund budget");
+            document.getElementById("dealer_fund_budget").focus();
             return false;
         }else{ 
             return true;
@@ -284,7 +296,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>ตำบล / Distict <font color="#F00"><b>*</b></font> </label>
-                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select">
+                        <select id="district_id" name="district_id" data-live-search="true" class="form-control select" onchange="getVillage()">
                             <option value="">Select</option>
                             <?php 
                             for($i =  0 ; $i < count($district) ; $i++){
@@ -301,7 +313,7 @@
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>หมู่บ้าน : Village <font color="#F00"><b>*</b></font> </label>
-                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select" onchange="getVillage()">
+                        <select id="village_id" name="village_id" data-live-search="true" class="form-control select">
                             <option value="">Select</option>
                             <?php 
                             for($i =  0 ; $i < count($village) ; $i++){
@@ -314,12 +326,29 @@
                         <p class="help-block">Example : บ้าน.</p>
                     </div>
                 </div>
-
+            </div> 
+            <div class="row">
                 <div class="col-sm-6 col-lg-3">
                     <div class="form-group">
                         <label>เลขไปรษณีย์ / Zipcode <font color="#F00"><b>*</b></font> </label>
-                        <input id="dealer_zipcode" name="dealer_zipcode" type="text" readonly class="form-control" value="<?php echo $dealer['POSTCODE']?>"  autocomplete="off">
+                        <input id="dealer_zipcode" name="dealer_zipcode" type="text" readonly class="form-control" value="<?php echo $dealer['POSTCODE']?>" autocomplete="off">
                         <p class="help-block">Example : 30000.</p>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>ชื่อกองทุนที่ดูเเล / Fund Name <font color="#F00"><b>*</b></font> </label>
+                        <input id="dealer_fund_name" name="dealer_fund_name" type="text" class="form-control" value="<?php echo $dealer['dealer_fund_name']?>" autocomplete="off">
+                        <p class="help-block">Example : กองทุนบ้านกล้วย.</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3">
+                    <div class="form-group">
+                        <label>งบประมาณกองทุน / Fund budget <font color="#F00"><b>*</b></font> </label>
+                        <input id="dealer_fund_budget" name="dealer_fund_budget" type="text" class="form-control integer" value="<?php echo $dealer['dealer_fund_budget']?>" autocomplete="off">
+                        <p class="help-block">Example : 10000.</p>
                     </div>
                 </div>
             </div>

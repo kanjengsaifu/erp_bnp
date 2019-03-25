@@ -20,7 +20,6 @@ class StatusModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getStatusByID($id){
@@ -45,6 +44,7 @@ class StatusModel extends BaseModel{
         FROM tb_status 
         WHERE status_id = '$id' 
         ";
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $row = mysqli_fetch_array($result,MYSQLI_NUM);
             $result->close();
@@ -56,7 +56,6 @@ class StatusModel extends BaseModel{
     function deleteStatusByID($id){
         $sql = " DELETE FROM tb_status WHERE status_id = '$id' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
     }
 }
 ?>

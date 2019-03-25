@@ -1,13 +1,3 @@
-
-
-<!-- <div class="row">
-    <div class="col-lg-6">
-        <h1 class="page-header">Purchase Order Management  </h1>
-    </div>
-    <div class="col-lg-6" align="right">
-       
-    </div> 
-</div> -->
 <div class="row">
     <div class="col-lg-6">
         <h1 class="page-header">Purchase Order Management</h1>
@@ -32,8 +22,8 @@
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form role="form" method="post"  action="index.php?app=purchase_order&action=approve&id=<?php echo $purchase_order_id;?>" >
-                    <input type="hidden"  id="purchase_order_id" name="purchase_order_id" value="<?php echo $purchase_order_id; ?>" />
+                <form role="form" method="post"  action="index.php?app=purchase_order&action=approve&id=<?php echo $purchase_order_code;?>" >
+                    <input type="hidden"  id="purchase_order_code" name="purchase_order_code" value="<?php echo $purchase_order_code; ?>" />
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="row">
@@ -139,7 +129,7 @@
                                 
 
                                 <td><?PHP   
-                                    //  echo  $purchase_order_lists[$i]['purchase_order_list_id'];
+                                    //  echo  $purchase_order_lists[$i]['purchase_order_list_code'];
                                    
                                         // echo "<pre>";
                                         // print_r($invoice_material);
@@ -155,7 +145,7 @@
                                 
                                 <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2)?></td>
                                 <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price_sum'],2)?></td>
-                                <!-- <td width="80"><a href="index.php?app=purchase_order&action=balance&id=<?PHP echo $purchase_order_id; ?>&purchase_order_list_id=<?PHP echo $purchase_order_lists[$i]['purchase_order_list_id']; ?>" class="btn btn-danger">Close</a></td> -->
+                                <!-- <td width="80"><a href="index.php?app=purchase_order&action=balance&id=<?PHP echo $purchase_order_code; ?>&purchase_order_list_code=<?PHP echo $purchase_order_lists[$i]['purchase_order_list_code']; ?>" class="btn btn-danger">Close</a></td> -->
 								<!--
                                 <td align="center"><?php echo $purchase_order_lists[$i]['purchase_order_list_delivery_min']?></td>
                                 <td align="center"><?php echo $purchase_order_lists[$i]['purchase_order_list_delivery_max']?></td>
@@ -265,7 +255,7 @@
                         </div>
                         <div class="col-lg-2" align="right">
                             <!-- <button type="submit" class="btn btn-success">Save</button>
-                            <a href="index.php?app=purchase_order&action=balance&id=<?PHP echo $purchase_order_id; ?>" class="btn btn-danger">Close</a> -->
+                            <a href="index.php?app=purchase_order&action=balance&id=<?PHP echo $purchase_order_code; ?>" class="btn btn-danger">Close</a> -->
                             <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>
                         </div>
                     <?PHP } ?>

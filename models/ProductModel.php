@@ -52,7 +52,6 @@ class ProductModel extends BaseModel{
         if($keyword != ""){
             $sts_keyword = " AND (product_name LIKE ('%$keyword%') OR tb_product.product_code LIKE ('%$keyword%') ) ";
         }
-
         
         $sql = " SELECT tb_product.* ,CONCAT(product_type_name,' ',product_brand_name,' ',product_name) AS name 
         FROM tb_product  
