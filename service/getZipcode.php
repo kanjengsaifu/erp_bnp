@@ -1,29 +1,29 @@
-<?php
-
+<?php 
+  
 header('Access-Control-Allow-Origin: *');  
 header("Access-Control-Allow-Methods: *");
 header("Content-Type: application/json; charset=UTF-8");
-require_once('../models/MemberModel.php');  
+require_once('../models/AddressModel.php');  
 date_default_timezone_set('asia/bangkok');
 
-$MemberModel = new MemberModel;   
+$AddressModel = new AddressModel;   
  
 $json = file_get_contents('php://input');
     
 $obj = json_decode($json,true);  
 
-if (isset($obj['user_code']) ) {
+if (isset($obj['POSTCODE']) ) {
  
     $data=[]; 
-    $member = $MemberModel->getMemberBy($obj['user_code'],$obj['member_type'],$obj['keyword']);
+    $amphur = $AddressModel->getZipcodeByAmphurID($obj['POSTCODE']);
     // echo '<pre>';
-    // print_r($songserm);
+    // print_r($amphur);
     // echo '</pre>';
-    if (count($member) > 0) {
-        $data ['data'] = $member ;
+    if (count($amphur) > 0) {
+        $data ['data'] = $amphur ;
         $data ['result'] = true;
     } else {
-        $data ['result_text'] = 'user_code=='.$obj['user_code'].'|||member_type=='.$obj['member_type'].'|||keyword=='.$obj['keyword'];
+        $data ['result_text'] = 'POSTCODE=='.$obj['POSTCODE'];
         $data ['result'] = false ;
     }
 } else {
@@ -31,5 +31,4 @@ if (isset($obj['user_code']) ) {
     $data ['result'] = false;
 }
 echo json_encode($data);
-
 ?>

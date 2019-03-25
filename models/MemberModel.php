@@ -72,7 +72,7 @@ class MemberModel extends BaseModel{
         $str_member_type 
         $str_keyword
         ";
-        echo $sql;
+        // echo $sql;
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
