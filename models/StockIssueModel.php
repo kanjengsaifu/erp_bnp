@@ -68,14 +68,10 @@ class StockIssueModel extends BaseModel{
         //echo $sql;
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
 
     function getStockIssueViewByCode($id){
@@ -103,16 +99,11 @@ class StockIssueModel extends BaseModel{
         WHERE stock_issue_code = '$id' 
         ";
 
-        
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
 
     function getStockIssueLastID($id,$digit){
@@ -127,7 +118,6 @@ class StockIssueModel extends BaseModel{
             $result->close();
             return $row['stock_issue_lastcode'];
         }
-
     }
 
    
@@ -150,8 +140,6 @@ class StockIssueModel extends BaseModel{
         }else {
             return false;
         }
-
-
     }
 
 

@@ -204,12 +204,9 @@ class StockListModel extends BaseModel{
         FROM $table_name
         WHERE product_code = '$product_code' 
         AND STR_TO_DATE(stock_date,'%d-%m-%Y %H:%i:%s') < STR_TO_DATE('$stock_date','%d-%m-%Y %H:%i:%s') )"; 
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }

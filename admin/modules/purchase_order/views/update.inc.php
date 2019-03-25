@@ -207,7 +207,7 @@
 
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
-                                            '<input type="checkbox" name="p_id" value="'+data[i].material_code+'" />'+     
+                                            '<input type="checkbox" name="p_code" value="'+data[i].material_code+'" />'+     
                                         '</td>'+
                                         '<td>'+
                                             data[i].material_code+
@@ -255,7 +255,7 @@
 
                     content += '<tr class="odd gradeX">'+
                                         '<td>'+
-                                            '<input type="checkbox" name="p_id" value="'+data[i].material_code+'" />'+     
+                                            '<input type="checkbox" name="p_code" value="'+data[i].material_code+'" />'+     
                                         '</td>'+
                                         '<td>'+
                                             data[i].material_code+
@@ -311,7 +311,7 @@
 
     function add_row(id){
         $('#modalAdd').modal('hide');
-        var checkbox = document.getElementsByName('p_id');
+        var checkbox = document.getElementsByName('p_code');
         for(var i = 0 ; i < (checkbox.length); i++){
             if(checkbox[i].checked){
 

@@ -52,15 +52,8 @@ class LicensePermissionModel extends BaseModel{
         }
     } 
     function getLicensePermissionByUserCode($code){
-        $sql = "SELECT  
-        tb_license_permission.menu_code,
-        tb_menu.menu_name,
-        tb_menu.menu_name_eng,
-        tb_license_permission.license_permission_view ,
-        tb_license_permission.license_permission_add,
-        tb_license_permission.license_permission_edit,
-        tb_license_permission.license_permission_cancel,
-        tb_license_permission.license_permission_delete
+        $sql = "SELECT tb_license_permission.menu_code, menu_name, menu_name_en, 
+        permission_view , permission_add, permission_edit, permission_approve, permission_cancel, permission_delete
         FROM tb_user 
         LEFT JOIN tb_license ON tb_user.license_code = tb_license.license_code
         LEFT JOIN tb_license_permission ON tb_license.license_code = tb_license_permission.license_code  
@@ -77,6 +70,7 @@ class LicensePermissionModel extends BaseModel{
             return $data;
         }
     } 
+    
     function getLicensePermissionByLicenseCode($code,$menu_code=''){
         $sql = " SELECT * 
         FROM tb_license_permission 
@@ -101,20 +95,20 @@ class LicensePermissionModel extends BaseModel{
             license_permission_code,
             license_code,
             menu_code,
-            license_permission_view,
-            license_permission_add,
-            license_permission_edit,
-            license_permission_cancel, 
-            license_permission_delete 
+            permission_view,
+            permission_add,
+            permission_edit,
+            permission_cancel, 
+            permission_delete 
             ) VALUES (
             '".$data['license_permission_code']."',
             '".$data['license_code']."',
             '".$data['menu_code']."',
-            '".$data['license_permission_view']."',
-            '".$data['license_permission_add']."',
-            '".$data['license_permission_edit']."',
-            '".$data['license_permission_cancel']."',
-            '".$data['license_permission_delete']."'
+            '".$data['permission_view']."',
+            '".$data['permission_add']."',
+            '".$data['permission_edit']."',
+            '".$data['permission_cancel']."',
+            '".$data['permission_delete']."'
             )";
             // echo $sql;
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) { 
@@ -128,11 +122,11 @@ class LicensePermissionModel extends BaseModel{
         $sql = " UPDATE tb_license_permission SET 
         license_code = '".$data['license_code']."',
         menu_code = '".$data['menu_code']."',
-        license_permission_view = '".$data['license_permission_view']."',
-        license_permission_add = '".$data['license_permission_add']."',
-        license_permission_edit = '".$data['license_permission_edit']."',
-        license_permission_cancel = '".$data['license_permission_cancel']."',
-        license_permission_delete = '".$data['license_permission_delete']."' 
+        permission_view = '".$data['permission_view']."',
+        permission_add = '".$data['permission_add']."',
+        permission_edit = '".$data['permission_edit']."',
+        permission_cancel = '".$data['permission_cancel']."',
+        permission_delete = '".$data['permission_delete']."' 
         WHERE license_permission_code = '$code' 
         ";
         // echo $sql;

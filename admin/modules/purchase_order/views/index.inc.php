@@ -40,7 +40,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
 
         $materials = $material_model->getMaterialBy();
 
-        $user = $user_model->getUserByCode($admin_id);
+        $user = $user_model->getUserByCode($admin_code);
         
         $data = [];
         $data['year'] = date("Y");
@@ -59,7 +59,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             }   
         } 
 
-        $purchase_order_lists = $purchase_order_model->generatePurchaseOrderListBySupplierId($supplier_code,$purchase_request_id,$type);
+        $purchase_order_lists = $purchase_order_model->generatePurchaseOrderListBySupplierId($supplier_code,$purchase_request_code,$type);
         
     }
     $first_date = date("d")."-".date("m")."-".date("Y"); 
@@ -80,24 +80,14 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
     }
     //$materials=$material_supplier_model->getMaterialBySupplierCode($purchase_order['supplier_code']);
     $materials=$material_model->getMaterialBy('','','','Active');
-    // echo "<pre>";
-    // print_r( $purchase_order_lists);
-    // echo "</pre>";
+
     require_once($path.'update.inc.php');
 
 }else if ($_GET['action'] == 'detail'&& $menu['purchase_order']['view']){ 
     $purchase_order = $purchase_order_model->getPurchaseOrderViewByCode($purchase_order_code);
     $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
-    // if($supplier['vat_type'] == '0'){
-    //     $vat= '0';
-    // }else{
-    //     $vat = $purchase_order['vat'];
-    // }
-    // echo "<pre>";
-    // print_r($purchase_order);
-    // echo "</pre>";
-    require_once($path.'detail.inc.php');
 
+    require_once($path.'detail.inc.php');
 }else if ($_GET['action'] == 'delete' && $menu['purchase_order']['delete']){
 
     // $notification_model->deleteNotificationByTypeCode('Purchase Order',$purchase_order_code);
@@ -175,14 +165,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                     $data_sub['purchase_order_list_delivery_max'] = $purchase_order_list_delivery_max[$i];
                     $data_sub['purchase_order_list_remark'] = $purchase_order_list_remark[$i];
                     $data_sub['addby'] = $login_user['user_code'];
-                    
-                    // echo '<pre>';
-                    // print_r($data_sub);
-                    // echo '</pre>';
+
                     $id = $purchase_order_list_model->insertPurchaseOrderList($data_sub);
-                    // if($id != ""){
-                     
-                    // }
+
                 }
                 $data['purchase_order_status'] = 'New';
             }else if($material_code != ""){
@@ -199,9 +184,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 $data_sub['purchase_order_list_remark'] = $purchase_order_list_remark;
                 $data_sub['addby'] = $login_user['user_code'];
 
-                // echo '<pre>';
-                // print_r($data_sub);
-                // echo '</pre>';
                 $id = $purchase_order_list_model->insertPurchaseOrderList($data_sub);
                 // if($id != ""){
                     
@@ -262,7 +244,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 }
             }
 
-
             ?>
                     <script>
                      window.location="index.php?app=purchase_order&action=update&purchase_order_code=<?php echo $purchase_order_code;?>"</script>
@@ -304,7 +285,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 $data_sub['purchase_order_list_no'] = $i;
                 $data_sub['purchase_order_code'] = $purchase_order_code;
                 $data_sub['material_code'] = $material_code[$i];
-                $data_sub['stock_group_id'] = $stock_group_id[$i];
+                $data_sub['stock_group_code'] = $stock_group_code[$i];
                 
                 $data_sub['purchase_order_list_qty'] = (float)filter_var($purchase_order_list_qty[$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                 $data_sub['purchase_order_list_price'] = (float)filter_var($purchase_order_list_price[$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);

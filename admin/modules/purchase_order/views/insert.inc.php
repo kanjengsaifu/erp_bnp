@@ -128,12 +128,12 @@
             document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
         });
 
-        // $.post( "controllers/getPurchaseOrderCodeByCode.php", { 'supplier_id': supplier_id, 'user_code':user_code, 'purchase_order_category':purchase_order_category  }, function( data ) {
+        // $.post( "controllers/getPurchaseOrderCodeByCode.php", { 'supplier_code': supplier_code, 'user_code':user_code, 'purchase_order_category':purchase_order_category  }, function( data ) {
         //     document.getElementById('purchase_order_code').value = data;
         //     check_code(); 
         // });
 
-        // $.post( "controllers/getMaterialBySupplierCode.php", { 'supplier_id': supplier_id }, function( data ) {
+        // $.post( "controllers/getMaterialBySupplierCode.php", { 'supplier_code': supplier_code }, function( data ) {
         //     material_data = data;
         // });
     }
@@ -248,7 +248,7 @@
 
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
-                                            '<input type="checkbox" name="p_id" value="'+data[i].material_code+'" />'+     
+                                            '<input type="checkbox" name="p_code" value="'+data[i].material_code+'" />'+     
                                         '</td>'+
                                         '<td>'+
                                             data[i].material_code+
@@ -295,7 +295,7 @@
 
                     content += '<tr class="odd gradeX">'+
                                         '<td>'+
-                                            '<input type="checkbox" name="p_id" value="'+data[i].material_code+'" />'+     
+                                            '<input type="checkbox" name="p_code" value="'+data[i].material_code+'" />'+     
                                         '</td>'+
                                         '<td>'+
                                             data[i].material_code+
@@ -350,7 +350,7 @@
 
     function add_row(id){
         $('#modalAdd').modal('hide');
-        var checkbox = document.getElementsByName('p_id');
+        var checkbox = document.getElementsByName('p_code');
         for(var i = 0 ; i < (checkbox.length); i++){
             if(checkbox[i].checked){
 
@@ -370,7 +370,7 @@
                         '<td>'+
                             '<input type="hidden" name="purchase_order_list_code[]" value="0" />'+ 
                             '<input type="hidden" name="material_code[]" value="'+data_buffer[i].material_code+'" />'+
-                            '<input type="hidden" name="stock_group_id[]" value="'+data_buffer[i].stock_group_id+'" />'+ 
+                            '<input type="hidden" name="stock_group_code[]" value="'+data_buffer[i].stock_group_code+'" />'+ 
                             '<span>'+data_buffer[i].material_code+'</span>'+
                         '</td>'+
                         '<td>'+

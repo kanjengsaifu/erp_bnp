@@ -1,8 +1,27 @@
 <?php
-    /* ----------------------------------- ระบบพื้นฐาน --------------------------------- */
-    if(!isset($_GET['app'])){
+    /* ----------------------------------- ระบบงาน --------------------------------- */
+    if(!isset($_GET['app']) && $menu['dashboard']['view']){
         require_once("modules/dashboard/views/index.inc.php");
-    }else if($_GET['app'] == "user"){
+    }else if($_GET['app'] == "order" && $menu['order']['view']){
+        require_once("modules/order/views/index.inc.php");   
+    }else if($_GET['app'] == "job" && $menu['job']['view']){
+        require_once("modules/job/views/index.inc.php");
+    }
+    /* ----------------------------------- //ระบบงาน// ----------------------------------- */
+
+    /* ----------------------------------- ระบบจัดซื้อ --------------------------------- */
+    else if($_GET['app'] == "purchase_request" && $menu['purchase']['view']){
+        require_once("modules/purchase_request/views/index.inc.php");
+    }else if($_GET['app'] == "purchase_order" && $menu['purchase']['view']){
+        require_once("modules/purchase_order/views/index.inc.php");   
+    }else if($_GET['app'] == "invoice_supplier" && $menu['purchase']['view']){
+        require_once("modules/invoice_supplier/views/index.inc.php");
+    }
+    /* ----------------------------------- //ระบบจัดซื้อ// ----------------------------------- */
+
+
+    /* ----------------------------------- ระบบพื้นฐาน --------------------------------- */
+    else if($_GET['app'] == "user"){
         require_once("modules/user/views/index.inc.php");
     }else if($_GET['app'] == "license"){
         require_once("modules/license/views/index.inc.php");   

@@ -10,26 +10,27 @@ $license_permission = $license_permission_model->getLicensePermissionByUserCode(
 
 $menu = [];
 for($i = 0 ; $i < count($menu_list); $i++){
-
-    $menu_name_eng = $menu_list[$i]['menu_name_eng'];  
-    $id = '1';   
+    $menu_name_en = $menu_list[$i]['menu_name_en'];
     $action = 'view';  
-    $menu[$menu_list[$i]['menu_name_eng']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_eng,$action,$id) { 
-        return ($var['menu_name_eng'] == trim($menu_name_eng)&&$var['license_permission_'.$action] ==$id); 
-    }));      
+    $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
+        return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
+    }));
     $action = 'add';  
-    $menu[$menu_list[$i]['menu_name_eng']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_eng,$action,$id) { 
-        return ($var['menu_name_eng'] == trim($menu_name_eng)&&$var['license_permission_'.$action] ==$id); 
-    }));      
+    $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
+        return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
+    }));
     $action = 'edit';  
-    $menu[$menu_list[$i]['menu_name_eng']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_eng,$action,$id) { 
-        return ($var['menu_name_eng'] == trim($menu_name_eng)&&$var['license_permission_'.$action] ==$id); 
-    }));      
+    $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
+        return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
+    }));
+    $action = 'approve';  
+    $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
+        return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
+    }));
     $action = 'delete';  
-    $menu[$menu_list[$i]['menu_name_eng']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_eng,$action,$id) { 
-        return ($var['menu_name_eng'] == trim($menu_name_eng)&&$var['license_permission_'.$action] ==$id); 
-    }));      
-    
+    $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
+        return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
+    }));
 }
 // echo "<pre>";
 // print_r($menu);
@@ -119,18 +120,21 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <div style="font-size: 0.75em;color: #a9a9a9;">enterprise resource planning</div>
                     </div>
                 </li>
+                <?php if ($menu['dashboard']['view']){ ?>
                 <li>
                     <a href="?" <?PHP if(!isset($_GET['app'])){ ?> class="active" <?PHP } ?>><i class="fa fa-line-chart" aria-hidden="true"></i> ภาพรวม</a>
-                </li>   
+                </li>
+                <?php } ?>
+                <?php if ($menu['order']['view']){ ?>
                 <li> 
                     <a href="?app=order" <?PHP if($_GET["app"]=='order'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-text-o" aria-hidden="true"></i> ใบรับงาน</a>
                 </li>
+                <?php } ?>
+                <?php if ($menu['job']['view']){ ?>
                 <li>
                     <a href="?app=job" <?PHP if($_GET["app"]=='job'){ ?> class="active" <?PHP } ?>><i class="fa fa-gears" aria-hidden="true"></i> งาน</a>
                 </li>
-                <!-- <li>
-                    <a href="?app=product" <?PHP if($_GET["app"]=='product'){ ?> class="active" <?PHP } ?>><i class="fa fa-th" aria-hidden="true"></i> สินค้า</a>
-                </li> -->
+                <?php } ?>
                 <?php if ($menu['zone']['view']){ ?>
                 <li>
                     <a href="?app=zone" <?PHP if($_GET['app'] == "zone"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> เขตการขาย</a>
@@ -199,6 +203,36 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         </li>
                     </ul>
                 </li>
+
+                <?php if ($menu['purchase']['view']){ ?>
+                <li
+                <?PHP 
+                    if($_GET["app"]=='purchase_request'
+                        || $_GET["app"]=='purchase_order'
+                        || $_GET["app"]=='invoice_supplier'
+                    ){
+                        echo ' class="active" ';
+                    }
+                ?> 
+                >
+                    <a style="cursor: pointer;" class="nav-title">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i> ระบบจัดซื้อ <span class="glyphicon arrow"></span>
+                    </a>
+                    <ul class="collapse"> 
+                        <li>
+                            <a href="?app=purchase_request" <?PHP if($_GET["app"]=='purchase_request'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i> ใบร้องขอสั่งซื้อ</a>
+                        </li>
+                        <li>
+                            <a href="?app=purchase_order" <?PHP if($_GET["app"]=='purchase_order'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i> ใบสั่งซื้อ</a>
+                        </li>
+                        <li>
+                            <a href="?app=invoice_supplier" <?PHP if($_GET["app"]=='invoice_supplier'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i> ใบรับสินค้า</a>
+                        </li>
+                    </ul>
+                </li>
+                <?php } ?>
+
+                <?php if ($menu['stock']['view']){ ?>
                 <li
                 <?PHP 
                     if($_GET["app"]=='stock'
@@ -214,7 +248,6 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <i class="fa fa-database" aria-hidden="true"></i> ระบบคลังสินค้า <span class="glyphicon arrow"></span>
                     </a>
                     <ul class="collapse"> 
-                        <?php if ($menu['stock']['view']){ ?>
                         <li>
                             <a href="?app=search_product" <?PHP if($_GET["app"]=='search_product'){ ?> class="active" <?PHP } ?>><i class="fa fa-search fa-fw" aria-hidden="true"></i> ค้นหาสินค้า</a>
                         </li>
@@ -227,9 +260,9 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <li>
                             <a href="?app=stock_issue" <?PHP if($_GET["app"]=='stock_issue'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i>  ใบนำออกสินค้า</a>
                         </li>
-                        <?php } ?>
                     </ul>
                 </li>
+                <?php } ?>
                 <li
                 <?PHP 
                     if($_GET["app"]=='user'

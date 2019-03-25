@@ -51,10 +51,7 @@ class SupplierModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
@@ -69,14 +66,10 @@ class SupplierModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
 
     function getSupplierByPO($purchase_order_code){
@@ -87,14 +80,10 @@ class SupplierModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     } 
 
     function updateSupplierByCode($code,$data = []){
