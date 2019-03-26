@@ -3,18 +3,15 @@
         url: function(keyword) {
             return "controllers/getMaterialByKeyword.php?keyword="+keyword;
         },
-
         getValue: function(element) {
             return element.material_code ;
         },
-
         template: {
             type: "description",
             fields: {
                 description: "material_name"
             }
         },
-        
         ajaxSettings: {
             dataType: "json",
             method: "POST",
@@ -22,12 +19,10 @@
                 dataType: "json"
             }
         },
-
         preparePostData: function(data) {
             data.keyword = $(".example-ajax-post").val();
             return data;
         },
-
         requestDelay: 400
     }; 
 
@@ -64,11 +59,7 @@
         });
     }
 
-
     function check(){
-
-
-  
         var supplier_code = document.getElementById("supplier_code").value;
         var purchase_order_code = document.getElementById("purchase_order_code").value;
         var purchase_order_date = document.getElementById("purchase_order_date").value;
@@ -110,14 +101,10 @@
         }else{ 
             return true;
         }
-
-
-
     }
 
     function get_supplier_detail(){
         var supplier_code = document.getElementById('supplier_select').value;
-        // var purchase_order_category = document.getElementById('purchase_order_category').value;
         var user_code = document.getElementById('user_code').value;
         document.getElementById('supplier_code').value = supplier_code;
         $.post( "controllers/getSupplierByCode.php", { 'supplier_code': supplier_code}, function( data ) {
@@ -127,17 +114,7 @@
             document.getElementById('purchase_order_credit_term').value = data.credit_day;
             document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
         });
-
-        // $.post( "controllers/getPurchaseOrderCodeByCode.php", { 'supplier_code': supplier_code, 'user_code':user_code, 'purchase_order_category':purchase_order_category  }, function( data ) {
-        //     document.getElementById('purchase_order_code').value = data;
-        //     check_code(); 
-        // });
-
-        // $.post( "controllers/getMaterialBySupplierCode.php", { 'supplier_code': supplier_code }, function( data ) {
-        //     material_data = data;
-        // });
     }
-
     
     function delete_row(id){
         $(id).closest('tr').remove();
@@ -151,13 +128,11 @@
             td_number[i].innerHTML = (i+1);
         }
     }
- 
 
-     function update_sum(id){
-
-          var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_qty[]"]').val(  ).replace(',',''));
-          var price =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( ).replace(',',''));
-          var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( ).replace(',',''));
+    function update_sum(id){
+        var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_qty[]"]').val(  ).replace(',',''));
+        var price =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( ).replace(',',''));
+        var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( ).replace(',',''));
 
         if(isNaN(qty)){
             qty = 0;
@@ -178,8 +153,6 @@
         $(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( sum.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
 
         calculateAll();
-
-        
     }
 
     function calculate_list(id){
@@ -204,7 +177,6 @@
         $(id).closest('tr').children('td').children('input[name="qty"]').val( qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
         $(id).closest('tr').children('td').children('input[name="price"]').val( price.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
         $(id).closest('tr').children('td').children('input[name="total"]').val( sum.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-
     }
 
     function show_recieve(checkbox){ 
@@ -236,12 +208,10 @@
         
         if(supplier_code != ""){
 
-            $.post( "controllers/getPurchaseOrderListBySupplierCode.php", 
-            {  
+            $.post( "controllers/getPurchaseOrderListBySupplierCode.php",{  
                 'supplier_code': supplier_code
              }, function( data ) {
                 if(data.length > 0){
-                    console.log(data);
                     data_buffer = data;
                     var content = "";
                     for(var i = 0; i < data.length ; i++){
@@ -270,29 +240,24 @@
                     //add_row_new(id);
                     alert("ไม่มีรายการวัตถุดิบที่สามารถเปิดใบสั่งซื้อได้");
                 }
-                
             });
         }else{
             alert("Please select supplier.");
         }
-        
     } 
-    function search_pop_like(id){
 
+    function search_pop_like(id){
         var supplier_code = document.getElementById('supplier_code').value; 
         
-        $.post( "controllers/getPurchaseOrderListBySupplierCode.php", 
-        {  
+        $.post( "controllers/getPurchaseOrderListBySupplierCode.php", {  
             'supplier_code': supplier_code, 
             'search':$(id).val() 
         }, function( data ) {
-            // console.log(data);
             var content = "";
             if(data.length > 0){
                 data_buffer = data;
                 
                 for(var i = 0; i < data.length ; i++){
-
                     content += '<tr class="odd gradeX">'+
                                         '<td>'+
                                             '<input type="checkbox" name="p_code" value="'+data[i].material_code+'" />'+     
@@ -314,7 +279,6 @@
     }
     
     function show_data(id){
-        
         var material_code = $(id).val();  
 
         $.post( "controllers/getMaterialByCode.php", { 'material_code': $.trim(material_code)}, function( data ) {
@@ -327,7 +291,6 @@
                 var supplier_code = $('#supplier_code').val(); 
                 if(supplier_code!=''){
                     $.post( "controllers/getMaterialSupplierPriceByCode.php", { 'material_code': $.trim(data.material_code),'supplier_code': $.trim(supplier_code)}, function( data ) { 
-                        // console.log(data);
                         if (data != null){
                             if( data.material_code == null ){
                                 $(id).closest('tr').children('td').children('input[name="save_material_price[]"]').attr('checked',true) ; 
@@ -345,7 +308,6 @@
                 } 
             }
         });
-    
     }
 
     function add_row(id){
@@ -353,7 +315,6 @@
         var checkbox = document.getElementsByName('p_code');
         for(var i = 0 ; i < (checkbox.length); i++){
             if(checkbox[i].checked){
-
                 var index = 0;
                 if(isNaN($(id).closest('table').children('tbody').children('tr').length)){
                     index = 1;
@@ -361,7 +322,6 @@
                     index = $(id).closest('table').children('tbody').children('tr').length + 1;
                 }
                
-
                 $(id).closest('table').children('tbody').append(
                     '<tr class="odd gradeX">'+
                         '<td class="sorter">'+
@@ -394,19 +354,13 @@
                         '</td>'+
                     '</tr>'
                 );
- 
-
             }
-            
         } 
         
         $(".example-ajax-post").easyAutocomplete(options);
         update_line();
         calculateAll();
     }
-
-    
-
 
     function add_row_new(id){
         var supplier_code = document.getElementById('supplier_code').value;   
@@ -458,9 +412,7 @@
         }
     }
 
-
-    function checkAll(id)
-    {
+    function checkAll(id){
         var checkbox = document.getElementById('check_all');
         if (checkbox.checked == true){
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[type="checkbox"]').prop('checked', true);
@@ -469,9 +421,7 @@
         }
     }
 
-
     function calculateAll(){
-
         var val = document.getElementsByName('purchase_order_list_price_sum[]');
         var purchase_order_vat = parseFloat(document.getElementById('purchase_order_vat').value);
         var vat_type = document.getElementById('purchase_order_vat_type').value;
@@ -479,7 +429,6 @@
         var total = 0.0;
 
         for(var i = 0 ; i < val.length ; i++){
-            
             total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
         }
 
@@ -495,7 +444,6 @@
         $('#purchase_order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
         $('#purchase_order_vat_price').val((total * ($('#purchase_order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
         $('#purchase_order_net_price').val((total * ($('#purchase_order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-
     }
 
     function material_detail_blank(id){
@@ -507,360 +455,327 @@
             window.open("?app=material_detail&material_code="+material_code);
         }
     }
-
-
 </script>
 
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">Purchase Order Management </h1>
     </div>
-    <!-- /.col-lg-12 -->
 </div>
-<!-- /.row -->
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-               เพิ่มใบสั่งซื้อวัตถุดิบ / Add Purchase Order  
-            </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <form role="form" method="post" onsubmit="return check();" action="index.php?app=purchase_order&action=add" >
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        เพิ่มใบสั่งซื้อวัตถุดิบ / Add Purchase Order  
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <form role="form" method="post" onsubmit="return check();" action="index.php?app=purchase_order&action=add">
+            <div class="row">
+                <div class="col-lg-6">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label>รหัสผู้ขาย / Supplier Code <font color="#F00"><b>*</b></font></label>
-                                        <input id="supplier_code" name="supplier_code" class="form-control" value="<? echo $supplier['supplier_code'];?>" readonly>
-                                        <p class="help-block">Example : A0001.</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="form-group">
-                                        <label>ผู้ขาย / Supplier  <font color="#F00"><b>*</b></font> </label>
-                                        <input type="hidden" id="supplier_code_select" name="supplier_code_select" value="<?PHP echo $supplier_code; ?>"/>
-                                            <select id="supplier_select" name="supplier_select" class="form-control select" onchange="get_supplier_detail()" data-live-search="true" >
-                                            <option value="">Select</option>
-                                            <?php 
-                                            for($i =  0 ; $i < count($suppliers) ; $i++){
-                                            ?>
-                                            <option <?php if($suppliers[$i]['supplier_code'] == $supplier['supplier_code']){?> selected <?php }?> value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?>  </option>
-                                            <?
-                                            }
-                                            ?>
-                                        </select>
-                                        <p class="help-block">Example : Revel Soft (บริษัท เรเวลซอฟต์ จำกัด).</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font></label>
-                                        <textarea  id="supplier_address" name="supplier_address" class="form-control" rows="5" readonly><? echo $supplier['supplier_address_1'] ."\n". $supplier['supplier_address_2'] ."\n". $supplier['supplier_address_3'];?></textarea >
-                                        <p class="help-block">Example : IN.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                        </div>
                         <div class="col-lg-4">
-                            <div class="row">
-                                <!-- <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>ประเภทสั่งซื้อวัตถุดิบ / Purchase Order Type <font color="#F00"><b>*</b></font></label>
-                                        <select id="purchase_order_category" name="purchase_order_category" onchange="get_supplier_detail()" class="form-control" >
-                                            <option value="Normal">Normal</option>
-                                            <option value="Email">Email</option>
-                                            <option value="Online">Online</option>
-                                        </select>
-                                        <p class="help-block">Example : Online.</p>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>รหัสใบสั่งซื้อวัตถุดิบ / Purchase Order Code <font color="#F00"><b>*</b></font></label>
-                                        <input id="purchase_order_code" name="purchase_order_code" class="form-control"  onchange="check_code()" value="<?php echo $last_code;?>" >
-                                        <input id="purchase_check" type="hidden" value="" />
-                                        <p class="help-block">Example : PO1801001.</p>
-                                    </div>
-                                </div> -->
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>วันที่ออกใบสั่งซื้อวัตถุดิบ / Purchase Order Date</label>
-                                        <input type="text" id="purchase_order_date" name="purchase_order_date" value="<?PHP echo $first_date; ?>" class="form-control calendar"  onchange="check_date(this);" readonly/>
-                                        <input id="date_check" type="hidden" value="" />
-                                        <p class="help-block">31/01/2018</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>เครดิต (วัน) / Credit term (Day)</label>
-                                        <input type="text" id="purchase_order_credit_term" name="purchase_order_credit_term"  class="form-control" value="<?PHP echo $supplier['credit_day'];?>"/>
-                                        <p class="help-block">10 </p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>ผู้ออกใบสั่งซื้อ / Employee  <font color="#F00"><b>*</b></font> </label>
-                                        <select id="user_code" name="user_code" class="form-control select" data-live-search="true">
-                                            <option value="">Select</option>
-                                            <?php 
-                                            for($i =  0 ; $i < count($users) ; $i++){
-                                            ?>
-                                            <option <?PHP if($login_user['user_code'] == $users[$i]['user_code']){?> SELECTED <?PHP }?> value="<?php echo $users[$i]['user_code'] ?>"><?php echo $users[$i]['name'] ?> (<?php echo $users[$i]['user_position_name'] ?>)</option>
-                                            <?
-                                            }
-                                            ?>
-                                        </select>
-                                        <p class="help-block">Example : Thana Tepchuleepornsil.</p>
-                                    </div>
-                                </div>  
-                                
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>วันที่จัดส่ง / Delivery Date</label>
-                                        <input type="text" id="purchase_order_delivery_date" name="purchase_order_delivery_date" value="<? echo $purchase_order['purchase_order_delivery_date'];?>"  class="form-control calendar"   onchange="check_date(this);" readonly/>
-                                        <p class="help-block">31/01/2018</p>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>หมายเหตุ / Remark</label>
-                                        <input type="text" id="purchase_order_remark" name="purchase_order_remark" value="<? echo $purchase_order['purchase_order_remark'];?>"  class="form-control"  />
-                                        <p class="help-block">-</p>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label>รหัสผู้ขาย / Supplier Code <font color="#F00"><b>*</b></font></label>
+                                <input id="supplier_code" name="supplier_code" class="form-control" value="<? echo $supplier['supplier_code'];?>" readonly>
+                                <p class="help-block">Example : A0001.</p>
                             </div>
                         </div>
-                    </div> 
-
-                     <div>
-                    Our reference :
+                        <div class="col-lg-8">
+                            <div class="form-group">
+                                <label>ผู้ขาย / Supplier  <font color="#F00"><b>*</b></font> </label>
+                                <input type="hidden" id="supplier_code_select" name="supplier_code_select" value="<?PHP echo $supplier_code; ?>"/>
+                                    <select id="supplier_select" name="supplier_select" class="form-control select" onchange="get_supplier_detail()" data-live-search="true">
+                                    <option value="">Select</option>
+                                    <?php 
+                                    for($i =  0 ; $i < count($suppliers) ; $i++){
+                                    ?>
+                                    <option <?php if($suppliers[$i]['supplier_code'] == $supplier['supplier_code']){?> selected <?php }?> value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?>  </option>
+                                    <?
+                                    }
+                                    ?>
+                                </select>
+                                <p class="help-block">Example : Revel Soft (บริษัท เรเวลซอฟต์ จำกัด).</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>ที่อยู่ / Address <font color="#F00"><b>*</b></font></label>
+                                <textarea  id="supplier_address" name="supplier_address" class="form-control" rows="5" readonly><? echo $supplier['supplier_address_1'] ."\n". $supplier['supplier_address_2'] ."\n". $supplier['supplier_address_3'];?></textarea >
+                                <p class="help-block">Example : IN.</p>
+                            </div>
+                        </div>
                     </div>
-                    <table width="100%" name="tb_list" class="table table-striped table-bordered table-hover" >
-                        <thead>
-                            <tr>
-                                <th style="text-align:center;" width="60">ลำดับ </th>
-                                <th style="text-align:center;" width="150">รหัสวัตถุดิบ </th>
-                                <th style="text-align:center;" >ชื่อวัตถุดิบ / หมายเหตุ  </th> 
-                                <th style="text-align:center;" width="120">จำนวน  </th>
-                                <th style="text-align:center;" width="120">ราคาต่อหน่วย </th>
-                                <th style="text-align:center;" width="120">จำนวนเงิน </th>
-                                <th width="24"></th>
-                            </tr>
-                        </thead>
-                        <tbody  class="sorted_table">
-                            <?php 
-                            $total = 0;
-                            for($i=0; $i < count($purchase_order_lists); $i++){
-                            ?>
-                            <tr class="odd gradeX">
-                                <td class="sorter">
-                                    <?PHP echo ($i + 1); ?>.
-                                </td>
-                                <td>
-                                    <input type="hidden" name="purchase_order_list_code[]" value="0"/>
-                                    
-                                    <input type="hidden" name="material_code[]" value="<?PHP echo  $purchase_order_lists[$i]['material_code'];?>" />
+                </div>
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>วันที่ออกใบสั่งซื้อวัตถุดิบ / Purchase Order Date</label>
+                                <input type="text" id="purchase_order_date" name="purchase_order_date" value="<?PHP echo $first_date; ?>" class="form-control calendar" onchange="check_date(this);" readonly>
+                                <input id="date_check" type="hidden" value="" />
+                                <p class="help-block">31/01/2018</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>เครดิต (วัน) / Credit term (Day)</label>
+                                <input type="text" id="purchase_order_credit_term" name="purchase_order_credit_term"  class="form-control" value="<?PHP echo $supplier['credit_day'];?>">
+                                <p class="help-block">10 </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>ผู้ออกใบสั่งซื้อ / Employee  <font color="#F00"><b>*</b></font> </label>
+                                <select id="user_code" name="user_code" class="form-control select" data-live-search="true">
+                                    <option value="">Select</option>
+                                    <?php 
+                                    for($i = 0 ; $i < count($users) ; $i++){
+                                    ?>
+                                    <option <?PHP if($login_user['user_code'] == $users[$i]['user_code']){?> SELECTED <?PHP }?> value="<?php echo $users[$i]['user_code'] ?>"><?php echo $users[$i]['name'] ?> (<?php echo $users[$i]['user_position_name'] ?>)</option>
+                                    <?
+                                    }
+                                    ?>
+                                </select>
+                                <p class="help-block">Example : Thana Tepchuleepornsil.</p>
+                            </div>
+                        </div>  
+                        
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>วันที่จัดส่ง / Delivery Date</label>
+                                <input type="text" id="purchase_order_delivery_date" name="purchase_order_delivery_date" value="<? echo $purchase_order['purchase_order_delivery_date'];?>"  class="form-control calendar"   onchange="check_date(this);" readonly/>
+                                <p class="help-block">31/01/2018</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>หมายเหตุ / Remark</label>
+                                <input type="text" id="purchase_order_remark" name="purchase_order_remark" value="<? echo $purchase_order['purchase_order_remark'];?>"  class="form-control"  />
+                                <p class="help-block">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
 
-                                    <span><?PHP echo  $purchase_order_lists[$i]['material_code'];?></span>
-                                </td>
-                                <td>
-                                    <span>Material name : </span>
-                                    <span><?PHP echo  $purchase_order_lists[$i]['material_name'];?></span><br>
-                                    <span>Remark.</span>
-                                    <input type="text" class="form-control" name="purchase_order_list_remark[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_remark']; ?>" />
-                                </td> 
-                                <td align="right">
-                                    <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="purchase_order_list_qty[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_qty']; ?>" /></td>
-                                <td>
-                                    <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="purchase_order_list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2); ?>" />
-                                    <input type="checkbox" name="save_material_price[]" value="<?php echo $purchase_order_lists[$i]['material_code']; ?>"/> บันทึกราคาซื้อ
-                                </td>
-                                <td align="right">
-                                    <input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="purchase_order_list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'],2); ?>" /></td>
-                                
-                                <td>
-                                    <a href="javascript:;" onclick="material_detail_blank(this);">
-                                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    </a> 
-                                    <a href="javascript:;" onclick="delete_row(this);" style="color:red;">
-                                        <i class="fa fa-times" aria-hidden="true"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <?
-                                $total += $purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'];
+                <div>
+            Our reference :
+            </div>
+            <table width="100%" name="tb_list" class="table table-striped table-bordered table-hover" >
+                <thead>
+                    <tr>
+                        <th style="text-align:center;" width="60">ลำดับ </th>
+                        <th style="text-align:center;" width="150">รหัสวัตถุดิบ </th>
+                        <th style="text-align:center;" >ชื่อวัตถุดิบ / หมายเหตุ  </th> 
+                        <th style="text-align:center;" width="120">จำนวน  </th>
+                        <th style="text-align:center;" width="120">ราคาต่อหน่วย </th>
+                        <th style="text-align:center;" width="120">จำนวนเงิน </th>
+                        <th width="24"></th>
+                    </tr>
+                </thead>
+                <tbody  class="sorted_table">
+                    <?php 
+                    $total = 0;
+                    for($i=0; $i < count($purchase_order_lists); $i++){
+                    ?>
+                    <tr class="odd gradeX">
+                        <td class="sorter">
+                            <?PHP echo ($i + 1); ?>.
+                        </td>
+                        <td>
+                            <input type="hidden" name="purchase_order_list_code[]" value="0"/>
+                            
+                            <input type="hidden" name="material_code[]" value="<?PHP echo  $purchase_order_lists[$i]['material_code'];?>" />
+
+                            <span><?PHP echo  $purchase_order_lists[$i]['material_code'];?></span>
+                        </td>
+                        <td>
+                            <span>Material name : </span>
+                            <span><?PHP echo  $purchase_order_lists[$i]['material_name'];?></span><br>
+                            <span>Remark.</span>
+                            <input type="text" class="form-control" name="purchase_order_list_remark[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_remark']; ?>" />
+                        </td> 
+                        <td align="right">
+                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="purchase_order_list_qty[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_qty']; ?>" /></td>
+                        <td>
+                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="purchase_order_list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2); ?>" />
+                            <input type="checkbox" name="save_material_price[]" value="<?php echo $purchase_order_lists[$i]['material_code']; ?>"/> บันทึกราคาซื้อ
+                        </td>
+                        <td align="right">
+                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="purchase_order_list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'],2); ?>" /></td>
+                        
+                        <td>
+                            <a href="javascript:;" onclick="material_detail_blank(this);">
+                                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            </a> 
+                            <a href="javascript:;" onclick="delete_row(this);" style="color:red;">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <?
+                        $total += $purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'];
+                    }
+                    ?>
+                </tbody>
+                <tfoot>
+                    <tr class="odd gradeX">
+                        <td> 
+                            <button type="button" class="btn btn-success" onclick="add_row_new(this);">+ New</button>
+                        </td>
+                        <td colspan="6" align="center">
+                            <a href="javascript:;" onclick="show_purchase_order(this);" style="color:red;">
+                                <i class="fa fa-plus" aria-hidden="true"></i> 
+                                <span>ค้นหาวัตถุดิบ</span>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="odd gradeX">
+                        <td colspan="3" rowspan="3">
+                            
+                        </td>
+                        <td colspan="2" align="left" style="vertical-align: middle;">
+                            <span>ราคารวมทั้งสิ้น / Sub total</span>
+                        </td>
+                        <td>
+                        <?PHP
+                            if($supplier['vat_type'] == 1){
+                                $total_val = $total - (($supplier['vat']/( 100 + $supplier['vat'] )) * $total);
+                            } else if($supplier['vat_type'] == 2){
+                                $total_val = $total;
+                            } else {
+                                $total_val = $total;
+                            }
+                        ?>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_total_price" name="purchase_order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="odd gradeX">
+                        <td colspan="2" align="left" style="vertical-align: middle;">
+                            <table>
+                                <tr>
+                                    <td colspan="3" >
+                                        <span>ประเภทภาษีมูลค่าเพิ่ม / Vat type </span>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td colspan="2"> 
+                                        <select id="purchase_order_vat_type" name="purchase_order_vat_type" class="form-control select" style="max-width:130px;margin-left:auto;margin-right:8px;margin-bottom:8px;" onchange="calculateAll()"> 
+                                            <option value="0" <?PHP if($supplier['vat_type'] == '0'){?>Selected <?PHP }?> >ไม่มี Vat</option>
+                                            <option value="1" <?PHP if($supplier['vat_type'] == '1'){?>Selected <?PHP }?> >รวม Vat</option>
+                                            <option value="2" <?PHP if($supplier['vat_type'] == '2'){?>Selected <?PHP }?> >แยก Vat</option>
+                                        </select>
+                                    </td>
+                                    <td width="16"> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span>
+                                    </td>
+                                    <td style = "padding-left:8px;padding-right:8px;width:72px;">
+                                        <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat" name="purchase_order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();" />
+                                    </td>
+                                    <td width="16">
+                                    %
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </td>
+                        <td>
+                            <?PHP 
+                            if($supplier['vat_type'] == 1){
+                                $vat_val = ($supplier['vat']/( 100 + $supplier['vat'] )) * $total;
+                            } else if($supplier['vat_type'] == 2){
+                                $vat_val = ($supplier['vat']/100) * $total;
+                            } else {
+                                $vat_val = 0.0;
                             }
                             ?>
-                        </tbody>
-                        <tfoot>
-                            <tr class="odd gradeX">
-                                <td> 
-                                    <button type="button" class="btn btn-success" onclick="add_row_new(this);">+ New</button>
-                                </td>
-                                <td colspan="6" align="center">
-                                    <a href="javascript:;" onclick="show_purchase_order(this);" style="color:red;">
-                                        <i class="fa fa-plus" aria-hidden="true"></i> 
-                                        <span>ค้นหาวัตถุดิบ</span>
-                                    </a>
-
-                                    <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog modal-lg " role="document">
-                                            <div class="modal-content">
-
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title">เลือกรายการวัตถุดิบ / Choose material</h4>
-                                            </div>
-
-                                            <div  class="modal-body">
-                                            <div class="row">
-                                                <div class="col-md-offset-8 col-md-4" align="right">
-                                                    <input type="text" class="form-control" name="search_pop" onchange="search_pop_like(this)" placeholder="Search"/>
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <table width="100%" class="table table-striped table-bordered table-hover" >
-                                                <thead>
-                                                    <tr>
-                                                        <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)" /></th>
-                                                        <th style="text-align:center;">รหัสวัตถุดิบ  </th>
-                                                        <th style="text-align:center;">ชื่อวัตถุดิบ  </th> 
-                                                        <th style="text-align:center;" width="150">ราคาต่อหน่วย (บาท) </th> 
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bodyAdd">
-
-                                                </tbody>
-                                            </table>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Material</button>
-                                            </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
-
-
-                                </td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td colspan="3" rowspan="3">
-                                    
-                                </td>
-                                <td colspan="2" align="left" style="vertical-align: middle;">
-                                    <span>ราคารวมทั้งสิ้น / Sub total</span>
-                                </td>
-                                <td>
-                                <?PHP
-                                    if($supplier['vat_type'] == 1){
-                                        $total_val = $total - (($supplier['vat']/( 100 + $supplier['vat'] )) * $total);
-                                    } else if($supplier['vat_type'] == 2){
-                                        $total_val = $total;
-                                    } else {
-                                        $total_val = $total;
-                                    }
-                                ?>
-                                    <input type="text" class="form-control" style="text-align: right;" id="purchase_order_total_price" name="purchase_order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td colspan="2" align="left" style="vertical-align: middle;">
-                                    <table>
-                                        <tr>
-                                            <td colspan="3" >
-                                                <span>ประเภทภาษีมูลค่าเพิ่ม / Vat type </span>
-                                            </td>
-                                            
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" > 
-                                                <select id="purchase_order_vat_type" name="purchase_order_vat_type" class="form-control" style="max-width:130px;margin-left:auto;margin-right:8px;margin-bottom:8px;" onchange="calculateAll()"> 
-                                                    <option value="0" <?PHP if($supplier['vat_type'] == '0'){?>Selected <?PHP }?> >0 - ไม่มี Vat</option>
-                                                    <option value="1"  <?PHP if($supplier['vat_type'] == '1'){?>Selected <?PHP }?> >1 - รวม Vat</option>
-                                                    <option value="2"  <?PHP if($supplier['vat_type'] == '2'){?>Selected <?PHP }?> >2 - แยก Vat</option>
-                                                </select>
-                                            </td>
-                                            <td width="16"> 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span>
-                                            </td>
-                                            <td style = "padding-left:8px;padding-right:8px;width:72px;">
-                                                <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat" name="purchase_order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();" />
-                                            </td>
-                                            <td width="16">
-                                            %
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    
-                                </td>
-                                <td>
-                                    <?PHP 
-                                    if($supplier['vat_type'] == 1){
-                                        $vat_val = ($supplier['vat']/( 100 + $supplier['vat'] )) * $total;
-                                    } else if($supplier['vat_type'] == 2){
-                                        $vat_val = ($supplier['vat']/100) * $total;
-                                    } else {
-                                        $vat_val = 0.0;
-                                    }
-                                    ?>
-                                    <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat_price"  name="purchase_order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                            <tr class="odd gradeX">
-                                <td colspan="2" align="left" style="vertical-align: middle;">
-                                    <span>จำนวนเงินรวมทั้งสิ้น / Net Total</span>
-                                </td>
-                                <td>
-                                    <?PHP 
-                                    if($supplier['vat_type'] == 1){
-                                        $net_val =  $total;
-                                    } else if($supplier['vat_type'] == 2){
-                                        $net_val = ($supplier['vat']/100) * $total + $total;
-                                    } else {
-                                        $net_val = $total;
-                                    }
-                                    ?>
-                                    <input type="text" class="form-control" style="text-align: right;" id="purchase_order_net_price" name="purchase_order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
-                                </td>
-                                <td>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>   
-                
-                    <!-- /.row (nested) -->
-                    <div class="row">
-                        <div class="col-lg-offset-9 col-lg-3" align="right">
-                            <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>
-                            <button type="reset" class="btn btn-primary">Reset</button>
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div>
-                    </div>
-                </form>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat_price"  name="purchase_order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr class="odd gradeX">
+                        <td colspan="2" align="left" style="vertical-align: middle;">
+                            <span>จำนวนเงินรวมทั้งสิ้น / Net Total</span>
+                        </td>
+                        <td>
+                            <?PHP 
+                            if($supplier['vat_type'] == 1){
+                                $net_val =  $total;
+                            } else if($supplier['vat_type'] == 2){
+                                $net_val = ($supplier['vat']/100) * $total + $total;
+                            } else {
+                                $net_val = $total;
+                            }
+                            ?>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_net_price" name="purchase_order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>   
+        
+            <div class="row">
+                <div class="col-lg-offset-9 col-lg-3" align="right">
+                    <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
             </div>
-            <!-- /.panel-body -->
-        </div>
-        <!-- /.panel -->
+        </form>
     </div>
-    <!-- /.col-lg-12 -->
 </div>
 
-<script> 
+<div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg " role="document">
+        <div class="modal-content">
 
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">เลือกรายการวัตถุดิบ / Choose material</h4>
+        </div>
+
+        <div  class="modal-body">
+        <div class="row">
+            <div class="col-md-offset-8 col-md-4" align="right">
+                <input type="text" class="form-control" name="search_pop" onchange="search_pop_like(this)" placeholder="Search"/>
+            </div>
+        </div>
+        <br>
+        <table width="100%" class="table table-striped table-bordered table-hover" >
+            <thead>
+                <tr>
+                    <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)" /></th>
+                    <th style="text-align:center;">รหัสวัตถุดิบ  </th>
+                    <th style="text-align:center;">ชื่อวัตถุดิบ  </th> 
+                    <th style="text-align:center;" width="150">ราคาต่อหน่วย (บาท) </th> 
+                </tr>
+            </thead>
+            <tbody id="bodyAdd">
+
+            </tbody>
+        </table>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Material</button>
+        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script> 
     $(".example-ajax-post").easyAutocomplete(options);
     $('.sorted_table').sortable({
         handle: ".sorter" , 

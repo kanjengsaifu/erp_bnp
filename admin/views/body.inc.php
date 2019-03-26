@@ -10,50 +10,46 @@
     /* ----------------------------------- //ระบบงาน// ----------------------------------- */
 
     /* ----------------------------------- ระบบจัดซื้อ --------------------------------- */
-    else if($_GET['app'] == "purchase_request" && $menu['purchase']['view']){
+    else if($_GET['app'] == "purchase_request" && $menu['purchase_request']['view']){
         require_once("modules/purchase_request/views/index.inc.php");
-    }else if($_GET['app'] == "purchase_order" && $menu['purchase']['view']){
+    }else if($_GET['app'] == "purchase_order" && $menu['purchase_order']['view']){
         require_once("modules/purchase_order/views/index.inc.php");   
-    }else if($_GET['app'] == "invoice_supplier" && $menu['purchase']['view']){
+    }else if($_GET['app'] == "invoice_supplier" && $menu['invoice_supplier']['view']){
         require_once("modules/invoice_supplier/views/index.inc.php");
     }
     /* ----------------------------------- //ระบบจัดซื้อ// ----------------------------------- */
 
 
     /* ----------------------------------- ระบบพื้นฐาน --------------------------------- */
-    else if($_GET['app'] == "user"){
+    else if($_GET['app'] == "user" && $menu['user']['view']){
         require_once("modules/user/views/index.inc.php");
-    }else if($_GET['app'] == "license"){
+    }else if($_GET['app'] == "license" && $menu['license']['view']){
         require_once("modules/license/views/index.inc.php");   
-    }else if($_GET['app'] == "company"){
+    }else if($_GET['app'] == "company" && $menu['company']['view']){
         require_once("modules/company/views/index.inc.php");   
-    }else if($_GET['app'] == "supplier"){
+    }else if($_GET['app'] == "supplier" && $menu['supplier']['view']){
         require_once("modules/supplier/views/index.inc.php");   
-    }else if($_GET['app'] == "purchase_order"){
-        require_once("modules/purchase_order/views/index.inc.php");   
-    }else if($_GET['app'] == "material"){
+    }else if($_GET['app'] == "material" && $menu['material']['view']){
         require_once("modules/material/views/index.inc.php");   
-    }else if($_GET['app'] == "unit"){
+    }else if($_GET['app'] == "unit" && $menu['unit']['view']){
         require_once("modules/unit/views/index.inc.php");   
-    }else if($_GET['app'] == "material_type"){
+    }else if($_GET['app'] == "material_type" && $menu['material_type']['view']){
         require_once("modules/material_type/views/index.inc.php");   
-    }else if($_GET['app'] == "invoice_supplier"){
-        require_once("modules/invoice_supplier/views/index.inc.php");   
-    }else if($_GET['app'] == "production"){
+    }else if($_GET['app'] == "production" && $menu['production']['view']){
         require_once("modules/production/views/index.inc.php");
-    }else if($_GET['app'] == "product"){
+    }else if($_GET['app'] == "product" && $menu['product']['view']){
         require_once("modules/product/views/index.inc.php");   
-    }else if($_GET['app'] == "product_type"){
+    }else if($_GET['app'] == "product_type" && $menu['product_type']['view']){
         require_once("modules/product_type/views/index.inc.php");   
-    }else if($_GET['app'] == "product_brand"){
+    }else if($_GET['app'] == "product_brand" && $menu['product_brand']['view']){
         require_once("modules/product_brand/views/index.inc.php");   
-    }else if($_GET['app'] == "project"){
+    }else if($_GET['app'] == "project" && $menu['project']['view']){
         require_once("modules/project/views/index.inc.php");   
-    }else if($_GET['app'] == "satisfaction"){
+    }else if($_GET['app'] == "satisfaction" && $menu['satisfaction']['view']){
         require_once("modules/satisfaction/views/index.inc.php");   
-    }else if($_GET['app'] == "contact_way"){
+    }else if($_GET['app'] == "contact_way" && $menu['contact_way']['view']){
         require_once("modules/contact_way/views/index.inc.php");   
-    }else if($_GET['app'] == "contact_type"){
+    }else if($_GET['app'] == "contact_type" && $menu['contact_type']['view']){
         require_once("modules/contact_type/views/index.inc.php");   
     }else if($_GET['app'] == "address" && $menu['address']['view']){
         require_once("modules/address/views/index.inc.php");   

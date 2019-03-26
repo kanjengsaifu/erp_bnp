@@ -9,7 +9,7 @@ $keyword = $_GET['keyword'];
 
 $product_model = new ProductModel;
 
-$product = $product_model->getProductBy('','','',$keyword);
+$product = $product_model->getProductBy('',$keyword);
 
 echo json_encode($product);
 

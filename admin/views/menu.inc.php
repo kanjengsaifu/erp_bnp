@@ -27,6 +27,10 @@ for($i = 0 ; $i < count($menu_list); $i++){
     $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
         return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
     }));
+    $action = 'cancel';  
+    $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
+        return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
+    }));
     $action = 'delete';  
     $menu[$menu_list[$i]['menu_name_en']][$action] = count(array_filter($license_permission, function ($var) use ($menu_name_en,$action,$id) { 
         return ($var['menu_name_en'] == trim($menu_name_en)&&$var['permission_'.$action]); 
@@ -204,7 +208,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                     </ul>
                 </li>
 
-                <?php if ($menu['purchase']['view']){ ?>
+                <?php if ($menu['purchase_request']['view'] || $menu['purchase_order']['view'] || $menu['invoice_supplier']['view']){ ?>
                 <li
                 <?PHP 
                     if($_GET["app"]=='purchase_request'
@@ -219,15 +223,21 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         <i class="fa fa-file-text-o" aria-hidden="true"></i> ระบบจัดซื้อ <span class="glyphicon arrow"></span>
                     </a>
                     <ul class="collapse"> 
+                    <?php if ($menu['purchase_request']['view']){ ?>
                         <li>
                             <a href="?app=purchase_request" <?PHP if($_GET["app"]=='purchase_request'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i> ใบร้องขอสั่งซื้อ</a>
                         </li>
+                    <?php } ?>
+                    <?php if ($menu['purchase_order']['view']){ ?>
                         <li>
                             <a href="?app=purchase_order" <?PHP if($_GET["app"]=='purchase_order'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i> ใบสั่งซื้อ</a>
                         </li>
+                    <?php } ?>
+                    <?php if ($menu['invoice_supplier']['view']){ ?>
                         <li>
                             <a href="?app=invoice_supplier" <?PHP if($_GET["app"]=='invoice_supplier'){ ?> class="active" <?PHP } ?>><i class="fa fa-file-o" aria-hidden="true"></i> ใบรับสินค้า</a>
                         </li>
+                    <?php } ?>
                     </ul>
                 </li>
                 <?php } ?>

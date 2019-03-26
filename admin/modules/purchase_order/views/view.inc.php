@@ -27,6 +27,49 @@
         <h1 class="page-header">Purchase Order Management</h1>
     </div>
 </div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        เปิดใบสั่งซื้ออ้างอิงตามบริษัท / Purchase order to do
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+
+        <table width="100%" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="" data-original-title="ลำดับ" width="64px"> No.</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="" data-original-title="ผู้ขาย"> Supplier</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                        data-placement="top" title="" data-original-title="เปิดใบสั่งซื้อ"
+                        width="180px"> Open purchase order</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                for($i=0; $i < count($supplier_orders); $i++){
+                ?>
+                <tr class="odd gradeX">
+                    <td><?php echo $i+1; ?></td>
+                    <td><?php  echo $supplier_orders[$i]['supplier_name_en'];  ?></td>
+                    <td>
+                        <a
+                            href="?app=purchase_order&action=insert&supplier_code=<?php echo $supplier_orders[$i]['supplier_code'];?>">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                        </a>
+
+                    </td>
+
+                </tr>
+                <?
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
  
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -56,7 +99,7 @@
             <select id="supplier_code" name="supplier_code" class="form-control select" data-live-search="true">
                 <option value="">ทั้งหมด</option>
                 <?php 
-                for($i =  0 ; $i < count($suppliers) ; $i++){
+                for($i=0 ; $i<count($suppliers); $i++){
                 ?>
                 <option <?php if($suppliers[$i]['supplier_code'] == $supplier_code){?> selected <?php }?> value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?> </option>
                 <?

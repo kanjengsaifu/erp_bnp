@@ -113,6 +113,29 @@ class PurchaseOrderModel extends BaseModel{
         }
     }
 
+    
+    function getSupplierOrder(){
+        $sql = "SELECT supplier_code, supplier_name_en , supplier_name_th 
+            FROM tb_supplier 
+            WHERE supplier_code IN ( 
+                SELECT DISTINCT supplier_code 
+                FROM tb_purchase_request_list 
+                LEFT JOIN tb_purchase_request ON tb_purchase_request_list.purchase_request_code = tb_purchase_request.purchase_request_code                   
+                WHERE request_cancelled = 0 AND approve_status = 'Approve' 
+            )
+            GROUP BY supplier_code 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+        }
+        return $data;
+    }
+
     function cancelPurchaseOrderByCode($code){
         $sql = " UPDATE tb_purchase_order SET 
         purchase_order_cancelled = '1', 
@@ -143,7 +166,6 @@ class PurchaseOrderModel extends BaseModel{
         }
     }
 
-
     function updatePurchaseOrderByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_order SET  
         supplier_code = '".$data['supplier_code']."', 
@@ -169,8 +191,6 @@ class PurchaseOrderModel extends BaseModel{
         }else {
             return false;
         }
-
-
     } 
  
 

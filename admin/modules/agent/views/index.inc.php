@@ -26,7 +26,7 @@ $location_code = $_GET['location'];
 
 if ($_GET['action'] == 'insert'&&$menu['agent']['add']){ 
     $status = $status_model->getStatusBy();
-    $add_province = $address_model->getProvinceBy();  
+    $province = $address_model->getProvinceBy();  
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update'&&$menu['agent']['edit']){
     $agent = $agent_model->getAgentByCode($agent_code);

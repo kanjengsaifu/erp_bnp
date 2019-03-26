@@ -144,27 +144,10 @@ class InvoiceSupplierModel extends BaseModel{
         }
     }
 
-    function getInvoiceSupplierByCode($id){
-        $sql = "SELECT tb_invoice_supplier.* ,tb_user.*
-        FROM tb_invoice_supplier 
-        LEFT JOIN tb_user ON tb_invoice_supplier.user_code = tb_user.user_code 
-        WHERE invoice_supplier_code = '$id' 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
-            $result->close();
-            return $data;
-        }
-
-    }
-
     function getInvoiceSupplierByCode($invoice_supplier_code){
         $sql = "SELECT * 
         FROM tb_invoice_supplier  
+        LEFT JOIN tb_user ON tb_invoice_supplier.user_code = tb_user.user_code 
         WHERE invoice_supplier_code = '$invoice_supplier_code' 
         ";
 
@@ -305,19 +288,6 @@ class InvoiceSupplierModel extends BaseModel{
             $result->close();
         }
         return $data;
-    }
-
-    function getInvoiceSupplierLastCode($id,$digit){
-        $sql = "SELECT CONCAT('$id' , LPAD(IFNULL(MAX(CAST(SUBSTRING(invoice_supplier_code_gen,".(strlen($id)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  invoice_supplier_lastcode 
-        FROM tb_invoice_supplier
-        WHERE invoice_supplier_code_gen LIKE ('$id%') 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-            $result->close();
-            return $row['invoice_supplier_lastcode'];
-        }
     }
 
     function generateInvoiceSupplierListBySupplierId($supplier_code, $data = [], $search = "", $purchase_order_code){

@@ -35,8 +35,6 @@ class LicensePermissionModel extends BaseModel{
         }
     }
 
-    
-
     function getLicensePermissionByCode($code){
         $sql = " SELECT * 
         FROM tb_license_permission 
@@ -51,6 +49,7 @@ class LicensePermissionModel extends BaseModel{
             return $data;
         }
     } 
+
     function getLicensePermissionByUserCode($code){
         $sql = "SELECT tb_license_permission.menu_code, menu_name, menu_name_en, 
         permission_view , permission_add, permission_edit, permission_approve, permission_cancel, permission_delete
@@ -79,7 +78,7 @@ class LicensePermissionModel extends BaseModel{
         if($menu_code!=''){
             $sql .= " AND menu_code = '$menu_code' ";
         }
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data=[];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -98,6 +97,7 @@ class LicensePermissionModel extends BaseModel{
             permission_view,
             permission_add,
             permission_edit,
+            permission_approve,
             permission_cancel, 
             permission_delete 
             ) VALUES (
@@ -107,10 +107,11 @@ class LicensePermissionModel extends BaseModel{
             '".$data['permission_view']."',
             '".$data['permission_add']."',
             '".$data['permission_edit']."',
+            '".$data['permission_approve']."',
             '".$data['permission_cancel']."',
             '".$data['permission_delete']."'
             )";
-            // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) { 
             return $data['license_code'];
         }else {
@@ -125,25 +126,25 @@ class LicensePermissionModel extends BaseModel{
         permission_view = '".$data['permission_view']."',
         permission_add = '".$data['permission_add']."',
         permission_edit = '".$data['permission_edit']."',
+        permission_approve = '".$data['permission_approve']."',
         permission_cancel = '".$data['permission_cancel']."',
         permission_delete = '".$data['permission_delete']."' 
         WHERE license_permission_code = '$code' 
         ";
-        // echo $sql;
-         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            return 1;
+
+        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            return true;
         }else {
-            return 0;
+            return false;
         }
     }
-
 
     function deleteLicensePermissionByCode($code){
         $sql = " DELETE FROM tb_license_permission WHERE license_code = '$code' ";
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            return 1;
+            return true;
         }else {
-            return 0;
+            return false;
         }
     }
 }
