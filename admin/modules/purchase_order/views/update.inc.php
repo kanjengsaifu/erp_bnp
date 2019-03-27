@@ -535,7 +535,7 @@
                                         <label>วันที่ออกใบสั่งซื้อวัตถุดิบ / Purchase Order Date</label>
                                         <input type="text" id="purchase_order_date" name="purchase_order_date" value="<? echo $purchase_order['purchase_order_date'];?>"  class="form-control calendar"   onchange="check_date(this);" readonly/>
                                         <input id="date_check" type="hidden" value="" />
-                                        <p class="help-block">31/01/2018</p>
+                                        <p class="help-block">31-01-2018</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -573,7 +573,7 @@
                                     <div class="form-group">
                                         <label>วันที่จัดส่ง / Delivery Date</label>
                                         <input type="text" id="purchase_order_delivery_date" name="purchase_order_delivery_date" value="<? echo $purchase_order['purchase_order_delivery_date'];?>"  class="form-control calendar"   onchange="check_date(this);" readonly/>
-                                        <p class="help-block">31/01/2018</p>
+                                        <p class="help-block">31-01-2018</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">

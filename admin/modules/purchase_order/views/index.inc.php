@@ -24,7 +24,9 @@ $supplier_code = $_GET['supplier_code'];
 if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
     $suppliers = $supplier_model->getSupplierBy();
     $users = $user_model->getUserBy(); 
-      
+    $code = "PO".date("y").date("m").date("d");
+    $purchase_order_code = $purchase_order_model->getPurchaseOrderLastCode($code,4);  
+    
     if($supplier_code != ""){
         $supplier = $supplier_model->getSupplierByCode($supplier_code);
         if($supplier['vat_type'] == '0'){
@@ -34,11 +36,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         }
 
         $materials = $material_model->getMaterialBy();
-        $user = $user_model->getUserByCode($login_user['user_code']);
-        $code = "PO".date("y").date("m").date("d");
-        $last_code = $purchase_order_model->getPurchaseOrderLastCode($code,4);
-        $purchase_order_lists = $purchase_order_model->generatePurchaseOrderListBySupplierId($supplier_code,$purchase_request_code,$type);
-    }    
+        $purchase_order_lists = $purchase_order_model->generatePurchaseOrderListBySupplierCode($supplier_code);
+    }
+
     require_once($path.'insert.inc.php');
 }else if ($_GET['action'] == 'update' && $menu['purchase_order']['edit']){
     
@@ -86,8 +86,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
     </script>
     <?php
 }else if ($_GET['action'] == 'add' && $menu['purchase_order']['add']){
-    $purchase_order_code = "PO";
-    $purchase_order_code = $purchase_order_model->getPurchaseOrderLastCode($purchase_order_code,7);  
     if($purchase_order_code!=''){
         $data = []; 
         $data['purchase_order_code'] = $purchase_order_code;

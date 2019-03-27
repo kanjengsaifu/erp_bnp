@@ -10,7 +10,7 @@ class PurchaseOrderModel extends BaseModel{
     }
 
     function getPurchaseOrderLastCode($code,$digit){
-        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(purchase_order_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
+        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(purchase_order_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0')) AS lastcode 
         FROM tb_purchase_order 
         WHERE purchase_order_code LIKE ('$code%') 
         ";
@@ -192,7 +192,6 @@ class PurchaseOrderModel extends BaseModel{
             return false;
         }
     } 
- 
 
     function updatePurchaseOrderStatusByCode($id,$data = []){
         if ($data['updateby'] != ""){
@@ -211,11 +210,45 @@ class PurchaseOrderModel extends BaseModel{
         }else {
             return false;
         }
-    }   
+    }
 
-    function generatePurchaseOrderListBySupplierId( $supplier_code /*รหัสผู้ขาย*/ ){
+    function generatePurchaseOrderListBySupplierCode($supplier_code, $data_pr = [], $search = ""){
+        $str_pr = "''";
+        for($i=0; $i<count($data_pr); $i++){
+            $str_pr .= ",'".$data_pr[$i]."'";
+            if($i + 1 < count($data_pr)){
+                $str_pr .= ",";
+            }
+        }
 
-       
+        $sql_request = "SELECT purchase_request_list_code, tb_purchase_request_list.product_code, product_name, 
+        stock_group_code, request_list_qty as order_list_qty, IFNULL(product_buyprice,0) as order_list_price, 
+        CONCAT('PR : ',tb_purchase_request.purchase_request_code) as order_list_remark 
+        FROM tb_purchase_request 
+        LEFT JOIN tb_purchase_request_list ON tb_purchase_request.purchase_request_code = tb_purchase_request_list.purchase_request_code 
+        LEFT JOIN tb_product ON tb_purchase_request_list.product_code = tb_product.product_code 
+        LEFT JOIN tb_product_supplier ON (tb_purchase_request_list.product_code = tb_product_supplier.product_code AND tb_purchase_request_list.supplier_code = tb_product_supplier.supplier_code) 
+        WHERE tb_purchase_request_list.supplier_code = '$supplier_code'
+        AND purchase_order_list_code = '' 
+        AND purchase_request_list_code NOT IN ($str_pr) 
+        AND ( 
+                tb_purchase_request.purchase_request_code LIKE ('%$search%') 
+                OR tb_purchase_request_list.product_code LIKE ('%$search%') 
+                OR product_name LIKE ('%$search%')
+            )  
+        AND approve_status = 'Approve' 
+        GROUP BY purchase_request_list_code 
+        ORDER BY purchase_request_list_code ASC
+        ";
+    
+        if ($result = mysqli_query(static::$db,$sql_request, MYSQLI_USE_RESULT)) {
+            $data = [];
+            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                $data[] = $row;
+            }
+            $result->close();
+            return $data;
+        }
     }
 
     function insertPurchaseOrder($data = []){

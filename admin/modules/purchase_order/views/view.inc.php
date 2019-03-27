@@ -32,9 +32,7 @@
     <div class="panel-heading">
         เปิดใบสั่งซื้ออ้างอิงตามบริษัท / Purchase order to do
     </div>
-    <!-- /.panel-heading -->
     <div class="panel-body">
-
         <table width="100%" class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
