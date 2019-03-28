@@ -156,9 +156,9 @@
                     '</select>'+ 
                 '</td>'+
                 '<td>'+
-                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="request_list_qty[]" value="1">'+ 
+                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="list_qty[]" value="1">'+ 
                 '</td>'+
-                '<td><input type="text" class="form-control" name="request_list_remark[]"></td>'+
+                '<td><input type="text" class="form-control" name="list_remark[]"></td>'+
                 '<td style="text-align:center;">'+
                     '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
                         '<i class="fa fa-times" aria-hidden="true"></i>'+

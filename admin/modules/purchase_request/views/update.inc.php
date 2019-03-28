@@ -179,9 +179,9 @@
                     '</select>'+ 
                 '</td>'+
                 '<td>'+
-                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="request_list_qty[]" value="1">'+ 
+                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="list_qty[]" value="1">'+ 
                 '</td>'+
-                '<td><input type="text" class="form-control" name="request_list_remark[]"></td>'+
+                '<td><input type="text" class="form-control" name="list_remark[]"></td>'+
                 '<td style="text-align:center;">'+
                     '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
                         '<i class="fa fa-times" aria-hidden="true"></i>'+
@@ -259,7 +259,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>วันที่ร้องขอ / PR Date</label>
-                        <input id="request_date" name="request_date" type="text" value="<?PHP echo $purchase_request['request_date'];?>" class="form-control calendar" onchange="check_date(this);" readonly>
+                        <input id="request_date" name="request_date" type="text" value="<?php if ($purchase_request['request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request['request_date'])); } ?>" class="form-control calendar" onchange="check_date(this);" readonly>
                         <input id="date_check" type="hidden" value="">
                         <p class="help-block">01-03-2018</p>
                     </div>
@@ -285,7 +285,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>วันที่แจ้งเตือน / Alert Date</label>
-                        <input type="text" id="request_alert" name="request_alert" value="<?PHP echo $purchase_request['request_alert'];?>" class="form-control calendar" readonly>
+                        <input type="text" id="request_alert" name="request_alert" value="<?php if ($purchase_request['request_alert'] != ''){ echo date("d-m-Y", strtotime($purchase_request['request_alert'])); } ?>" class="form-control calendar" readonly>
                         <p class="help-block">01-03-2018</p>
                     </div>
                 </div>
@@ -364,9 +364,9 @@
                             </select>
                         </td> 
                         <td> 
-                            <input type="text" class="form-control" style="text-align:center;" name="request_list_qty[]" autocomplete="off" value="<?php echo $purchase_request_lists[$i]['request_list_qty']; ?>">
+                            <input type="text" class="form-control" style="text-align:center;" name="list_qty[]" autocomplete="off" value="<?php echo $purchase_request_lists[$i]['list_qty']; ?>">
                         </td>
-                        <td><input type="text" class="form-control" name="request_list_remark[]" value="<?php echo $purchase_request_lists[$i]['request_list_remark']; ?>"></td>
+                        <td><input type="text" class="form-control" name="list_remark[]" value="<?php echo $purchase_request_lists[$i]['list_remark']; ?>"></td>
                         <td>
                             <a href="javascript:;" onclick="delete_row(this);" style="color:red;">
                                 <i class="fa fa-times" aria-hidden="true"></i>

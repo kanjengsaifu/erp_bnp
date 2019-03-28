@@ -35,9 +35,9 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#purchase_order_date").val(data.date_now);
+                //$("#order_date").val(data.date_now);
                 $( ".calendar" ).datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("purchase_order_date").focus();
+                document.getElementById("order_date").focus();
             } else{
                 $("#date_check").val("0");
                 //generate_credit_date();
@@ -48,20 +48,20 @@
     function check(){
         var supplier_code = document.getElementById("supplier_code").value;
         var purchase_order_code = document.getElementById("purchase_order_code").value;
-        var purchase_order_date = document.getElementById("purchase_order_date").value;
-        var purchase_order_credit_term = document.getElementById("purchase_order_credit_term").value;
+        var order_date = document.getElementById("order_date").value;
+        var credit_term = document.getElementById("credit_term").value;
         var employee_code = document.getElementById("employee_code").value;
         var date_check = document.getElementById("date_check").value;
 
         supplier_code = $.trim(supplier_code);
         purchase_order_code = $.trim(purchase_order_code);
-        purchase_order_date = $.trim(purchase_order_date);
-        purchase_order_credit_term = $.trim(purchase_order_credit_term);
+        order_date = $.trim(order_date);
+        credit_term = $.trim(credit_term);
         employee_code = $.trim(employee_code);
 
         if(date_check == "1"){
-            alert("This "+purchase_order_date+" is locked in the system.");
-            document.getElementById("purchase_order_date").focus();
+            alert("This "+order_date+" is locked in the system.");
+            document.getElementById("order_date").focus();
             return false;
         }else if(purchase_order_code == ""){
             alert("Please input purchase order code .");
@@ -71,9 +71,9 @@
             alert("Please input Supplier");
             document.getElementById("supplier_code").focus();
             return false;
-        }else if(purchase_order_date.length == 0){
+        }else if(order_date.length == 0){
             alert("Please input purchase order Date");
-            document.getElementById("purchase_order_date").focus();
+            document.getElementById("order_date").focus();
             return false;
         }else if(employee_code.length == 0){
             alert("Please input employee");
@@ -89,12 +89,11 @@
         document.getElementById('supplier_code').value = supplier_code;
 
         $.post("controllers/getSupplierByCode.php", { 'supplier_code': supplier_code}, function( data ) {
-            document.getElementById('purchase_order_credit_term').value = data.credit_day;
+            document.getElementById('credit_term').value = data.credit_day;
             document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
         });
 
         $.post("modules/purchase_order/controllers/getProductBySupplierCode.php", { 'supplier_code': supplier_code }, function( data ) {
-            console.log(data);
             product_data = data;
         });
     }
@@ -118,15 +117,15 @@
         if(data.length > 0){
             $(id).closest('tr').children('td').children('input[name="product_code[]"]').val( data[0]['product_code'] );
             $(id).closest('tr').children('td').children('span[name="product_name[]"]').html( data[0]['product_name'] );
-            $(id).closest('tr').children('td').children('input[name="order_list_price[]"]').val( data[0]['product_buyprice'] );
+            $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( data[0]['product_buyprice'] );
             update_sum(id);
         }
     }
 
     function update_sum(id){
-        var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="order_list_qty[]"]').val(  ).replace(',',''));
-        var price =  parseFloat($(id).closest('tr').children('td').children('input[name="order_list_price[]"]').val( ).replace(',',''));
-        var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="order_list_price_sum[]"]').val( ).replace(',',''));
+        var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="list_qty[]"]').val(  ).replace(',',''));
+        var price =  parseFloat($(id).closest('tr').children('td').children('input[name="list_price[]"]').val( ).replace(',',''));
+        var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="list_price_sum[]"]').val( ).replace(',',''));
 
         if(isNaN(qty)){
             qty = 0;
@@ -142,9 +141,9 @@
 
         sum = qty*price;
 
-        $(id).closest('tr').children('td').children('input[name="order_list_qty[]"]').val( qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $(id).closest('tr').children('td').children('input[name="order_list_price[]"]').val( price.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $(id).closest('tr').children('td').children('input[name="order_list_price_sum[]"]').val( sum.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $(id).closest('tr').children('td').children('input[name="list_qty[]"]').val( qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( price.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $(id).closest('tr').children('td').children('input[name="list_price_sum[]"]').val( sum.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
 
         calculateAll();
     }
@@ -166,21 +165,15 @@
         $('#data_show_list').html("ทั้งหมด : 0 รายการ");
         var supplier_code = document.getElementById('supplier_code').value;
         var val_pr = document.getElementsByName('purchase_request_list_code[]');
-        var val_code = document.getElementsByName('purchase_order_list_code[]');
-        var val_qty = document.getElementsByName('order_list_qty[]');
+        var val_qty = document.getElementsByName('list_qty[]');
 
-        var purchase_order_list_code = [];
-        for(var i = 0 ; i < val_code.length ; i++){
-            purchase_order_list_code.push(val_code[i].value);
-        }
-
-        var order_list_qty = [];
+        var list_qty = [];
         for(var i = 0 ; i < val_qty.length ; i++){
             if(val_qty[i].value ==0){
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return;
             }else{
-                order_list_qty.push(val_qty[i].value);
+                list_qty.push(val_qty[i].value);
             } 
         }
 
@@ -188,25 +181,33 @@
         for(var i = 0 ; i < val_pr.length ; i++){
             purchase_request_list_code.push(val_pr[i].value);
         }
+
+        console.log(purchase_request_list_code);
         
         if(supplier_code != ""){
             $(".table-pop").hide();
             $(".lds-spinner").show();
             $('#modalAdd').modal('show');
+
             $.post("modules/purchase_order/controllers/getPurchaseOrderListBySupplierCode.php", { 
                 'supplier_code': supplier_code,
-                'purchase_request_list_code': JSON.stringify(purchase_request_list_code)
-             }, function( data ) {
-                console.log(data);
-                $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
+                'purchase_request_list_code': JSON.stringify(purchase_request_list_code) ,
+                'search':'' 
+            }).done(function( data ) {
+                $( ".table-pop" ).show();
+                $( ".lds-spinner" ).hide();
+
+                index_buffer=[];
+
                 if(data.length > 0){
                     data_buffer = data;
-                    index_buffer=[];
+                    $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
+
                     var content = "";
                     for(var i = 0; i < data.length ; i++){
-                        var order_list_qty = parseFloat( data[i].order_list_qty );
-                        var order_list_price = parseFloat( data[i].order_list_price );
-                        var purchase_order_list_total = (data[i].order_list_qty * data[i].order_list_price);
+                        var list_qty = parseFloat( data[i].list_qty );
+                        var list_price = parseFloat( data[i].list_price );
+                        var purchase_order_list_total = (data[i].list_qty * data[i].list_price);
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
                                             '<input onchange="//show_receive(this);" onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -217,16 +218,16 @@
                                         '<td>'+
                                             data[i].product_name+
                                             '<br>Remark : '+
-                                            data[i].order_list_remark+
+                                            data[i].list_remark+
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="qty">' + order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
+                                            '<span name="qty">' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                    
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="price">' + roundNumber(order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
+                                            '<span name="price">' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                     
                                         '</td>'+
                                         '<td align="right">'+
@@ -257,27 +258,19 @@
         $('#data_show_list').html("ทั้งหมด : 0 รายการ");
         var supplier_code = document.getElementById('supplier_code').value;
         var val_pr = document.getElementsByName('purchase_request_list_code[]');
-
-        var purchase_request_list_code = [];
-
-        var val_code = document.getElementsByName('purchase_order_list_code[]');
-        var val_qty = document.getElementsByName('order_list_qty[]');
+        var val_qty = document.getElementsByName('list_qty[]');
         
-        var purchase_order_list_code = [];
-        var order_list_qty = [];
-        for(var i = 0 ; i < val_code.length ; i++){
-            purchase_order_list_code.push(val_code[i].value);
-        }
-
+        var list_qty = [];
         for(var i = 0 ; i < val_qty.length ; i++){
             if(val_qty[i].value ==0){
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return;
             }else{
-                order_list_qty.push(val_qty[i].value);
+                list_qty.push(val_qty[i].value);
             } 
         }
 
+        var purchase_request_list_code = [];
         for(var i = 0 ; i < val_pr.length ; i++){
             purchase_request_list_code.push(val_pr[i].value);
         }
@@ -286,19 +279,19 @@
             'supplier_code': supplier_code,
             'purchase_request_list_code': JSON.stringify(purchase_request_list_code) ,
             'search':$(id).val() 
-        }, function( data ) {
-            $( ".table-pop" ).show();
-            $( ".lds-spinner" ).hide();
-            $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
-            var content = "";
+         }).done(function( data ) {
+            data_buffer = data;
+            index_buffer=[];
+
             if(data.length > 0){
-                data_buffer = data;
-                index_buffer=[];
-                
+                $( ".table-pop" ).show();
+                $( ".lds-spinner" ).hide();
+                $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
+                var content = "";
                 for(var i = 0; i < data.length ; i++){
-                    var order_list_qty = parseFloat( data[i].order_list_qty );
-                    var order_list_price = parseFloat( data[i].order_list_price );
-                    var purchase_order_list_total = (data[i].order_list_qty * data[i].order_list_price);
+                    var list_qty = parseFloat( data[i].list_qty );
+                    var list_price = parseFloat( data[i].list_price );
+                    var purchase_order_list_total = (data[i].list_qty * data[i].list_price);
                     content += '<tr class="odd gradeX">'+
                                     '<td>'+
                                         '<input onchange="//show_receive(this);"  onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -309,21 +302,18 @@
                                     '<td>'+
                                         data[i].product_name+
                                         '<br>Remark : '+
-                                        data[i].order_list_remark+
+                                        data[i].list_remark+
                                     '</td>'+
                                     '<td align="right">'+
-                                        //data[i].order_list_qty +
-                                        '<span name="qty">' + order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
+                                        '<span name="qty">' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                     '</td>'+
                                     '<td align="right">'+
-                                        //data[i].order_list_price +
-                                        '<span name="price">' + roundNumber(order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
+                                        '<span name="price">' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                     
                                     '</td>'+
                                     '<td align="right">'+
-                                        //(data[i].order_list_qty * data[i].order_list_price) +
                                         '<span name="total">' + roundNumber(purchase_order_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
                                         '<input name="total" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(purchase_order_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" readonly>'+
                                    
@@ -346,8 +336,6 @@
 
             $(checkbox).closest('tr').children('td').children('input[name="total"]').show();
             $(checkbox).closest('tr').children('td').children('span[name="total"]').hide();
-
-
         }else{
             $(checkbox).closest('tr').children('td').children('input[name="qty"]').hide();
             $(checkbox).closest('tr').children('td').children('span[name="qty"]').show();
@@ -417,7 +405,7 @@
                     '<tr class="odd gradeX">'+
                         '<td class="sorter">'+index+'.</td>'+
                         '<td>'+
-                            '<input type="hidden" name="purchase_order_list_code[]" value="0">'+ 
+                            '<input type="hidden" name="purchase_order_list_code[]" value="">'+ 
                             '<input type="hidden" name="product_code[]" value="'+data_buffer[i].product_code+'">'+
                             '<input type="hidden" name="stock_group_code[]" value="'+data_buffer[i].stock_group_code+'">'+
                             '<input type="hidden" name="purchase_request_list_code[]" value="'+purchase_request_list_code+'">'+     
@@ -427,15 +415,14 @@
                             '<span>Product name : </span>'+
                             '<span>'+data_buffer[i].product_name+'</span><br>'+
                             '<span>Remark : </span>'+
-                            '<input type="text" class="form-control" name="order_list_remark[]" value="'+data_buffer[i].order_list_remark+'">'+
+                            '<input type="text" class="form-control" name="list_remark[]" value="'+data_buffer[i].list_remark+'">'+
                         '</td>'+
-                        '<td><input type="text" class="form-control" name="order_list_delivery[]" value="'+data_buffer[i].order_list_delivery+'" readonly></td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="order_list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].order_list_qty+'"></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].list_qty+'"></td>'+
                         '<td>'+
-                            '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="order_list_price[]" onchange="update_sum(this);" value="'+data_buffer[i].order_list_price+'">'+
+                            '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_price[]" onchange="update_sum(this);" value="'+data_buffer[i].list_price+'">'+
                             '<input type="checkbox" name="save_product_price[]" value="'+ data_buffer[i].product_code +'"> บันทึกราคาซื้อ'+ 
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="order_list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].order_list_qty * data_buffer[i].order_list_price)+'"></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].list_qty * data_buffer[i].list_price)+'"></td>'+
                         '<td>'+
                             '<a href="javascript:;" onclick="product_detail_blank(this);">'+
                                 '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
@@ -446,58 +433,10 @@
                         '</td>'+
                     '</tr>'
                 );
-
-                $(id).closest('table').children('tbody').children('tr:last').children('td').children('input[name="order_list_delivery[]"]').datepicker({ dateFormat: 'dd-mm-yy' });
             }
         }
         update_line();
         calculateAll();
-    }
-
-    function add_row_new(id){
-        $('#modalAdd').modal('hide');
-        var index = 0;
-        if(isNaN($(id).closest('table').children('tbody').children('tr').length)){
-            index = 1;
-        }else{
-            index = $(id).closest('table').children('tbody').children('tr').length + 1;
-        }
-        $(id).closest('table').children('tbody').append(
-            '<tr class="odd gradeX">'+
-                '<td class="sorter">'+
-                index+
-                '.</td>'+
-                '<td>'+
-                    '<input type="hidden" name="purchase_order_list_code[]">'+ 
-                    '<input type="hidden" name="product_code[]">'+ 
-                    '<input type="hidden" name="stock_group_code[]">'+ 
-                    '<select class="form-control select" onchange="show_data(this);" data-live-search="true"></select>'+
-                '</td>'+
-                '<td>'+
-                    '<span>Product name : </span>'+
-                    '<span name="product_name[]" ></span><br>'+
-                    '<span>Remark</span><br>'+
-                    '<input type="text" class="form-control" name="order_list_remark[]">'+
-                '</td>'+
-                '<td><input type="text" class="form-control" name="order_list_delivery[]" readonly></td>'+
-                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="order_list_qty[]" onchange="update_sum(this);" value="1"></td>'+
-                '<td>'+
-                    '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="order_list_price[]" onchange="update_sum(this);">'+ 
-                    '<input type="checkbox" name="save_product_price[]" value=""> บันทึกราคาซื้อ'+
-                '</td>'+
-                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="order_list_price_sum[]" onchange="update_sum(this);"></td>'+
-                '<td>'+
-                    '<a href="javascript:;" onclick="product_detail_blank(this);">'+
-                        '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
-                    '</a> '+
-                    '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
-                        '<i class="fa fa-times" aria-hidden="true"></i>'+
-                    '</a>'+
-                '</td>'+
-            '</tr>'
-        );
-        $(id).closest('table').children('tbody').children('tr:last').children('td').children('input[name="order_list_delivery[]"]').datepicker({ dateFormat: 'dd-mm-yy' });
-        update_line();
     }
 
     function checkAll(id){
@@ -524,16 +463,16 @@
     }
 
     function calculateAll(){
-        var val = document.getElementsByName('order_list_price_sum[]');
+        var val = document.getElementsByName('list_price_sum[]');
         var total = 0.0;
         
         for(var i = 0 ; i < val.length ; i++){
             total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
         }
 
-        $('#purchase_order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#purchase_order_vat_price').val((total * ($('#purchase_order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#purchase_order_net_price').val((total * ($('#purchase_order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#order_vat_price').val((total * ($('#order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#order_net_price').val((total * ($('#order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
     }
 
     function product_detail_blank(id){
@@ -600,7 +539,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font></label>
-                                <input id="purchase_order_code" name="purchase_order_code" class="form-control"  onchange="check_code()" value="<?php echo $purchase_order_code; ?>" >
+                                <input id="purchase_order_code" name="purchase_order_code" class="form-control" onchange="check_code()" value="<?php echo $purchase_order_code; ?>" >
                                 <p id="alert_code" class="help-block">Example : PO1801010001.</p>
                             </div>
                         </div>
@@ -625,7 +564,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>วันที่ออกใบสั่งซื้อสินค้า / Purchase Order Date</label>
-                                <input type="text" id="purchase_order_date" name="purchase_order_date" value="<?PHP echo date("d")."-".date("m")."-".date("Y"); ?>" class="form-control calendar" onchange="check_date(this);" readonly/>
+                                <input type="text" id="order_date" name="order_date" value="<?PHP echo date("d")."-".date("m")."-".date("Y"); ?>" class="form-control calendar" onchange="check_date(this);" readonly>
                                 <input id="date_check" type="hidden" value="">
                                 <p class="help-block">Example : 31-01-2018</p>
                             </div>
@@ -633,7 +572,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>เครดิต (วัน) / Credit term (Day)</label>
-                                <input type="text" id="purchase_order_credit_term" name="purchase_order_credit_term" class="form-control" value="<?PHP echo $supplier['credit_day'];?>"/>
+                                <input type="text" id="credit_term" name="credit_term" class="form-control" value="<?PHP echo $supplier['credit_day'];?>">
                                 <p class="help-block">Example : 10 </p>
                             </div>
                         </div>
@@ -642,7 +581,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>จัดส่งโดย / Delivery by</label>
-                                <input type="text" id="purchase_order_delivery_by" name="purchase_order_delivery_by" value="<?PHP echo $supplier['delivery_by'] ?>" class="form-control"/>
+                                <input type="text" id="delivery_by" name="delivery_by" value="<?PHP echo $supplier['delivery_by'] ?>" class="form-control">
                                 <p class="help-block">Example : DHL </p>
                             </div>
                         </div>
@@ -651,14 +590,14 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>วันที่จัดส่ง / Delivery Date</label>
-                                <input type="text" id="purchase_order_delivery_term" name="purchase_order_delivery_term" value="<? echo $purchase_order['purchase_order_delivery_term'];?>"  class="form-control calendar"   onchange="check_date(this);" readonly/>
+                                <input type="text" id="delivery_term" name="delivery_term" value="<? echo $purchase_order['delivery_term'];?>" class="form-control calendar" onchange="check_date(this);" readonly>
                                 <p class="help-block">Example : 31-01-2018</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>หมายเหตุ / Remark</label>
-                                <input type="text" id="purchase_order_remark" name="purchase_order_remark" value="<? echo $purchase_order['purchase_order_remark'];?>" class="form-control"  />
+                                <input type="text" id="order_remark" name="order_remark" value="<? echo $purchase_order['order_remark'];?>" class="form-control">
                                 <p class="help-block">Example : -</p>
                             </div>
                         </div>            
@@ -673,7 +612,6 @@
                         <th style="text-align:center;" width="60">ลำดับ </th>
                         <th style="text-align:center;" width="150">รหัสสินค้า </th>
                         <th style="text-align:center;">ชื่อสินค้า / หมายเหตุ</th>
-                        <th style="text-align:center;" width="120">วันที่จัดส่ง</th>
                         <th style="text-align:center;" width="120">จำนวน</th>
                         <th style="text-align:center;" width="120">ราคาต่หน่วย </th>
                         <th style="text-align:center;" width="120">จำนวนเงิน </th>
@@ -690,25 +628,24 @@
                             <?PHP echo ($i + 1); ?>.
                         </td>
                         <td>
-                            <input type="hidden" name="purchase_order_list_code[]" value="0">
-                            <input type="hidden" name="purchase_request_list_code[]" value="<?PHP echo  $purchase_order_lists[$i]['purchase_request_list_code'];?>">
-                            <input type="hidden" name="stock_group_code[]" value="<?PHP echo  $purchase_order_lists[$i]['stock_group_code'];?>">
-                            <input type="hidden" name="product_code[]" value="<?PHP echo  $purchase_order_lists[$i]['product_code'];?>">
+                            <input type="hidden" name="purchase_order_list_code[]" value="">
+                            <input type="hidden" name="product_code[]" value="<?PHP echo $purchase_order_lists[$i]['product_code'];?>">
+                            <input type="hidden" name="stock_group_code[]" value="<?PHP echo $purchase_order_lists[$i]['stock_group_code'];?>">
+                            <input type="hidden" name="purchase_request_list_code[]" value="<?PHP echo $purchase_order_lists[$i]['purchase_request_list_code'];?>">
                             <span><?PHP echo $purchase_order_lists[$i]['product_code'];?></span>
                         </td>
                         <td>
                             <span>Product name : </span>
                             <span><?PHP echo  $purchase_order_lists[$i]['product_name'];?></span><br>
                             <span>Remark.</span>
-                            <input type="text" class="form-control" name="order_list_remark[]" value="<?php echo $purchase_order_lists[$i]['order_list_remark']; ?>">
+                            <input type="text" class="form-control" name="list_remark[]" value="<?php echo $purchase_order_lists[$i]['list_remark']; ?>">
                         </td>
-                        <td><input type="text" class="form-control calendar" name="order_list_delivery[]" readonly value="<?php echo $purchase_order_lists[$i]['order_list_delivery']; ?>"></td>
-                        <td><input type="text" class="form-control" style="text-align:center;" autocomplete="off" onchange="update_sum(this);" name="order_list_qty[]" value="<?php echo $purchase_order_lists[$i]['order_list_qty']; ?>"></td>
+                        <td><input type="text" class="form-control" style="text-align:center;" autocomplete="off" onchange="update_sum(this);" name="list_qty[]" value="<?php echo $purchase_order_lists[$i]['list_qty']; ?>"></td>
                         <td>
-                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="order_list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['order_list_price'],2); ?>">
+                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['list_price'],2); ?>">
                             <input type="checkbox" name="save_product_price[]" value="<?php echo $purchase_order_lists[$i]['product_code']; ?>"/> บันทึกราคาซื้อ
                         </td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="order_list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['order_list_qty'] * $purchase_order_lists[$i]['order_list_price'],2); ?>"></td>
+                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['list_qty'] * $purchase_order_lists[$i]['list_price'],2); ?>"></td>
                         <td>
                             <a href="javascript:;" onclick="product_detail_blank(this);">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -719,7 +656,7 @@
                         </td>
                     </tr>
                     <?
-                        $total += $purchase_order_lists[$i]['order_list_qty'] * $purchase_order_lists[$i]['order_list_price'];
+                        $total += $purchase_order_lists[$i]['list_qty'] * $purchase_order_lists[$i]['list_price'];
                     }
                     ?>
                 </tbody>
@@ -730,59 +667,10 @@
                                 <i class="fa fa-plus" aria-hidden="true"></i> 
                                 <span>เพิ่มสินค้า / Add product</span>
                             </a>
-
-                            <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
-                                            <div class="col-lg-8">
-                                                <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 pull-right" >
-                                                <input type="text" class="form-control pull-right" name="search_pop" onchange="search_pop_like(this)" placeholder="Search"/>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal-body modal-body-m">
-                                            <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-                                            <br>
-                                            <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
-                                                <thead>
-                                                    <tr>
-                                                        <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
-                                                        <th style="text-align:center;">รหัสสินค้า  </th>
-                                                        <th style="text-align:center;">ชื่อสินค้า  </th>
-                                                        <th style="text-align:center;" width="150">จำนวน  </th>
-                                                        <th style="text-align:center;" width="150">ราคาต่อหน่วย  </th>
-                                                        <th style="text-align:center;" width="150">จำนวนเงิน  </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="bodyAdd">
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <div class="col-lg-8">
-                                                <div id="data_show_list_choose" class="form-control alert-box alert-success text-left" role="alert">
-                                                    เลือก 0 รายการ
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4" align="right">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
-                                            </div>
-                                        </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
                         </td>
                     </tr>
                     <tr class="odd gradeX">
-                        <td colspan="4" rowspan="3"></td>
+                        <td colspan="3" rowspan="3"></td>
                         <td colspan="2" align="left" style="vertical-align: middle;"><span>ราคารวมทั้งสิ้น / Sub total</span></td>
                         <td>
                         <?PHP
@@ -794,7 +682,7 @@
                                 $total_val = $total;
                             }
                         ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_total_price" name="purchase_order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="order_total_price" name="order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
                         </td>
                         <td></td>
                     </tr>
@@ -804,7 +692,7 @@
                                 <tr>
                                     <td><span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span></td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
-                                        <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat" name="purchase_order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
+                                        <input type="text" class="form-control" style="text-align: right;" id="order_vat" name="order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
                                     </td>
                                     <td width="16">%</td>
                                 </tr>
@@ -820,7 +708,7 @@
                                 $vat_val = 0.0;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat_price"  name="purchase_order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="order_vat_price"  name="order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
                         </td>
                         <td></td>
                     </tr>
@@ -836,7 +724,7 @@
                                 $net_val = $total;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_net_price" name="purchase_order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="order_net_price" name="order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
                         </td>
                         <td></td>
                     </tr>
@@ -853,6 +741,55 @@
         </form>
     </div>
 </div>
+
+<div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
+                <div class="col-lg-8">
+                    <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert">
+                    </div>
+                </div>
+                <div class="col-md-4 pull-right" >
+                    <input type="text" class="form-control pull-right" name="search_pop" onchange="search_pop_like(this)" placeholder="Search"/>
+                </div>
+            </div>
+
+            <div class="modal-body modal-body-m">
+                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                <br>
+                <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
+                    <thead>
+                        <tr>
+                            <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
+                            <th style="text-align:center;">รหัสสินค้า  </th>
+                            <th style="text-align:center;">ชื่อสินค้า  </th>
+                            <th style="text-align:center;" width="150">จำนวน  </th>
+                            <th style="text-align:center;" width="150">ราคาต่อหน่วย  </th>
+                            <th style="text-align:center;" width="150">จำนวนเงิน  </th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyAdd">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-lg-8">
+                    <div id="data_show_list_choose" class="form-control alert-box alert-success text-left" role="alert">
+                        เลือก 0 รายการ
+                    </div>
+                </div>
+                <div class="col-lg-4" align="right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script> 
     $('.sorted_table').sortable({

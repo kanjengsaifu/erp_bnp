@@ -60,8 +60,8 @@
                         <td><?php echo $i+1; ?>.</td>
                         <td><?php echo $purchase_request_lists[$i]['product_code']; ?></td>
                         <td><?php echo $purchase_request_lists[$i]['product_name']; ?></td>
-                        <td style="text-align:center;"><?php echo $purchase_request_lists[$i]['request_list_qty']; ?></td>
-                        <td><?php echo $purchase_request_lists[$i]['request_list_remark']; ?></td>
+                        <td style="text-align:center;"><?php echo $purchase_request_lists[$i]['list_qty']; ?></td>
+                        <td><?php echo $purchase_request_lists[$i]['list_remark']; ?></td>
                     </tr>
                     <?
                     }

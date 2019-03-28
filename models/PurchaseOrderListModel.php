@@ -10,11 +10,11 @@ class PurchaseOrderListModel extends BaseModel{
     }
 
     function getPurchaseOrderListLastCode($code,$digit){
-        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(purchase_order_list_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
+        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(purchase_order_list_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS lastcode 
         FROM tb_purchase_order_list
         WHERE purchase_order_list_code LIKE ('$code%') 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
@@ -23,27 +23,23 @@ class PurchaseOrderListModel extends BaseModel{
     }
 
     function getPurchaseOrderListBy($purchase_order_code){
-        $sql = " SELECT tb.material_code,  
-        material_name,   
-        tb.purchase_order_list_code,   
-        IFNULL(( SELECT SUM(IFNULL(invoice_supplier_list_qty,0)) FROM tb_invoice_supplier_list WHERE  purchase_order_list_code = tb.purchase_order_list_code),0) as purchase_order_list_qty_recieve , 
-        tb.stock_group_id, 
-        purchase_order_list_qty, 
-        purchase_order_list_price, 
-        purchase_order_list_price_sum, 
-        purchase_order_list_delivery_min,  
-        purchase_order_list_delivery_max, 
-        purchase_order_list_remark, 
-        purchase_order_list_supplier_qty, 
-        purchase_order_list_supplier_delivery_min,  
-        purchase_order_list_supplier_delivery_max, 
-        purchase_order_list_supplier_remark 
+        $sql = " SELECT tb.product_code,  
+        product_name,   
+        purchase_order_list_code,   
+        IFNULL(( SELECT SUM(IFNULL(list_qty,0)) FROM tb_invoice_supplier_list WHERE purchase_order_list_code = tb.purchase_order_list_code),0) as list_recieve_qty , 
+        stock_group_code, 
+        list_qty, 
+        list_price, 
+        list_price_sum, 
+        list_remark, 
+        supplier_qty, 
+        supplier_remark 
         FROM tb_purchase_order_list as tb 
-        LEFT JOIN tb_material ON tb.material_code = tb_material.material_code  
+        LEFT JOIN tb_product ON tb.product_code = tb_product.product_code  
         WHERE purchase_order_code = '$purchase_order_code' 
-        ORDER BY purchase_order_list_no, tb.purchase_order_list_code 
+        ORDER BY list_no, purchase_order_list_code 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -52,10 +48,9 @@ class PurchaseOrderListModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
-    function getPurchaseOrderListCodeByOther($purchase_order_code,$purchase_order_list_no){
+    function getPurchaseOrderListCodeByOther($purchase_order_code,$list_no){
         $sql ="SELECT * 
         FROM tb_purchase_order_list 
         LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_code 
@@ -66,177 +61,120 @@ class PurchaseOrderListModel extends BaseModel{
                 $data[] = $row;
             }
             $result->close();
-            return $data[$purchase_order_list_no-1]['purchase_order_list_id'];
+            return $data[$list_no-1]['purchase_order_list_code'];
         }
     }
-
 
     function insertPurchaseOrderList($data = []){
         $sql = " INSERT INTO tb_purchase_order_list ( 
             purchase_order_list_code,
             purchase_order_code,
-            purchase_order_list_no,
-            material_code,
-            stock_group_id,
-            purchase_order_list_qty,
-            purchase_order_list_price, 
-            purchase_order_list_price_sum,
-            purchase_order_list_delivery_min, 
-            purchase_order_list_delivery_max,
-            purchase_order_list_remark,
+            product_code,
+            stock_group_code,
+            list_no,
+            list_qty,
+            list_price, 
+            list_price_sum,
+            list_remark,
             addby,
-            adddate,
-            updateby,
-            lastupdate
+            adddate
         ) VALUES ( 
             '".$data['purchase_order_list_code']."', 
             '".$data['purchase_order_code']."', 
-            '".$data['purchase_order_list_no']."', 
-            '".$data['material_code']."', 
-            '".$data['stock_group_id']."', 
-            '".$data['purchase_order_list_qty']."', 
-            '".$data['purchase_order_list_price']."', 
-            '".$data['purchase_order_list_price_sum']."', 
-            '".$data['purchase_order_list_delivery_min']."', 
-            '".$data['purchase_order_list_delivery_max']."', 
-            '".$data['purchase_order_list_remark']."',
+            '".$data['product_code']."', 
+            '".$data['stock_group_code']."', 
+            '".$data['list_no']."', 
+            '".$data['list_qty']."', 
+            '".$data['list_price']."', 
+            '".$data['list_price_sum']."', 
+            '".$data['list_remark']."',
             '".$data['addby']."', 
-            NOW(), 
-            '".$data['addby']."', 
-            NOW() 
-        ); 
-        ";
-
-//echo $sql."<br><br>";
-        // echo $sql;
-        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            return mysqli_insert_id(static::$db);
-        }else {
-            return '';
-        }
-
-    }
-
-    function updatePurchaseOrderListById($data,$id){
-
-        $sql = " UPDATE tb_purchase_order_list 
-            SET purchase_order_list_supplier_qty = '".$data['purchase_order_list_supplier_qty']."',
-            purchase_order_list_supplier_delivery_min = '".$data['purchase_order_list_supplier_delivery_min']."', 
-            purchase_order_list_supplier_delivery_max = '".$data['purchase_order_list_supplier_delivery_max']."',
-            purchase_order_list_supplier_remark = '".$data['purchase_order_list_supplier_remark']."'
-            WHERE purchase_order_list_id = '$id'
-        ";
+            NOW()
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
     }
 
-    function updatePurchaseOrderListByIdAdmin($data,$code){
-
-        $sql = " UPDATE tb_purchase_order_list 
-            SET material_code = '".$data['material_code']."', 
-            stock_group_id = '".$data['stock_group_id']."',
-            purchase_order_list_no = '".$data['purchase_order_list_no']."',
-            purchase_order_list_qty = '".$data['purchase_order_list_qty']."',
-            purchase_order_list_price = '".$data['purchase_order_list_price']."', 
-            purchase_order_list_price_sum = '".$data['purchase_order_list_price_sum']."',
-            purchase_order_list_delivery_min = '".$data['purchase_order_list_delivery_min']."', 
-            purchase_order_list_delivery_max = '".$data['purchase_order_list_delivery_max']."',
-            purchase_order_list_remark = '".$data['purchase_order_list_remark']."'
+    function updatePurchaseOrderListByCode($data,$code){
+        $sql = " UPDATE tb_purchase_order_list SET 
+            supplier_qty = '".$data['supplier_qty']."',
+            supplier_remark = '".$data['supplier_remark']."'
             WHERE purchase_order_list_code = '$code'
         ";
 
-        //echo $sql."<br><br>";
-
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
     }
 
-    function updateInvoiceSupplierListCode($purchase_order_list_id,$invoice_supplier_list_id){
-        $sql = " UPDATE tb_purchase_request_list 
-            SET invoice_supplier_list_id = '$invoice_supplier_list_id' 
-            WHERE purchase_order_list_id = '$purchase_order_list_id' 
+    function updatePurchaseOrderListByCodeAdmin($data,$code){
+        $sql = " UPDATE tb_purchase_order_list SET 
+            list_qty = '".$data['list_qty']."',
+            list_price = '".$data['list_price']."', 
+            list_price_sum = '".$data['list_price_sum']."',
+            list_remark = '".$data['list_remark']."'
+            WHERE purchase_order_list_code = '$code'
         ";
 
-
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
     }
 
+    function updateInvoiceSupplierListCode($purchase_order_list_code,$invoice_supplier_list_code){
+        $sql = " UPDATE tb_purchase_request_list SET 
+            invoice_supplier_list_code = '$invoice_supplier_list_code' 
+            WHERE purchase_order_list_code = '$purchase_order_list_code' 
+        ";
+        if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            return true;
+        }else {
+            return false;
+        }
+    }
     
-    function updateInvoiceCustomerListCode($purchase_order_list_id,$invoice_customer_list_id){
+    function updateInvoiceCustomerListCode($purchase_order_list_code,$invoice_customer_list_code){
         $sql = " UPDATE tb_purchase_request_list 
-            SET invoice_customer_list_id = '$invoice_customer_list_id' 
-            WHERE purchase_order_list_id = '$purchase_order_list_id' 
+            SET invoice_customer_list_code = '$invoice_customer_list_code' 
+            WHERE purchase_order_list_code = '$purchase_order_list_code' 
         ";
 
-
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
     }
 
-
-
-    function deletePurchaseOrderListByCode($id){
-        $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_list_id = '$id' ";
+    function deletePurchaseOrderListByCode($code){
+        $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_list_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
     }
 
-
-    function deletePurchaseOrderListByPurchaseOrderCode($id){
-
-        $sql = "UPDATE  tb_purchase_request_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
+    function deletePurchaseOrderListByPurchaseOrderCode($code){
+        $sql = "UPDATE tb_purchase_request_list 
+            SET purchase_order_list_code = ''
+            WHERE purchase_order_list_code IN (
+                SELECT purchase_order_list_code 
+                FROM tb_purchase_order_list 
+                WHERE purchase_order_code = '$code'
+            )
+        ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
-        $sql = "UPDATE  tb_customer_purchase_order_list_detail SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
+        $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-        $sql = "UPDATE  tb_delivery_note_supplier_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-        $sql = "UPDATE  tb_regrind_supplier_receive_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-        $sql = "UPDATE  tb_request_standard_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-        $sql = "UPDATE  tb_request_special_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-        $sql = "UPDATE  tb_request_regrind_list SET purchase_order_list_id = '0'  WHERE purchase_order_list_id IN (SELECT purchase_order_list_id FROM tb_purchase_order_list WHERE purchase_order_code = '$id') ";
-     
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-
-
-
-        $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_code = '$id' ";
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-        
-
     }
 
-    function deletePurchaseOrderListByPurchaseOrderCodeNotIN($id,$data){
+    function deletePurchaseOrderListByPurchaseOrderCodeNotIN($code,$data){
         $str ='';
         if(is_array($data)){ 
             for($i=0; $i < count($data) ;$i++){
@@ -251,12 +189,9 @@ class PurchaseOrderListModel extends BaseModel{
             $str="'0'";
         }
   
+        $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_code = '$code' AND purchase_order_list_code NOT IN ($str) ";
 
-        $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_code = '$id' AND purchase_order_list_code NOT IN ($str) ";
-        // echo $sql;
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-
     }
 }
 ?>

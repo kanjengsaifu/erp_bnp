@@ -54,7 +54,7 @@ class PurchaseRequestModel extends BaseModel{
         request_remark 
         FROM tb_purchase_request as tb 
         LEFT JOIN tb_user as tb1 ON tb.employee_code = tb1.user_code 
-        LEFT JOIN tb_user as tb2 ON tb.request_approve_by = tb2.user_code 
+        LEFT JOIN tb_user as tb2 ON tb.approve_by = tb2.user_code 
         WHERE ( CONCAT(tb1.user_name,' ',tb1.user_lastname) LIKE ('%$keyword%') 
             OR CONCAT(tb2.user_name,' ',tb2.user_lastname) LIKE ('%$keyword%') 
             OR purchase_request_code LIKE ('%$keyword%') 
@@ -171,7 +171,7 @@ class PurchaseRequestModel extends BaseModel{
             $str_user = "AND tb.employee_code  = '$user_code' ";
         }
 
-        $sql =  "SELECT tb_purchase_request.purchase_request_code,purchase_request_list_code,request_date,purchase_request_code,request_remark,purchase_request_list_qty,product_name,product_code,purchase_order_code,invoice_supplier_code_gen
+        $sql =  "SELECT tb_purchase_request.purchase_request_code,purchase_request_list_code,request_date,purchase_request_code,request_remark,list_qty,product_name,product_code,purchase_order_code,invoice_supplier_code_gen
                 FROM tb_purchase_request                    
                 LEFT JOIN tb_purchase_request_list ON tb_purchase_request.purchase_request_code = tb_purchase_request_list.purchase_request_code
                 LEFT JOIN tb_product ON tb_purchase_request_list.product_code = tb_product.product_code
@@ -261,8 +261,8 @@ class PurchaseRequestModel extends BaseModel{
     function updatePurchaseRequestApproveByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_request SET 
         approve_status = '".$data['approve_status']."', 
-        request_approve_by = '".$data['request_approve_by']."', 
-        request_approve_date = NOW(), 
+        approve_by = '".$data['approve_by']."', 
+        approve_date = NOW(), 
         request_status = 'Approved'
         WHERE purchase_request_code = '$code' 
         ";
