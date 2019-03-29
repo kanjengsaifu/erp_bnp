@@ -181,8 +181,6 @@
         for(var i = 0 ; i < val_pr.length ; i++){
             purchase_request_list_code.push(val_pr[i].value);
         }
-
-        console.log(purchase_request_list_code);
         
         if(supplier_code != ""){
             $(".table-pop").hide();
@@ -210,7 +208,7 @@
                         var purchase_order_list_total = (data[i].list_qty * data[i].list_price);
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
-                                            '<input onchange="//show_receive(this);" onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
+                                            '<input onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
                                         '</td>'+
                                         '<td>'+
                                             data[i].product_code+
@@ -294,7 +292,7 @@
                     var purchase_order_list_total = (data[i].list_qty * data[i].list_price);
                     content += '<tr class="odd gradeX">'+
                                     '<td>'+
-                                        '<input onchange="//show_receive(this);"  onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
+                                        '<input onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
                                     '</td>'+
                                     '<td>'+
                                         data[i].product_code+
@@ -324,28 +322,6 @@
             }
             $('#bodyAdd').html(content);
         });
-    }
-
-    function show_receive(checkbox){ 
-        if (checkbox.checked == true){
-            $(checkbox).closest('tr').children('td').children('input[name="qty"]').show();
-            $(checkbox).closest('tr').children('td').children('span[name="qty"]').hide();
-
-            $(checkbox).closest('tr').children('td').children('input[name="price"]').show();
-            $(checkbox).closest('tr').children('td').children('span[name="price"]').hide();
-
-            $(checkbox).closest('tr').children('td').children('input[name="total"]').show();
-            $(checkbox).closest('tr').children('td').children('span[name="total"]').hide();
-        }else{
-            $(checkbox).closest('tr').children('td').children('input[name="qty"]').hide();
-            $(checkbox).closest('tr').children('td').children('span[name="qty"]').show();
-
-            $(checkbox).closest('tr').children('td').children('input[name="price"]').hide();
-            $(checkbox).closest('tr').children('td').children('span[name="price"]').show();
-
-            $(checkbox).closest('tr').children('td').children('input[name="total"]').hide();
-            $(checkbox).closest('tr').children('td').children('span[name="total"]').show();
-        }
     }
 
     function calculate_list(id){
@@ -395,8 +371,8 @@
                 }else{
                     index = $(id).closest('table').children('tbody').children('tr').length + 1;
                 }
-                var purchase_request_list_code = 0;
 
+                var purchase_request_list_code = 0;
                 if(data_buffer[i].purchase_request_list_code !== undefined){
                     purchase_request_list_code = data_buffer[i].purchase_request_list_code;
                 }
@@ -667,6 +643,55 @@
                                 <i class="fa fa-plus" aria-hidden="true"></i> 
                                 <span>เพิ่มสินค้า / Add product</span>
                             </a>
+
+                            <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
+                                            <div class="col-lg-8">
+                                                <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 pull-right" >
+                                                <input type="text" class="form-control pull-right" name="search_pop" onchange="search_pop_like(this)" placeholder="Search"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body modal-body-m">
+                                            <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                            <br>
+                                            <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
+                                                <thead>
+                                                    <tr>
+                                                        <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
+                                                        <th style="text-align:center;">รหัสสินค้า  </th>
+                                                        <th style="text-align:center;">ชื่อสินค้า  </th>
+                                                        <th style="text-align:center;" width="150">จำนวน  </th>
+                                                        <th style="text-align:center;" width="150">ราคาต่อหน่วย  </th>
+                                                        <th style="text-align:center;" width="150">จำนวนเงิน  </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyAdd">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <div class="col-lg-8">
+                                                <div id="data_show_list_choose" class="form-control alert-box alert-success text-left" role="alert">
+                                                    เลือก 0 รายการ
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4" align="right">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
                         </td>
                     </tr>
                     <tr class="odd gradeX">
@@ -741,55 +766,6 @@
         </form>
     </div>
 </div>
-
-<div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
-                <div class="col-lg-8">
-                    <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert">
-                    </div>
-                </div>
-                <div class="col-md-4 pull-right" >
-                    <input type="text" class="form-control pull-right" name="search_pop" onchange="search_pop_like(this)" placeholder="Search"/>
-                </div>
-            </div>
-
-            <div class="modal-body modal-body-m">
-                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-                <br>
-                <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
-                    <thead>
-                        <tr>
-                            <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
-                            <th style="text-align:center;">รหัสสินค้า  </th>
-                            <th style="text-align:center;">ชื่อสินค้า  </th>
-                            <th style="text-align:center;" width="150">จำนวน  </th>
-                            <th style="text-align:center;" width="150">ราคาต่อหน่วย  </th>
-                            <th style="text-align:center;" width="150">จำนวนเงิน  </th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyAdd">
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="modal-footer">
-                <div class="col-lg-8">
-                    <div id="data_show_list_choose" class="form-control alert-box alert-success text-left" role="alert">
-                        เลือก 0 รายการ
-                    </div>
-                </div>
-                <div class="col-lg-4" align="right">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <script> 
     $('.sorted_table').sortable({

@@ -22,11 +22,9 @@ class ProductSupplierModel extends BaseModel{
         }
     }
 
-    function getProductSupplierBy($product_supplier_name = ''){
+    function getProductSupplierBy(){
         $sql = " SELECT *    
-        FROM tb_product_supplier 
-        WHERE product_supplier_name LIKE ('%$product_supplier_name%') 
-        ORDER BY product_supplier_name  
+        FROM tb_product_supplier
         "; 
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -109,12 +107,14 @@ class ProductSupplierModel extends BaseModel{
 
     function updateProductSupplierPriceByCode($data = []){
         $sql = " UPDATE tb_product_supplier SET      
-        product_buyprice = '".$data['product_buyprice']."' 
+        product_buyprice = '".$data['product_buyprice']."',
+        updateby = '".$data['updateby']."',
+        lastupdate = NOW()
         WHERE supplier_code = '".$data['supplier_code']."' AND product_code = '".$data['product_code']."' 
         "; 
         
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -124,12 +124,13 @@ class ProductSupplierModel extends BaseModel{
         $sql = " UPDATE tb_product_supplier SET     
         supplier_code = '".$data['supplier_code']."', 
         product_buyprice = '".$data['product_buyprice']."', 
-        lead_time = '".$data['lead_time']."'   
+        updateby = '".$data['updateby']."',
+        lastupdate = NOW()
         WHERE product_supplier_code = '$code' 
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -141,18 +142,19 @@ class ProductSupplierModel extends BaseModel{
             product_code,
             supplier_code,
             product_buyprice,
-            lead_time
+            addby,
+            adddate
         ) VALUES (
             '".$data['product_supplier_code']."', 
             '".$data['product_code']."', 
             '".$data['supplier_code']."', 
             '".$data['product_buyprice']."', 
-            '".$data['lead_time']."' 
-        ); 
-        ";
+            '".$data['addby']."',
+            NOW()
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }

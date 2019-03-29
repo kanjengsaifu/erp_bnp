@@ -100,7 +100,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $data['employee_code'] = $_POST['employee_code'];
         $data['supplier_code'] = $_POST['supplier_code'];
         $data['credit_term'] = $_POST['credit_term'];
-        $data['order_status'] = 'New';
         $data['delivery_by'] = $_POST['delivery_by'];
         $data['order_remark'] = $_POST['order_remark'];
 
@@ -117,6 +116,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $data['order_vat'] = (float)filter_var($order_vat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['order_vat_price'] = (float)filter_var($order_vat_price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['order_net_price'] = (float)filter_var($order_net_price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['revise_code'] = $_POST['purchase_order_code'];
         $data['addby'] = $login_user['user_code'];
 
         $result = $purchase_order_model->insertPurchaseOrder($data);
@@ -127,14 +127,14 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 $data['purchase_order_list_code'] = $_POST['purchase_order_code'].date("Hi").$i;
                 $data['purchase_order_code'] = $_POST['purchase_order_code'];
                 $data['product_code'] = $_POST['product_code'][$i];
-                $data['supplier_code'] = $_POST['supplier_code'][$i];
                 $data['stock_group_code'] = $_POST['stock_group_code'][$i];
                 $data['list_no'] = $i;
                 $data['list_qty'] = (float)filter_var($_POST['list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
                 $data['list_price'] = (float)filter_var($_POST['list_price'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
                 $data['list_price_sum'] = (float)filter_var($_POST['list_price_sum'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
                 $data['list_remark'] = $_POST['list_remark'][$i];
-    
+                $data['addby'] = $login_user['user_code'];
+
                 $result = $purchase_order_list_model->insertPurchaseOrderList($data);
                 if($result){
                     $purchase_request_list_model->updatePurchaseOrderCode($_POST['purchase_request_list_code'][$i],$data['purchase_order_list_code']);
@@ -142,23 +142,26 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             }
 
             for($i=0; $i < count($_POST['save_product_price']); $i++){
-                for($j=0; $j < count($product_code); $j++){
-                    if($product_code[$j] == $_POST['save_product_price'][$i]){
-                        $product_price = (float)filter_var($list_price[$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                for($j=0; $j < count($_POST['product_code']); $j++){
+                    if($_POST['product_code'][$j] == $_POST['save_product_price'][$i]){
+                        $product_price = (float)filter_var($_POST['list_price'][$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                     }
                 }
 
                 $product_supplier_price = $product_supplier_model->getProductSupplierPriceByCode($_POST['save_product_price'][$i],$_POST['supplier_code']);
     
                 $data = [];
+                $data['product_supplier_code'] = $product_supplier_price['product_supplier_code'];
                 $data['product_code'] = $_POST['save_product_price'][$i];
                 $data['supplier_code'] = $_POST['supplier_code'];
                 $data['product_buyprice'] = $product_price;
-                $data['product_supplier_status'] = 'Active';
     
-                if(count($product_supplier_prices) > 0){ 
+                if($data['product_supplier_code'] != ''){ 
+                    $data['updateby'] = $login_user['user_code'];
                     $product_supplier_model->updateProductSupplierPriceByCode($data);
                 }else{
+                    $data['product_supplier_code'] = $_POST['supplier_code'].$_POST['save_product_price'][$i];
+                    $data['addby'] = $login_user['user_code'];
                     $product_supplier_model->insertProductSupplier($data);
                 }
             }
@@ -185,7 +188,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
 }else if ($_GET['action'] == 'edit' && $menu['purchase_order']['edit']){
     if(isset($_POST['purchase_order_code'])){
         $purchase_order_list_model->deletePurchaseOrderListByPurchaseOrderCodeNotIN($_POST['purchase_order_code'],$_POST['purchase_order_list_code']);
-        
+
         for($i=0; $i<count($_POST['product_code']); $i++){
             $data = [];
             $data['list_no'] = $i;
@@ -200,7 +203,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             }else{
                 $data['purchase_order_list_code'] = $_POST['purchase_order_code'].date("Hi").$i;
                 $data['product_code'] = $_POST['product_code'][$i];
-                $data['supplier_code'] = $_POST['supplier_code'][$i];
                 $data['stock_group_code'] = $_POST['stock_group_code'][$i];
                 $data['addby'] = $login_user['user_code'];
 
@@ -212,23 +214,26 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         }
 
         for($i=0; $i < count($_POST['save_product_price']); $i++){
-            for($j=0; $j < count($product_code); $j++){
-                if($product_code[$j] == $_POST['save_product_price'][$i]){
-                    $product_price = (float)filter_var($list_price[$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+            for($j=0; $j < count($_POST['product_code']); $j++){
+                if($_POST['product_code'][$j] == $_POST['save_product_price'][$i]){
+                    $product_price = (float)filter_var($_POST['list_price'][$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                 }
             }
 
             $product_supplier_price = $product_supplier_model->getProductSupplierPriceByCode($_POST['save_product_price'][$i],$_POST['supplier_code']);
 
             $data = [];
+            $data['product_supplier_code'] = $product_supplier_price['product_supplier_code'];
             $data['product_code'] = $_POST['save_product_price'][$i];
             $data['supplier_code'] = $_POST['supplier_code'];
             $data['product_buyprice'] = $product_price;
-            $data['product_supplier_status'] = 'Active';
 
-            if(count($product_supplier_prices) > 0){ 
+            if($data['product_supplier_code'] != ''){ 
+                $data['updateby'] = $login_user['user_code'];
                 $product_supplier_model->updateProductSupplierPriceByCode($data);
             }else{
+                $data['product_supplier_code'] = $_POST['supplier_code'].$_POST['save_product_price'][$i];
+                $data['addby'] = $login_user['user_code'];
                 $product_supplier_model->insertProductSupplier($data);
             }
         }
@@ -282,19 +287,20 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         </script>
         <?php
     }
-}else if ($_GET['action'] == 'revise' && $menu['purchase_order']['edit']){
-    if($purchase_order_code > 0){
+}else if ($_GET['action'] == 'revise' && ($menu['purchase_order']['edit'] || $menu['purchase_order']['add'])){
+    if($purchase_order_code != ''){
         $purchase_order = $purchase_order_model->getPurchaseOrderByCode($purchase_order_code);
         $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
         $result = $purchase_order_model->cancelPurchaseOrderByCode($purchase_order_code);  
 
+        $purchase_order_code = $purchase_order['revise_code']."-REVISE-".($purchase_order['revise_no'] + 1);
+
         $data = [];
-        $data['purchase_order_code'] = $purchase_order['purchase_order_code'];
+        $data['purchase_order_code'] = $purchase_order_code;
         $data['supplier_code'] = $purchase_order['supplier_code'];
         $data['employee_code'] = $purchase_order['employee_code'];
-        $data['order_status'] = 'New';
         $data['order_date'] = $purchase_order['order_date'];
-        $data['revise_code'] = $purchase_order_code;
+        $data['revise_code'] = $purchase_order['revise_code']; 
         $data['revise_no'] = $purchase_order['revise_no'] + 1;
         $data['credit_term'] = $purchase_order['credit_term'];
         $data['approve_status'] = '';
@@ -309,22 +315,22 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $result = $purchase_order_model->insertPurchaseOrder($data);
             
         for($i=0; $i < count($purchase_order_lists) ; $i++){
-            $data_sub = [];
-            $data_sub['purchase_order_list_code'] = $purchase_order_code.date("Hi").$i;
-            $data_sub['list_no'] = $purchase_order_lists[$i]['list_no'];
-            $data_sub['purchase_order_code'] = $purchase_order_code;
-            $data_sub['product_code'] = $purchase_order_lists[$i]['product_code'];
-            $data_sub['stock_group_code'] = $purchase_order_lists[$i]['stock_group_code'];
-            $data_sub['list_qty'] = $purchase_order_lists[$i]['list_qty'];
-            $data_sub['list_price'] = $purchase_order_lists[$i]['list_price'];
-            $data_sub['list_price_sum'] = $purchase_order_lists[$i]['list_price_sum'];
-            $data_sub['list_remark'] = $purchase_order_lists[$i]['list_remark'];
+            $data = [];
+            $data['purchase_order_list_code'] = $purchase_order_code.date("Hi").$i;
+            $data['list_no'] = $purchase_order_lists[$i]['list_no'];
+            $data['purchase_order_code'] = $purchase_order_code;
+            $data['product_code'] = $purchase_order_lists[$i]['product_code'];
+            $data['stock_group_code'] = $purchase_order_lists[$i]['stock_group_code'];
+            $data['list_qty'] = $purchase_order_lists[$i]['list_qty'];
+            $data['list_price'] = $purchase_order_lists[$i]['list_price'];
+            $data['list_price_sum'] = $purchase_order_lists[$i]['list_price_sum'];
+            $data['list_remark'] = $purchase_order_lists[$i]['list_remark'];
 
-            $result = $purchase_order_list_model->insertPurchaseOrderList($data_sub);
+            $result = $purchase_order_list_model->insertPurchaseOrderList($data);
 
             if($result){
                 if($purchase_order_lists[$i]['purchase_request_list_code'] != ""){
-                    $purchase_request_list_model->updatePurchaseOrderCode($purchase_order_lists[$i]['purchase_request_list_code'],$id);
+                    $purchase_request_list_model->updatePurchaseOrderCode($purchase_order_lists[$i]['purchase_request_list_code'],$data['purchase_order_list_code']);
                 }
             }
         }
@@ -335,11 +341,11 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         </script>
         <?php
     }else{
-        ?>
+    ?>
         <script>
             window.history.back();
         </script>
-        <?php
+    <?php
     }
 }else if ($_GET['action'] == 'approve' && $menu['purchase_order']['approve']){
     if(isset($_POST['approve_status'])){
@@ -419,10 +425,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $company = $company_model->getCompanyBy(); 
         $purchase_order = $purchase_order_model->getPurchaseOrderByCode($purchase_order_code);
 
-        $data = [];
-        $data['order_status'] = 'Sending';
-        $data['updateby'] = $login_user['user_code'];
-
         $supplier = $supplier_model->getSupplierByCode($supplier_code);
     
         if($supplier_code != ''){
@@ -434,7 +436,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             $body = '
                 We are opened the purchase order No:'.$purchase_order['purchase_order_code'].' .
                 Can you confirm the order details?. 
-                At <a href="'.$company_model->supplier_page_url.'/index.php?app=purchase_order&action=sending&id='.$purchase_order_code.'">Click</a> 
+                At <a href="'.$company_model->supplier_page_url.'/index.php?app=purchase_order&action=sending&code='.$purchase_order_code.'">Click</a> 
                 <br>
                 <br>
                 <b> Best regards,</b><br><br>
@@ -474,6 +476,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 if(!$mail->Send()) {
                     $result = "Mailer Error: " . $mail->ErrorInfo;
                 }else{
+                    $data = [];
+                    $data['order_status'] = 'Sending';
+                    $data['updateby'] = $login_user['user_code'];
                     $purchase_order_model->updatePurchaseOrderStatusByCode($purchase_order_code,$data);
                     $result = "Send purchase order complete.";
                 } 
@@ -494,7 +499,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             </script>
             <?php
         }
-    
     }else{
     ?>
         <script>

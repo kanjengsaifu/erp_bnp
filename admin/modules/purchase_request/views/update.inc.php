@@ -402,7 +402,6 @@
 
 <script>
     $(".example-ajax-post").easyAutocomplete(options);
-    // Sortable rows
     $('.sorted_table').sortable({
         handle: ".sorter" , 
         update: function( event, ui ) {

@@ -175,18 +175,15 @@ class PurchaseOrderListModel extends BaseModel{
     }
 
     function deletePurchaseOrderListByPurchaseOrderCodeNotIN($code,$data){
-        $str ='';
-        if(is_array($data)){ 
-            for($i=0; $i < count($data) ;$i++){
+        $str="'".$data."'";
+        if(is_array($data) && count($data) > 0){ 
+            $str ="";
+            for($i=0; $i<count($data); $i++){
                 $str .= "'".$data[$i]."'";
                 if($i + 1 < count($data)){
-                    $str .= ',';
+                    $str .= ",";
                 }
             }
-        }else if ($data != ''){
-            $str = "'".$data."'";
-        }else{
-            $str="'0'";
         }
   
         $sql = "DELETE FROM tb_purchase_order_list WHERE purchase_order_code = '$code' AND purchase_order_list_code NOT IN ($str) ";

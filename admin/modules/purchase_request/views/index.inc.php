@@ -23,9 +23,8 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     $products = $product_model->getProductBy();
     $suppliers = $supplier_model->getSupplierBy();
     $stock_groups = $stock_group_model->getStockGroupBy();
-    $condition = 'AND (permission_add = 1 OR permission_add = 1)';
+    $condition = 'AND (permission_add OR permission_edit)';
     $users = $user_model->getUserByPermission('purchase_request',$condition);
-
     $code = "PR".date("y").date("m").date("d");
     $last_code = $purchase_request_model->getPurchaseRequestLastCode($code,4);
     require_once($path.'insert.inc.php');
@@ -33,7 +32,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     $products = $product_model->getProductBy();
     $suppliers = $supplier_model->getSupplierBy();
     $stock_groups = $stock_group_model->getStockGroupBy();
-    $condition = 'AND (permission_add = 1 OR permission_add = 1)';
+    $condition = 'AND (permission_add OR permission_edit)';
     $users = $user_model->getUserByPermission('purchase_request',$condition);
     $purchase_request = $purchase_request_model->getPurchaseRequestByCode($purchase_request_code);
     $purchase_request_lists = $purchase_request_list_model->getPurchaseRequestListBy($purchase_request_code);
@@ -42,14 +41,14 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     $purchase_request = $purchase_request_model->getPurchaseRequestByCode($purchase_request_code);
     $purchase_request_lists = $purchase_request_list_model->getPurchaseRequestListBy($purchase_request_code);
     require_once($path.'detail.inc.php');
-}else if ($_GET['action'] == 'delete'){
+}else if ($_GET['action'] == 'delete' && $menu['purchase_request']['delete']){
     $notification_model->deleteNotificationByTypeID('Purchase Request',$purchase_request_code);
     $purchase_request = $purchase_request_model->deletePurchaseRequestByCode($purchase_request_code);
     ?> <script>window.location="index.php?app=purchase_request"</script> <?php
-}else if ($_GET['action'] == 'cancelled'){
+}else if ($_GET['action'] == 'cancelled' && $menu['purchase_request']['cancel']){
     $purchase_request_model->cancelPurchaseRequestByCode($purchase_request_code);
     ?> <script>window.location="index.php?app=purchase_request"</script> <?php
-}else if ($_GET['action'] == 'uncancelled'){
+}else if ($_GET['action'] == 'uncancelled' && $menu['purchase_request']['cancel']){
     $purchase_request_model->uncancelPurchaseRequestByCode($purchase_request_code);
     ?> <script>window.location="index.php?app=purchase_request"</script> <?php
 }else if ($_GET['action'] == 'add' && $menu['purchase_request']['add']){
@@ -69,6 +68,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
         }
 
         $data['request_remark'] = $_POST['request_remark'];
+        $data['revise_code'] = $_POST['purchase_request_code'];
         $data['addby'] = $login_user['user_code'];
 
         $result = $purchase_request_model->insertPurchaseRequest($data); 
@@ -150,37 +150,39 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     $purchase_request = $purchase_request_model->getPurchaseRequestByCode($purchase_request_code);
     $purchase_request_lists = $purchase_request_list_model->getPurchaseRequestListBy($purchase_request_code);
     $purchase_request_model->cancelPurchaseRequestByCode($purchase_request_code);
+    
+    $purchase_request_code = $purchase_request['revise_code']."-REVISE-".($purchase_request['revise_no'] + 1);
 
     $data = [];
-    $data['purchase_request_code'] = $purchase_request['purchase_request_code']."-REVISE-".$data['revise_no'];
-    $data['approve_status'] = "Waiting";
-    if (trim($_POST['request_alert']) != ''){
-        $due_date = explode("-",$_POST['request_alert']);
-        $data['request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
-    }
+    $data['purchase_request_code'] = $purchase_request_code;
+    $data['employee_code'] = $purchase_request['employee_code'];
+    $data['request_date'] = $purchase_request['request_date'];
+    $data['request_alert']  = $purchase_request['request_alert'];
     $data['revise_no'] = $purchase_request['revise_no'] + 1;
-    $data['revise_code'] = $purchase_request_code; 
+    $data['revise_code'] = $purchase_request['revise_code']; 
     $data['request_remark'] = $purchase_request['request_remark'];
+    $data['addby'] = $login_user['user_code'];
 
-    $purchase_request_code = $purchase_request_model->insertPurchaseRequest($data);
+    $result = $purchase_request_model->insertPurchaseRequest($data);
 
-    if($purchase_request_code != 0){
-        if(count($purchase_request_lists) > 0){
-            for($i=0; $i < count($purchase_request_lists) ; $i++){
-                $data = [];
-                $data['purchase_request_code'] = $purchase_request_code;
-                $data['purchase_request_list_code'] = $purchase_request_code.date("His").$i;
-                $data['product_code'] = $purchase_request_lists[$i]['product_code'];
-                $data['supplier_code'] = $purchase_request_lists[$i]['supplier_code'];
-                $data['stock_group_code'] = $purchase_request_lists[$i]['stock_group_code'];
-                $data['list_qty'] = $purchase_request_lists[$i]['list_qty'];
-                $data['list_remark'] = $purchase_request_lists[$i]['list_remark'];
-                $purchase_request_list_model->insertPurchaseRequestList($data); 
-            }
+    if($result){
+        for($i=0; $i<count($purchase_request_lists); $i++){
+            $data = [];
+            $data['purchase_request_list_code'] = $purchase_request_code.date("Hi").$i;
+            $data['purchase_request_code'] = $purchase_request_code;
+            $data['product_code'] = $purchase_request_lists[$i]['product_code'];
+            $data['supplier_code'] = $purchase_request_lists[$i]['supplier_code'];
+            $data['stock_group_code'] = $purchase_request_lists[$i]['stock_group_code'];
+            $data['list_no'] =  $purchase_request_lists[$i]['list_no'];
+            $data['list_qty'] = $purchase_request_lists[$i]['list_qty'];
+            $data['list_remark'] = $purchase_request_lists[$i]['list_remark'];
+            $purchase_request_list_model->insertPurchaseRequestList($data); 
         }
-        ?> <script>window.location="index.php?app=purchase_request&action=update&code=<?php echo $purchase_request_code;?>"</script> <?php
+        ?> <script>window.location="index.php?app=purchase_request&action=update&code=<?php echo $purchase_request_code; ?>"</script> <?php
     }else{
-        ?> <script>window.history.back();</script> <?php
+    ?>
+        <script>window.history.back();</script>
+    <?php
     }
 }else if ($_GET['action'] == 'approve' && $menu['purchase_request']['approve']){
     if(isset($_POST['approve_status'])){

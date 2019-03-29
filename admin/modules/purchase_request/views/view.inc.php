@@ -77,21 +77,22 @@
                 ?>
                 <tr class="odd gradeX">
                     <td class="text-center"><?php echo $i+1; ?></td>
-                    <td><?php echo $purchase_request[$i]['purchase_request_code']; ?> <?php if($purchase_request[$i]['revise_no'] > 0){ ?><b><font color="#F00">Rewrite <?PHP echo $purchase_request[$i]['revise_no']; ?></font></b> <?PHP } ?> <?php if($purchase_request[$i]['request_cancelled']){ ?><b><font color="#F00">Cancelled</font></b> <?PHP } ?></td>
+                    <td><?php echo $purchase_request[$i]['purchase_request_code']; ?> <?php if($purchase_request[$i]['revise_no']){ ?><br><b><font color="#F00">Revise <?PHP echo $purchase_request[$i]['revise_no']; ?></font></b> <?PHP } ?> <?php if($purchase_request[$i]['request_cancelled']){ ?><b><font color="#F00">Cancelled</font></b> <?PHP } ?></td>
                     <td class="text-center" data-order="<?php echo $timestamp = strtotime($purchase_request[$i]['request_date']); ?>">
                         <?php if ($purchase_request[$i]['request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request[$i]['request_date'])); } ?>
                     </td>
                     <td><?php echo $purchase_request[$i]['request_name']; ?></td>
                     <td class="text-center"><?php echo $purchase_request[$i]['approve_status']; ?></td>
                     <td><?php echo $purchase_request[$i]['accept_name']; ?></td>
-                    <td class="text-center"><?php
+                    <td class="text-center">
+                        <?php
                         $purchase_orders = $purchase_request_model->getPurchaseOrderByPurchaseRequestCode($purchase_request[$i]['purchase_request_code']);
 
                         for($j=0; $j < count($purchase_orders); $j++){ ?>
                             <a href="?app=purchase_order&action=detail&code=<?php echo $purchase_orders[$j]['purchase_order_code'];?>" target = "_blank" title="ดูรายละเอียดใบสั่งซื้อ">
                             <?php echo $purchase_orders[$j]['purchase_order_code']; ?>
                             </a><br>
-                            <?php
+                        <?php
                         }
                         ?>
                     </td>

@@ -43,7 +43,9 @@ class PurchaseRequestModel extends BaseModel{
         request_date, 
         revise_code,
         IFNULL((
-            SELECT COUNT(*) FROM tb_purchase_request WHERE revise_code = tb.purchase_request_code 
+            SELECT IF(MAX(tb_purchase_request.revise_no) = tb.revise_no,0,1)
+            FROM tb_purchase_request 
+            WHERE revise_code = tb.revise_code 
         ),0) as count_revise,
         revise_no,
         purchase_request_code, 
@@ -61,6 +63,8 @@ class PurchaseRequestModel extends BaseModel{
         ) $str_date $str_user  
         ORDER BY request_date DESC 
         ";
+
+        echo $sql;
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -298,8 +302,8 @@ class PurchaseRequestModel extends BaseModel{
             $data['revise_code']."','".
             $data['revise_no']."','".
             $data['addby']."',".
-            "NOW()); 
-        ";
+            "NOW()
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return true;

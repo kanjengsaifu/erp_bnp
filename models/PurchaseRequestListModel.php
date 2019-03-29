@@ -90,7 +90,7 @@ class PurchaseRequestListModel extends BaseModel{
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -107,16 +107,15 @@ class PurchaseRequestListModel extends BaseModel{
     }
 
     function deletePurchaseRequestListByPurchaseRequestCodeNotIN($code,$data){
-        $str ='';
-        if(is_array($data)){ 
-            for($i=0; $i < count($data) ;$i++){
-                $str .= " '".$data[$i]."' ";
+        $str="'".$data."'";
+        if(is_array($data) && count($data) > 0){ 
+            $str ="";
+            for($i=0; $i<count($data); $i++){
+                $str .= "'".$data[$i]."'";
                 if($i + 1 < count($data)){
                     $str .= ",";
                 }
             }
-        }else if ($data != ''){
-            $str = $data;
         }
 
         $sql = "DELETE FROM tb_purchase_request_list WHERE purchase_request_code = '$code' AND purchase_request_list_code NOT IN ($str) ";

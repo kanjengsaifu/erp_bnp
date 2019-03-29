@@ -41,22 +41,24 @@ class PurchaseOrderModel extends BaseModel{
         }
 
         if($supplier_code != ""){
-            $str_supplier = "AND tb_purchase_order.supplier_code = '$supplier_code' ";
+            $str_supplier = "AND tb.supplier_code = '$supplier_code' ";
         }
 
-        $sql = " SELECT purchase_order_code, tb_purchase_order.supplier_code,
+        $sql = " SELECT purchase_order_code, tb.supplier_code,
         purchase_order_code, order_date, revise_code, revise_no,
         order_status, approve_status, credit_term, order_cancelled, delivery_by,
         IFNULL((
-            SELECT COUNT(*) FROM tb_purchase_order WHERE revise_code = purchase_order_code 
+            SELECT IF(MAX(tb_purchase_order.revise_no) = tb.revise_no,0,1)
+            FROM tb_purchase_order 
+            WHERE revise_code = tb.revise_code 
         ),0) as count_revise,
         IFNULL(CONCAT(tb_employee.user_name,' ',tb_employee.user_lastname),'-') as employee_name, 
         IFNULL(CONCAT(tb_approve.user_name,' ',tb_approve.user_lastname),'-') as accept_name, 
         IFNULL(supplier_name_en,'-') as supplier_name
-        FROM tb_purchase_order
-        LEFT JOIN tb_user as tb_employee ON tb_purchase_order.employee_code = tb_employee.user_code 
-        LEFT JOIN tb_user as tb_approve ON tb_purchase_order.approve_by = tb_approve.user_code 
-        LEFT JOIN tb_supplier ON tb_purchase_order.supplier_code = tb_supplier.supplier_code 
+        FROM tb_purchase_order as tb 
+        LEFT JOIN tb_user as tb_employee ON tb.employee_code = tb_employee.user_code 
+        LEFT JOIN tb_user as tb_approve ON tb.approve_by = tb_approve.user_code 
+        LEFT JOIN tb_supplier ON tb.supplier_code = tb_supplier.supplier_code 
         WHERE (
             CONCAT(tb_employee.user_name,' ',tb_employee.user_lastname) LIKE ('%$keyword%')
             OR CONCAT(tb_approve.user_name,' ',tb_approve.user_lastname) LIKE ('%$keyword%')
@@ -67,6 +69,8 @@ class PurchaseOrderModel extends BaseModel{
         GROUP BY purchase_order_code
         ORDER BY purchase_order_code DESC
         ";
+
+        echo $sql;
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -277,7 +281,7 @@ class PurchaseOrderModel extends BaseModel{
         }
 
         $sql_request = "SELECT purchase_request_list_code, tb_purchase_request_list.product_code, product_name, 
-        stock_group_code, request_list_qty as list_qty, IFNULL(product_buyprice,0) as list_price, 
+        stock_group_code, list_qty, IFNULL(product_buyprice,0) as list_price, 
         CONCAT('PR : ',tb_purchase_request.purchase_request_code) as list_remark 
         FROM tb_purchase_request 
         LEFT JOIN tb_purchase_request_list ON tb_purchase_request.purchase_request_code = tb_purchase_request_list.purchase_request_code 
@@ -465,7 +469,7 @@ class PurchaseOrderModel extends BaseModel{
             $data['credit_term']."','".
             $data['delivery_by']."','". 
             $data['order_date']."','".
-            $data['order_status']."','".
+            "New','".
             static::$db->real_escape_string($data['order_remark'])."','". 
             $data['order_total_price']."','".
             $data['order_vat']."','".

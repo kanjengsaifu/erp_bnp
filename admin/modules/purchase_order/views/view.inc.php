@@ -83,11 +83,9 @@
                 <select id="supplier_code" name="supplier_code" class="form-control select" data-live-search="true">
                     <option value="">ทั้งหมด</option>
                     <?php 
-                    for($i =  0 ; $i < count($suppliers) ; $i++){
+                    for($i=0; $i<count($suppliers); $i++){
                     ?>
-                    <option <?php if($suppliers[$i]['supplier_code'] == $supplier_code){?> selected <?php }?>
-                        value="<?php echo $suppliers[$i]['supplier_code'] ?>">
-                        <?php echo $suppliers[$i]['supplier_name_en'] ?> </option>
+                    <option <?php if($suppliers[$i]['supplier_code'] == $supplier_code){?> selected <?php }?> value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?> </option>
                     <?
                     }
                     ?>
@@ -129,19 +127,19 @@
                         width="82">PO Date</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
                         data-placement="top" title="" data-original-title="ผู้ขาย">Supplier</th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
                         data-placement="top" title="" data-original-title="ผู้ออกใบสั่งซื้อ" width="82">
                         Request by</th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
                         data-placement="top" title="" data-original-title="สถานะสั่งซื้อ" width="90">PO
                         Status</th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
                         data-placement="top" title="" data-original-title="รหัสเอกสาร" width="102">
                         Invoice Code</th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
                         data-placement="top" title="" data-original-title="สถานะ" width="102">Status
                     </th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip"
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
                         data-placement="top" title="" data-original-title="หมายเหตุ" width="82">Remark
                     </th>
                     <th></th>
@@ -154,11 +152,8 @@
                 <tr class="odd gradeX">
                     <td class="text-center"><?php echo $i+1; ?></td>
                     <td><?php echo $purchase_orders[$i]['purchase_order_code']; ?>
-                        <?php if($purchase_orders[$i]['revise_no'] > 0){ ?><b>
-                            <font color="#F00">Revise
-                                <?PHP echo $purchase_orders[$i]['revise_no']; ?>
-                            </font>
-                        </b>
+                        <?php if($purchase_orders[$i]['revise_no']){ ?>
+                            <br><b><font color="#F00">Revise<?PHP echo $purchase_orders[$i]['revise_no']; ?></font></b>
                         <?PHP } ?>
                         <?php if($purchase_orders[$i]['order_cancelled']){ ?><b>
                             <font color="#F00">Cancelled</font>
@@ -263,7 +258,6 @@
 
                             for($j = 0; $j<count($invoice_supplier); $j++){ 
                                 if ($invoice_supplier =! null ||$invoice_supplier=! "" ) {
-                                
                                     if($invoice_supplier_model->checkPurchaseOrder($purchase_orders[$i]['purchase_order_code'])>0){ 
                                         echo " <b class='text-danger'>ยังไม่ครบ</b> ";
                                     }else{
@@ -294,60 +288,45 @@
                             <i class="fa fa-print" aria-hidden="true"></i>
                         </a>
 
-                        <?php if($purchase_orders[$i]['order_status'] == "New" || $purchase_orders[$i]['order_status'] == "Approved"){ ?>
-
-                        <?php if($purchase_orders[$i]['order_cancelled'] == 0){ ?>
-
-
-                        <?PHP if( $license_purchase_page == "Medium" || $license_purchase_page == "High"){ ?>
-                        <a href="?app=purchase_order&action=cancelled&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                            title="ยกเลิกใบร้องขอ"
-                            onclick="return confirm('You want to cancelled purchase request : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
-                            style="color:#F00;">
-                            <i class="fa fa-ban" aria-hidden="true"></i>
-                        </a>
-                        <a href="?app=purchase_order&action=rewrite&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                            title="เขียนใบร้องขอใหม่"
-                            onclick="return confirm('You want to rewrite purchase request : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
-                            style="color:#F00;">
-                            <i class="fa fa-registered" aria-hidden="true"></i>
-                        </a>
-                        <a href="?app=purchase_order&action=update&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                            title="แก้ไขใบร้องขอ">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                        <?PHP } ?>
-
-                        <?php } else if($purchase_orders[$i]['count_rewrite'] == 0) { ?>
-                            <?PHP if( $license_purchase_page == "Medium" || $license_purchase_page == "High"){ ?>
+                    <?php if($purchase_orders[$i]['order_status'] == "New" || $purchase_orders[$i]['order_status'] == "Approved"){ ?>
+                        <?php if(!$purchase_orders[$i]['order_cancelled']){ ?>
+                            <?php if($menu['purchase_order']['cancel']){ ?> 
+                            <a href="?app=purchase_order&action=cancelled&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
+                                title="ยกเลิกใบร้องขอ"
+                                onclick="return confirm('You want to cancelled Purchase Order : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
+                                style="color:#F00;">
+                                <i class="fa fa-ban" aria-hidden="true"></i>
+                            </a>
+                            <?php } ?> 
+                            <?PHP if($menu['purchase_order']['edit']){ ?>
+                            <a href="?app=purchase_order&action=revise&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
+                                title="เขียนใบร้องขอใหม่"
+                                onclick="return confirm('You want to revise Purchase Order : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
+                                style="color:#F00;">
+                                <i class="fa fa-registered" aria-hidden="true"></i>
+                            </a>
+                            <a href="?app=purchase_order&action=update&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
+                                title="แก้ไขใบร้องขอ">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                            <?PHP } ?>
+                        <?php } else if(!$purchase_orders[$i]['count_revise']) { ?>
+                            <?PHP if($menu['purchase_order']['cancel']){ ?>
                             <a href="?app=purchase_order&action=uncancelled&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
                                 title="เรียกคืนใบร้องขอ"
-                                onclick="return confirm('You want to uncancelled purchase request : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');">
+                                onclick="return confirm('You want to uncancelled Purchase Order : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');">
                                 <i class="fa fa-undo" aria-hidden="true"></i>
                             </a>
-                            <a href="?app=purchase_order&action=rewrite&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
+                            <?PHP } ?>
+                            <?PHP if($menu['purchase_order']['edit']){ ?>
+                            <a href="?app=purchase_order&action=revise&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
                                 title="เขียนใบร้องขอใหม่"
-                                onclick="return confirm('You want to rewrite purchase request : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
+                                onclick="return confirm('You want to revise Purchase Order : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
                                 style="color:#F00;">
                                 <i class="fa fa-registered" aria-hidden="true"></i>
                             </a>
                             <?PHP } ?>
-                            <?PHP if( $license_purchase_page == "High"){ ?>
-                            <a href="?app=purchase_order&action=delete&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                                onclick="return confirm('You want to delete Purchase Order : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
-                                style="color:red;" title="ลบ">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </a>
-                            <?PHP } ?>
-                        <?PHP }else{ ?>
-                            <?PHP if( $license_purchase_page == "Medium" || $license_purchase_page == "High"){ ?>
-                            <a href="?app=purchase_order&action=uncancelled&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                                title="เรียกคืนใบร้องขอ"
-                                onclick="return confirm('You want to uncancelled purchase request : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');">
-                                <i class="fa fa-undo" aria-hidden="true"></i>
-                            </a>
-                            <?PHP } ?>
-                            <?PHP if( $license_purchase_page == "High"){ ?>
+                            <?PHP if($menu['purchase_order']['delete']){ ?>
                             <a href="?app=purchase_order&action=delete&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
                                 onclick="return confirm('You want to delete Purchase Order : <?php echo $purchase_orders[$i]['purchase_order_code']; ?>');"
                                 style="color:red;" title="ลบ">

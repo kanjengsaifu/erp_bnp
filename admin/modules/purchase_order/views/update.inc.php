@@ -491,7 +491,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font><?php if($purchase_order['purchase_order_rewrite_no'] > 0){ ?><b><font color="#F00">Revise <?PHP echo $purchase_order['purchase_order_rewrite_no']; ?></font></b> <?PHP } ?></label>
+                                <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font><?php if($purchase_order['revise_no'] > 0){ ?><b><font color="#F00">Revise <?PHP echo $purchase_order['revise_no']; ?></font></b> <?PHP } ?></label>
                                 <input id="purchase_order_code" name="purchase_order_code" class="form-control" value="<? echo $purchase_order['purchase_order_code'];?>" onchange="check_code()" > 
                                 <input id="purchase_check" type="hidden" value="">
                                 <p class="help-block">Example : PO1801001.</p>
@@ -635,6 +635,54 @@
                                 <i class="fa fa-plus" aria-hidden="true"></i> 
                                 <span>เพิ่มสินค้า / Add product</span>
                             </a>
+
+                            <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg " role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
+                                            <div class="col-lg-8">
+                                                <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert"></div>
+                                            </div>
+                                            <div class="col-md-4 pull-right" >
+                                                <input type="text" class="form-control pull-right" name="search_pop" onchange="search_pop_like(this)" placeholder="Search">
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-body modal-body-m">
+                                            <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+
+                                            <br>
+                                            <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
+                                                <thead>
+                                                    <tr>
+                                                        <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
+                                                        <th style="text-align:center;">รหัสสินค้า </th>
+                                                        <th style="text-align:center;">ชื่อสินค้า </th>
+                                                        <th style="text-align:center;" width="150">จำนวน </th>
+                                                        <th style="text-align:center;" width="150">ราคาต่อหน่วย </th>
+                                                        <th style="text-align:center;" width="150">จำนวนเงิน </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyAdd"></tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <div class="col-lg-8">
+                                                <div id="data_show_list_choose" class="form-control alert-box alert-success text-left" role="alert">
+                                                    เลือก 0 รายการ
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4" align="right">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
+                                            </div>
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div><!-- /.modal -->
                         </td>
                     </tr>
                     <tr class="odd gradeX">
@@ -729,54 +777,6 @@
         </form>
     </div>
 </div>
-
-<div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg " role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
-                <div class="col-lg-8">
-                    <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert"></div>
-                </div>
-                <div class="col-md-4 pull-right" >
-                    <input type="text" class="form-control pull-right" name="search_pop" onchange="search_pop_like(this)" placeholder="Search">
-                </div>
-            </div>
-
-            <div class="modal-body modal-body-m">
-                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-
-                <br>
-                <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
-                    <thead>
-                        <tr>
-                            <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
-                            <th style="text-align:center;">รหัสสินค้า </th>
-                            <th style="text-align:center;">ชื่อสินค้า </th>
-                            <th style="text-align:center;" width="150">จำนวน </th>
-                            <th style="text-align:center;" width="150">ราคาต่อหน่วย </th>
-                            <th style="text-align:center;" width="150">จำนวนเงิน </th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyAdd"></tbody>
-                </table>
-            </div>
-
-            <div class="modal-footer">
-                <div class="col-lg-8">
-                    <div id="data_show_list_choose" class="form-control alert-box alert-success text-left" role="alert">
-                        เลือก 0 รายการ
-                    </div>
-                </div>
-                <div class="col-lg-4" align="right">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <script> 
     $('.sorted_table').sortable({
