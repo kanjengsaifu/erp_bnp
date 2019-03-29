@@ -2,16 +2,10 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <h1 class="page-header">Invoice Supplier Management  </h1>
+        <h1 class="page-header">Invoice Supplier Management</h1>
     </div>
     <div class="col-lg-6" align="right">
-        <?php if($menu['purchase_order']['view']==1){ ?> 
-        <a href="?app=purchase_order&action=detail&purchase_order_code=<?PHP echo $_GET['purchase_order_code'];?>" class="btn btn-primary btn-menu ">ใบสั่งซื้อ (PO) </a> 
-        <?PHP }?>
-        <?php if($menu['invoice_supplier']['view']==1){ ?> 
-        <a href="?app=invoice_supplier&purchase_order_code=<?PHP echo $_GET['purchase_order_code'];?>" class="btn btn-primary btn-menu active">ใบรับวัตถุดิบ (Supplier Invoice)</a> 
-        <?PHP }?> 
-        <a href="#" class="btn btn-primary btn-menu ">จ่ายเงิน (Pay)</a> 
+       
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -20,13 +14,39 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Invoice Supplier Detail 
+            
+            <div class="col-md-6">
+            รายละเอียดใบกำกับภาษีรับเข้า / Invoice Supplier Detail 
+                </div>
+                <div class="col-md-6" align="right">
+                    <?PHP if($previous_code != ""){?>
+                    <a class="btn btn-primary" href="?app=invoice_supplier&action=detail&code=<?php echo $previous_code;?>" > <i class="fa fa-angle-double-left" aria-hidden="true"></i> <?php echo $previous_code;?> </a>
+                    <?PHP } ?>
+
+                    <a class="btn btn-success "  href="?app=invoice_supplier&action=insert&sort=<?php echo $sort;?>" ><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
+                    
+                    <?PHP if ($sort == "ภายนอกประเทศ") { ?>
+
+                        <a class="btn btn-danger" href="print.php?app=invoice_supplier_abroad&action=pdf&type=credit&sort=<?php echo $sort;?>&code=<?php echo $invoice_supplier_code;?>" target="_blank" > <i class="fa fa-print" aria-hidden="true"></i> พิมพ์ใบตั้งเจ้าหนี้ต่างประเทศ </a>
+                    
+                        <a class="btn btn-danger" href="print.php?app=invoice_supplier_abroad&action=pdf&type=receive&sort=<?php echo $sort;?>&code=<?php echo $invoice_supplier_code;?>" target="_blank" > <i class="fa fa-print" aria-hidden="true"></i> พิมพ์ใบรับสินค้า </a>
+                    
+                    <?PHP } else { ?>
+
+                    <a class="btn btn-danger" href="print.php?app=invoice_supplier&action=pdf&lan=th&sort=<?php echo $sort;?>&code=<?php echo $invoice_supplier_code;?>" target="_blank" > <i class="fa fa-print" aria-hidden="true"></i> พิมพ์ใบรับสินค้า </a>
+                    
+                    <?PHP } ?>
+
+                    <?PHP if($next_code != ""){?>
+                    <a class="btn btn-primary" href="?app=invoice_supplier&action=detail&sort=<?php echo $sort;?>&code=<?php echo $next_code;?>" >  <?php echo $next_code;?> <i class="fa fa-angle-double-right" aria-hidden="true"></i> </a>
+                    <?PHP } ?>
+                </div>
             </div>
             <!-- /.panel-heading -->
             <div class="panel-body">
-                <form role="form" method="post"  action="index.php?app=invoice_supplier&purchase_order_code=<?PHP echo $_GET['purchase_order_code'];?>&action=approve&id=<?php echo $invoice_supplier_code;?>" >
-                    <input type="hidden"  id="invoice_supplier_code" name="invoice_supplier_code" value="<?php echo $invoice_supplier_code; ?>" />
-                    <input type="hidden"  id="invoice_supplier_date" name="invoice_supplier_date" value="<?php echo $invoice_supplier['invoice_supplier_date']; ?>" />
+                
+                    <input type="hidden" id="invoice_supplier_code" name="invoice_supplier_code" value="<?php echo $invoice_supplier_code; ?>" />
+                    <input type="hidden" id="craete_date" name="craete_date" value="<?php echo $invoice_supplier['craete_date']; ?>" />
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="row">
@@ -64,7 +84,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>วันที่ออกใบกำกับภาษี / Date</label>
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_date'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['craete_date'];?></p>
                                     </div>
                                 </div>
 
@@ -80,7 +100,7 @@
                                     <div class="form-group">
                                         <label>เครดิต / Credit Day </label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_due_day'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['due_day_day'];?></p>
                                     </div>
                                 </div>
 
@@ -88,22 +108,30 @@
                                     <div class="form-group">
                                         <label>กำหนดชำระ / Due </label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_due'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['due_day'];?></p>
                                     </div>
-                                </div> 
+                                </div>
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>เงื่อนไขการชำระ / term </label>
+                                        
+                                        <p class="help-block"><?PHP echo $invoice_supplier['term'];?></p>
+                                    </div>
+                                </div>
                                 
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>วันที่รับใบกำกับภาษี / Date recieve</label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_date_recieve'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['craete_date_recieve'];?></p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>หมายเลขรับใบกำกับภาษี / recieve code <font color="#F00"><b>*</b></font></label>
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code_gen'];?></p>
                                     </div>
                                 </div>
 
@@ -143,7 +171,7 @@
                                                             <?php echo $i+1; ?>.
                                                         </td>
                                                         <td align="center">
-                                                            <a target="_blank" href="?app=purchase_order&action=detail&purchase_order_code=<?php echo $purchase_orders[$i]['purchase_order_code']; ?>"><?php echo $purchase_orders[$i]['purchase_order_code']; ?></a>
+                                                            <a target="_blank" href="?app=purchase_order&action=detail&code=<?php echo $purchase_orders[$i]['purchase_order_code']; ?>"><?php echo $purchase_orders[$i]['purchase_order_code']; ?></a>
                                                         </td>
                                                         <td align="center"> 
                                                         <?php 
@@ -165,8 +193,9 @@
                                 
                             </div>
                         </div>
-                    </div>    
-                    <div>
+                    </div> 
+
+                     <div>
                     Our reference :
                     </div>
                     <table width="100%" class="table table-striped table-bordered table-hover" >
@@ -174,12 +203,14 @@
                             <tr>
                                 <th style="text-align:center;">ลำดับ </th>
                                 <th style="text-align:center;">รหัสสินค้า </th>
-                                <th style="text-align:center;">รายละเอียดสินค้า </th> 
+                                <th style="text-align:center;">รายละเอียดสินค้า </th>
+                                <th style="text-align:center;" width="150">คลังสินค้า </th>
                                 <th style="text-align:center;" width="150">จำนวน </th>
                                 <th style="text-align:center;" width="150">ราคาต่อหน่วย </th>
                                 <th style="text-align:center;" width="150">จำนวนเงิน </th>
                             </tr>
                         </thead>
+
                         <tbody>
                             <?php 
                             $total = 0;
@@ -191,55 +222,106 @@
                                 </td>
                                 
                                 <td>
-                                    <?php echo $invoice_supplier_lists[$i]['material_code']; ?>
+                                    <?php echo $invoice_supplier_lists[$i]['product_code']; ?>
                                 </td>
 
                                 <td>
-                                    <b><?php echo $invoice_supplier_lists[$i]['material_name']; ?></b><br> 
+                                    <b><?php echo $invoice_supplier_lists[$i]['product_name']; ?></b><br>
+                                    <span>Sub name : </span><?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_product_name']; ?><br>
+                                    <span>Detail : </span><?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_product_detail']; ?><br>
                                     <span>Remark : </span><?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_remark']; ?><br>
                                 </td>
- 
+
+                                <td align="left"><?php echo $invoice_supplier_lists[$i]['stock_group_name']; ?></td>
                                 <td align="right"><?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_qty']; ?></td>
                                 <td align="right"><?php echo  number_format($invoice_supplier_lists[$i]['invoice_supplier_list_price'],2); ?></td>
-                                <td align="right"><?php echo  number_format($invoice_supplier_lists[$i]['invoice_supplier_list_qty'] * $invoice_supplier_lists[$i]['invoice_supplier_list_price'],2); ?></td>
+                                <td align="right"><?php echo  number_format( $invoice_supplier_lists[$i]['invoice_supplier_list_total'],2); ?></td>
                                 
                             </tr>
                             <?
-                                $total += $invoice_supplier_lists[$i]['invoice_supplier_list_qty'] * $invoice_supplier_lists[$i]['invoice_supplier_list_price'];
+                                $total += $invoice_supplier_lists[$i]['invoice_supplier_list_total'];
                             }
                             ?>
                         </tbody>
-                    </table>
 
+                        <tfoot>
+                            <tr class="odd gradeX">
+                                <td colspan="4" rowspan="3">
+                                    
+                                </td>
+                                <td colspan="2" align="left" style="vertical-align: middle;">
+                                    <span>ราคารวมทั้งสิ้น / Sub total</span>
+                                </td>
+                                <td style="text-align: right;">
+                                <?PHP
+                                    if($invoice_supplier['vat_type'] == 1){
+                                        $total_val = $total - (($invoice_supplier['vat']/( 100 + $invoice_supplier['vat'] )) * $total);
+                                    } else if($invoice_supplier['vat_type'] == 2){
+                                        $total_val = $total;
+                                    } else {
+                                        $total_val = $total;
+                                    }
+                                ?>
+                                    <?PHP echo number_format($total_val,2) ;?>
+                                </td>
+                            </tr>
+                            <tr class="odd gradeX">
+                                <td colspan="2" align="left" style="vertical-align: middle;">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span>
+                                            </td>
+                                            <td style = "padding-left:8px;padding-right:8px;width:72px;text-align: right;">
+                                            <?PHP echo $invoice_supplier['vat'];?>
+                                            </td>
+                                            <td width="16">
+                                            %
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
+                                </td>
+                                <td style="text-align: right;">
+                                <?PHP 
+                                    if($invoice_supplier['vat_type'] == 1){
+                                        $vat_val = ($invoice_supplier['vat']/( 100 + $invoice_supplier['vat'] )) * $total;
+                                    } else if($invoice_supplier['vat_type'] == 2){
+                                        $vat_val = ($invoice_supplier['vat']/100) * $total;
+                                    } else {
+                                        $vat_val = 0.0;
+                                    }
+                                    ?>
+                                    <?PHP echo number_format($vat_val,2) ;?>
+                                </td>
 
+                            </tr>
+                            <tr class="odd gradeX">
+                                <td colspan="2" align="left" style="vertical-align: middle;">
+                                    <span>จำนวนเงินรวมทั้งสิ้น / Net Total</span>
+                                </td>
+                                <td style="text-align: right;">
+                                <?PHP 
+                                    if($invoice_supplier['vat_type'] == 1){
+                                        $net_val =  $total;
+                                    } else if($invoice_supplier['vat_type'] == 2){
+                                        $net_val = ($invoice_supplier['vat']/100) * $total + $total;
+                                    } else {
+                                        $net_val = $total;
+                                    }
+                                    ?>
+                                   <?PHP echo number_format($net_val,2) ;?>
+                                </td>
+
+                            </tr>
+                        </tfoot>
+                    </table>   
+                
                     <!-- /.row (nested) -->
                     <div class="row">
-                    <?php if(($license_purchase_page == "High" || $license_manager_page == "High" ) && $invoice_supplier['invoice_supplier_status'] == 'Request'){ ?>
-                        <div class="col-lg-offset-8 col-lg-2" align="right">
-                            <!-- <select id="invoice_supplier_accept_status" name="invoice_supplier_accept_status" class="form-control" data-live-search="true" >
-                                <option <?php if($invoice_supplier['invoice_supplier_accept_status'] == "Waitting"){?> selected <?php }?> >Waitting</option>
-                                <option <?php if($invoice_supplier['invoice_supplier_accept_status'] == "Approve"){?> selected <?php }?> >Approve</option>
-                                <option <?php if($invoice_supplier['invoice_supplier_accept_status'] == "Not Approve"){?> selected <?php }?> >Not Approve</option>
-                            </select> -->
+                        <div class="col-lg-offset-9 col-lg-3" align="right">
+                            <a href="index.php?app=invoice_supplier" class="btn btn-default">Back</a>
                         </div>
-                        <div class="col-lg-2" align="right">
-                            <a href="index.php?app=invoice_supplier&purchase_order_code=<?PHP echo $_GET['purchase_order_code'];?>" class="btn btn-default">Back</a>
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </div>
-                    <?php } else { ?>
-                        <div class="col-lg-offset-8 col-lg-2" align="right"> 
-                            <!-- <select id="invoice_supplier_accept_status" name="invoice_supplier_accept_status" class="form-control" data-live-search="true" >
-                                <option <?php if($invoice_supplier['invoice_supplier_accept_status'] == "Waitting"){?> selected <?php }?> >Waitting</option>
-                                <option <?php if($invoice_supplier['invoice_supplier_accept_status'] == "Approve"){?> selected <?php }?> >Approve</option>
-                                <option <?php if($invoice_supplier['invoice_supplier_accept_status'] == "Not Approve"){?> selected <?php }?> >Not Approve</option>
-                            </select>  -->
-                        </div>
-                        <div class="col-lg-2" align="right">
-                            <!-- <button type="submit" class="btn btn-success">Save</button>
-                            <a href="index.php?app=invoice_supplier&action=balance&id=<?PHP echo $invoice_supplier_code; ?>" class="btn btn-danger">Close</a> -->
-                            <a href="index.php?app=invoice_supplier&purchase_order_code=<?PHP echo $_GET['purchase_order_code'];?>" class="btn btn-default">Back</a>
-                        </div>
-                    <?PHP } ?>
                     </div>
                 </form>
             </div>

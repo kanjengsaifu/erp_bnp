@@ -66,7 +66,7 @@
                     <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="สถานะอนุมัติ" >สถานะ<br>Status</th>
                     <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ผู้อนุมัติ" >ผู้อนุมัติ<br>Approve by</th>
                     <th width="120"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="รหัสคำสั่งซื้อ" >รหัสคำสั่งซื้อ<br>PO Code</th>
-                    <th width="160"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="เลขที่ใบรับสินค้า" >เลขที่ใบรับสินค้า<br>Invoice Supplier Code</th>
+                    <th width="160"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="เลขที่ใบรับสินค้า" >เลขที่ใบรับสินค้า<br>Invoice Code</th>
                     <th width="100"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="หมายเหตุ" >หมายเหตุ<br>Remark</th>
                     <th width="10">
                 </tr>

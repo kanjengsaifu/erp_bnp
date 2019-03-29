@@ -44,7 +44,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Purchase Order Code <font color="#F00"><b>*</b></font>
-                                <?php if($purchase_order['revise_no'] > 0){ ?><b>
+                                <?php if($purchase_order['revise_no']){ ?><b>
                                         <font color="#F00">Revise
                                             <?PHP echo $purchase_order['revise_no']; ?>
                                         </font>
@@ -103,7 +103,9 @@
                         <th style="text-align:center;">Recieve</th>
                         <th style="text-align:center;">@</th>
                         <th style="text-align:center;">Amount</th>
+                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
                         <th width="80"></th>
+                        <?PHP } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -152,9 +154,11 @@
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_recieve_qty'],0)?></td>
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_price'],2)?></td>
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_price_sum'],2)?></td>
-                        <td width="80">
+                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
+                        <td>
                             <a href="index.php?app=purchase_order&action=balance&code=<?PHP echo $purchase_order_code; ?>&list=<?PHP echo $purchase_order_lists[$i]['purchase_order_list_code']; ?>" class="btn btn-danger">Close</a>
                         </td>
+                        <?PHP } ?>
                     </tr>
                     <?
                     $sub_total += $purchase_order_lists[$i]['list_price_sum'];
@@ -166,17 +170,23 @@
                         <td colspan="4" rowspan="3"></td>
                         <td colspan="3" align="right">Sub Total</td>
                         <td align="right"><?php echo number_format($sub_total,2);?></td>
-                        <td width="80"></td>
+                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
+                        <td></td>
+                        <?PHP } ?>
                     </tr>
                     <tr class="odd gradeX">
                         <td colspan="3" align="right">Vat</td>
                         <td align="right"><?php echo number_format($sub_total * $vat/100,2);?></td>
-                        <td width="80"></td>
+                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
+                        <td></td>
+                        <?PHP } ?>
                     </tr>
                     <tr class="odd gradeX">
                         <td colspan="3" align="right">Net Total</td>
                         <td align="right"><?php echo number_format($sub_total+($sub_total * $vat/100),2);?></td>
-                        <td width="80"></td>
+                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
+                        <td></td>
+                        <?PHP } ?>
                     </tr>
                 </tfoot>
             </table>
@@ -184,35 +194,25 @@
             <form role="form" method="post" action="index.php?app=purchase_order&action=approve&code=<?php echo $purchase_order_code;?>">
                 <input type="hidden" id="purchase_order_code" name="purchase_order_code" value="<?php echo $purchase_order_code; ?>">
                 <div class="row">
-                    <?php if(($license_purchase_page == "High" || $license_manager_page == "High" ) && $purchase_order['order_status'] == 'Request'){ ?>
                     <div class="col-lg-offset-8 col-lg-2" align="right">
+                    <?php if($menu['purchase_order']['approve'] && !$purchase_order['order_cancelled']){ ?>
                         <select id="approve_status" name="approve_status" class="form-control" data-live-search="true">
                             <option <?php if($purchase_order['approve_status'] == "Waitting"){?> selected <?php }?>>Waitting</option>
                             <option <?php if($purchase_order['approve_status'] == "Approve"){?> selected <?php }?>>Approve</option>
                             <option <?php if($purchase_order['approve_status'] == "Not Approve"){?> selected <?php }?>>Not Approve</option>
                         </select>
-                    </div>
-
-                    <div class="col-lg-2" align="right">
-                        <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>
-                        <button type="submit" class="btn btn-success">Save</button>
+                    <?PHP } ?>
                     </div>
                     
-                    <?php } else { ?>
-                    <div class="col-lg-offset-8 col-lg-2" align="right">
-                        <select id="approve_status" name="approve_status" class="form-control" data-live-search="true">
-                            <option <?php if($purchase_order['approve_status'] == "Waitting"){?> selected <?php }?>>Waitting</option>
-                            <option <?php if($purchase_order['approve_status'] == "Approve"){?> selected <?php }?>>Approve</option>
-                            <option <?php if($purchase_order['approve_status'] == "Not Approve"){?> selected <?php }?>>Not Approve</option>
-                        </select>
-                    </div>
                     <div class="col-lg-2" align="right">
+                    <?php if($menu['purchase_request']['approve'] && !$purchase_order['order_cancelled']){ ?>
                         <button type="submit" class="btn btn-success">Save</button>
-                        <a href="index.php?app=purchase_order&action=balance&code=<?PHP echo $purchase_order_code; ?>"
-                            class="btn btn-danger">Close</a>
+                    <?PHP } ?>
+                    <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
+                        <a href="index.php?app=purchase_order&action=balance&code=<?PHP echo $purchase_order_code; ?>" class="btn btn-danger">Close</a>
+                    <?PHP } ?>
                         <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>
                     </div>
-                    <?PHP } ?>
                 </div>
             </div>
         </form>

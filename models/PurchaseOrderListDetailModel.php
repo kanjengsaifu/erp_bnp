@@ -1,6 +1,6 @@
 <?php
-
 require_once("BaseModel.php");
+
 class PurchaseOrderListDetailModel extends BaseModel{
 
     function __construct(){
@@ -9,18 +9,15 @@ class PurchaseOrderListDetailModel extends BaseModel{
         }
     }
 
-    function getPurchaseOrderListDetailBy($purchase_order_list_id = ""){
-        $str = "1";
-        if($purchase_order_list_id != ""){
-            $str = "purchase_order_list_id = '$purchase_order_list_id'";
+    function getPurchaseOrderListDetailBy($code = ""){
+        if($code != ""){
+            $str = "WHERE purchase_order_list_code = '$code'";
         }
-        $sql = "    SELECT  purchase_order_list_detail_id,
-                            purchase_order_list_id,
-                            date_recieve,
-                            qty_recieve,
-                            remark_recieve
-                    FROM tb_purchase_order_list_detail 
-                    WHERE $str ";
+
+        $sql = "SELECT purchase_order_list_detail_code, purchase_order_list_code, date_recieve, qty_recieve, remark_recieve
+            FROM tb_purchase_order_list_detail 
+            $str 
+        ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
@@ -30,32 +27,27 @@ class PurchaseOrderListDetailModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
-    function getPurchaseOrderListDetailByID($purchase_order_list_detail_id){
-        $sql = "  SELECT * FROM tb_purchase_order_list_detail WHERE purchase_order_list_detail_id = $purchase_order_list_detail_id ";
+    function getPurchaseOrderListDetailByCode($code){
+        $sql = "  SELECT * FROM tb_purchase_order_list_detail WHERE purchase_order_list_detail_code = '$code' ";
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
 
-
-
-
-    function updatePurchaseOrderListDetailByID($id,$data = []){
+    function updatePurchaseOrderListDetailByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_order_list_detail SET 
-        purchase_order_list_id = '".$data['purchase_order_list_id']."' , 
+        purchase_order_list_code = '".$data['purchase_order_list_code']."' , 
         date_recieve = '".$data['date_recieve']."' , 
         qty_recieve = '".$data['qty_recieve']."' , 
         remark_recieve = '".static::$db->real_escape_string($data['remark_recieve'])."' 
-        WHERE purchase_order_list_detail_id = $id 
+        WHERE purchase_order_list_detail_code = '$code' 
         ";
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -63,44 +55,40 @@ class PurchaseOrderListDetailModel extends BaseModel{
 
     function insertPurchaseOrderListDetail($data = []){
         $sql = " INSERT INTO tb_purchase_order_list_detail (
-            purchase_order_list_id, 
+            purchase_order_list_code, 
             date_recieve, 
             qty_recieve, 
             remark_recieve 
         ) VALUES (  
-            '".$data['purchase_order_list_id']."', 
+            '".$data['purchase_order_list_code']."', 
             '".$data['date_recieve']."', 
             '".$data['qty_recieve']."', 
             '".static::$db->real_escape_string($data['remark_recieve'])."'  
-        ); 
-        ";
-
+        )";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return mysqli_insert_id(static::$db);
+            return true;
         }else {
-            return 0;
+            return false;
         }
-
     }
 
-    function updatePurchaseOrderId($purchase_order_list_detail_id,$purchase_order_list_id){
+    function updatePurchaseOrderId($purchase_order_list_detail_code,$purchase_order_list_code){
         $sql = " UPDATE tb_purchase_order_list_detail 
-            SET purchase_order_list_id = '$purchase_order_list_id' 
-            WHERE purchase_order_list_detail_id = '$purchase_order_list_detail_id' 
+            SET purchase_order_list_code = '$purchase_order_list_code' 
+            WHERE purchase_order_list_detail_code = '$purchase_order_list_detail_code' 
         ";
 
-
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
     }
 
 
-    function deletePurchaseOrderListDetailByID($id){
-        $sql = " DELETE FROM tb_purchase_order_list_detail WHERE purchase_order_list_detail_id = '$id' ";
+    function deletePurchaseOrderListDetailByCode($code){
+        $sql = " DELETE FROM tb_purchase_order_list_detail WHERE purchase_order_list_detail_code = '$code' ";
         if(mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)){
             return true;
         }else{
@@ -108,32 +96,24 @@ class PurchaseOrderListDetailModel extends BaseModel{
         }
     }
 
-    function deletePurchaseOrderListDetailByIDNotIN($id,$data){
-        $str ='';
-        if(is_array($data)){ 
-            for($i=0; $i < count($data) ;$i++){
-                if($data[$i] != ""){
-                    $str .= $data[$i];
-                    if($i + 1 < count($data)){
-                        $str .= ',';
-                    }
+    function deletePurchaseOrderListDetailByCodeNotIN($code,$data){
+        $str="'".$data."'";
+        if(is_array($data) && count($data) > 0){ 
+            $str ="";
+            for($i=0; $i<count($data); $i++){
+                $str .= "'".$data[$i]."'";
+                if($i + 1 < count($data)){
+                    $str .= ",";
                 }
             }
-        }else if ($data != ''){
-            $str = $data;
-        }else{
-            $str='0';
         }
-
-        if( $str==''){
-            $str='0';
-        }
-
             
-        $sql = "DELETE FROM tb_purchase_order_list_detail WHERE purchase_order_list_id = '$id' AND purchase_order_list_detail_id NOT IN ($str) ";
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
+        $sql = "DELETE FROM tb_purchase_order_list_detail WHERE purchase_order_list_code = '$code' AND purchase_order_list_detail_code NOT IN ($str) ";
+        if(mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)){
+            return true;
+        }else{
+            return false;
+        }
     }
-
 }
 ?>

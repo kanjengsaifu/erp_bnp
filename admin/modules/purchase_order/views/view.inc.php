@@ -164,7 +164,7 @@
                         <?php if ($purchase_orders[$i]['order_date'] != ''){ echo date("d-m-Y", strtotime($purchase_orders[$i]['order_date'])); } ?>
                     </td>
                     <td><?php echo $purchase_orders[$i]['supplier_name']; ?> </td>
-                    <td class="text-center"><?php echo $purchase_orders[$i]['employee_name']; ?></td>
+                    <td><?php echo $purchase_orders[$i]['employee_name']; ?></td>
                     <td class="text-center">
                         <?php if($purchase_orders[$i]['order_status'] =="New"){ ?>
                         <b class="font-weight-bold text-success text-center"><i class="fa fa-plus" aria-hidden="true"></i>
@@ -203,29 +203,25 @@
                         <div>
                             <b>
                                 <a style="float: left;" class="text-success"
-                                    href="?app=purchase_order&action=sending&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>&supplier_code=<?php echo $purchase_orders[$i]['supplier_code'];?>"
-                                    title="Re-send">
+                                    href="?app=purchase_order&action=sending&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>&supplier_code=<?php echo $purchase_orders[$i]['supplier_code'];?>" title="Re-send">
                                     <i class="fa fa-refresh" aria-hidden="true"></i>
                                 </a>
                             </b>
                             <b>
-                                <a href="?app=purchase_order&action=update_sending&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                                    title="Confirm">
+                                <a href="?app=purchase_order&action=update_sending&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>" title="Confirm">
                                     <i class="fa fa-handshake-o" aria-hidden="true"></i>
                                 </a>
                             </b>
                             <b>
                                 <a style="float: right;" class="text-danger"
-                                    href="?app=purchase_order&action=cancel_sending&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
-                                    title="Cancel">
+                                    href="?app=purchase_order&action=cancel_sending&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>" title="Cancel">
                                     <i class="fa fa-ban" aria-hidden="true"></i>
                                 </a>
                             </b>
                         </div>
                         <?php
                         }else if($purchase_orders[$i]['order_status'] =="Confirm"){ ?>
-                        <b class="font-weight-bold text-secondary text-center"><i
-                                class="fa fa-check-square-o" aria-hidden="true"></i>
+                        <b class="font-weight-bold text-secondary text-center"><i class="fa fa-check-square-o" aria-hidden="true"></i>
                             <?php echo $purchase_orders[$i]['order_status']; ?>
                         </b>
                         <?php
@@ -305,6 +301,8 @@
                                 style="color:#F00;">
                                 <i class="fa fa-registered" aria-hidden="true"></i>
                             </a>
+                            <?PHP } ?>
+                            <?PHP if($purchase_orders[$i]['order_status'] == "New" && $menu['purchase_order']['edit']){ ?>
                             <a href="?app=purchase_order&action=update&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
                                 title="แก้ไขใบร้องขอ">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

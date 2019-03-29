@@ -64,8 +64,6 @@ class PurchaseRequestModel extends BaseModel{
         ORDER BY request_date DESC 
         ";
 
-        echo $sql;
-
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -77,14 +75,24 @@ class PurchaseRequestModel extends BaseModel{
     }
 
     function getPurchaseOrderByPurchaseRequestCode($purchase_request_code){
-        $sql =  "   SELECT tb_purchase_order.purchase_order_code,purchase_order_code
-                    FROM  tb_purchase_request_list
-                    LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
-                    LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_code
-                    WHERE purchase_request_code = '$purchase_request_code' 
-                    GROUP BY tb_purchase_order_list.purchase_order_code
-                ";
-         //echo $sql;
+        $sql =  "SELECT purchase_order_code
+        FROM tb_purchase_order AS tb
+        WHERE revise_code IN (
+            SELECT revise_code
+            FROM tb_purchase_request_list
+            LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
+            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.revise_code
+            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.revise_code = tb.revise_code
+            GROUP BY revise_code
+        )  AND revise_no = (
+            SELECT MAX(revise_no)
+            FROM tb_purchase_request_list
+            LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
+            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.revise_code
+            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.revise_code = tb.revise_code
+            GROUP BY revise_code
+        )";
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -104,7 +112,7 @@ class PurchaseRequestModel extends BaseModel{
                 WHERE purchase_request_code = '$purchase_request_code' 
                 GROUP BY invoice_supplier_code_gen
             ";
-        //   echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -113,19 +121,18 @@ class PurchaseRequestModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
 
     function getPurchaseOrderByPurchaseRequestListCode($purchase_request_list_code){
-        $sql =  "   SELECT tb_purchase_order.purchase_order_code,purchase_order_code
-                    FROM  tb_purchase_request_list
-                    LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
-                    LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_code
-                    WHERE purchase_request_list_code = '$purchase_request_list_code' 
-                    GROUP BY tb_purchase_order_list.purchase_order_code
-                ";
-        //  echo $sql;
+        $sql =  "SELECT tb_purchase_order.purchase_order_code,purchase_order_code
+                FROM  tb_purchase_request_list
+                LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
+                LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_code
+                WHERE purchase_request_list_code = '$purchase_request_list_code' 
+                GROUP BY tb_purchase_order_list.purchase_order_code
+            ";
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -134,7 +141,6 @@ class PurchaseRequestModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getInvoiceSuppliertByPurchaseRequestListCode($purchase_request_list_code){
@@ -147,7 +153,7 @@ class PurchaseRequestModel extends BaseModel{
                     GROUP BY invoice_supplier_code_gen
                 
                 ";
-        //   echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -184,7 +190,7 @@ class PurchaseRequestModel extends BaseModel{
                 LEFT JOIN tb_invoice_supplier_list ON tb_purchase_order_list.purchase_order_list_code = tb_invoice_supplier_list.purchase_order_list_code
                 LEFT JOIN tb_invoice_supplier ON tb_invoice_supplier_list.invoice_supplier_code = tb_invoice_supplier.invoice_supplier_code
             ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -220,7 +226,7 @@ class PurchaseRequestModel extends BaseModel{
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -235,7 +241,7 @@ class PurchaseRequestModel extends BaseModel{
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -256,7 +262,7 @@ class PurchaseRequestModel extends BaseModel{
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -272,7 +278,7 @@ class PurchaseRequestModel extends BaseModel{
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
