@@ -247,7 +247,7 @@ class DealerModel extends BaseModel{
             NOW()
         )";
 
-        echo $sql;
+        // echo $sql;
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return true;

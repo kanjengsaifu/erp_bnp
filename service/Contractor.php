@@ -29,8 +29,8 @@ $date="$d1$d2$d3$d4$d5$d6";
 
 $target_dir = "../upload/contractor/";
 
-$contractor_code = $_GET['code'];
-$location_code = $_GET['location'];
+$contractor_code = $_POST['code'];
+$location_code = $_POST['location'];
 
 // $json = file_get_contents('php://input');
     
@@ -39,16 +39,24 @@ $location_code = $_GET['location'];
 // echo json_encode($_POST['action']);
 
 if ($_POST['action'] == 'insert'){ 
- 
+    $province = $address_model->getProvinceBy();
 }else if ($_POST['action'] == 'update'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
-    $location = $contractor_location_model->getContractorLocationBy($contractor_code);
-    $status = $status_model->getStatusBy();
+    // $location = $contractor_location_model->getContractorLocationBy($contractor_code);
+    // $status = $status_model->getStatusBy();
     $province = $address_model->getProvinceBy();
     $amphur = $address_model->getAmphurByProviceID($contractor['PROVINCE_ID']);
     $district = $address_model->getDistrictByAmphurID($contractor['AMPHUR_ID']); 
-    $village = $address_model->getVillageByDistrictID($contractor['DISTRICT_ID']); 
-    require_once($path.'update.inc.php');
+    $village = $address_model->getVillageByDistrictID($contractor['DISTRICT_ID']);  
+    
+    $result_detail['contractor'] = $contractor;
+    $result_detail['province'] = $province;
+    $result_detail['amphur'] = $amphur;
+    $result_detail['district'] = $district;
+    $result_detail['village'] = $village;
+    $result_detail['result'] = true;
+    echo json_encode($result_detail); 
+    
 }else if ($_POST['action'] == 'delete'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
 
@@ -157,10 +165,9 @@ if ($_POST['action'] == 'insert'){
         echo json_encode($result);
     } 
 }else if ($_POST['action'] == 'edit'){
-    if(isset($_POST['contractor_code'])){
+    if($contractor_code!=''){
         $check = true;
-        $data = [];  
-        $data['status_code'] = $_POST['status_code']; 
+        $data = [];   
         $data['contractor_prefix'] = $_POST['contractor_prefix'];
         $data['contractor_name'] = $_POST['contractor_name'];
         $data['contractor_lastname'] = $_POST['contractor_lastname'];
@@ -215,23 +222,41 @@ if ($_POST['action'] == 'insert'){
         }
 
         if($check){
-            $result = $contractor_model->updateContractorByCode($_POST['contractor_code'],$data);
-
-            if($result){
-                ?> <script> window.location="index.php?app=contractor" </script> <?php
+            $check_result = $contractor_model->updateContractorByCode($contractor_code,$data);
+    
+            if($check_result!=false){
+                $result['result'] = true;
+                echo json_encode($result);
             }else{
-                ?> <script> window.history.back(); </script> <?php
+                for ($i=0; $i<count($input_image); $i++){
+                    if ($data[$input_image[$i]] != ''){
+                        $target_file = $target_dir .$data[$input_image[$i]];
+                        if (file_exists($target_file)) {
+                            unlink($target_file);
+                        }
+                    }
+                }
+                $result ['result_text'] = 'it can not upload result!=false';
+                $result ['result'] = false;
+                echo json_encode($result);
             }
         }else{
-            ?> 
-            <script> 
-                alert('<?php echo $error_msg; ?>'); 
-                window.history.back(); 
-            </script> 
-            <?php
-        }
+            for ($i=0; $i<count($input_image); $i++){
+                if ($data[$input_image[$i]] != ''){
+                    $target_file = $target_dir .$data[$input_image[$i]];
+                    if (file_exists($target_file)) {
+                        unlink($target_file);
+                    }
+                }
+            }
+            $result ['result_text'] = $error_msg;
+            $result ['result'] = false;
+            echo json_encode($result);
+        } 
     }else{
-        ?> <script> window.location="index.php?app=contractor" </script> <?php
+        $result ['result_text'] = 'empty code';
+        $result ['result'] = false;
+        echo json_encode($result);
     }
 }else if ($_POST['action'] == 'approve'){
     if(isset($_POST['contractor_code'])){
@@ -300,11 +325,11 @@ if ($_POST['action'] == 'insert'){
 }else if ($_POST['action'] == 'detail'){
     $contractor = $contractor_model->getContractorByCode($contractor_code);
     require_once($path.'detail.inc.php');
-}else if ($_GET['status'] == 'pending'){
+}else if ($_POST['status'] == 'pending'){
     $on_pending = $contractor_model->countContractorByStatus('00');
     $contractor = $contractor_model->getContractorByStatus('00');
     require_once($path.'view.inc.php');
-}else if ($_GET['status'] == 'cease'){
+}else if ($_POST['status'] == 'cease'){
     $on_pending = $contractor_model->countContractorByStatus('00');
     $contractor = $contractor_model->getContractorByStatus('02');
     require_once($path.'view.inc.php');
