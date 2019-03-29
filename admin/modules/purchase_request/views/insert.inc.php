@@ -35,7 +35,6 @@
     <?php }?>
     ];
 
-
     var supplier_data = [
     <?php for($i = 0 ; $i < count($suppliers) ; $i++ ){?>
         {
@@ -50,8 +49,6 @@
         var code = document.getElementById("purchase_request_code").value;
 
         code = $.trim(code);
-
-        console.log(code);
 
         if(code.length == 0){
             $('#alert_code').html('Example : PR1801010001.');
@@ -81,9 +78,9 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#purchase_request_date").val(data.date_now);
+                //$("#request_date").val(data.date_now);
                 $(".calendar").datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("purchase_request_date").focus();
+                document.getElementById("request_date").focus();
             } else{
                 $("#date_check").val("0");
                 //generate_credit_date();
@@ -92,33 +89,14 @@
     }
 	
     function check(){
-        var purchase_request_code = document.getElementById("purchase_request_code").value;
-        var purchase_request_date = document.getElementById("purchase_request_date").value;
-        var purchase_request_type = document.getElementById("purchase_request_type").value;
         var employee_code = document.getElementById("employee_code").value; 
-        var purchase_check = document.getElementById("purchase_check").value;
-        var date_check = document.getElementById("date_check").value;
 
-        purchase_request_code = $.trim(purchase_request_code);
-        purchase_request_type = $.trim(purchase_request_type);
-        employee_code = $.trim(employee_code); 
+        employee_code = $.trim(employee_code);
 
         check_code();
         
         if($('#alert_code').hasClass('alert-danger')){
             document.getElementById("agent_code").focus();
-            return false;
-        }else if(date_check == "1"){
-            alert("This "+purchase_request_date+" is locked in the system.");
-            document.getElementById("purchase_request_date").focus();
-            return false;
-        }else if(purchase_request_code.length == 0){
-            alert("Please input purchase request code");
-            document.getElementById("purchase_request_code").focus();
-            return false;
-        }else if(purchase_request_type.length == 0){
-            alert("Please input purchase request type");
-            document.getElementById("purchase_request_type").focus();
             return false;
         }else if(employee_code.length == 0){
             alert("Please input employee");
@@ -164,20 +142,23 @@
             '<tr class="odd gradeX">'+
                 '<td class="sorter" style="text-align:center;">'+index+'</td>'+
                 '<td>'+
-                    '<input type="hidden" class="form-control" name="purchase_request_list_code[]" value="">'+
-                    '<input type="hidden" class="form-control" name="product_code[]" value="">'+
+                    '<input type="hidden" class="form-control" name="purchase_request_list_code[]">'+
                     '<input class="example-ajax-post form-control" name="product_code[]" onchange="show_data(this);" placeholder="Product Code">'+
                     'Name : <span name="product_name[]"></span><br>'+
                     'Description : <span name="product_description[]"></span>'+
                 '</td>'+ 
                 '<td>'+
+                    '<select name="supplier_code[]" class="form-control select" data-live-search="true">'+  
+                    '</select>'+ 
+                '</td>'+
+                '<td>'+
                     '<select name="stock_group_code[]" class="form-control select" data-live-search="true">'+  
                     '</select>'+ 
                 '</td>'+
                 '<td>'+
-                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="request_list_qty[]" value="1">'+ 
+                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="list_qty[]" value="1">'+ 
                 '</td>'+
-                '<td><input type="text" class="form-control" name="request_list_remark[]"></td>'+
+                '<td><input type="text" class="form-control" name="list_remark[]"></td>'+
                 '<td style="text-align:center;">'+
                     '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
                         '<i class="fa fa-times" aria-hidden="true"></i>'+
@@ -194,10 +175,8 @@
         $.each(supplier_data, function (index, value) { 
             if(value['supplier_code'] == supplier_code){
                 str += "<option value='" + value['supplier_code'] + "' selected>" +  value['supplier_name_en'] + "</option>";  
-                
             }else {
                 str += "<option value='" + value['supplier_code'] + "'>" +  value['supplier_name_en'] + "</option>";  
-                
             }
         });
 
@@ -263,13 +242,20 @@
                 </div> 
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
+                        <label>วันที่แจ้งเตือน </label>
+                        <input type="text" id="request_alert" name="request_alert" class="form-control calendar" readonly/>
+                        <p class="help-block">01-03-2018</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
                         <label>ผู้ขาย </label>
                         <select id="supplier_code" name="supplier_code" data-live-search="true" class="form-control select" >
-                            <option value="0">Select</option>
+                            <option value="">Select</option>
                             <?php 
                             for($i=0; $i<count($suppliers); $i++){
                             ?>
-                            <option  value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?></option>
+                            <option value="<?php echo $suppliers[$i]['supplier_code'] ?>"><?php echo $suppliers[$i]['supplier_name_en'] ?></option>
                             <?
                             }
                             ?>
@@ -277,13 +263,6 @@
                         <p class="help-block">Example : บริษัท เรเวลซอฟต์ จำกัด (Revel Soft co,ltd).</p>
                     </div>
                 </div> 
-                <div class="col-md-6 col-lg-3">
-                    <div class="form-group">
-                        <label>วันที่แจ้งเตือน </label>
-                        <input type="text" id="request_alert" name="request_alert" class="form-control calendar" readonly/>
-                        <p class="help-block">01-03-2018</p>
-                    </div>
-                </div>
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label>หมายเหตุ</label>
@@ -297,11 +276,12 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;" width="60">ลำดับ </th>
-                        <th style="text-align:center;">รายละเอียดสินค้า  </th> 
+                        <th style="text-align:center;">รายละเอียดสินค้า </th> 
+                        <th style="text-align:center;">ผู้ขาย </th>
                         <th style="text-align:center;">คลังสินค้า </th>
-                        <th style="text-align:center;max-width:80px;">จำนวน </th>
-                        <th style="text-align:center;">หมายเหตุ </th>
-                        <th></th>
+                        <th style="text-align:center;" width="120">จำนวน </th>
+                        <th style="text-align:center;" width="200">หมายเหตุ </th>
+                        <th width="60"></th>
                     </tr>
                 </thead>
                 <tbody class="sorted_table"></tbody>

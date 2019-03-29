@@ -42,9 +42,12 @@ class UserModel extends BaseModel{
     }
 
     function getUserBy($name = '', $position = '', $email = '', $mobile  = ''){
-        $sql = " SELECT user_code, user_profile_img , CONCAT(tb_user.user_name,' ',tb_user.user_lastname) as name , user_mobile, user_email, user_position_name, user_status_name  
-        FROM tb_user LEFT JOIN tb_user_position ON tb_user.user_position_code = tb_user_position.user_position_code 
+        $sql = " SELECT user_code, user_profile_img , CONCAT(tb_user.user_name,' ',tb_user.user_lastname) as name, 
+        user_mobile, user_email, user_position_name, user_status_name, license_name
+        FROM tb_user 
+        LEFT JOIN tb_user_position ON tb_user.user_position_code = tb_user_position.user_position_code 
         LEFT JOIN tb_user_status ON tb_user.user_status_code = tb_user_status.user_status_code 
+        LEFT JOIN tb_license ON tb_user.license_code = tb_license.license_code 
         WHERE CONCAT(tb_user.user_name,' ',tb_user.user_lastname) LIKE ('%$name%') 
         AND user_position_name LIKE ('%$position%') 
         AND user_email LIKE ('%$email%') 
@@ -114,13 +117,14 @@ class UserModel extends BaseModel{
         }
     }
 
-    function getUserByPermission($menu = '',$permission = ''){
-        $sql = " SELECT user_code, CONCAT(user_name,' ',user_lastname) as name
+    function getUserByPermission($menu = '',$condition = ''){
+        $sql = " SELECT user_code, CONCAT(user_name,' ',user_lastname) as name, user_position_name
         FROM tb_user
+        LEFT JOIN tb_user_position ON tb_user.user_position_code = tb_user_position.user_position_code 
         LEFT JOIN tb_license ON tb_user.license_code = tb_license.license_code 
         LEFT JOIN tb_license_permission ON tb_license.license_code = tb_license_permission.license_code 
         LEFT JOIN tb_menu ON tb_license_permission.menu_code = tb_menu.menu_code 
-        WHERE menu_name_eng = '$menu' AND $permission = '1'
+        WHERE menu_name_en = '$menu' $condition
         ORDER BY CONCAT(user_name,' ',user_lastname) 
         ";
 

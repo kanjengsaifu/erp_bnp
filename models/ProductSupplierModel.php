@@ -1,6 +1,6 @@
 <?php
-
 require_once("BaseModel.php");
+
 class ProductSupplierModel extends BaseModel{
 
     function __construct(){
@@ -8,8 +8,9 @@ class ProductSupplierModel extends BaseModel{
             static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
         }
     }
+
     function getProductSupplierLastCode($code,$digit){
-        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(product_supplier_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
+        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(product_supplier_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS lastcode 
         FROM tb_product_supplier 
         WHERE product_supplier_code LIKE ('$code%') 
         ";
@@ -21,12 +22,11 @@ class ProductSupplierModel extends BaseModel{
         }
     }
 
-    function getProductSupplierBy($product_supplier_name = ''){
+    function getProductSupplierBy(){
         $sql = " SELECT *    
-        FROM tb_product_supplier 
-        WHERE product_supplier_name LIKE ('%$product_supplier_name%') 
-        ORDER BY product_supplier_name  
+        FROM tb_product_supplier
         "; 
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -35,7 +35,6 @@ class ProductSupplierModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getProductSupplierByProductCode($product_code = ''){
@@ -45,7 +44,7 @@ class ProductSupplierModel extends BaseModel{
         WHERE product_code ='$product_code'  
         ORDER BY supplier_name_en 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -54,7 +53,6 @@ class ProductSupplierModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getProductSupplierBySupplierCode($supplier_code = '' ,$search = ''){
@@ -70,7 +68,7 @@ class ProductSupplierModel extends BaseModel{
         $str_search
         ORDER BY product_name 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -79,7 +77,6 @@ class ProductSupplierModel extends BaseModel{
             $result->close();
             return $data;
         }
-
     }
 
     function getProductSupplierByCode($code){
@@ -89,14 +86,10 @@ class ProductSupplierModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
         }
-
     }
 
     function getProductSupplierPriceByCode($product_code,$supplier_code){
@@ -106,46 +99,41 @@ class ProductSupplierModel extends BaseModel{
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
-            }
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
-        } 
+        }
     }
 
     function updateProductSupplierPriceByCode($data = []){
         $sql = " UPDATE tb_product_supplier SET      
-        product_supplier_buyprice = '".$data['product_supplier_buyprice']."' 
+        product_buyprice = '".$data['product_buyprice']."',
+        updateby = '".$data['updateby']."',
+        lastupdate = NOW()
         WHERE supplier_code = '".$data['supplier_code']."' AND product_code = '".$data['product_code']."' 
         "; 
         
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
-
-
     }
 
     function updateProductSupplierByCode($code,$data = []){
         $sql = " UPDATE tb_product_supplier SET     
         supplier_code = '".$data['supplier_code']."', 
-        product_supplier_buyprice = '".$data['product_supplier_buyprice']."', 
-        product_supplier_lead_time = '".$data['product_supplier_lead_time']."'   
+        product_buyprice = '".$data['product_buyprice']."', 
+        updateby = '".$data['updateby']."',
+        lastupdate = NOW()
         WHERE product_supplier_code = '$code' 
         ";
 
-        // echo $sql;
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
-
-
     }
 
     function insertProductSupplier($data = []){
@@ -153,26 +141,24 @@ class ProductSupplierModel extends BaseModel{
             product_supplier_code,
             product_code,
             supplier_code,
-            product_supplier_buyprice,
-            product_supplier_lead_time
+            product_buyprice,
+            addby,
+            adddate
         ) VALUES (
             '".$data['product_supplier_code']."', 
             '".$data['product_code']."', 
             '".$data['supplier_code']."', 
-            '".$data['product_supplier_buyprice']."', 
-            '".$data['product_supplier_lead_time']."' 
-        ); 
-        ";
+            '".$data['product_buyprice']."', 
+            '".$data['addby']."',
+            NOW()
+        )";
 
-        //echo $sql;
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
-
     }
-
 
     function deleteProductSupplierByCode($code){
         $sql = " DELETE FROM tb_product_supplier WHERE product_supplier_code = '$code' ";
