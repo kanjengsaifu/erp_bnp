@@ -129,7 +129,7 @@ if ($_POST['action'] == 'add'){
                         }
                     }
                 }
-                $result ['result_text'] = 'it can not upload';
+                $result ['result_text'] = 'check_result = '.$check_result;
                 $result ['result'] = false;
                 echo json_encode($result);
             }
@@ -142,13 +142,13 @@ if ($_POST['action'] == 'add'){
                     }
                 }
             }
-            $result ['result_text'] = $error_msg;
+            $result ['result_text'] = 'check = '.$check;
             $result ['result'] = false;
             echo json_encode($result);
         } 
  
     }else{
-        $result ['result_text'] = 'it can not upload';
+        $result ['result_text'] = 'agent_code empty';
         $result ['result'] = false;
         echo json_encode($result);
     }

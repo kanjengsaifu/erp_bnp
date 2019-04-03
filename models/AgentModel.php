@@ -112,7 +112,7 @@ class AgentModel extends BaseModel{
         FROM tb_agent 
         WHERE agent_code != '$code' AND agent_username = '$user' 
         ";
-
+        // echo $sql;
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
