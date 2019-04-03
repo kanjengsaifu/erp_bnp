@@ -10,6 +10,19 @@ class JournalPurchaseModel extends BaseModel{
         mysqli_set_charset(static::$db,"utf8");
     }
 
+    function getJournalPurchaseLastCode($code,$digit){
+        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(journal_purchase_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS lastcode 
+        FROM tb_journal_purchase 
+        WHERE journal_purchase_code LIKE ('$code%') 
+        ";
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+            $result->close();
+            return $row['lastcode'];
+        }
+    }
+
     function getJournalPurchaseBy($date_start = "", $date_end = "",$keyword = "", $lock_1 = "0", $lock_2 = "0", $sort = "ASC"){
         $str_date = "";
 
@@ -35,8 +48,7 @@ class JournalPurchaseModel extends BaseModel{
         journal_purchase_code, 
         journal_purchase_date,
         journal_purchase_name,
-        tb_journal_purchase.invoice_supplier_code,
-        tb_invoice_supplier.invoice_supplier_code_gen, 
+        tb_invoice_supplier.invoice_supplier_code, 
         IFNULL(SUM(journal_purchase_list_debit),0) as journal_debit,
         IFNULL(SUM(journal_purchase_list_credit),0) as journal_credit
         FROM tb_journal_purchase  
@@ -90,9 +102,7 @@ class JournalPurchaseModel extends BaseModel{
     }
 
     function getJournalPurchaseByKeyword(){
-        $sql = " SELECT journal_purchase_code, 
-        journal_purchase_code,  
-        journal_purchase_name 
+        $sql = " SELECT journal_purchase_code, journal_purchase_name 
         FROM tb_journal_purchase  
         WHERE journal_purchase_code LIKE ('%$keyword%')  OR  journal_purchase_name LIKE ('%$keyword%') 
         ORDER BY journal_purchase_code DESC 
@@ -110,7 +120,6 @@ class JournalPurchaseModel extends BaseModel{
 
     function getJournalPurchaseViewByCode($code){
         $sql = " SELECT journal_purchase_code, 
-        journal_purchase_code, 
         journal_purchase_date,
         journal_purchase_name,  
         addby,
@@ -129,20 +138,6 @@ class JournalPurchaseModel extends BaseModel{
             $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
             $result->close();
             return $data;
-        }
-    }
-
-    function getJournalPurchaseLastCode($code,$digit){
-
-        $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(journal_purchase_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  journal_purchase_lastcode 
-        FROM tb_journal_purchase 
-        WHERE journal_purchase_code LIKE ('$code%') 
-        ";
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
-            $result->close();
-            return $row['journal_purchase_lastcode'];
         }
     }
 
@@ -170,9 +165,7 @@ class JournalPurchaseModel extends BaseModel{
             journal_purchase_date,
             journal_purchase_name,
             addby,
-            adddate,
-            updateby, 
-            lastupdate) 
+            adddate) 
         VALUES ('".
         $data['invoice_supplier_code']."','".
         $data['journal_purchase_code']."','".

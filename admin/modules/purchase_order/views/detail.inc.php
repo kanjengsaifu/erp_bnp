@@ -118,7 +118,7 @@
                         <td><?php echo $purchase_order_lists[$i]['product_code']?></td>
                         <td>
                             Product name : <?php echo $purchase_order_lists[$i]['product_name']?> <br>
-                            Remark : <?php echo $purchase_order_lists[$i]['list_remark']?> <br>
+                            Remark : <?php echo $purchase_order_lists[$i]['purchase_order_list_remark']?> <br>
                             <br><label>Supplier Confirm</label><br>
                             Qty : <?php  echo $purchase_order_lists[$i]['supplier_qty']?>
                             <br>
@@ -136,12 +136,12 @@
                                     <a href="index.php?app=invoice_supplier&action=detail&code=<?PHP echo $invoice_product[$j]['invoice_supplier_code']; ?>"
                                         target="_blank">
                                         <?PHP
-                                        echo $invoice_product[$j]['invoice_supplier_code_gen']; 
+                                        echo $invoice_product[$j]['invoice_supplier_code']; 
                                         ?>
                                     </a>
                                     จำนวน
                                     <?PHP
-                                        echo $invoice_product[$j]['list_qty']; 
+                                        echo $invoice_product[$j]['invoice_supplier_list_qty']; 
                                         ?>
                                     pcs
                                 </li>
@@ -150,10 +150,10 @@
                             }
                             ?>
                         </td>
-                        <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_qty'],0)?></td>
+                        <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_qty'],0)?></td>
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_recieve_qty'],0)?></td>
-                        <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_price'],2)?></td>
-                        <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_price_sum'],2)?></td>
+                        <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2)?></td>
+                        <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price_sum'],2)?></td>
                         <?php if($menu['purchase_request']['edit'] && !$purchase_order['order_cancelled']){ ?>
                         <td>
                             <a href="index.php?app=purchase_order&action=balance&code=<?PHP echo $purchase_order_code; ?>&list=<?PHP echo $purchase_order_lists[$i]['purchase_order_list_code']; ?>" class="btn btn-danger">Close</a>
@@ -161,7 +161,7 @@
                         <?PHP } ?>
                     </tr>
                     <?
-                    $sub_total += $purchase_order_lists[$i]['list_price_sum'];
+                    $sub_total += $purchase_order_lists[$i]['purchase_order_list_price_sum'];
                     }
                     ?>
                 </tbody>

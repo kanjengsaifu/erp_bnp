@@ -153,97 +153,87 @@
         </div>
         <br> 
 
-        <div class="row">
-            <div class="col-sm-12">
-                <table width="100%" class="table table-striped table-bordered table-hover dataTables">
-                    <thead>
-                        <tr>
-                            <th class="datatable-th"data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ลำดับ" width="24">No.</th>
-                            <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="หมายเลขรับสินค้า" width="84">Recieve Code</th>
-                            <th class="datatable-th" data-original-title="วันที่รับสินค้า" data-container="body" data-toggle="tooltip" data-placement="top" title="" width="84">Recieve Date</th>
-                            <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="หมายเลขใบกำกับภาษี" width="90">Invoice Code</th>
-                            <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="วันที่ตามใบกำกับภาษี" width="80">Invoice Date</th>                                    
-                            <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="เอกสารที่เกี่ยวข้อง" width="90">Purchase Order</th>
-                            <th class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ผู้ขาย" >Supplier</th>
-                            <th  class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="จำนวนเงิน" >amount</th>
-                            <th class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ภาษีซื้อ" >Tax</th>
-                            <th  class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="จำนวนเงินสุทธิ" >Net amount</th>
-                            <th width="100"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <table width="100%" class="table table-striped table-bordered table-hover dataTables">
+            <thead>
+                <tr>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ลำดับ" width="24">No.</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="หมายเลขรับสินค้า" width="84">Recieve Code</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="วันที่รับสินค้า" width="84">Recieve Date</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="หมายเลขใบกำกับภาษี" width="90">Invoice Code</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="วันที่ตามใบกำกับภาษี" width="80">Invoice Date</th>                                    
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="เอกสารที่เกี่ยวข้อง" width="90">Purchase Order</th>
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ผู้ขาย" >Supplier</th>
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="จำนวนเงิน" >amount</th>
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ภาษีซื้อ" >Tax</th>
+                    <th class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="จำนวนเงินสุทธิ" >Net amount</th>
+                    <th width="100"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                $total_price =0;
+                $vat_price =0;
+                $net_price =0;
+                for($i=0; $i < count($invoice_suppliers); $i++){
+                    $total_price +=$invoice_suppliers[$i]['invoice_supplier_total_price'];
+                    $vat_price +=$invoice_suppliers[$i]['invoice_supplier_vat_price'];
+                    $net_price +=$invoice_suppliers[$i]['invoice_supplier_net_price'];
+                ?>
+                <tr class="odd gradeX">
+                    <td class=" text-center"><?php echo $i+1; ?></td>
+                    <td><?php echo $invoice_suppliers[$i]['invoice_supplier_code']; ?></td>
+                    <td data-order="<?php echo  $timestamp = strtotime($invoice_suppliers[$i]['invoice_supplier_receive_date']) ?>" >
+                        <?php if ($invoice_suppliers[$i]['invoice_supplier_receive_date'] != ''){ echo date("d-m-Y", strtotime($invoice_suppliers[$i]['invoice_supplier_receive_date'])); } ?>
+                    </td>
+                    <td><?php echo $invoice_suppliers[$i]['invoice_code_receive']; ?></td>
+                    <td data-order="<?php echo  $timestamp = strtotime($invoice_suppliers[$i]['invoice_supplier_craete_date']) ?>" >
+                        <?php if ($invoice_suppliers[$i]['invoice_supplier_craete_date'] != ''){ echo date("d-m-Y", strtotime($invoice_suppliers[$i]['invoice_supplier_craete_date'])); } ?>
+                    </td>
+                    <td>
                         <?php 
-                        $total_price =0;
-                        $vat_price =0;
-                        $net_price =0;
-                        for($i=0; $i < count($invoice_suppliers); $i++){
-                            $total_price +=$invoice_suppliers[$i]['total_price'];
-                            $vat_price +=$invoice_suppliers[$i]['vat_price'];
-                            $net_price +=$invoice_suppliers[$i]['net_price'];
+                        $purchase_orders = $invoice_supplier_model->getPurchaseOrderByInvoiceSupplierCode($invoice_suppliers[$i]['invoice_supplier_code']);
+
+                        for($j=0; $j < count($purchase_orders); $j++){ 
                         ?>
-                        <tr class="odd gradeX">
-                            <td class=" text-center"><?php echo $i+1; ?></td>
-                            <td><?php echo $invoice_suppliers[$i]['invoice_supplier_code_gen']; ?></td>
-                            <td data-order="<?php echo  $timestamp = strtotime( $invoice_suppliers[$i]['recieve_date']) ?>" >
-                                <?php echo ( $invoice_suppliers[$i]['recieve_date']); ?>
-                            </td>
-                            <td><?php echo $invoice_suppliers[$i]['invoice_supplier_code']; ?></td>
-                            <td data-order="<?php echo  $timestamp = strtotime(  $invoice_suppliers[$i]['craete_date']  ) ?>" >
-                                <?php echo (  $invoice_suppliers[$i]['craete_date']  ); ?>
-                            </td>
-                            <td>
-                                <?php 
-                                $purchase_orders = $invoice_supplier_model->getPurchaseOrderByInvoiceSupplierId($invoice_suppliers[$i]['invoice_supplier_code']);
-
-                                for($j=0; $j < count($purchase_orders); $j++){ 
-                                ?>
-                                    <a href="?app=purchase_order&action=detail&code=<?php echo $purchase_orders[$j]['purchase_order_code'];?>" target = "_blank" title="ดูรายละเอียดใบสั่งซื้อ">
-                                    <?php echo $purchase_orders[$j]['purchase_order_code']; ?>
-                                    </a><br>
-                                <?php
-                                } 
-                                ?>
-                            </td>
-                            <td><?php echo $invoice_suppliers[$i]['supplier_name']; ?> </td>
-                            <td align="right"><?php echo number_format($invoice_suppliers[$i]['total_price'],2); ?></td>
-                            <td align="right"><?php echo number_format($invoice_suppliers[$i]['vat_price'],2); ?></td>
-                            <td align="right"><?php echo number_format($invoice_suppliers[$i]['net_price'],2); ?></td>
-                            <td>
-                                <a href="?app=invoice_supplier&action=detail&code=<?php echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" style="color:#0045E6;">
-                                    <i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                </a>
-                                <a href="print.php?app=invoice_supplier&action=pdf&lan=en&code=<?PHP echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" target="_blank" title="พิมพ์ใบรับสินค้า">
-                                    <i class="fa fa-print" aria-hidden="true"></i>
-                                </a> 
-
-                                <?PHP if($license_purchase_page == "Medium" || $license_purchase_page == "High"){ ?>
-                                <a href="?app=invoice_supplier&action=update&sort=<?PHP echo $invoice_suppliers[$i]['supplier_domestic'];?>&code=<?php echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" style="color:orange;">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                </a> 
-                                <?PHP } ?>
-
-                                <?PHP if( $license_purchase_page == "High"){ ?>
-                                <a href="?app=invoice_supplier&action=delete&code=<?php echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" onclick="return confirm('You want to delete Invoice Supplier : <?php echo $invoice_suppliers[$i]['invoice_supplier_code']; ?>');" style="color:red;">
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </a>
-                                <?PHP } ?>
-                            </td>
-                        </tr>
-                        <?
-                        }
+                            <a href="?app=purchase_order&action=detail&code=<?php echo $purchase_orders[$j]['purchase_order_code'];?>" target = "_blank" title="ดูรายละเอียดใบสั่งซื้อ">
+                            <?php echo $purchase_orders[$j]['purchase_order_code']; ?>
+                            </a><br>
+                        <?php
+                        } 
                         ?>
-                    </tbody>
-                    <tfoot>
-                        <tr class="odd gradeX">
-                            <td colspan ="7"><b>จำนวนเงินรวม</b></td>
-                            <td align="right"><?php echo number_format($total_price,2); ?></td>
-                            <td align="right"><?php echo number_format($vat_price,2); ?></td>
-                            <td align="right"><?php echo number_format($net_price,2); ?></td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
+                    </td>
+                    <td><?php echo $invoice_suppliers[$i]['supplier_name']; ?> </td>
+                    <td align="right"><?php echo number_format($invoice_suppliers[$i]['invoice_supplier_total_price'],2); ?></td>
+                    <td align="right"><?php echo number_format($invoice_suppliers[$i]['invoice_supplier_vat_price'],2); ?></td>
+                    <td align="right"><?php echo number_format($invoice_suppliers[$i]['invoice_supplier_net_price'],2); ?></td>
+                    <td>
+                        <a href="?app=invoice_supplier&action=detail&code=<?php echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" style="color:#0045E6;">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        </a>
+                        <a href="print.php?app=invoice_supplier&action=pdf&lan=en&code=<?PHP echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" target="_blank" title="พิมพ์ใบรับสินค้า">
+                            <i class="fa fa-print" aria-hidden="true"></i>
+                        </a> 
+
+                        <?PHP if($menu['invoice_supplier']['delete']){ ?>
+                        <a href="?app=invoice_supplier&action=delete&code=<?php echo $invoice_suppliers[$i]['invoice_supplier_code'];?>" onclick="return confirm('You want to delete Invoice Supplier : <?php echo $invoice_suppliers[$i]['invoice_supplier_code']; ?>');" style="color:red;">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
+                        <?PHP } ?>
+                    </td>
+                </tr>
+                <?
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr class="odd gradeX">
+                    <td colspan ="7"><b>จำนวนเงินรวม</b></td>
+                    <td align="right"><?php echo number_format($total_price,2); ?></td>
+                    <td align="right"><?php echo number_format($vat_price,2); ?></td>
+                    <td align="right"><?php echo number_format($net_price,2); ?></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 </div>

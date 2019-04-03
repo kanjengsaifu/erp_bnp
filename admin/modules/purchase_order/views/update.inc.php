@@ -21,7 +21,7 @@
             if(data.result){ 
                 alert("This "+val_date+" is locked in the system.");
                 $("#date_check").val("1");
-                $( ".calendar" ).datepicker({ dateFormat: 'dd-mm-yy' });
+                $('.calendar').datepicker({ dateFormat: 'dd-mm-yy' });
                 document.getElementById("order_date").focus();
             } else{
                 $("#date_check").val("0");
@@ -92,9 +92,9 @@
     }
 
     function update_sum(id){
-        var qty =  $(id).closest('tr').children('td').children('input[name="list_qty[]"]').val(  );
-        var price =  $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( );
-        var sum =  $(id).closest('tr').children('td').children('input[name="list_price_sum[]"]').val( );
+        var qty =  $(id).closest('tr').children('td').children('input[name="purchase_order_list_qty[]"]').val(  );
+        var price =  $(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( );
+        var sum =  $(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( );
 
         if(isNaN(qty)){
             qty = 0;
@@ -110,9 +110,9 @@
 
         sum = qty*price;
 
-        $(id).closest('tr').children('td').children('input[name="list_qty[]"]').val( qty );
-        $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( price );
-        $(id).closest('tr').children('td').children('input[name="list_price_sum[]"]').val( sum );
+        $(id).closest('tr').children('td').children('input[name="purchase_order_list_qty[]"]').val( qty );
+        $(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( price );
+        $(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( sum );
      }
 
      function show_data(id){
@@ -121,15 +121,15 @@
         if(data.length > 0){
             $(id).closest('tr').children('td').children('input[name="product_code[]"]').val( data[0]['product_code'] );
             $(id).closest('tr').children('td').children('span[name="product_name[]"]').html( data[0]['product_name'] );
-            $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( data[0]['product_buyprice'] );
+            $(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( data[0]['product_buyprice'] );
             update_sum(id);
         }
      }
 
      function update_sum(id){
-          var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="list_qty[]"]').val(  ).replace(',',''));
-          var price =  parseFloat($(id).closest('tr').children('td').children('input[name="list_price[]"]').val( ).replace(',',''));
-          var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="list_price_sum[]"]').val( ).replace(',',''));
+          var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_qty[]"]').val(  ).replace(',',''));
+          var price =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( ).replace(',',''));
+          var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( ).replace(',',''));
 
         if(isNaN(qty)){
             qty = 0;
@@ -145,9 +145,9 @@
 
         sum = qty*price;
 
-        $(id).closest('tr').children('td').children('input[name="list_qty[]"]').val( qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( price.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $(id).closest('tr').children('td').children('input[name="list_price_sum[]"]').val( sum.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $(id).closest('tr').children('td').children('input[name="purchase_order_list_qty[]"]').val( qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $(id).closest('tr').children('td').children('input[name="purchase_order_list_price[]"]').val( price.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $(id).closest('tr').children('td').children('input[name="purchase_order_list_price_sum[]"]').val( sum.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
 
         calculateAll();
     }
@@ -165,24 +165,23 @@
     }
 
     function show_purchase_order(id){
-        $('#data_show_list').html("ทั้งหมด : 0 รายการ");
         var supplier_code = document.getElementById('supplier_code').value;
         var val_pr = document.getElementsByName('purchase_request_list_code[]');
         var val_code = document.getElementsByName('purchase_order_list_code[]');
-        var val_qty = document.getElementsByName('list_qty[]');
+        var val_qty = document.getElementsByName('purchase_order_list_qty[]');
 
         var purchase_order_list_code = [];
         for(var i = 0 ; i < val_code.length ; i++){
             purchase_order_list_code.push(val_code[i].value);
         }
 
-        var list_qty = [];
+        var purchase_order_list_qty = [];
         for(var i = 0 ; i < val_qty.length ; i++){
             if(val_qty[i].value ==0){
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return;
             }else{
-                list_qty.push(val_qty[i].value);
+                purchase_order_list_qty.push(val_qty[i].value);
             } 
         }
 
@@ -192,22 +191,21 @@
         }
         
         if(supplier_code != ""){
-            $(".table-pop").hide();
-            $(".lds-spinner").show();
-            $('#modalAdd').modal('show');
             $.post("modules/purchase_order/controllers/getPurchaseOrderListBySupplierCode.php", { 
                 'supplier_code': supplier_code,
                 'purchase_request_list_code': JSON.stringify(purchase_request_list_code)
-             }, function( data ) {
-                $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
-                if(data.length > 0){
+            }).done(function( data ) {
+                index_buffer = [];
+
+                if(data.length){
                     data_buffer = data;
-                    index_buffer=[];
+                    $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
+
                     var content = "";
                     for(var i = 0; i < data.length ; i++){
-                        var list_qty = parseFloat( data[i].list_qty );
-                        var list_price = parseFloat( data[i].list_price );
-                        var order_list_total = (data[i].list_qty * data[i].list_price);
+                        var purchase_order_list_qty = parseFloat( data[i].purchase_request_list_qty );
+                        var purchase_order_list_price = parseFloat( data[i].purchase_order_list_price );
+                        var order_list_total = (data[i].purchase_request_list_qty * data[i].purchase_order_list_price);
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
                                             '<input onchange="//show_receive(this);" onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -218,31 +216,29 @@
                                         '<td>'+
                                             data[i].product_name+
                                             '<br>Remark : '+
-                                            data[i].list_remark+
+                                            data[i].purchase_order_list_remark+
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="qty">' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
-                                   
+                                            '<span name="qty">' + purchase_order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + purchase_order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="price">' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
-                                    
+                                            '<span name="price">' + roundNumber(purchase_order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(purchase_order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                         '</td>'+
                                         '<td align="right">'+
                                             '<span name="total">' + roundNumber(order_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
                                             '<input name="total" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(order_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" readonly>'+
-                                   
                                         '</td>'+
                                     '</tr>';
 
                     }
-                    $( ".table-pop" ).show();
+                    
                     $('#bodyAdd').html(content);
-                    $( ".lds-spinner" ).hide();
+                    $('.table-pop').show();
+                    $('.lds-spinner').hide();
+                    $('#modalAdd').modal('show');
                 }else{
-                    $('#modalAdd').modal('hide');
                     alert("ไม่มีรายการสินค้าที่สามารถเปิดใบสั่งซื้อได้");
                 }
             });
@@ -253,26 +249,26 @@
     } 
    
     function search_pop_like(id){
-        $( ".table-pop" ).hide();
-        $( ".lds-spinner" ).show();
+        $('.table-pop').hide();
+        $('.lds-spinner').show();
         $('#data_show_list').html("ทั้งหมด : 0 รายการ");
         var supplier_code = document.getElementById('supplier_code').value;
         var val_pr = document.getElementsByName('purchase_request_list_code[]');
         var val_code = document.getElementsByName('purchase_order_list_code[]');
-        var val_qty = document.getElementsByName('list_qty[]');
+        var val_qty = document.getElementsByName('purchase_order_list_qty[]');
         
         var purchase_order_list_code = [];
         for(var i = 0 ; i < val_code.length ; i++){
             purchase_order_list_code.push(val_code[i].value);
         }
 
-        var list_qty = [];
+        var purchase_order_list_qty = [];
         for(var i = 0 ; i < val_qty.length ; i++){
             if(val_qty[i].value ==0){
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return;
             }else{
-                list_qty.push(val_qty[i].value);
+                purchase_order_list_qty.push(val_qty[i].value);
             } 
         }
 
@@ -286,18 +282,18 @@
             'purchase_request_list_code': JSON.stringify(purchase_request_list_code) ,
             'search':$(id).val() 
         }, function( data ) {
-            $( ".table-pop" ).show();
-            $( ".lds-spinner" ).hide();
+            $('.table-pop').show();
+            $('.lds-spinner').hide();
             $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
             var content = "";
+            index_buffer = [];
             if(data.length > 0){
                 data_buffer = data;
-                index_buffer=[];
                 
                 for(var i = 0; i < data.length ; i++){
-                    var list_qty = parseFloat( data[i].list_qty );
-                    var list_price = parseFloat( data[i].list_price );
-                    var order_list_total = (data[i].list_qty * data[i].list_price);
+                    var purchase_order_list_qty = parseFloat( data[i].purchase_request_list_qty );
+                    var purchase_order_list_price = parseFloat( data[i].purchase_order_list_price );
+                    var order_list_total = (data[i].purchase_request_list_qty * data[i].purchase_order_list_price);
                     content += '<tr class="odd gradeX">'+
                                     '<td>'+
                                         '<input onchange="//show_receive(this);"  onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -308,15 +304,15 @@
                                     '<td>'+
                                         data[i].product_name+
                                         '<br>Remark : '+
-                                        data[i].list_remark+
+                                        data[i].purchase_order_list_remark+
                                     '</td>'+
                                     '<td align="right">'+
-                                        '<span name="qty">' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
+                                        '<span name="qty">' + purchase_order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + purchase_order_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                     '</td>'+
                                     '<td align="right">'+
-                                        '<span name="price">' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
+                                        '<span name="price">' + roundNumber(purchase_order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(purchase_order_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);">'+
                                     
                                     '</td>'+
                                     '<td align="right">'+
@@ -366,14 +362,14 @@
                         '<span>Product name : </span>'+
                         '<span>'+data_buffer[i].product_name+'</span><br>'+
                         '<span>Remark : </span>'+
-                        '<input type="text" class="form-control" name="list_remark[]" value="'+data_buffer[i].list_remark+'">'+
+                        '<input type="text" class="form-control" name="purchase_order_list_remark[]" value="'+data_buffer[i].purchase_order_list_remark+'">'+
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].list_qty+'"></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_request_list_qty+'"></td>'+
                         '<td >'+
-                            '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_price[]" onchange="update_sum(this);" value="'+data_buffer[i].list_price+'">'+
+                            '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_order_list_price+'">'+
                             '<input type="checkbox" name="save_product_price[]" value="'+ data_buffer[i].product_code +'"> บันทึกราคาซื้อ'+ 
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].list_qty * data_buffer[i].list_price)+'"></td>'+ 
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].purchase_request_list_qty * data_buffer[i].purchase_order_list_price)+'"></td>'+ 
                         '<td>'+
                             '<a href="javascript:;" onclick="product_detail_blank(this);">'+
                                 '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
@@ -414,7 +410,7 @@
     }
 
     function calculateAll(){
-        var val = document.getElementsByName('list_price_sum[]');
+        var val = document.getElementsByName('purchase_order_list_price_sum[]');
         var total = 0.0;
         
         for(var i = 0 ; i < val.length ; i++){
@@ -606,14 +602,14 @@
                             <span>Product name : </span>
                             <span><?PHP echo $purchase_order_lists[$i]['product_name'];?></span><br>
                             <span>Remark.</span>
-                            <input type="text" class="form-control" name="list_remark[]" value="<?php echo $purchase_order_lists[$i]['list_remark']; ?>">
+                            <input type="text" class="form-control" name="purchase_order_list_remark[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_remark']; ?>">
                         </td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" onchange="update_sum(this);" name="list_qty[]" value="<?php echo $purchase_order_lists[$i]['list_qty']; ?>"></td>
+                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" onchange="update_sum(this);" name="purchase_order_list_qty[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_qty']; ?>"></td>
                         <td>
-                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off" onchange="update_sum(this);" name="list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['list_price'],2); ?>">
+                            <input type="text" class="form-control" style="text-align: right;" autocomplete="off" onchange="update_sum(this);" name="purchase_order_list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2); ?>">
                             <input type="checkbox" name="save_product_price[]" value="<?php echo $purchase_order_lists[$i]['product_code']; ?>"> บันทึกราคาซื้อ
                         </td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['list_qty'] * $purchase_order_lists[$i]['list_price'],2); ?>"></td>
+                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="purchase_order_list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'],2); ?>"></td>
                         <td>
                             <a href="javascript:;" onclick="product_detail_blank(this);">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -624,7 +620,7 @@
                         </td>
                     </tr>
                     <?
-                        $total += $purchase_order_lists[$i]['list_qty'] * $purchase_order_lists[$i]['list_price'];
+                        $total += $purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'];
                     }
                     ?>
                 </tbody>

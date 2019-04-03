@@ -239,7 +239,7 @@
                             <li class="list-inline-item">
                                 <a href="index.php?app=invoice_supplier&action=detail&code=<?PHP echo $invoice_supplier[$j]['invoice_supplier_code']; ?>"
                                     target="_blank">
-                                    <?PHP echo $invoice_supplier[$j]['invoice_supplier_code_gen']; ?>
+                                    <?PHP echo $invoice_supplier[$j]['invoice_supplier_code']; ?>
                                 </a>
                             </li>
                         </ul>

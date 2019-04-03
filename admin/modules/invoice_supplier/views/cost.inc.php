@@ -12,7 +12,6 @@ function roundNumber(num, scale) {
   }
 }
 
-console.log(roundNumber(56.755,2));
 var exchange_rate_baht_value = <?php if($exchange_rate_baht['exchange_rate_baht_value'] != ''){echo $exchange_rate_baht['exchange_rate_baht_value'];}else {echo 0;}?>;
 var vat = parseFloat('<?PHP echo $invoice_supplier['vat'] ;?>');
 var vat_type='<?PHP echo $invoice_supplier['vat_type'] ;?>';
@@ -71,12 +70,7 @@ function calculate(all_duty){
         invoice_supplier_list_total_sum += val_total; 
     }
     document.getElementById("invoice_supplier_currency_total").value = roundNumber(invoice_supplier_list_currency_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    document.getElementById("total_price").value = roundNumber(invoice_supplier_list_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    
-    console.log("invoice_supplier_currency_total : ",roundNumber(invoice_supplier_list_currency_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-    
-    console.log("total_price : ",roundNumber(invoice_supplier_list_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-    
+    document.getElementById("total_price").value = roundNumber(invoice_supplier_list_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");    
 
     /************************ End Calculate currency and  exchange rate  *************************/
   
@@ -91,11 +85,6 @@ function calculate(all_duty){
         var ex_total = parseFloat(invoice_supplier_list_total[i].value.toString().replace(new RegExp(',', 'g'),'')); 
         
         var cost_price_f = roundNumber((ex_total / total_price * freight_in),2);
-        console.log("ex_total : ",ex_total);
-        console.log("total_price : ",total_price);
-        console.log("freight_in : ",freight_in);
-        console.log("cost_price_f : ",cost_price_f);
-        console.log("freight_in_amount : ",freight_in_amount);
 
         if(freight_in -  freight_in_amount > 0){
 
@@ -229,17 +218,6 @@ function calculate(all_duty){
 
     document.getElementById("vat_price").value =  roundNumber(vat_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     document.getElementById("net_price").value =  roundNumber(net_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    
-    
-    console.log("vat_price : ",roundNumber(vat_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-   
-    console.log("net_price : ",roundNumber(net_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-   
-    console.log("import_duty : ",roundNumber(invoice_supplier_list_duty_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-    
-    console.log("freight_in : ",roundNumber(invoice_supplier_list_freight_in_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
-    
-    console.log("cost_total : ",roundNumber(invoice_supplier_list_cost_total_sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
 
     /************************ End Cost total calculate   *************************/
 
@@ -358,7 +336,6 @@ function calculate(all_duty){
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>หมายเลขใบกำกับภาษี / Inv code <font color="#F00"><b>*</b></font></label>
-                                        
                                         <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code'];?></p>
                                     </div>
                                 </div>
@@ -366,30 +343,29 @@ function calculate(all_duty){
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>กำหนดชำระ / Due </label>
-                                        
-                                        <p class="help-block"><?PHP echo $invoice_supplier['due_day'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_due_date'];?></p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>เงื่อนไขการชำระ / term </label>
+                                        <label>เงื่อนไขการชำระ / Term </label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['term'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['supplier_term'];?></p>
                                     </div>
                                 </div>
                                 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>วันที่รับใบกำกับภาษี / Date recieve</label>
+                                        <label>วันที่รับใบกำกับภาษี / Date receive</label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['recieve_date'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_receive_date'];?></p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>หมายเลขรับใบกำกับภาษี / recieve code <font color="#F00"><b>*</b></font></label>
+                                        <label>หมายเลขรับใบกำกับภาษี / receive code <font color="#F00"><b>*</b></font></label>
                                         <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code_gen'];?></p>
                                     </div>
                                 </div>

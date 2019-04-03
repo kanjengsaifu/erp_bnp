@@ -18,40 +18,35 @@ class StockModel extends BaseModel{
     function createStockTable(){
         $sql = "
             CREATE TABLE `".$this->table_name."` ( 
-                `stock_code` int(11) NOT NULL COMMENT 'รหัสอ้างอิงคลังสินค้า', 
-                `stock_type` varchar(10) NOT NULL COMMENT 'ประเภท รับ หรือ ออก', 
-                `product_code` int(11) NOT NULL COMMENT 'รหัสอ้างอิงสินค้า', 
-                `stock_date` varchar(50) NOT NULL COMMENT 'วันที่ดำเนินการ', 
-                `customer_code` int(11) NOT NULL COMMENT 'รหัสลูกค้า', 
-                `supplier_code` int(11) NOT NULL COMMENT 'รหัสผู้ขาย', 
-                `in_qty` int(11) NOT NULL COMMENT 'จำนวน (เข้า)', 
-                `in_stock_cost_avg` double NOT NULL COMMENT 'ราคาต่อชิ้น (เข้า)', 
-                `in_stock_cost_avg_total` double NOT NULL COMMENT 'ราคารวม (เข้า)', 
-                `out_qty` int(11) NOT NULL COMMENT 'จำนวน (ออก)', 
-                `out_stock_cost_avg` double NOT NULL COMMENT 'ราคาต่อชิ้น (ออก)', 
-                `out_stock_cost_avg_total` double NOT NULL COMMENT 'ราคารวม (ออก)', 
-                `balance_qty` int(11) NOT NULL COMMENT 'จำนวน (คงเหลือ)', 
-                `balance_stock_cost_avg` double NOT NULL COMMENT 'ราคาต่อชิ้น (คงเหลือ)', 
-                `balance_stock_cost_avg_total` double NOT NULL COMMENT 'ราคารวม (คงเหลือ)', 
-                `delivery_note_supplier_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการยืมเข้า', 
-                `delivery_note_customer_list_code` int(11) DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการยืมออก', 
-                `invoice_supplier_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการซื้อเข้า', 
-                `invoice_customer_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการขายออก', 
-                `stock_move_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการย้ายคลังสินค้า', 
-                `stock_issue_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการตัดคลังสินค้า', 
-                `credit_note_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการใบลดหนี้', 
-                `regrind_supplier_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสอ้างอิงรายการใบ Regrind', 
-                `summit_product_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสรายการสินค้ายกยอด', 
-                `stock_change_product_list_code` int(11) NOT NULL DEFAULT '0' COMMENT 'รหัสรายการสินค้าเปลี่ยนชื่อ', 
-                `addby` int(11) NOT NULL COMMENT 'ผู้เพิ่ม', 
-                `adddate` varchar(50) NOT NULL COMMENT 'เวลาเพิ่ม', 
-                `updateby` int(11) NOT NULL COMMENT 'ผู้แก้ไข', 
-                `lastupdate` varchar(50) NOT NULL COMMENT 'เวลาแก้ไข' 
+                `stock_code` int(11) NOT NULL COMMENT 'รหัสอ้างอิงคลังสินค้า',
+                `stock_type` varchar(10) NOT NULL COMMENT 'ประเภท รับ หรือ ออก',
+                `product_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงสินค้า',
+                `stock_date` date DEFAULT NULL COMMENT 'วันที่ดำเนินการ',
+                `in_qty` int(11) NOT NULL COMMENT 'จำนวน (เข้า)',
+                `in_cost_avg` double NOT NULL COMMENT 'ราคาต่อชิ้น (เข้า)',
+                `in_cost_avg_total` double NOT NULL COMMENT 'ราคารวม (เข้า)',
+                `out_qty` int(11) NOT NULL COMMENT 'จำนวน (ออก)',
+                `out_cost_avg` double NOT NULL COMMENT 'ราคาต่อชิ้น (ออก)',
+                `out_cost_avg_total` double NOT NULL COMMENT 'ราคารวม (ออก)',
+                `stock_qty` int(11) NOT NULL COMMENT 'จำนวน (คงเหลือ)',
+                `stock_cost_avg` double NOT NULL COMMENT 'ราคาต่อชิ้น (คงเหลือ)',
+                `stock_cost_avg_total` double NOT NULL COMMENT 'ราคารวม (คงเหลือ)',
+                `delivery_note_supplier_list_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงรายการยืมเข้า',
+                `delivery_note_customer_list_code` varchar(50) DEFAULT NULL COMMENT 'รหัสอ้างอิงรายการยืมออก',
+                `invoice_supplier_list_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงรายการซื้อเข้า',
+                `invoice_customer_list_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงรายการขายออก',
+                `stock_move_list_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงรายการย้ายคลังสินค้า',
+                `stock_issue_list_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงรายการตัดคลังสินค้า',
+                `credit_note_list_code` varchar(50) NOT NULL COMMENT 'รหัสอ้างอิงรายการใบลดหนี้',
+                `summit_product_code` varchar(50) NOT NULL COMMENT 'รหัสรายการสินค้ายกยอด',
+                `stock_change_product_list_code` varchar(50) NOT NULL COMMENT 'รหัสรายการสินค้าเปลี่ยนชื่อ',
+                `addby` varchar(50) NOT NULL COMMENT 'ผู้เพิ่ม',
+                `adddate` datetime DEFAULT NULL COMMENT 'เวลาเพิ่ม',
+                `updateby` varchar(50) DEFAULT NULL COMMENT 'ผู้แก้ไข',
+                `lastupdate` datetime DEFAULT NULL COMMENT 'เวลาแก้ไข'
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;  
         ";
         
-        echo $sql;
-
         if (mysqli_query(static::$db,$sql)) {
             $sql = "ALTER TABLE `".$this->table_name."` 
                 ADD PRIMARY KEY (`stock_code`), 
@@ -212,19 +207,17 @@ class StockModel extends BaseModel{
         }
     }
 
-    function updateStockByID($id,$data = []){
+    function updateStockByCode($code,$data = []){
         $sql = " UPDATE $table_name SET 
         stock_type = '".$data['stock_type']."' , 
         product_code = '".$data['product_code']."' , 
         stock_date = '".$data['stock_date']."' , 
-        customer_code = '".$data['customer_code']."' , 
-        supplier_code = '".$data['supplier_code']."' , 
         in_qty = '".$data['in_qty']."' , 
-        in_price = '".$data['in_price']."' , 
-        in_total = '".$data['in_total']."' , 
+        in_cost_avg = '".$data['in_cost_avg']."' , 
+        in_cost_avg_total = '".$data['in_cost_avg_total']."' , 
         out_qty = '".$data['out_qty']."' , 
-        out_price = '".$data['out_price']."' , 
-        out_total = '".$data['out_total']."' , 
+        out_cost_avg = '".$data['out_cost_avg']."' , 
+        out_cost_avg_total = '".$data['out_cost_avg_total']."' , 
         balance_qty = '".$data['balance_qty']."' , 
         balance_price = '".$data['balance_price']."' , 
         balance_total = '".$data['balance_total']."' , 
@@ -236,11 +229,11 @@ class StockModel extends BaseModel{
         regrind_supplier_list_code = '".$data['regrind_supplier_list_code']."' , 
         updateby = '".$data['updateby']."',  
         lastupdate = NOW() 
-        WHERE stock_code = $id ;
+        WHERE stock_code = '$code'
         ";
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
@@ -251,14 +244,12 @@ class StockModel extends BaseModel{
             stock_type, 
             product_code, 
             stock_date, 
-            customer_code, 
-            supplier_code, 
             in_qty, 
-            in_price, 
-            in_total,  
+            in_cost_avg, 
+            in_cost_avg_total,  
             out_qty, 
-            out_price, 
-            out_total,  
+            out_cost_avg, 
+            out_cost_avg_total,  
             balance_qty, 
             balance_price, 
             balance_total,  
@@ -277,11 +268,11 @@ class StockModel extends BaseModel{
             '".$data['customer_code']."', 
             '".$data['supplier_code']."', 
             '".$data['in_qty']."', 
-            '".$data['in_price']."', 
-            '".$data['in_total']."', 
+            '".$data['in_cost_avg']."', 
+            '".$data['in_cost_avg_total']."', 
             '".$data['out_qty']."', 
-            '".$data['out_price']."', 
-            '".$data['out_total']."', 
+            '".$data['out_cost_avg']."', 
+            '".$data['out_cost_avg_total']."', 
             '".$data['balance_qty']."', 
             '".$data['balance_price']."', 
             '".$data['balance_total']."', 
@@ -302,8 +293,8 @@ class StockModel extends BaseModel{
         }
     }
 
-    function deleteStockByID($id){
-        $sql = " DELETE FROM $table_name WHERE stock_code = '$id' ;";
+    function deleteStockByCode($code){
+        $sql = " DELETE FROM $table_name WHERE stock_code = '$code' ;";
         if(mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)){
             return true;
         }else{

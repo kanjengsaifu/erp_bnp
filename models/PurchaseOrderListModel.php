@@ -26,20 +26,20 @@ class PurchaseOrderListModel extends BaseModel{
         $sql = " SELECT tb.product_code,  
         product_name,   
         purchase_order_list_code,   
-        IFNULL(( SELECT SUM(IFNULL(list_qty,0)) FROM tb_invoice_supplier_list WHERE purchase_order_list_code = tb.purchase_order_list_code),0) as list_recieve_qty , 
+        IFNULL(( SELECT SUM(IFNULL(invoice_supplier_list_qty,0)) FROM tb_invoice_supplier_list WHERE purchase_order_list_code = tb.purchase_order_list_code),0) as list_receive_qty , 
         stock_group_code, 
-        list_qty, 
-        list_price, 
-        list_price_sum, 
-        list_remark, 
+        purchase_order_list_qty, 
+        purchase_order_list_price, 
+        purchase_order_list_price_sum, 
+        purchase_order_list_remark, 
         supplier_qty, 
         supplier_remark 
         FROM tb_purchase_order_list as tb 
         LEFT JOIN tb_product ON tb.product_code = tb_product.product_code  
         WHERE purchase_order_code = '$purchase_order_code' 
-        ORDER BY list_no, purchase_order_list_code 
+        ORDER BY purchase_order_list_no, purchase_order_list_code 
         ";
-
+        
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -50,7 +50,7 @@ class PurchaseOrderListModel extends BaseModel{
         }
     }
 
-    function getPurchaseOrderListCodeByOther($purchase_order_code,$list_no){
+    function getPurchaseOrderListCodeByOther($purchase_order_code,$purchase_order_list_no){
         $sql ="SELECT * 
         FROM tb_purchase_order_list 
         LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_code 
@@ -61,7 +61,7 @@ class PurchaseOrderListModel extends BaseModel{
                 $data[] = $row;
             }
             $result->close();
-            return $data[$list_no-1]['purchase_order_list_code'];
+            return $data[$purchase_order_list_no-1]['purchase_order_list_code'];
         }
     }
 
@@ -71,11 +71,11 @@ class PurchaseOrderListModel extends BaseModel{
             purchase_order_code,
             product_code,
             stock_group_code,
-            list_no,
-            list_qty,
-            list_price, 
-            list_price_sum,
-            list_remark,
+            purchase_order_list_no,
+            purchase_order_list_qty,
+            purchase_order_list_price, 
+            purchase_order_list_price_sum,
+            purchase_order_list_remark,
             addby,
             adddate
         ) VALUES ( 
@@ -83,11 +83,11 @@ class PurchaseOrderListModel extends BaseModel{
             '".$data['purchase_order_code']."', 
             '".$data['product_code']."', 
             '".$data['stock_group_code']."', 
-            '".$data['list_no']."', 
-            '".$data['list_qty']."', 
-            '".$data['list_price']."', 
-            '".$data['list_price_sum']."', 
-            '".$data['list_remark']."',
+            '".$data['purchase_order_list_no']."', 
+            '".$data['purchase_order_list_qty']."', 
+            '".$data['purchase_order_list_price']."', 
+            '".$data['purchase_order_list_price_sum']."', 
+            '".$data['purchase_order_list_remark']."',
             '".$data['addby']."', 
             NOW()
         )";
@@ -115,10 +115,10 @@ class PurchaseOrderListModel extends BaseModel{
 
     function updatePurchaseOrderListByCodeAdmin($data,$code){
         $sql = " UPDATE tb_purchase_order_list SET 
-            list_qty = '".$data['list_qty']."',
-            list_price = '".$data['list_price']."', 
-            list_price_sum = '".$data['list_price_sum']."',
-            list_remark = '".$data['list_remark']."'
+            purchase_order_list_qty = '".$data['purchase_order_list_qty']."',
+            purchase_order_list_price = '".$data['purchase_order_list_price']."', 
+            purchase_order_list_price_sum = '".$data['purchase_order_list_price_sum']."',
+            purchase_order_list_remark = '".$data['purchase_order_list_remark']."'
             WHERE purchase_order_list_code = '$code'
         ";
 

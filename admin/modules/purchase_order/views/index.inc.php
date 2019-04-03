@@ -128,11 +128,11 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 $data['purchase_order_code'] = $_POST['purchase_order_code'];
                 $data['product_code'] = $_POST['product_code'][$i];
                 $data['stock_group_code'] = $_POST['stock_group_code'][$i];
-                $data['list_no'] = $i;
-                $data['list_qty'] = (float)filter_var($_POST['list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-                $data['list_price'] = (float)filter_var($_POST['list_price'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-                $data['list_price_sum'] = (float)filter_var($_POST['list_price_sum'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-                $data['list_remark'] = $_POST['list_remark'][$i];
+                $data['purchase_order_list_no'] = $i;
+                $data['purchase_order_list_qty'] = (float)filter_var($_POST['purchase_order_list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+                $data['purchase_order_list_price'] = (float)filter_var($_POST['purchase_order_list_price'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+                $data['purchase_order_list_price_sum'] = (float)filter_var($_POST['purchase_order_list_price_sum'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+                $data['purchase_order_list_remark'] = $_POST['purchase_order_list_remark'][$i];
                 $data['addby'] = $login_user['user_code'];
 
                 $result = $purchase_order_list_model->insertPurchaseOrderList($data);
@@ -144,7 +144,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             for($i=0; $i < count($_POST['save_product_price']); $i++){
                 for($j=0; $j < count($_POST['product_code']); $j++){
                     if($_POST['product_code'][$j] == $_POST['save_product_price'][$i]){
-                        $product_price = (float)filter_var($_POST['list_price'][$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                        $product_price = (float)filter_var($_POST['purchase_order_list_price'][$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                     }
                 }
 
@@ -191,11 +191,11 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
 
         for($i=0; $i<count($_POST['product_code']); $i++){
             $data = [];
-            $data['list_no'] = $i;
-            $data['list_qty'] = (float)filter_var($_POST['list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-            $data['list_price'] = (float)filter_var($_POST['list_price'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-            $data['list_price_sum'] = (float)filter_var($_POST['list_price_sum'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-            $data['list_remark'] = $_POST['list_remark'][$i];
+            $data['purchase_order_list_no'] = $i;
+            $data['purchase_order_list_qty'] = (float)filter_var($_POST['purchase_order_list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+            $data['purchase_order_list_price'] = (float)filter_var($_POST['purchase_order_list_price'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+            $data['purchase_order_list_price_sum'] = (float)filter_var($_POST['purchase_order_list_price_sum'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+            $data['purchase_order_list_remark'] = $_POST['purchase_order_list_remark'][$i];
 
             if($_POST['purchase_order_list_code'][$i] != ''){
                 $data['updateby'] = $login_user['user_code'];
@@ -216,7 +216,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         for($i=0; $i < count($_POST['save_product_price']); $i++){
             for($j=0; $j < count($_POST['product_code']); $j++){
                 if($_POST['product_code'][$j] == $_POST['save_product_price'][$i]){
-                    $product_price = (float)filter_var($_POST['list_price'][$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                    $product_price = (float)filter_var($_POST['purchase_order_list_price'][$j], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
                 }
             }
 
@@ -317,14 +317,14 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         for($i=0; $i < count($purchase_order_lists) ; $i++){
             $data = [];
             $data['purchase_order_list_code'] = $purchase_order_code.date("Hi").$i;
-            $data['list_no'] = $purchase_order_lists[$i]['list_no'];
+            $data['purchase_order_list_no'] = $purchase_order_lists[$i]['purchase_order_list_no'];
             $data['purchase_order_code'] = $purchase_order_code;
             $data['product_code'] = $purchase_order_lists[$i]['product_code'];
             $data['stock_group_code'] = $purchase_order_lists[$i]['stock_group_code'];
-            $data['list_qty'] = $purchase_order_lists[$i]['list_qty'];
-            $data['list_price'] = $purchase_order_lists[$i]['list_price'];
-            $data['list_price_sum'] = $purchase_order_lists[$i]['list_price_sum'];
-            $data['list_remark'] = $purchase_order_lists[$i]['list_remark'];
+            $data['purchase_order_list_qty'] = $purchase_order_lists[$i]['purchase_order_list_qty'];
+            $data['purchase_order_list_price'] = $purchase_order_lists[$i]['purchase_order_list_price'];
+            $data['purchase_order_list_price_sum'] = $purchase_order_lists[$i]['purchase_order_list_price_sum'];
+            $data['purchase_order_list_remark'] = $purchase_order_lists[$i]['purchase_order_list_remark'];
 
             $result = $purchase_order_list_model->insertPurchaseOrderList($data);
 
@@ -399,9 +399,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
                 $data_sub['purchase_order_code'] = $purchase_order_code;
                 $data_sub['product_code'] = $purchase_order_lists[$i]['product_code'];
                 $data_sub['list_recieve_qty'] = $purchase_order_lists[$i]['list_recieve_qty'];
-                $data_sub['list_price'] = $purchase_order_lists[$i]['list_price'];
-                $data_sub['list_price_sum'] = $purchase_order_lists[$i]['list_price_sum'];
-                $data_sub['list_remark'] = $purchase_order_lists[$i]['list_remark'];
+                $data_sub['purchase_order_list_price'] = $purchase_order_lists[$i]['purchase_order_list_price'];
+                $data_sub['purchase_order_list_price_sum'] = $purchase_order_lists[$i]['purchase_order_list_price_sum'];
+                $data_sub['purchase_order_list_remark'] = $purchase_order_lists[$i]['purchase_order_list_remark'];
                 $purchase_order_list_model->updatePurchaseOrderListByCodeAdmin($data_sub,$purchase_order_lists[$i]['purchase_order_list_code']);
             }
         }else{
@@ -409,9 +409,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             $data_sub['purchase_order_code'] = $purchase_order_code;
             $data_sub['product_code'] = $purchase_order_lists[$i]['product_code'];
             $data_sub['list_recieve_qty'] = $purchase_order_lists[$i]['list_recieve_qty'];
-            $data_sub['list_price'] = $purchase_order_lists[$i]['list_price'];
-            $data_sub['list_price_sum'] = $purchase_order_lists[$i]['list_price_sum'];
-            $data_sub['list_remark'] = $purchase_order_lists[$i]['list_remark'];
+            $data_sub['purchase_order_list_price'] = $purchase_order_lists[$i]['purchase_order_list_price'];
+            $data_sub['purchase_order_list_price_sum'] = $purchase_order_lists[$i]['purchase_order_list_price_sum'];
+            $data_sub['purchase_order_list_remark'] = $purchase_order_lists[$i]['purchase_order_list_remark'];
             $purchase_order_list_model->updatePurchaseOrderListByCodeAdmin($data_sub,$purchase_order_lists[$i]['purchase_order_list_code']);
         }
     } 

@@ -179,9 +179,9 @@
                     '</select>'+ 
                 '</td>'+
                 '<td>'+
-                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="list_qty[]" value="1">'+ 
+                    '<input type="text" class="form-control" style="text-align:center;" autocomplete="off" name="purchase_request_list_qty[]" value="1">'+ 
                 '</td>'+
-                '<td><input type="text" class="form-control" name="list_remark[]"></td>'+
+                '<td><input type="text" class="form-control" name="purchase_request_list_remark[]"></td>'+
                 '<td style="text-align:center;">'+
                     '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
                         '<i class="fa fa-times" aria-hidden="true"></i>'+
@@ -364,9 +364,9 @@
                             </select>
                         </td> 
                         <td> 
-                            <input type="text" class="form-control" style="text-align:center;" name="list_qty[]" autocomplete="off" value="<?php echo $purchase_request_lists[$i]['list_qty']; ?>">
+                            <input type="text" class="form-control" style="text-align:center;" name="purchase_request_list_qty[]" autocomplete="off" value="<?php echo $purchase_request_lists[$i]['purchase_request_list_qty']; ?>">
                         </td>
-                        <td><input type="text" class="form-control" name="list_remark[]" value="<?php echo $purchase_request_lists[$i]['list_remark']; ?>"></td>
+                        <td><input type="text" class="form-control" name="purchase_request_list_remark[]" value="<?php echo $purchase_request_lists[$i]['purchase_request_list_remark']; ?>"></td>
                         <td>
                             <a href="javascript:;" onclick="delete_row(this);" style="color:red;">
                                 <i class="fa fa-times" aria-hidden="true"></i>

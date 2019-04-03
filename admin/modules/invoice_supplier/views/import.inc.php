@@ -24,9 +24,9 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#recieve_date").val(data.date_now);
+                //$("#invoice_supplier_receive_date").val(data.date_now);
                 $( ".calendar" ).datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("recieve_date").focus();
+                document.getElementById("invoice_supplier_receive_date").focus();
             } else{
                 $("#date_check").val("0");
                 get_supplier_detail();
@@ -37,24 +37,24 @@
     function check(){
 
         var supplier_code = document.getElementById("supplier_code").value;
-        var recieve_date = document.getElementById("recieve_date").value;
-        var term = document.getElementById("term").value;
-        var due_day = document.getElementById("due_day").value;
+        var invoice_supplier_receive_date = document.getElementById("invoice_supplier_receive_date").value;
+        var invoice_supplier_term = document.getElementById("invoice_supplier_term").value;
+        var invoice_supplier_due_date = document.getElementById("invoice_supplier_due_date").value;
         var employee_code = document.getElementById("employee_code").value; 
         var date_check = document.getElementById("date_check").value;
 
         var invoice_supplier_code = $('input[name="invoice_supplier_code[]"]');
         var invoice_supplier_code_gen = $('input[name="invoice_supplier_code_gen[]"]');
-        var craete_date = $('input[name="craete_date[]"]');
+        var invoice_supplier_craete_date = $('input[name="invoice_supplier_craete_date[]"]');
 
         var result_code = invoice_supplier_code.filter(word => word.value == '');
         var result_code_gen = invoice_supplier_code_gen.filter(word => word.value == '');
-        var result_date = craete_date.filter(word => word.value == '');
+        var result_date = invoice_supplier_craete_date.filter(word => word.value == '');
         
         supplier_code = $.trim(supplier_code); 
-        recieve_date = $.trim(recieve_date);
-        term = $.trim(term);
-        due_day = $.trim(due_day);
+        invoice_supplier_receive_date = $.trim(invoice_supplier_receive_date);
+        invoice_supplier_term = $.trim(invoice_supplier_term);
+        invoice_supplier_due_date = $.trim(invoice_supplier_due_date);
         employee_code = $.trim(employee_code);
 
 
@@ -63,7 +63,7 @@
             $(result_code[0]).focus();
             return false;
         } else if(result_code_gen.length > 0){
-            alert("Input invoice supplier code recieve.");
+            alert("Input invoice supplier code receive.");
             $(result_code_gen[0]).focus();
             return false;
         } else if(result_date.length > 0){
@@ -71,16 +71,16 @@
             $(result_date[0]).focus();
             return false;
         } else  if(date_check == "1"){
-            alert("This "+recieve_date+" is locked in the system.");
-            document.getElementById("recieve_date").focus();
+            alert("This "+invoice_supplier_receive_date+" is locked in the system.");
+            document.getElementById("invoice_supplier_receive_date").focus();
             return false;
         } else if(supplier_code.length == 0){
             alert("Please input supplier.");
             document.getElementById("supplier_code").focus();
             return false;
-        } else if(recieve_date.length == 0){
-            alert("Please input invoice supplier date recieve.");
-            document.getElementById("recieve_date").focus();
+        } else if(invoice_supplier_receive_date.length == 0){
+            alert("Please input invoice supplier date receive.");
+            document.getElementById("invoice_supplier_receive_date").focus();
             return false;
         } 
         else{
@@ -95,7 +95,7 @@
     function get_supplier_detail(){
         var supplier_code = document.getElementById('supplier_code').value;
         var employee_code = document.getElementById("employee_code").value;
-        var recieve_date = document.getElementById("recieve_date").value;
+        var invoice_supplier_receive_date = document.getElementById("invoice_supplier_receive_date").value;
         $.post( "controllers/getSupplierByID.php", { 'supplier_code': supplier_code }, function( data ) {
             if(data != null){
                 document.getElementById('supplier_code').value = data.supplier_code;
@@ -103,8 +103,8 @@
                 document.getElementById('supplier_branch').value = data.supplier_branch;
                 document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
                 document.getElementById('supplier_tax').value = data.supplier_tax ;
-                document.getElementById('due_day_day').value = data.credit_day ;
-                document.getElementById('term').value = data.condition_pay ;
+                document.getElementById('invoice_supplier_due_day').value = data.credit_day ;
+                document.getElementById('invoice_supplier_term').value = data.condition_pay ;
                 $('span[name="currency"]').html(data.currency_sign);
                 currency = data.currency_sign;
                 vat = data.vat;
@@ -113,7 +113,7 @@
         });
 
         <?PHP if($sort == "ภายนอกประเทศ"){ ?>
-            $.post( "controllers/getExchangeRateByCurrencyID.php", { 'recieve_date':recieve_date, 'supplier_code': supplier_code }, function( data ) {
+            $.post( "controllers/getExchangeRateByCurrencyID.php", { 'invoice_supplier_receive_date':invoice_supplier_receive_date, 'supplier_code': supplier_code }, function( data ) {
                 if(data != null){
                     var val =  parseFloat(data.exchange_rate_baht_value);
                     document.getElementById('exchange_rate_baht').value =  numberWithCommas(val); 
@@ -131,18 +131,18 @@
     }
 
 
-    function update_due_day(id){
-        var day = parseInt($('#due_day_day').val());
-        var date = $('#craete_date').val();
+    function update_invoice_supplier_due_date(id){
+        var day = parseInt($('#invoice_supplier_due_day').val());
+        var date = $('#invoice_supplier_craete_date').val();
 
         var current_date = new Date();
         var tomorrow = new Date();
 
         if(isNaN(day)){
-            $('#term').val(0);
+            $('#invoice_supplier_term').val(0);
             day = 0;
         }else if (date == ""){
-            $('#due_day').val(("0" + current_date.getDate() ) .slice(-2) + '-' + ("0" + current_date.getMonth() + 1).slice(-2) + '-' + current_date.getFullYear());
+            $('#invoice_supplier_due_date').val(("0" + current_date.getDate() ) .slice(-2) + '-' + ("0" + current_date.getMonth() + 1).slice(-2) + '-' + current_date.getFullYear());
         } else{
             var date_arr = date.split('-'); 
 
@@ -151,9 +151,7 @@
         }
 
         tomorrow.setDate(current_date.getDate()+day);
-        $('#due_day').val(("0" + tomorrow.getDate() ) .slice(-2) + '-' + ("0" + (tomorrow.getMonth()+1) ).slice(-2) + '-' + tomorrow.getFullYear());
-
-        console.log($('#due_day').val());
+        $('#invoice_supplier_due_date').val(("0" + tomorrow.getDate() ) .slice(-2) + '-' + ("0" + (tomorrow.getMonth()+1) ).slice(-2) + '-' + tomorrow.getFullYear());
     } 
 
 
@@ -244,7 +242,7 @@ function BindTable(jsondata,id) {
                             '<div> '+
                                 '<div class="col-lg-6">'+
                                     '<div class="form-group">'+
-                                        '<label>หมายเลขรับใบกำกับภาษี / recieve code <font color="#F00"><b>*</b></font></label>'+
+                                        '<label>หมายเลขรับใบกำกับภาษี / receive code <font color="#F00"><b>*</b></font></label>'+
                                         '<input name="invoice_supplier_code_gen[]" class="form-control" onchange="check_code(this)" value="<?php echo $last_code;?>" >'+
                                         '<input name="invoice_check" type="hidden" value="" />'+
                                         '<p class="help-block">Example : RR1801001 OR RF1801001.</p>'+
@@ -254,7 +252,7 @@ function BindTable(jsondata,id) {
                                 '<div class="col-lg-6">'+
                                     '<div class="form-group">'+
                                         '<label>วันที่ออกใบกำกับภาษี / Date</label>'+
-                                        '<input type="text"  name="craete_date[]"  class="form-control calendar"  readonly/>'+
+                                        '<input type="text"  name="invoice_supplier_craete_date[]"  class="form-control calendar"  readonly/>'+
                                         '<p class="help-block">31/01/2018</p>'+
                                     '</div>'+
                                 '</div>'+ 
@@ -266,7 +264,7 @@ function BindTable(jsondata,id) {
                                     '</div>'+
                                 '</div>';
                             '</div>';
-                            //onchange="update_due_day(this)"
+                            //onchange="update_invoice_supplier_due_date(this)"
 
                 str_html += '<table width="100%" class="table table-striped table-bordered table-hover" >'+
                         '<thead>'+
@@ -376,7 +374,7 @@ function BindTable(jsondata,id) {
                             '<div> '+
                                 '<div class="col-lg-6">'+
                                     '<div class="form-group">'+
-                                        '<label>หมายเลขรับใบกำกับภาษี / recieve code <font color="#F00"><b>*</b></font></label>'+
+                                        '<label>หมายเลขรับใบกำกับภาษี / receive code <font color="#F00"><b>*</b></font></label>'+
                                         '<input name="invoice_supplier_code_gen[]" class="form-control" onchange="check_code(this)" value="<?php echo $last_code;?>" >'+
                                         '<input name="invoice_check" type="hidden" value="" />'+
                                         '<p class="help-block">Example : RR1801001 OR RF1801001.</p>'+
@@ -386,7 +384,7 @@ function BindTable(jsondata,id) {
                                 '<div class="col-lg-6">'+
                                     '<div class="form-group">'+
                                         '<label>วันที่ออกใบกำกับภาษี / Date</label>'+
-                                        '<input type="text" name="craete_date[]" class="form-control calendar"  readonly/>'+
+                                        '<input type="text" name="invoice_supplier_craete_date[]" class="form-control calendar"  readonly/>'+
                                         '<p class="help-block">31/01/2018</p>'+
                                     '</div>'+
                                 '</div>'+ 
@@ -398,7 +396,7 @@ function BindTable(jsondata,id) {
                                     '</div>'+
                                 '</div>';
                             '</div>';
-//onchange="update_due_day(this)"
+//onchange="update_invoice_supplier_due_date(this)"
                 str_html += '<table width="100%" class="table table-striped table-bordered table-hover" >'+
                         '<thead>'+
                             '<tr>'+
@@ -594,10 +592,8 @@ function search_pop_like(id){
 
     if($(id).is(':checked')){
         $('tr[class="odd gradeX find"]').hide();
-        console.log("checked");
     }else{
         $('tr[class="odd gradeX find"]').show();
-        console.log("unchecked");
     }
 }
 
@@ -630,8 +626,6 @@ function export_error(){
         var sum = $(id).closest('table').children('tbody').children('tr').children('td').children('input[name="invoice_supplier_list_total[]"]')  ;
 
         var exchange_rate = parseFloat(document.getElementById('exchange_rate_baht').value.replace(',',''));
-        console.log(purchase_price);
-        console.log(qty);
         for(var i = 0 ; i < qty.length ; i++){  
             
             var val_qty =  parseFloat(qty[i].value.replace(',',''));
@@ -658,8 +652,6 @@ function export_error(){
 
             val_price =  val_purchase_price * exchange_rate;
             val_sum = val_qty*val_price;
-
-            console.log("val_price",val_price);
 
             qty[i].value = val_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") ;
             price[i].value = numberWithCommas(val_price.toFixed(4)) ;
@@ -863,8 +855,8 @@ function export_error(){
 
                                  <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>วันที่รับสินค้า / Date recieve</label>
-                                        <input type="text" id="recieve_date" name="recieve_date" value="<?PHP echo $first_date;?>"  class="form-control calendar" onchange="check_date(this);" readonly/>
+                                        <label>วันที่รับสินค้า / Date receive</label>
+                                        <input type="text" id="invoice_supplier_receive_date" name="invoice_supplier_receive_date" value="<?PHP echo $first_date;?>"  class="form-control calendar" onchange="check_date(this);" readonly/>
                                         <input id="date_check" type="hidden" value="" />
                                         <p class="help-block">31/01/2018</p>
                                     </div>
@@ -889,7 +881,7 @@ function export_error(){
                                 <div class="col-lg-6" style="display:none">
                                     <div class="form-group">
                                         <label>เครดิต / Credit Day </label>
-                                        <input type="text" id="due_day_day" name="due_day_day"  class="form-control" value="<?PHP echo $supplier['credit_day']; ?>" /> 
+                                        <input type="text" id="invoice_supplier_due_day" name="invoice_supplier_due_day"  class="form-control" value="<?PHP echo $supplier['credit_day']; ?>" /> 
                                         <p class="help-block">30</p>
                                     </div>
                                 </div> 
@@ -897,15 +889,15 @@ function export_error(){
                                 <div class="col-lg-6" style="display:none">
                                     <div class="form-group">
                                         <label>กำหนดชำระ / Due </label>
-                                        <input type="text" id="due_day" name="due_day"  class="form-control calendar" value="" readonly/> 
+                                        <input type="text" id="invoice_supplier_due_date" name="invoice_supplier_due_date"  class="form-control calendar" value="" readonly/> 
                                         <p class="help-block">01-03-2018 </p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12" style="display:none">
                                     <div class="form-group">
-                                        <label>เงื่อนไขการชำระ / term </label>
-                                        <input type="text" id="term" name="term"  class="form-control" value="<?PHP echo $supplier['condition_pay']; ?>" />
+                                        <label>เงื่อนไขการชำระ / Term </label>
+                                        <input type="text" id="invoice_supplier_term" name="invoice_supplier_term"  class="form-control" value="<?PHP echo $supplier['condition_pay']; ?>" />
                                         <p class="help-block">Bank </p>
                                     </div>
                                 </div>

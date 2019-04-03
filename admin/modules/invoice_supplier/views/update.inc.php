@@ -2,75 +2,15 @@
     function roundNumber(num, scale) {
         if(!("" + num).includes("e")) {
             return +(Math.round(num + "e+" + scale)  + "e-" + scale);
-        } else {
+        }else{
             var arr = ("" + num).split("e");
             var sig = ""
             if(+arr[1] + scale > 0) {
-            sig = "+";
+                sig = "+";
             }
             return +(Math.round(+arr[0] + "e" + sig + (+arr[1] + scale)) + "e-" + scale);
         }
     }
-
-    var options = {
-        url: function(keyword) {
-            return "controllers/getProductByKeyword.php?keyword="+keyword;
-        },
-        getValue: function(element) {
-            return element.product_code ;
-        },
-        template: {
-            type: "description",
-            fields: {
-                description: "product_name"
-            }
-        },
-        ajaxSettings: {
-            dataType: "json",
-            method: "POST",
-            data: {
-                dataType: "json"
-            }
-        },
-        preparePostData: function(data) {
-            data.keyword = $(".example-ajax-post:focus").val();
-            return data;
-        },
-        requestDelay: 400
-    };
-
-    var options_purchase = {
-        url: function(keyword) {
-            return "controllers/getPurchaseOrderByKeyword.php?&keyword="+keyword;
-        },
-        list: {
-            maxNumberOfElements: 10,
-            match: {
-                enabled: true
-            }
-        },
-        getValue: function(element) {
-            return element.purchase_order_code ;
-        },
-        template: {
-            type: "description",
-            fields: {
-                description: "supplier_name_en"
-            }
-        },
-        ajaxSettings: {
-            dataType: "json",
-            method: "POST",
-            data: {
-                dataType: "json"
-            }
-        },
-        preparePostData: function(data) {
-            data.keyword = $(".example-ajax-post:focus").val();
-            return data;
-        },
-        requestDelay: 400
-    };
 
     var stock_group_data = [
     <?php for($i = 0 ; $i < count($stock_groups) ; $i++ ){?>
@@ -81,7 +21,10 @@
     <?php }?>
     ];
 
+    var vat_type = <? echo $supplier['vat_type']; ?>;
+    
     var data_buffer = [];
+    var index_buffer = [];
 
     function check_date(id){
         var val_date = $(id).val();
@@ -90,9 +33,8 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#recieve_date").val(data.date_now);
-                $( ".calendar" ).datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("recieve_date").focus();
+                $(".calendar").datepicker({ dateFormat: 'dd-mm-yy' });
+                document.getElementById("invoice_supplier_receive_date").focus();
             } else{
                 $("#date_check").val("0");
                 get_supplier_detail();
@@ -105,7 +47,7 @@
         $.post( "controllers/getInvoiceSupplierByCodeGen.php", { 'invoice_supplier_code': code }, function( data ) {  
             if(data != null){ 
                 alert("This "+code+" is already in the system.");
-                document.getElementById("invoice_supplier_code_gen").focus();
+                document.getElementById("invoice_supplier_code").focus();
                 $("#invoice_check").val(data.invoice_supplier_code);
                 
             } else{
@@ -115,25 +57,25 @@
     }
 
     function check(){
+        var invoice_code_receive = document.getElementById("invoice_code_receive").value;
         var supplier_code = document.getElementById("supplier_code").value;
-        var invoice_supplier_code = document.getElementById("invoice_supplier_code").value;
-        var craete_date = document.getElementById("craete_date").value;
-        var recieve_date = document.getElementById("recieve_date").value;
-        var term = document.getElementById("term").value;
-        var due_day = document.getElementById("due_day").value;
+        var invoice_supplier_craete_date = document.getElementById("invoice_supplier_craete_date").value;
+        var invoice_supplier_receive_date = document.getElementById("invoice_supplier_receive_date").value;
+        var invoice_supplier_term = document.getElementById("invoice_supplier_term").value;
+        var invoice_supplier_due_day = document.getElementById("invoice_supplier_due_day").value;
         var employee_code = document.getElementById("employee_code").value;
         var invoice_check = document.getElementById("invoice_check").value;
         var date_check = document.getElementById("date_check").value;
 
         supplier_code = $.trim(supplier_code);
-        invoice_supplier_code = $.trim(invoice_supplier_code);
-        craete_date = $.trim(craete_date);
-        recieve_date = $.trim(recieve_date);
-        term = $.trim(term);
-        due_day = $.trim(due_day);
+        invoice_code_receive = $.trim(invoice_code_receive);
+        invoice_supplier_craete_date = $.trim(invoice_supplier_craete_date);
+        invoice_supplier_receive_date = $.trim(invoice_supplier_receive_date);
+        invoice_supplier_term = $.trim(invoice_supplier_term);
+        invoice_supplier_due_day = $.trim(invoice_supplier_due_day);
         employee_code = $.trim(employee_code);
 
-        var val_qty = document.getElementsByName('list_qty[]');
+        var val_qty = document.getElementsByName('invoice_supplier_list_qty[]');
         var invoice_supplier_currency_total = 0.0;
         var net_price = 0.0;
 
@@ -141,35 +83,35 @@
         var total = 0.0;
 
         for(var i = 0 ; i < val_qty.length ; i++){
-            if(val_qty[i].value ==0){
+            if(!val_qty[i].value){
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return false;
             }
         }
 
         if(date_check == "1"){
-            alert("This "+recieve_date+" is locked in the system.");
-            document.getElementById("recieve_date").focus();
+            alert("This "+invoice_supplier_receive_date+" is locked in the system.");
+            document.getElementById("invoice_supplier_receive_date").focus();
             return false;
         }else if(invoice_check != ""){
-            alert("This "+invoice_supplier_code_gen+" is already in the system.");
-            document.getElementById("invoice_supplier_code_gen").focus();
+            alert("This "+invoice_supplier_code+" is already in the system.");
+            document.getElementById("invoice_supplier_code").focus();
             return false;
         }else if(supplier_code.length == 0){
             alert("Please input supplier.");
             document.getElementById("supplier_code").focus();
             return false;
-        }else if(invoice_supplier_code.length == 0){
-            alert("Please input invoice supplier date.");
-            document.getElementById("invoice_supplier_code").focus();
+        }else if(invoice_code_receive.length == 0){
+            alert("Please input invoice code.");
+            document.getElementById("invoice_code_receive").focus();
             return false;
-        }else if(craete_date.length == 0){
-            alert("Please input invoice supplier date.");
-            document.getElementById("craete_date").focus();
+        }else if(invoice_supplier_craete_date.length == 0){
+            alert("Please input invoice date.");
+            document.getElementById("invoice_supplier_craete_date").focus();
             return false;
-        }else if(recieve_date.length == 0){
-            alert("Please input invoice supplier date recieve.");
-            document.getElementById("recieve_date").focus();
+        }else if(invoice_supplier_receive_date.length == 0){
+            alert("Please input invoice date receive.");
+            document.getElementById("invoice_supplier_receive_date").focus();
             return false;
         }else{
             update_sum(null);
@@ -179,24 +121,28 @@
     }
 
     function get_supplier_detail(){
-        var supplier_code = document.getElementById('supplier_code').value;
-        var employee_code = document.getElementById("employee_code").value;
-        var recieve_date = document.getElementById("recieve_date").value;
-        $.post( "controllers/getSupplierByID.php", { 'supplier_code': supplier_code }, function( data ) {
+        var supplier_code = document.getElementById('supplier_select').value;
+
+        $.post( "controllers/getSupplierByCode.php", { supplier_code: supplier_code }, function( data ) {
             if(data != null){
                 document.getElementById('supplier_code').value = data.supplier_code;
                 document.getElementById('supplier_name').value = data.supplier_name_en;
                 document.getElementById('supplier_branch').value = data.supplier_branch;
-                document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3 + ' ' +data.supplier_zipcode ;
+                document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3 + ' ' +data.supplier_zipcode;
                 document.getElementById('supplier_tax').value = data.supplier_tax ;
-                document.getElementById('due_date').value = data.credit_day ;
-                document.getElementById('term').value = data.condition_pay ;
+                document.getElementById('invoice_supplier_due_day').value = data.credit_day ;
+                document.getElementById('invoice_supplier_term').value = data.condition_pay ;
                 document.getElementById('vat').value = data.vat ;
+            }else{
+                document.getElementById('supplier_code').value = "";
+                document.getElementById('supplier_name').value = "";
+                document.getElementById('supplier_branch').value = "";
+                document.getElementById('supplier_address').value = "";
+                document.getElementById('supplier_tax').value = "0";
+                document.getElementById('invoice_supplier_due_day').value = "0";
+                document.getElementById('invoice_supplier_term').value = "";
+                document.getElementById('vat').value = "0";
             }
-        });
-
-        $.post( "controllers/getInvoiceSupplierCodeByID.php", { 'supplier_code': supplier_code, 'employee_code':employee_code  }, function( data ) {
-            document.getElementById('invoice_supplier_code_gen').value = data;
         });
     }
 
@@ -206,30 +152,20 @@
         update_line();
     }
 
-     function update_line(){
+    function update_line(){
         var td_number = $('table[name="tb_list"]').children('tbody').children('tr').children('td:first-child');
         for(var i = 0; i < td_number.length ;i++){
             td_number[i].innerHTML = (i+1);
         }
     }
 
-     function show_data(id){
-        var product_code = $(id).val();
-        $.post( "controllers/getProductByCode.php", { 'product_code': $.trim(product_code)}, function( data ) {
-            if(data != null){
-                $(id).closest('tr').children('td').children('input[name="product_name[]"]').val(data.product_name)
-                $(id).closest('tr').children('td').children('input[name="product_code[]"]').val(data.product_code)
-            }
-        });
-    }
-
     function update_sum(id){
-        var val_qty = document.getElementsByName('list_qty[]');
+        var val_qty = document.getElementsByName('invoice_supplier_list_qty[]');
         for(var i = 0 ; i < val_qty.length ; i++){ 
-           id = val_qty[i];
-            var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="list_qty[]"]').val(  ).replace(',',''));
-            var price =  parseFloat($(id).closest('tr').children('td').children('input[name="list_price[]"]').val( ).replace(',',''));
-            var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="list_total[]"]').val( ).replace(',',''));
+            id = val_qty[i];
+            var qty = parseFloat($(id).closest('tr').children('td').children('input[name="invoice_supplier_list_qty[]"]').val().replace(',',''));
+            var price = parseFloat($(id).closest('tr').children('td').children('input[name="invoice_supplier_list_price[]"]').val().replace(',',''));
+            var sum = parseFloat($(id).closest('tr').children('td').children('input[name="invoice_supplier_list_total[]"]').val().replace(',',''));
 
             if(isNaN(qty)){
                 qty = 0;
@@ -245,14 +181,12 @@
 
             sum = qty*price;
 
-            $(id).closest('tr').children('td').children('input[name="list_qty[]"]').val( qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-            $(id).closest('tr').children('td').children('input[name="invoice_supplier_list_cost[]"]').val( roundNumber(price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-            $(id).closest('tr').children('td').children('input[name="list_price[]"]').val( roundNumber(price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-            $(id).closest('tr').children('td').children('input[name="list_total[]"]').val( roundNumber(sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+            $(id).closest('tr').children('td').children('input[name="invoice_supplier_list_qty[]"]').val(qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $(id).closest('tr').children('td').children('input[name="invoice_supplier_list_cost[]"]').val(roundNumber(price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $(id).closest('tr').children('td').children('input[name="invoice_supplier_list_price[]"]').val(roundNumber(price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $(id).closest('tr').children('td').children('input[name="invoice_supplier_list_total[]"]').val(roundNumber(sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
         }
         calculateAll();
-        $( "#click_check" ).val(0);
-        $( "#add_product_tag" ).click();
     }
 
     function add_row_by_click(id,i){
@@ -268,49 +202,46 @@
     }
 
     function show_purchase_order(id){
-        $('#data_show_list').html("ทั้งหมด : 0 รายการ");
         var supplier_code = document.getElementById('supplier_code').value;
         var val = document.getElementsByName('purchase_order_list_code[]');
-        var val_qty = document.getElementsByName('list_qty[]');
+        var val_qty = document.getElementsByName('invoice_supplier_list_qty[]');
         var invoice_supplier_code = document.getElementById('invoice_supplier_code').value;
 
         var purchase_order_list_code = [];
-        var list_qty = [];
+        var invoice_supplier_list_qty = [];
 
         for(var i = 0 ; i < val.length ; i++){
             purchase_order_list_code.push(val[i].value);
-            if(val_qty[i].value ==0){
+            if(val_qty[i].value){
+                invoice_supplier_list_qty.push(val_qty[i].value);
+            }else{
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return;
-            }else{
-                list_qty.push(val_qty[i].value);
             }
         }
+
+        $('.lds-spinner').hide();
         
         if(supplier_code != ""){
-            if($( "#click_check" ).val()!=0){
-                $( ".table-pop" ).hide();
-                $( ".lds-spinner" ).show();
-                $('#modalAdd').modal('show');
-            }
-            $('#data_show_list_choose').html("เลือก : 0 รายการ");
-            $.post( "controllers/getInvoiceSupplierListBySupplierID.php", {'supplier_code': supplier_code, 'purchase_order_list_code': JSON.stringify(purchase_order_list_code) ,'list_qty' : JSON.stringify(list_qty),'invoice_supplier_code':invoice_supplier_code}, function( data ) {
+            $.post( "modules/invoice_supplier/controllers/getInvoiceSupplierListBySupplierCode.php", { 
+                supplier_code: supplier_code, 
+                purchase_order_list_code: JSON.stringify(purchase_order_list_code),
+                invoice_supplier_list_qty: JSON.stringify(invoice_supplier_list_qty),
+                invoice_supplier_code: invoice_supplier_code
+            }, function( data ) {
                 $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
-                if(data.length > 0){
-                    $('#add_product_tag').show();
-
+                var content = "";
+                if(data.length){
                     data_buffer = data;
-                    index_buffer=[];
-                    var content = "";
+                    index_buffer = [];
                     for(var i = 0; i < data.length ; i++){
-
-                        var list_qty = parseFloat( data[i].list_qty );
-                        var list_price = parseFloat( data[i].purchase_order_list_price );
-                        var list_total = list_price * list_qty;
+                        var invoice_supplier_list_qty = parseFloat( data[i].invoice_supplier_list_qty );
+                        var invoice_supplier_list_price = parseFloat( data[i].invoice_supplier_list_price );
+                        var invoice_supplier_list_total = invoice_supplier_list_price * invoice_supplier_list_qty;
 
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
-                                            '<input onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'" onchange="show_recieve(this);" />'+     
+                                            '<input onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'" onchange="show_receive(this);" />'+     
                                         '</td>'+
                                         '<td>'+
                                             data[i].product_code+
@@ -321,29 +252,26 @@
                                             data[i].invoice_supplier_list_remark+
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="qty">' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
+                                            '<span name="qty">' + invoice_supplier_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + invoice_supplier_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="price">' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
+                                            '<span name="price">' + roundNumber(invoice_supplier_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(invoice_supplier_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
                                         '</td>'+
                                         '<td align="right">'+
-                                            '<span name="total">' + roundNumber(list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                            '<input name="total" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" readonly>'+
+                                            '<span name="total">' + roundNumber(invoice_supplier_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                            '<input name="total" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(invoice_supplier_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" readonly>'+
                                         '</td>'+
                                     '</tr>';
 
                     }
                     
-                    if($( "#click_check" ).val()!=0){
-                        $( ".table-pop" ).show();
-                        $('#bodyAdd').html(content);
-                        $( ".lds-spinner" ).hide();
-                    }
-                    $( "#click_check" ).val(1);
+                    $('.table-pop').show();
+                    $('#bodyAdd').html(content);
+                    $('#modalAdd').modal('show');
                 }else{
-                    $('#add_product_tag').hide();
+                    alert("There are no items that can be added.");
                 }
             });
         }else{
@@ -355,42 +283,40 @@
     function search_pop_like(id){
         var supplier_code = document.getElementById('supplier_code').value;
         var val = document.getElementsByName('purchase_order_list_code[]');
-        var val_qty = document.getElementsByName('list_qty[]');
+        var val_qty = document.getElementsByName('invoice_supplier_list_qty[]');
         var invoice_supplier_code = document.getElementById('invoice_supplier_code').value;
         var purchase_order_list_code = [];
-        var list_qty = [];
+        var invoice_supplier_list_qty = [];
 
         for(var i = 0 ; i < val.length ; i++){
             purchase_order_list_code.push(val[i].value);
-            if(val_qty[i].value ==0){
+            if(val_qty[i].value){
+                invoice_supplier_list_qty.push(val_qty[i].value);
+            }else{
                 alert("!!!กรุณากรอกจำนวนมากกว่า 0 ");
                 return;
-            }else{
-                list_qty.push(val_qty[i].value);
-            }            
+            }
         }
 
-        $.post( "controllers/getInvoiceSupplierListBySupplierID.php", {
-            'supplier_code': supplier_code,
-            'purchase_order_list_code': JSON.stringify(purchase_order_list_code) ,
-            'list_qty' : JSON.stringify(list_qty), 
+        $.post("modules/invoice_supplier/controllers/getInvoiceSupplierListBySupplierCode.php", {
+            supplier_code: supplier_code,
+            purchase_order_list_code: JSON.stringify(purchase_order_list_code) ,
+            invoice_supplier_list_qty: JSON.stringify(invoice_supplier_list_qty), 
             search : $(id).val() 
-            
-            }, function( data ) 
-            {
-            var content = "";
+        }, function( data ){
             $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
-            if(data.length > 0){
+            var content = "";
+            if(data.length){
                 data_buffer = data;
-                index_buffer=[];
+                index_buffer = [];
                 for(var i = 0; i < data.length ; i++){
-                    var list_qty = parseFloat( data[i].list_qty );
-                    var list_price = parseFloat( data[i].purchase_order_list_price );
-                    var list_total = list_price * list_qty;
+                    var invoice_supplier_list_qty = parseFloat( data[i].invoice_supplier_list_qty );
+                    var invoice_supplier_list_price = parseFloat( data[i].invoice_supplier_list_price );
+                    var invoice_supplier_list_total = invoice_supplier_list_price * invoice_supplier_list_qty;
 
                     content += '<tr class="odd gradeX">'+
                                     '<td>'+
-                                        '<input onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'" onchange="show_recieve(this);" />'+     
+                                        '<input onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'" onchange="show_receive(this);" />'+     
                                     '</td>'+
                                     '<td>'+
                                         data[i].product_code+
@@ -401,16 +327,16 @@
                                         data[i].invoice_supplier_list_remark+
                                     '</td>'+
                                     '<td align="right">'+
-                                        '<span name="qty">' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
+                                        '<span name="qty">' + invoice_supplier_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="qty" style="display:none;text-align:right;" type="text" class="form-control" value="' + invoice_supplier_list_qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
                                     '</td>'+
                                     '<td align="right">'+
-                                        '<span name="price">' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
+                                        '<span name="price">' + roundNumber(invoice_supplier_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="price" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(invoice_supplier_list_price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" />'+
                                     '</td>'+
                                     '<td align="right">'+
-                                        '<span name="total">' + roundNumber(list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
-                                        '<input name="total" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" readonly>'+
+                                        '<span name="total">' + roundNumber(invoice_supplier_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + '</span>' +
+                                        '<input name="total" style="display:none;text-align:right;" type="text" class="form-control" value="' + roundNumber(invoice_supplier_list_total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")  + '" onchange="calculate_list(this);" readonly>'+
                                     '</td>'+
                                 '</tr>';
                 }
@@ -419,7 +345,7 @@
         });
     }
 
-    function show_recieve(checkbox){ 
+    function show_receive(checkbox){ 
         if (checkbox.checked == true){
             $(checkbox).closest('tr').children('td').children('input[name="qty"]').show();
             $(checkbox).closest('tr').children('td').children('span[name="qty"]').hide();
@@ -442,9 +368,9 @@
     }
 
     function calculate_list(id){
-        var qty =  parseFloat($(id).closest('tr').children('td').children('input[name="qty"]').val(  ).replace(',',''));
-        var price =  parseFloat($(id).closest('tr').children('td').children('input[name="price"]').val( ).replace(',',''));
-        var sum =  parseFloat($(id).closest('tr').children('td').children('input[name="total"]').val( ).replace(',',''));
+        var qty = parseFloat($(id).closest('tr').children('td').children('input[name="qty"]').val(  ).replace(',',''));
+        var price = parseFloat($(id).closest('tr').children('td').children('input[name="price"]').val( ).replace(',',''));
+        var sum = parseFloat($(id).closest('tr').children('td').children('input[name="total"]').val( ).replace(',',''));
 
         if(isNaN(qty)){
             qty = 0;
@@ -471,10 +397,10 @@
         for(var j = 0 ; j < (index_buffer.length); j++){
             var i = index_buffer[j];
             if(checkbox[i].checked){
-                var qty =  parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="qty"]').val(  ).replace(',',''));
-                var price =  parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="price"]').val( ).replace(',',''));
+                var qty = parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="qty"]').val(  ).replace(',',''));
+                var price = parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="price"]').val( ).replace(',',''));
                 var purchase_price = parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="price"]').val( ).replace(',',''));
-                var sum =  parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="total"]').val( ).replace(',',''));
+                var sum = parseFloat($(checkbox[i]).closest('tr').children('td').children('input[name="total"]').val( ).replace(',',''));
 
                 var index = 0;
                 if(isNaN($(id).closest('table').children('tbody').children('tr').length)){
@@ -489,29 +415,24 @@
                         '</td>'+ 
                         '<td>'+
                             '<input type="hidden" name="invoice_supplier_list_code[]" value="0">'+ 
-                            '<input type="hidden" name="purchase_order_list_code[]" value="'+ data_buffer[i].purchase_order_list_code +'"  />'+   
+                            '<input type="hidden" name="purchase_order_list_code[]" value="'+ data_buffer[i].purchase_order_list_code +'">'+   
                             '<input type="hidden" name="invoice_supplier_list_fix_type[]" value="no-fix">'+     
-                            '<input type="hidden" name="invoice_supplier_list_duty[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_freight_in[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_freight_in_total[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_import_duty[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_import_duty_total[]" value="0">'+     
+                            '<input type="hidden" name="invoice_supplier_list_freight[]" value="0">'+     
+                            '<input type="hidden" name="invoice_supplier_list_freight_total[]" value="0">'+
                             '<input type="hidden" name="invoice_supplier_list_cost[]" value="0">'+     
                             '<input type="hidden" name="invoice_supplier_list_cost_total[]" value="0">'+     
-                            '<input type="hidden" name="product_code[]"  value="'+ data_buffer[i].product_code +'">'+
-					        '<input class="example-ajax-post form-control" name="product_code[]" onchange="show_data(this);" placeholder="Product Code" value="'+ data_buffer[i].product_code +'">'+ 
+					        '<input type="text" class="form-control" name="product_code[]" placeholder="Product Code" value="'+ data_buffer[i].product_code +'" readonly>'+ 
                             '<input type="text" class="form-control" name="product_name[]" value="'+ data_buffer[i].product_name +'" readonly>'+
                             '<input type="text" class="form-control" name="invoice_supplier_list_product_name[]" placeholder="Product Name (Supplier)">'+
                             '<input type="text" class="form-control" name="invoice_supplier_list_product_detail[]" placeholder="Product Detail (Supplier)">'+
                             '<input type="text" class="form-control" name="invoice_supplier_list_remark[]" placeholder="Remark" value="'+ data_buffer[i].invoice_supplier_list_remark +'">'+
                         '</td>'+
                         '<td>'+
-                            '<select  name="stock_group_code[]" class="form-control select" data-live-search="true">'+  
-                            '</select>'+ 
+                            '<select  name="stock_group_code[]" class="form-control select" data-live-search="true"></select>'+ 
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_qty[]" onchange="update_sum(this);" value="'+ qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +'" /></td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_price[]" onchange="update_sum(this);" value="'+ roundNumber(price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +'" /></td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_total[]" onchange="update_sum(this);"  value="'+ roundNumber(sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +'" readonly></td>'+
+                        '<td align="right"><input type="text" class="form-control integer" style="text-align: right;" autocomplete="off" name="invoice_supplier_list_qty[]" onchange="update_sum(this);" value="'+ qty.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +'" /></td>'+
+                        '<td align="right"><input type="text" class="form-control float" style="text-align: right;" autocomplete="off" name="invoice_supplier_list_price[]" onchange="update_sum(this);" value="'+ roundNumber(price,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +'" /></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="invoice_supplier_list_total[]" onchange="update_sum(this);"  value="'+ roundNumber(sum,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") +'" readonly></td>'+
                         '<td>'+
                             '<a href="javascript:;" onclick="product_detail_blank(this);">'+
                                 '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
@@ -522,8 +443,6 @@
                         '</td>'+
                     '</tr>'
                 );
-
-                $(".example-ajax-post").easyAutocomplete(options);
 
                 $(id).closest('table').children('tbody').children('tr:last').children('td').children('div').children('div').children('select[name="stock_group_code[]"]').empty();
                 var str = "";
@@ -537,76 +456,9 @@
                 $(id).closest('table').children('tbody').children('tr:last').children('td').children('select[name="stock_group_code[]"]').html(str);
                 $(id).closest('table').children('tbody').children('tr:last').children('td').children('select[name="stock_group_code[]"]').selectpicker();
             }
-            
         }
         
         calculateAll();
-        update_line();
-
-        $( "#click_check" ).val(0);
-        $( "#add_product_tag" ).click();
-    }
-
-    function add_row_new(id){
-        $('#modalAdd').modal('hide');
-        var index = 0;
-        if(isNaN($(id).closest('table').children('tbody').children('tr').length)){
-            index = 1;
-        }else{
-            index = $(id).closest('table').children('tbody').children('tr').length + 1;
-        }
-        $(id).closest('table').children('tbody').append(
-            '<tr class="odd gradeX">'+
-                '<td class="sorter">'+
-                '</td>'+ 
-                '<td>'+
-                    '<input type="hidden" name="invoice_supplier_list_code[]" value="0">'+ 
-                    '<input type="hidden" name="purchase_order_list_code[]" value="0">'+ 
-                    '<input type="hidden" name="invoice_supplier_list_fix_type[]" value="no-fix">'+     
-                    '<input type="hidden" name="invoice_supplier_list_duty[]" value="0">'+           
-                    '<input type="hidden" name="invoice_supplier_list_freight_in[]" value="0">'+     
-                    '<input type="hidden" name="invoice_supplier_list_freight_in_total[]" value="0">'+     
-                    '<input type="hidden" name="invoice_supplier_list_import_duty[]" value="0">'+    
-                    '<input type="hidden" name="invoice_supplier_list_import_duty_total[]" value="0">'+    
-                    '<input type="hidden" name="invoice_supplier_list_cost[]" value="0">'+
-                    '<input type="hidden" name="invoice_supplier_list_cost_total[]" value="0">'+
-                    '<input type="hidden" name="old_cost[]" value="0">'+
-                    '<input type="hidden" name="old_qty[]" value="0">'+
-                    '<input type="hidden" name="product_code[]" value="0">'+
-                    '<input class="example-ajax-post form-control" name="product_code[]" onchange="show_data(this);" placeholder="Product Code" value="">'+ 
-                    '<input type="text" class="form-control" name="product_name[]" readonly>'+
-                    '<input type="text" class="form-control" name="invoice_supplier_list_product_name[]" placeholder="Product Name (Supplier)">'+
-                    '<input type="text" class="form-control" name="invoice_supplier_list_product_detail[]" placeholder="Product Detail (Supplier)">'+
-                    '<input type="text" class="form-control" name="invoice_supplier_list_remark[]" placeholder="Remark">'+
-                '</td>'+
-                '<td>'+
-                    '<select  name="stock_group_code[]" class="form-control select" data-live-search="true">'+  
-                    '</select>'+ 
-                '</td>'+
-                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_qty[]" value="0" onchange="update_sum(this);"></td>'+
-                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_price[]" value="0" onchange="update_sum(this);"></td>'+
-                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="list_total[]" value="0" onchange="update_sum(this);" readonly></td>'+
-                '<td>'+
-                    '<a href="javascript:;" onclick="product_detail_blank(this);">'+
-                        '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
-                    '</a> '+
-                    '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
-                        '<i class="fa fa-times" aria-hidden="true"></i>'+
-                    '</a>'+
-                '</td>'+
-            '</tr>'
-        );
-
-        $(".example-ajax-post").easyAutocomplete(options);
-
-        $(id).closest('table').children('tbody').children('tr:last').children('td').children('div').children('div').children('select[name="stock_group_code[]"]').empty();
-        var str = "";
-        $.each(stock_group_data, function (index, value) { 
-            str += "<option value='" + value['stock_group_code'] + "'>" +  value['stock_group_name'] + "</option>"; 
-        });
-        $(id).closest('table').children('tbody').children('tr:last').children('td').children('select[name="stock_group_code[]"]').html(str);
-
-        $(id).closest('table').children('tbody').children('tr:last').children('td').children('select[name="stock_group_code[]"]').selectpicker();
         update_line();
     }
 
@@ -638,7 +490,6 @@
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[name="qty"]').hide();
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[name="price"]').hide();
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[name="total"]').hide();
-
             $(id).closest('table').children('tbody').children('tr').children('td').children('span[name="qty"]').show();
             $(id).closest('table').children('tbody').children('tr').children('td').children('span[name="price"]').show();
             $(id).closest('table').children('tbody').children('tr').children('td').children('span[name="total"]').show();
@@ -648,16 +499,27 @@
     }
 
     function calculateAll(){
-        var val = document.getElementsByName('list_total[]');
+        var val = document.getElementsByName('invoice_supplier_list_total[]');
+        var vat = parseInt(document.getElementById("invoice_supplier_vat").value);
         var total = 0.0;
 
         for(var i = 0 ; i < val.length ; i++){ 
             total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
         }
 
-        $('#total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#vat_price').val(roundNumber((total * ($('#vat').val()/100.0)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#net_price').val(roundNumber((total * ($('#vat').val()/100.0) + total),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        if(vat_type == 1){
+            $('#invoice_supplier_net_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#invoice_supplier_total_price').val(roundNumber(total - ((vat/(100.00 + vat) * total)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#invoice_supplier_vat_price').val(roundNumber((vat/(100.00 + vat)) * total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }else if(vat_type == 2){
+            $('#invoice_supplier_total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#invoice_supplier_vat_price').val(roundNumber((total * (vat/100.0)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#invoice_supplier_net_price').val(roundNumber((total * (vat/100.0) + total),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }else{
+            $('#invoice_supplier_total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#invoice_supplier_net_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#invoice_supplier_vat_price').val(0);
+        }
     }
 
     function get_purchase(){
@@ -671,18 +533,17 @@
         });
     } 
 
-    function update_due_day(id){
-        var day = parseInt($('#due_date').val());
-        var date = $('#craete_date').val();
-
+    function update_invoice_supplier_due_day(id){
+        var day = parseInt($('#invoice_supplier_due_date').val());
+        var date = $('#invoice_supplier_craete_date').val();
         var current_date = new Date();
         var tomorrow = new Date();
 
         if(isNaN(day)){
-            $('#term').val(0);
+            $('#invoice_supplier_term').val(0);
             day = 0;
         }else if (date == ""){
-            $('#due_day').val(("0" + current_date.getDate() ) .slice(-2) + '-' + ("0" + current_date.getMonth() + 1).slice(-2) + '-' + current_date.getFullYear());
+            $('#invoice_supplier_due_day').val(("0" + current_date.getDate()) .slice(-2) + '-' + ("0" + current_date.getMonth() + 1).slice(-2) + '-' + current_date.getFullYear());
         } else{
             var date_arr = date.split('-'); 
 
@@ -691,7 +552,7 @@
         }
 
         tomorrow.setDate(current_date.getDate()+day);
-        $('#due_day').val(("0" + tomorrow.getDate() ) .slice(-2) + '-' + ("0" + (tomorrow.getMonth()+1) ).slice(-2) + '-' + tomorrow.getFullYear());
+        $('#invoice_supplier_due_day').val(("0" + tomorrow.getDate()).slice(-2) + '-' + ("0" + (tomorrow.getMonth()+1)).slice(-2) + '-' + tomorrow.getFullYear());
     }
 
     function product_detail_blank(id){
@@ -721,19 +582,19 @@
             <a class="btn btn-primary" href="?app=invoice_supplier&action=update&code=<?php echo $previous_code;?>" ><i class="fa fa-angle-double-left" aria-hidden="true"></i><?php echo $previous_code;?> </a>
             <?PHP } ?>
 
-            <a class="btn btn-success "  href="?app=invoice_supplier&action=insert"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
-            <a class="btn btn-danger" href="print.php?app=invoice_supplier&action=pdf&lan=en&code=<?php echo $invoice_supplier_code;?>" target="_blank" ><i class="fa fa-print" aria-hidden="true"></i> พิมพ์ใบรับสินค้า </a>
+            <a class="btn btn-success" href="?app=invoice_supplier&action=insert"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
+            <a class="btn btn-danger" href="print.php?app=invoice_supplier&action=pdf&lan=en&code=<?php echo $invoice_supplier_code;?>" target="_blank"><i class="fa fa-print" aria-hidden="true"></i> พิมพ์ใบรับสินค้า </a>
             
             <?PHP if($next_code != ""){?>
-            <a class="btn btn-primary" href="?app=invoice_supplier&action=update&code=<?php echo $next_code;?>"><?php echo $next_code;?><i class="fa fa-angle-double-right" aria-hidden="true"></i> </a>
+            <a class="btn btn-primary" href="?app=invoice_supplier&action=update&code=<?php echo $next_code;?>"><?php echo $next_code;?><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
             <?PHP } ?>
         </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
-        <form id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=invoice_supplier&action=edit&code=<?php echo $invoice_supplier_code;?>" >
-            <input type="hidden" id="invoice_supplier_code" name="invoice_supplier_code" value="<?php echo $invoice_supplier_code; ?>" />
-            <input type="hidden" id="craete_date_old" name="craete_date_old" value="<?php echo $invoice_supplier['recieve_date']; ?>" />
+        <form id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=invoice_supplier&action=edit&code=<?php echo $invoice_supplier_code;?>">
+            <input type="hidden" id="invoice_supplier_code" name="invoice_supplier_code" value="<?php echo $invoice_supplier_code; ?>">
+            <input type="hidden" id="invoice_supplier_craete_date_old" name="invoice_supplier_craete_date_old" value="<?php echo $invoice_supplier['invoice_supplier_receive_date']; ?>">
             <div class="row">
                 <div class="col-lg-7">
                     <div class="row">
@@ -746,8 +607,8 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>ผู้ขาย / Supplier  <font color="#F00"><b>*</b></font> </label>
-                                <select id="supplier_code" name="supplier_code" class="form-control select" onchange="get_supplier_detail()" data-live-search="true">
+                                <label>ผู้ขาย / Supplier <font color="#F00"><b>*</b></font> </label>
+                                <select id="supplier_select" name="supplier_select" class="form-control select" onchange="get_supplier_detail()" data-live-search="true">
                                     <option value="">Select</option>
                                     <?php 
                                     for($i = 0 ; $i < count($suppliers) ; $i++){
@@ -763,28 +624,28 @@
                         <div class="col-lg-8">
                             <div class="form-group">
                                 <label>ชื่อตามใบกำกับภาษี / Full name <font color="#F00"><b>*</b></font></label>
-                                <input id="supplier_name" name="supplier_name" class="form-control" value="<?php echo $invoice_supplier['supplier_name'];?> " >
+                                <input id="invoice_supplier_name" name="invoice_supplier_name" class="form-control" value="<?php echo $invoice_supplier['invoice_supplier_name'];?>">
                                 <p class="help-block">Example : Revel soft.</p>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>สาขา / Branch <font color="#F00"><b>*</b></font></label>
-                                <input id="supplier_branch" name="supplier_branch" class="form-control" value="<?php echo $invoice_supplier['supplier_branch'];?>" >
+                                <input id="invoice_supplier_branch" name="invoice_supplier_branch" class="form-control" value="<?php echo $invoice_supplier['invoice_supplier_branch'];?>">
                                 <p class="help-block">Example : 0000 </p>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>ที่อยู่ตามใบกำภาษี / Address <font color="#F00"><b>*</b></font></label>
-                                <textarea id="supplier_address" name="supplier_address" class="form-control" rows="5" ><?php echo $invoice_supplier['supplier_address'];?></textarea >
+                                <textarea id="invoice_supplier_address" name="invoice_supplier_address" class="form-control" rows="5" ><?php echo $invoice_supplier['invoice_supplier_address'];?></textarea>
                                 <p class="help-block">Example : IN.</p>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>เลขประจำตัวผู้เสียภาษี / Tax <font color="#F00"><b>*</b></font></label>
-                                <input id="supplier_tax" name="supplier_tax" class="form-control" value="<?php echo $invoice_supplier['supplier_tax'];?>" >
+                                <input id="invoice_supplier_tax" name="invoice_supplier_tax" class="form-control" value="<?php echo $invoice_supplier['invoice_supplier_tax'];?>">
                                 <p class="help-block">Example : 0305559003597.</p>
                             </div>
                         </div>
@@ -794,16 +655,16 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>วันที่รับสินค้า / Date recieve</label>
-                                <input type="text" id="recieve_date" name="recieve_date" class="form-control calendar" value="<?PHP echo $invoice_supplier['recieve_date'];?>" onchange="check_date(this);"  readonly/>
+                                <label>วันที่รับสินค้า / Date receive</label>
+                                <input type="text" id="invoice_supplier_receive_date" name="invoice_supplier_receive_date" class="form-control calendar" value="<?PHP echo $invoice_supplier['invoice_supplier_receive_date'];?>" onchange="check_date(this);"  readonly>
                                 <input id="date_check" type="hidden" value="">
                                 <p class="help-block">31-01-2018</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>หมายเลขรับใบกำกับภาษี / recieve code <font color="#F00"><b>*</b></font></label>
-                                <input id="invoice_supplier_code_gen" name="invoice_supplier_code_gen" class="form-control" value="<?PHP echo $invoice_supplier['invoice_supplier_code_gen'];?>" >
+                                <label>หมายเลขรับใบกำกับภาษี / receive code <font color="#F00"><b>*</b></font></label>
+                                <input id="invoice_supplier_code" name="invoice_supplier_code" class="form-control" value="<?PHP echo $invoice_supplier['invoice_supplier_code'];?>" >
                                 <input id="invoice_check" type="hidden" value="">
                                 <p class="help-block">Example : RR1801001 OR RF1801001.</p>
                             </div>
@@ -812,7 +673,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>วันที่ออกใบกำกับภาษี / Date</label>
-                                <input type="text" id="craete_date" name="craete_date" value="<?PHP echo $invoice_supplier['craete_date'];?>"  onchange="update_due_day(this)" class="form-control calendar" readonly/>
+                                <input type="text" id="invoice_supplier_craete_date" name="invoice_supplier_craete_date" value="<?PHP echo $invoice_supplier['invoice_supplier_craete_date'];?>"  onchange="update_invoice_supplier_due_day(this)" class="form-control calendar" readonly>
                                 <p class="help-block">01-03-2018</p>
                             </div>
                         </div>
@@ -820,7 +681,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>หมายเลขใบกำกับภาษี / Inv code <font color="#F00"><b>*</b></font></label>
-                                <input id="invoice_supplier_code" name="invoice_supplier_code" class="form-control" value="<?PHP echo $invoice_supplier['invoice_supplier_code'];?>" >
+                                <input id="invoice_code_receive" name="invoice_code_receive" class="form-control" value="<?PHP echo $invoice_supplier['invoice_code_receive'];?>" >
                                 <p class="help-block">Example : INV1801001.</p>
                             </div>
                         </div>
@@ -828,7 +689,7 @@
                         <div class="col-lg-6" style="display:none">
                             <div class="form-group">
                                 <label>เครดิต / Credit Day </label>
-                                <input type="text" id="due_date" name="due_date" class="form-control" value="<?PHP echo $invoice_supplier['due_date'];?>" /> 
+                                <input type="text" id="invoice_supplier_due_day" name="invoice_supplier_due_day" class="form-control" value="<?PHP echo $invoice_supplier['invoice_supplier_due_day'];?>"> 
                                 <p class="help-block">30</p>
                             </div>
                         </div>
@@ -836,22 +697,22 @@
                         <div class="col-lg-6" style="display:none">
                             <div class="form-group">
                                 <label>กำหนดชำระ / Due </label>
-                                <input type="text" id="due_day" name="due_day" class="form-control calendar" value="<?PHP echo $invoice_supplier['due_day'];?>" readonly/> 
+                                <input type="text" id="invoice_supplier_due_date" name="invoice_supplier_due_date" class="form-control calendar" value="<?PHP echo $invoice_supplier['invoice_supplier_due_date'];?>" readonly> 
                                 <p class="help-block">01-03-2018 </p>
                             </div>
                         </div>
 
                         <div class="col-lg-12" style="display:none">
                             <div class="form-group">
-                                <label>เงื่อนไขการชำระ / term </label>
-                                <input type="text" id="term" name="term" class="form-control" value="<?PHP echo $invoice_supplier['term'];?>"  />
+                                <label>เงื่อนไขการชำระ / Term </label>
+                                <input type="text" id="invoice_supplier_term" name="invoice_supplier_term" class="form-control" value="<?PHP echo $invoice_supplier['invoice_supplier_term'];?>">
                                 <p class="help-block">01-03-2018 </p>
                             </div>
                         </div>
                         
                         <div class="col-lg-12" style="display:none">
                             <div class="form-group">
-                                <label>ผู้รับใบกำกับภาษี / Employee  <font color="#F00"><b>*</b></font> </label>
+                                <label>ผู้รับใบกำกับภาษี / Employee <font color="#F00"><b>*</b></font> </label>
                                 <select id="employee_code" name="employee_code" class="form-control select" data-live-search="true">
                                     <option value="">Select</option>
                                     <?php 
@@ -886,42 +747,35 @@
                 <tbody class="sorted_table">
                     <?php 
                     $total = 0;
-                    $cost_duty = 0;
                     $cost_price_total_s = 0;
                     $cost_price_ex_total_s = 0;
                     $purchase_order_total_price = 0;
 
                     for($i=0; $i < count($invoice_supplier_lists); $i++){
-                        $cost_total = $invoice_supplier_lists[$i]['list_price'] ;
-                        $cost_qty = $invoice_supplier_lists[$i]['list_qty'];
-                        $cost_price = $invoice_supplier_lists[$i]['list_price'] ;
-                        $cost_duty += $cost_qty * $cost_price;
+                        $cost_total = $invoice_supplier_lists[$i]['invoice_supplier_list_price'] ;
+                        $cost_qty = $invoice_supplier_lists[$i]['invoice_supplier_list_qty'];
+                        $cost_price = $invoice_supplier_lists[$i]['invoice_supplier_list_price'] ;
                     ?>
                     <tr class="odd gradeX">
                         <td class="sorter"><?PHP echo ($i + 1); ?>.</td>
                         <td>
-                            <input type="hidden" name="invoice_supplier_list_code[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_code'];?>" />   
-                            <input type="hidden" name="purchase_order_list_code[]" value="<?PHP echo  $invoice_supplier_lists[$i]['purchase_order_list_code'];?>" />  
-                            <input type="hidden" name="invoice_supplier_list_fix_type[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_fix_type'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_duty[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_duty'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_freight_in[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_freight_in'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_freight_in_total[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_freight_in_total'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_import_duty[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_import_duty'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_import_duty_total[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_import_duty_total'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_cost[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_cost'];?>" />
-                            <input type="hidden" name="invoice_supplier_list_cost_total[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_cost_total'];?>" />
-                            <input type="hidden" name="old_cost[]" value="<?PHP echo  $invoice_supplier_lists[$i]['invoice_supplier_list_cost'];?>" />
-                            <input type="hidden" name="old_qty[]" value="<?PHP echo  $invoice_supplier_lists[$i]['list_qty'];?>" />
-                            <input type="hidden" name="product_code[]"  value="<?php echo $invoice_supplier_lists[$i]['product_code']; ?>" />
-                            <input class="example-ajax-post form-control" name="product_code[]" onchange="show_data(this);" placeholder="Product Code" value="<?php echo $invoice_supplier_lists[$i]['product_code']; ?>"  readonly/> 
-                            <input type="text" class="form-control" name="product_name[]"  readonly value="<?php echo $invoice_supplier_lists[$i]['product_name']; ?>" />
-                            <input type="text" class="form-control" name="invoice_supplier_list_product_name[]"  placeholder="Product Name (Supplier)"/>
-                            <input type="text" class="form-control" name="invoice_supplier_list_product_detail[]"  placeholder="Product Detail (Supplier)" />
-                            <input type="text" class="form-control" name="invoice_supplier_list_remark[]"  placeholder="Remark" value="<?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_remark']; ?>" />
+                            <input type="hidden" name="invoice_supplier_list_code[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_code'];?>">   
+                            <input type="hidden" name="purchase_order_list_code[]" value="<?PHP echo $invoice_supplier_lists[$i]['purchase_order_list_code'];?>">  
+                            <input type="hidden" name="invoice_supplier_list_fix_type[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_fix_type'];?>">
+                            <input type="hidden" name="invoice_supplier_list_freight[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_freight'];?>">
+                            <input type="hidden" name="invoice_supplier_list_freight_total[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_freight_total'];?>">
+                            <input type="hidden" name="invoice_supplier_list_cost[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_cost'];?>">
+                            <input type="hidden" name="invoice_supplier_list_cost_total[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_cost_total'];?>">
+                            <input type="hidden" name="old_cost[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_cost'];?>">
+                            <input type="hidden" name="old_qty[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_qty'];?>">
+                            <input type="text" class="form-control" name="product_code[]" placeholder="Product Code" value="<?php echo $invoice_supplier_lists[$i]['product_code']; ?>" readonly> 
+                            <input type="text" class="form-control" name="product_name[]" readonly value="<?php echo $invoice_supplier_lists[$i]['product_name']; ?>">
+                            <input type="text" class="form-control" name="invoice_supplier_list_product_name[]" placeholder="Product Name (Supplier)">
+                            <input type="text" class="form-control" name="invoice_supplier_list_product_detail[]" placeholder="Product Detail (Supplier)">
+                            <input type="text" class="form-control" name="invoice_supplier_list_remark[]" placeholder="Remark" value="<?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_remark']; ?>">
                         </td>
                         <td>
-                        
-                            <select name="stock_group_code[]" class="form-control select" data-live-search="true" >
+                            <select name="stock_group_code[]" class="form-control select" data-live-search="true">
                                 <?php 
                                 for($ii = 0 ; $ii < count($stock_groups) ; $ii++){
                                 ?>
@@ -930,11 +784,10 @@
                                 }
                                 ?>
                             </select>
-
                         </td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="list_qty[]" value="<?php echo $invoice_supplier_lists[$i]['list_qty']; ?>" /></td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;"  autocomplete="off" onchange="update_sum(this);" name="list_price[]" value="<?php echo  number_format($invoice_supplier_lists[$i]['list_price'],4); ?>" /></td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="list_total[]" value="<?php echo  number_format( $invoice_supplier_lists[$i]['list_total'],2); ?>" /></td>
+                        <td align="right"><input type="text" class="form-control integer" style="text-align: right;" autocomplete="off" onchange="update_sum(this);" name="invoice_supplier_list_qty[]" value="<?php echo $invoice_supplier_lists[$i]['invoice_supplier_list_qty']; ?>"></td>
+                        <td align="right"><input type="text" class="form-control float" style="text-align: right;" autocomplete="off" onchange="update_sum(this);" name="invoice_supplier_list_price[]" value="<?php echo  number_format($invoice_supplier_lists[$i]['invoice_supplier_list_price'],2); ?>"></td>
+                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="invoice_supplier_list_total[]" value="<?php echo  number_format( $invoice_supplier_lists[$i]['invoice_supplier_list_total'],2); ?>"></td>
                         <td> 
                             <a href="javascript:;" onclick="product_detail_blank(this);">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -945,9 +798,8 @@
                         </td>
                     </tr>
                     <?
-                        $total += $invoice_supplier_lists[$i]['list_total'] ;
+                        $total += $invoice_supplier_lists[$i]['invoice_supplier_list_total'] ;
                     }
-
                     ?>
                 </tbody>
 
@@ -956,7 +808,6 @@
                         <td colspan="7" align="center">
                             <a id="add_product_tag" name="add_product_tag" href="javascript:;" onclick="show_purchase_order(this);" style="color:red;">
                                 <i class="fa fa-plus" aria-hidden="true"></i> 
-                                <input type="hidden" id="click_check" value="0">
                                 <span>เพิ่มสินค้า / Add product</span>
                             </a>
 
@@ -1026,7 +877,7 @@
                                 $total_val = $total;
                             }
                         ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="total_price" name="total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="invoice_supplier_total_price" name="invoice_supplier_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly>
                         </td>
                         <td></td>
                     </tr>
@@ -1036,7 +887,7 @@
                                 <tr>
                                     <td><span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span></td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
-                                        <input type="text" class="form-control" style="text-align: right;" id="vat" name="vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();"/>
+                                        <input type="text" class="form-control integer" style="text-align: right;" id="invoice_supplier_vat" name="invoice_supplier_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();"/>
                                     </td>
                                     <td width="16">%</td>
                                 </tr>
@@ -1052,7 +903,7 @@
                                 $vat_val = 0.0;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="vat_price"  name="vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="invoice_supplier_vat_price"  name="invoice_supplier_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly>
                         </td>
                         <td></td>
                     </tr>
@@ -1070,7 +921,7 @@
                                 $net_val = $total;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="net_price" name="net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="invoice_supplier_net_price" name="invoice_supplier_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly>
                         </td>
                         <td></td>
                     </tr>
@@ -1082,7 +933,7 @@
                     <div class="form-group">
                         <label>ค่าขนส่งสินค้า / Freight in<font color="#F00"><b>*</b></font></label>
                         <div>
-                            <table name="tb_freight_in" class="table table-striped table-bordered table-hover" >
+                            <table name="tb_freight" class="table table-striped table-bordered table-hover" >
                                 <thead>
                                     <tr>
                                         <th style="width:64px;text-align:center;">ลำดับ</th>
@@ -1092,17 +943,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php for($i=0; $i < count($invoice_supplier_freight_in_lists); $i++){ ?>
+                                <?php for($i=0; $i < count($invoice_supplier_freight_lists); $i++){ ?>
                                     <tr class="odd gradeX">
                                         <td class="sorter" style="vertical-align: middle;text-align:center;">
                                         <?PHP echo $i + 1; ?>
                                         </td>
                                         <td>
-                                            <input type="hidden" name="invoice_supplier_freight_in_list_code[]" value="<?php echo $invoice_supplier_freight_in_lists[$i]['invoice_supplier_freight_in_list_code']; ?>" />
-                                            <input type="text" class="form-control" name="invoice_supplier_freight_in_list_name[]" value="<?php echo $invoice_supplier_freight_in_lists[$i]['invoice_supplier_freight_in_list_name']; ?>" />
+                                            <input type="hidden" name="invoice_supplier_freight_list_code[]" value="<?php echo $invoice_supplier_freight_lists[$i]['invoice_supplier_freight_list_code']; ?>">
+                                            <input type="text" class="form-control" name="invoice_supplier_freight_list_name[]" value="<?php echo $invoice_supplier_freight_lists[$i]['invoice_supplier_freight_list_name']; ?>">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" style="text-align:right;" name="invoice_supplier_freight_in_list_total[]" value="<?php echo number_format($invoice_supplier_freight_in_lists[$i]['invoice_supplier_freight_in_list_total'],2);?>" onchange="calculate_freight_in();calculateCost();" />
+                                            <input type="text" class="form-control" style="text-align:right;" name="invoice_supplier_freight_list_total[]" value="<?php echo number_format($invoice_supplier_freight_lists[$i]['invoice_supplier_freight_list_total'],2);?>" onchange="calculate_freight();calculateCost();" />
                                         </td>
                                         <td>
                                             <a href="javascript:;" onclick="delete_row(this);" style="color:red;">
@@ -1115,7 +966,7 @@
                                 <tfoot>
                                     <tr>
                                         <td colspan="4" align="center" >
-                                            <a href="javascript:;" onclick="add_freight_in_list(this);" style="color:red;">
+                                            <a href="javascript:;" onclick="add_freight_list(this);" style="color:red;">
                                                 <i class="fa fa-plus" aria-hidden="true"></i> 
                                                 <span>เพิ่มรายการ / Add list</span>
                                             </a>
@@ -1126,7 +977,7 @@
                                             จำนวนเงินรวม 
                                         </td>
                                         <td style="width:150px;">
-                                            <input id="freight_in" name="freight_in" onchange="calculateCost();" class="form-control" style="text-align:right" value="<?php echo number_format($invoice_supplier['freight_in'],2);?>" onchange="calculateCost()" readonly>
+                                            <input id="invoice_supplier_freight" name="invoice_supplier_freight" onchange="calculateCost();" class="form-control" style="text-align:right" value="<?php echo number_format($invoice_supplier['invoice_supplier_freight'],2);?>" onchange="calculateCost()" readonly>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -1150,7 +1001,6 @@
 </div>
 
 <script>
-    $(".example-ajax-post").easyAutocomplete(options);
     $('.sorted_table').sortable({
         handle: ".sorter" , 
         update: function( event, ui ) {

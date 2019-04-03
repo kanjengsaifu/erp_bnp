@@ -102,15 +102,13 @@ class PurchaseOrderModel extends BaseModel{
     function getPurchaseOrderInvoiceProductBy($purchase_order_list_code) {
         $sql = " SELECT 
         tb_invoice_supplier.invoice_supplier_code,
+        tb_invoice_supplier.invoice_code_receive,
         tb_invoice_supplier.supplier_code,
-        tb_invoice_supplier.invoice_supplier_code,
-        tb_invoice_supplier.invoice_supplier_code_gen,
         tb_invoice_supplier.invoice_supplier_total_price,
         tb_invoice_supplier.invoice_supplier_vat_price,
         tb_invoice_supplier.invoice_supplier_net_price,
-        tb_invoice_supplier_list.product_code,
-        tb_invoice_supplier_list.invoice_supplier_list_qty,
-        tb_invoice_supplier_list.invoice_supplier_list_price,
+        invoice_supplier_list_qty,
+        invoice_supplier_list_price,
         tb_product.product_code,
         tb_product.product_name
         FROM `tb_invoice_supplier`
@@ -157,7 +155,7 @@ class PurchaseOrderModel extends BaseModel{
         tb_purchase_order_list.purchase_order_list_code,
         tb_purchase_order_list.product_code,
         tb_purchase_order_list.purchase_list_qty,
-        tb_purchase_order_list.purchase_list_price,
+        tb_purchase_order_list.purchase_purchase_order_list_price,
         tb_supplier.supplier_code,
         tb_supplier.supplier_code,
         tb_supplier.supplier_name_th,
@@ -278,9 +276,13 @@ class PurchaseOrderModel extends BaseModel{
             }
         }
 
-        $sql_request = "SELECT purchase_request_list_code, tb_purchase_request_list.product_code, product_name, 
-        stock_group_code, list_qty, IFNULL(product_buyprice,0) as list_price, 
-        CONCAT('PR : ',tb_purchase_request.purchase_request_code) as list_remark 
+        $sql = "SELECT purchase_request_list_code, 
+        tb_purchase_request_list.product_code, 
+        product_name, 
+        stock_group_code, 
+        purchase_request_list_qty, 
+        IFNULL(product_buyprice,0) as purchase_order_list_price, 
+        CONCAT('PR : ',tb_purchase_request.purchase_request_code) as purchase_order_list_remark 
         FROM tb_purchase_request 
         LEFT JOIN tb_purchase_request_list ON tb_purchase_request.purchase_request_code = tb_purchase_request_list.purchase_request_code 
         LEFT JOIN tb_product ON tb_purchase_request_list.product_code = tb_product.product_code 
@@ -298,7 +300,7 @@ class PurchaseOrderModel extends BaseModel{
         ORDER BY purchase_request_list_code ASC
         ";
     
-        if ($result = mysqli_query(static::$db,$sql_request, MYSQLI_USE_RESULT)) {
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                 $data[] = $row;

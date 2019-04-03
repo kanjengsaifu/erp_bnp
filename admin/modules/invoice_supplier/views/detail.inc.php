@@ -92,7 +92,7 @@
                                     <div class="form-group">
                                         <label>หมายเลขใบกำกับภาษี / Inv code <font color="#F00"><b>*</b></font></label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_code_receive'];?></p>
                                     </div>
                                 </div>
                                 
@@ -100,38 +100,37 @@
                                     <div class="form-group">
                                         <label>เครดิต / Credit Day </label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['due_day_day'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_due_day'];?></p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>กำหนดชำระ / Due </label>
-                                        
-                                        <p class="help-block"><?PHP echo $invoice_supplier['due_day'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_due_date'];?></p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label>เงื่อนไขการชำระ / term </label>
+                                        <label>เงื่อนไขการชำระ / Term </label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['term'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_term'];?></p>
                                     </div>
                                 </div>
                                 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>วันที่รับใบกำกับภาษี / Date recieve</label>
+                                        <label>วันที่รับใบกำกับภาษี / Date receive</label>
                                         
-                                        <p class="help-block"><?PHP echo $invoice_supplier['craete_date_recieve'];?></p>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_craete_date'];?></p>
                                     </div>
                                 </div>
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>หมายเลขรับใบกำกับภาษี / recieve code <font color="#F00"><b>*</b></font></label>
-                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code_gen'];?></p>
+                                        <label>หมายเลขรับใบกำกับภาษี / receive code <font color="#F00"><b>*</b></font></label>
+                                        <p class="help-block"><?PHP echo $invoice_supplier['invoice_supplier_code'];?></p>
                                     </div>
                                 </div>
 

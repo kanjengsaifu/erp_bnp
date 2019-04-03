@@ -10,10 +10,10 @@ $purchase_request_list_code = json_decode($_POST['purchase_request_list_code'],t
 $purchase_order_model = new PurchaseOrderModel;
 
 $supplier = $purchase_order_model->generatePurchaseOrderListBySupplierCode(
-        $_POST['supplier_code'],
-        $purchase_request_list_code, 
-        $_POST['search']
-    );
+    $_POST['supplier_code'],
+    $purchase_request_list_code, 
+    $_POST['search']
+);
 
 echo json_encode($supplier);
 ?>

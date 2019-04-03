@@ -77,13 +77,13 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
             for($i=0; $i<count($_POST['product_code']); $i++){
                 $data = [];
                 $data['purchase_request_list_code'] = $_POST['purchase_request_code'].date("Hi").$i;
-                $data['list_no'] = $i;
+                $data['purchase_request_list_no'] = $i;
                 $data['purchase_request_code'] = $_POST['purchase_request_code'];
                 $data['product_code'] = $_POST['product_code'][$i];
                 $data['supplier_code'] = $_POST['supplier_code'][$i];
                 $data['stock_group_code'] = $_POST['stock_group_code'][$i];
-                $data['list_qty'] = (float)filter_var($_POST['list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-                $data['list_remark'] = $_POST['list_remark'][$i];
+                $data['purchase_request_list_qty'] = (float)filter_var($_POST['purchase_request_list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+                $data['purchase_request_list_remark'] = $_POST['purchase_request_list_remark'][$i];
     
                 $purchase_request_list_model->insertPurchaseRequestList($data);
             }
@@ -123,13 +123,13 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
             for($i=0; $i<count($_POST['product_code']); $i++){
                 $data = [];
                 $data['purchase_request_list_code'] = $_POST['purchase_request_code'].date("Hi").$i;
-                $data['list_no'] = $i;
+                $data['purchase_request_list_no'] = $i;
                 $data['purchase_request_code'] = $_POST['purchase_request_code'];
                 $data['product_code'] = $_POST['product_code'][$i];
                 $data['supplier_code'] = $_POST['supplier_code'][$i];
                 $data['stock_group_code'] = $_POST['stock_group_code'][$i];
-                $data['list_qty'] = (float)filter_var($_POST['list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
-                $data['list_remark'] = $_POST['list_remark'][$i];
+                $data['purchase_request_list_qty'] = (float)filter_var($_POST['purchase_request_list_qty'][$i], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);;
+                $data['purchase_request_list_remark'] = $_POST['purchase_request_list_remark'][$i];
 
                 if($_POST['purchase_request_list_code'][$i] == ''){
                     $purchase_request_list_model->insertPurchaseRequestList($data);
@@ -173,9 +173,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
             $data['product_code'] = $purchase_request_lists[$i]['product_code'];
             $data['supplier_code'] = $purchase_request_lists[$i]['supplier_code'];
             $data['stock_group_code'] = $purchase_request_lists[$i]['stock_group_code'];
-            $data['list_no'] =  $purchase_request_lists[$i]['list_no'];
-            $data['list_qty'] = $purchase_request_lists[$i]['list_qty'];
-            $data['list_remark'] = $purchase_request_lists[$i]['list_remark'];
+            $data['purchase_request_list_no'] =  $purchase_request_lists[$i]['purchase_request_list_no'];
+            $data['purchase_request_list_qty'] = $purchase_request_lists[$i]['purchase_request_list_qty'];
+            $data['purchase_request_list_remark'] = $purchase_request_lists[$i]['purchase_request_list_remark'];
             $purchase_request_list_model->insertPurchaseRequestList($data); 
         }
         ?> <script>window.location="index.php?app=purchase_request&action=update&code=<?php echo $purchase_request_code; ?>"</script> <?php

@@ -11,12 +11,12 @@ class PurchaseRequestListModel extends BaseModel{
     }
 
     function getPurchaseRequestListBy($code){
-        $sql = " SELECT tb_purchase_request_list.product_code, list_qty, stock_group_code, list_remark, supplier_code,
+        $sql = " SELECT tb_purchase_request_list.product_code, purchase_request_list_qty, stock_group_code, purchase_request_list_remark, supplier_code,
         product_name, product_description, purchase_request_list_code
         FROM tb_purchase_request_list 
         LEFT JOIN tb_product ON tb_purchase_request_list.product_code = tb_product.product_code 
         WHERE purchase_request_code = '$code' 
-        ORDER BY list_no, purchase_request_list_code 
+        ORDER BY purchase_request_list_no, purchase_request_list_code 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -30,7 +30,7 @@ class PurchaseRequestListModel extends BaseModel{
     }
 
     function insertPurchaseRequestList($data = []){
-        $data['list_remark']=mysqli_real_escape_string(static::$db,$data['list_remark']);
+        $data['purchase_request_list_remark']=mysqli_real_escape_string(static::$db,$data['purchase_request_list_remark']);
 
         $sql = " INSERT INTO tb_purchase_request_list ( 
             purchase_request_list_code,
@@ -38,9 +38,9 @@ class PurchaseRequestListModel extends BaseModel{
             product_code,
             supplier_code,
             stock_group_code,
-            list_no,
-            list_qty,
-            list_remark,
+            purchase_request_list_no,
+            purchase_request_list_qty,
+            purchase_request_list_remark,
             addby,
             adddate
         ) VALUES ( 
@@ -49,9 +49,9 @@ class PurchaseRequestListModel extends BaseModel{
             '".$data['product_code']."', 
             '".$data['supplier_code']."', 
             '".$data['stock_group_code']."', 
-            '".$data['list_no']."', 
-            '".$data['list_qty']."', 
-            '".$data['list_remark']."',
+            '".$data['purchase_request_list_no']."', 
+            '".$data['purchase_request_list_qty']."', 
+            '".$data['purchase_request_list_remark']."',
             '".$data['addby']."', 
             NOW()
         )";
@@ -64,15 +64,15 @@ class PurchaseRequestListModel extends BaseModel{
     }
 
     function updatePurchaseRquestListByCode($data,$code){
-        $data['list_remark']=mysqli_real_escape_string(static::$db,$data['list_remark']);
+        $data['purchase_request_list_remark']=mysqli_real_escape_string(static::$db,$data['purchase_request_list_remark']);
 
         $sql = " UPDATE tb_purchase_request_list SET 
         product_code = '".$data['product_code']."', 
         supplier_code = '".$data['supplier_code']."', 
         stock_group_code = '".$data['stock_group_code']."',
-        list_no = '".$data['list_no']."',
-        list_qty = '".$data['list_qty']."',
-        list_remark = '".$data['list_remark']."' 
+        purchase_request_list_no = '".$data['purchase_request_list_no']."',
+        purchase_request_list_qty = '".$data['purchase_request_list_qty']."',
+        purchase_request_list_remark = '".$data['purchase_request_list_remark']."' 
         WHERE purchase_request_list_code = '$code'
         ";
 
