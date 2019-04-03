@@ -177,6 +177,7 @@ class AgentModel extends BaseModel{
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         agent_username = '".static::$db->real_escape_string($data['agent_username'])."', 
         agent_password = '".static::$db->real_escape_string($data['agent_password'])."', 
+        agent_signature = '".$data['agent_signature']."', 
         updateby = '".$data['updateby']."', 
         lastupdate = NOW() 
         WHERE agent_code = '$code'
@@ -215,6 +216,7 @@ class AgentModel extends BaseModel{
             id_card_image,
             agent_username,
             agent_password,
+            agent_signature,
             addby,
             adddate
             )  VALUES ('".  
@@ -231,6 +233,7 @@ class AgentModel extends BaseModel{
             $data['id_card_image']."','".
             $data['agent_username']."','".
             $data['agent_password']."','".
+            $data['agent_signature']."','".
             $data['addby']."',
             NOW()
         )";

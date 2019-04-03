@@ -89,8 +89,8 @@ class DealerModel extends BaseModel{
     }
 
     function getDealerByStatus($code){
-        $sql = " SELECT dealer_code, dealer_prefix, CONCAT(dealer_name,' ',dealer_lastname) as name,
-        dealer_mobile, dealer_line, dealer_fund_name, dealer_fund_budget, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME
+        $sql = " SELECT dealer_code, dealer_prefix, CONCAT(dealer_name,' ',dealer_lastname) as name, 
+        dealer_mobile, dealer_line, dealer_fund_name, dealer_fund_budget, PROVINCE_NAME, AMPHUR_NAME, DISTRICT_NAME, VILLAGE_NAME 
         FROM tb_dealer 
         LEFT JOIN tb_village ON tb_dealer.village_id = tb_village.VILLAGE_ID 
         LEFT JOIN tb_district ON tb_village.DISTRICT_ID = tb_district.DISTRICT_ID 
@@ -183,6 +183,7 @@ class DealerModel extends BaseModel{
         id_card_image = '".static::$db->real_escape_string($data['id_card_image'])."', 
         dealer_username = '".static::$db->real_escape_string($data['dealer_username'])."', 
         dealer_password = '".static::$db->real_escape_string($data['dealer_password'])."', 
+        dealer_signature = '".$data['dealer_signature']."', 
         updateby = '".$data['updateby']."', 
         lastupdate = NOW() 
         WHERE dealer_code = '$code'
@@ -225,6 +226,7 @@ class DealerModel extends BaseModel{
             id_card_image,
             dealer_username,
             dealer_password,
+            dealer_signature,
             addby,
             adddate
             )  VALUES ('".
@@ -243,6 +245,7 @@ class DealerModel extends BaseModel{
             $data['id_card_image']."','".
             $data['dealer_username']."','".
             $data['dealer_password']."','".
+            $data['dealer_signature']."','".
             $data['addby']."',
             NOW()
         )";

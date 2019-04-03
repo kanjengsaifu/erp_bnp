@@ -53,7 +53,7 @@ if ($_GET['action'] == 'insert'&&$menu['dealer']['add']){
 }else if ($_GET['action'] == 'add'&&$menu['dealer']['add']){
 
     if ($_POST['dealer_code'] == ''){
-        $dealer_code = "AG".$_POST['province_id'].$_POST['district_id'];
+        $dealer_code = "DL".$_POST['province_id'].$_POST['district_id'];
         $dealer_code = $dealer_model->getDealerLastCode($dealer_code,4);  
     }else{
         $dealer_code = $_POST['dealer_code'];

@@ -174,6 +174,7 @@ class ContractorModel extends BaseModel{
         house_regis_image = '".static::$db->real_escape_string($data['house_regis_image'])."', 
         account_image = '".static::$db->real_escape_string($data['account_image'])."', 
         status_code = '".static::$db->real_escape_string($data['status_code'])."',
+        contractor_signature = '".$data['contractor_signature']."',
         updateby = '".$data['updateby']."', 
         lastupdate = NOW() 
         WHERE contractor_code = '".static::$db->real_escape_string($code)."'
@@ -212,6 +213,7 @@ class ContractorModel extends BaseModel{
             id_card_image,
             house_regis_image,
             account_image,
+            contractor_signature,
             addby,
             adddate
             )  VALUES ('".  
@@ -228,6 +230,7 @@ class ContractorModel extends BaseModel{
             $data['id_card_image']."','".
             $data['house_regis_image']."','".
             $data['account_image']."','".
+            $data['contractor_signature']."','".
             $data['addby']."',
             NOW()
         )";

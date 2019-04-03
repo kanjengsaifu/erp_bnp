@@ -1,8 +1,5 @@
 <?php
-
-// header('Access-Control-Allow-Origin: *');  
-// header("Access-Control-Allow-Methods: *");
-// header("Content-Type: application/json; charset=UTF-8");
+ 
 date_default_timezone_set('asia/bangkok');
 
 require_once('../models/ContractorModel.php');
@@ -30,13 +27,7 @@ $date="$d1$d2$d3$d4$d5$d6";
 $target_dir = "../upload/contractor/";
 
 $contractor_code = $_POST['code'];
-$location_code = $_POST['location'];
-
-// $json = file_get_contents('php://input');
-    
-// $obj = json_decode($json,true); 
-
-// echo json_encode($_POST['action']);
+$location_code = $_POST['location']; 
 
 if ($_POST['action'] == 'insert'){ 
     $province = $address_model->getProvinceBy();
@@ -57,25 +48,6 @@ if ($_POST['action'] == 'insert'){
     $result_detail['result'] = true;
     echo json_encode($result_detail); 
     
-}else if ($_POST['action'] == 'delete'){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
-
-    $img_delete = ['profile_image','id_card_image','house_regis_image','account_image'];
-
-    for ($i=0; $i<count($img_delete); $i++){
-        if ($contractor[$img_delete[$i]] != ''){
-            $target_file = $target_dir .$contractor[$img_delete[$i]];
-            if (file_exists($target_file)) {
-                unlink($target_file);
-            }
-        }
-    }
-
-    $result = $zone_contractor_model->deleteZoneContractorByContractor($contractor_code);
-    $result = $contractor_location_model->deleteContractorLocationBy($contractor_code);
-    $result = $contractor_model->deleteContractorByCode($contractor_code);
-
-    ?> <script> window.location="index.php?app=contractor"</script> <?php
 }else if ($_POST['action'] == 'add'){
     if ($_POST['contractor_code'] == ''){
         $contractor_code = "CT".$d2.$d3;
@@ -94,7 +66,8 @@ if ($_POST['action'] == 'insert'){
     $data['village_id'] = $_POST['village_id'];
     $data['contractor_mobile'] = $_POST['contractor_mobile'];
     $data['contractor_line'] = $_POST['contractor_line'];
-    $data['addby'] = $login_user['user_code'];
+    $data['contractor_signature'] = $_POST['contractor_signature'];
+    $data['addby'] = $_POST['addby'];
 
     // $input_image = ['profile_image','id_card_image','house_regis_image','account_image']; 
     
@@ -133,41 +106,77 @@ if ($_POST['action'] == 'insert'){
         }
     }
     if($check){
-        $result = $contractor_model->insertContractor($data);
+        $result_check = $contractor_model->insertContractor($data);
 
-        if($result!=false){
-            $result_detail['result'] = true;
-            echo json_encode($result_detail);
+        if($result_check!=false){
+            if($_POST['location_checked']==true){ 
+                $code = date('y').$contractor_code;
+                $location_code = $contractor_location_model->getContractorLocationLastCode($code,3);  
+                if($location_code != '' && $contractor_code!=""){
+                    $check = true;
+                    $data['location_code'] = $location_code;
+                    $data['contractor_code'] = $contractor_code;
+                    $data['location_lat'] = $_POST['location_lat'];
+                    $data['location_long'] = $_POST['location_long'];
+                    $data['addby'] = $_POST['addby'];
+    
+                    $result_check = $contractor_location_model->insertContractorLocation($data);
+    
+                    if($result_check!=false){  
+                        $result ['result'] = true;
+                        $result ['result_location'] = true;
+                        echo json_encode($result);
+                    }else{
+                        $result ['result_text'] = 'err: location';
+                        $result ['result'] = true;
+                        $result ['result_location'] = false;
+                        echo json_encode($result);
+                    }
+                }else{
+                    $result ['result_text'] = 'err: location';
+                    $result ['result'] = true;
+                    $result ['result_location'] = false;
+                    echo json_encode($result);
+                }
+            }else{ 
+                $result['result'] = true;
+                $result ['result_location'] = true;
+                echo json_encode($result);
+            } 
+
         }else{
             for ($i=0; $i<count($input_image); $i++){
-                if ($data[$input_image[$i]] != ''){
-                    $target_file = $target_dir .$data[$input_image[$i]];
+                if ($_FILES[$input_image[$i]]['name'] != ''){
+                    $target_file = $target_dir .$_FILES[$input_image[$i]]['name'];
                     if (file_exists($target_file)) {
                         unlink($target_file);
                     }
                 }
             }
             $result ['result_text'] = 'it can not upload';
-            $result ['result'] = false;
+            $result ['result'] = false; 
+            $result ['result_location'] = true;
             echo json_encode($result);
         }
     }else{
         for ($i=0; $i<count($input_image); $i++){
-            if ($data[$input_image[$i]] != ''){
-                $target_file = $target_dir .$data[$input_image[$i]];
+            if ($_FILES[$input_image[$i]]['name'] != ''){
+                $target_file = $target_dir .$_FILES[$input_image[$i]]['name'];
                 if (file_exists($target_file)) {
                     unlink($target_file);
                 }
             }
         }
         $result ['result_text'] = 'it can not upload';
-        $result ['result'] = false;
+        $result ['result'] = false; 
+        $result ['result_location'] = true;
         echo json_encode($result);
     } 
 }else if ($_POST['action'] == 'edit'){
     if($contractor_code!=''){
         $check = true;
         $data = [];   
+        $data['status_code'] = $_POST['status_code'];
         $data['contractor_prefix'] = $_POST['contractor_prefix'];
         $data['contractor_name'] = $_POST['contractor_name'];
         $data['contractor_lastname'] = $_POST['contractor_lastname'];
@@ -175,6 +184,7 @@ if ($_POST['action'] == 'insert'){
         $data['village_id'] = $_POST['village_id'];
         $data['contractor_mobile'] = $_POST['contractor_mobile'];
         $data['contractor_line'] = $_POST['contractor_line'];
+        $data['contractor_signature'] = $_POST['contractor_signature'];
         $data['updateby'] = $login_user['user_code'];
 
         $img_upload = ['profile_image','id_card_image','house_regis_image','account_image'];
@@ -229,8 +239,8 @@ if ($_POST['action'] == 'insert'){
                 echo json_encode($result);
             }else{
                 for ($i=0; $i<count($input_image); $i++){
-                    if ($data[$input_image[$i]] != ''){
-                        $target_file = $target_dir .$data[$input_image[$i]];
+                    if ($_FILES[$input_image[$i]]['name'] != ''){
+                        $target_file = $target_dir .$_FILES[$input_image[$i]]['name'];
                         if (file_exists($target_file)) {
                             unlink($target_file);
                         }
@@ -242,8 +252,8 @@ if ($_POST['action'] == 'insert'){
             }
         }else{
             for ($i=0; $i<count($input_image); $i++){
-                if ($data[$input_image[$i]] != ''){
-                    $target_file = $target_dir .$data[$input_image[$i]];
+                if ($_FILES[$input_image[$i]]['name'] != ''){
+                    $target_file = $target_dir .$_FILES[$input_image[$i]]['name'];
                     if (file_exists($target_file)) {
                         unlink($target_file);
                     }
@@ -258,84 +268,5 @@ if ($_POST['action'] == 'insert'){
         $result ['result'] = false;
         echo json_encode($result);
     }
-}else if ($_POST['action'] == 'approve'){
-    if(isset($_POST['contractor_code'])){
-        $result = $contractor_model->approveContractorByCode($_POST['contractor_code']);
-    }
-
-    ?> <script> window.location="index.php?app=contractor" </script> <?php
-}else if ($_POST['action'] == 'insert-location'){ 
-    require_once($path.'insert-location.inc.php');
-}else if ($_POST['action'] == 'update-location'){ 
-    $location = $contractor_location_model->getContractorLocationByCode($location_code);
-    require_once($path.'update-location.inc.php');
-}else if ($_POST['action'] == 'add-location'){
-    $code = date('y').$_POST['contractor_code'];
-    $location_code = $contractor_location_model->getContractorLocationLastCode($code,3);  
-
-    if($location_code != '' && isset($_POST['contractor_code'])){
-        $check = true;
-        $data['location_code'] = $location_code;
-        $data['contractor_code'] = $_POST['contractor_code'];
-        $data['location_lat'] = $_POST['location_lat'];
-        $data['location_long'] = $_POST['location_long'];
-        $data['addby'] = $login_user['user_code'];
-
-        $result = $contractor_location_model->insertContractorLocation($data);
-
-        if($result){
-            ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $_POST['contractor_code']; ?>" </script> <?php
-        }else{
-            ?> <script> window.history.back(); </script> <?php
-        }
-    }else{
-        ?> <script> window.history.back(); </script> <?php
-    }
-}else if ($_POST['action'] == 'edit-location'){
-    $code = date('y').$_POST['contractor_code'];
-    $location_code = $contractor_location_model->getContractorLocationLastCode($code,3);  
-
-    if($location_code != '' && isset($_POST['contractor_code'])){
-        $check = true;
-        $data['location_code'] = $location_code;
-        $data['contractor_code'] = $_POST['contractor_code'];
-        $data['location_lat'] = $_POST['location_lat'];
-        $data['location_long'] = $_POST['location_long'];
-        $data['addby'] = $login_user['user_code'];
-
-        $result = $contractor_location_model->insertContractorLocation($data);
-
-        if($result){
-            ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $_POST['contractor_code']; ?>" </script> <?php
-        }else{
-            ?> <script> window.history.back(); </script> <?php
-        }
-    }else{
-        ?> <script> window.history.back(); </script> <?php
-    }
-}else if ($_POST['action'] == 'delete-location'){
-    $location = $contractor_location_model->getContractorLocationByCode($location_code);
-    $result = $contractor_location_model->deleteContractorLocationByCode($location_code);
-
-    if($result){
-        ?> <script> window.location="index.php?app=contractor&action=update&code=<?php echo $location['contractor_code']; ?>" </script> <?php
-    }else{
-        ?> <script> window.history.back(); </script> <?php
-    }
-}else if ($_POST['action'] == 'detail'){
-    $contractor = $contractor_model->getContractorByCode($contractor_code);
-    require_once($path.'detail.inc.php');
-}else if ($_POST['status'] == 'pending'){
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('00');
-    require_once($path.'view.inc.php');
-}else if ($_POST['status'] == 'cease'){
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('02');
-    require_once($path.'view.inc.php');
-}else{
-    $on_pending = $contractor_model->countContractorByStatus('00');
-    $contractor = $contractor_model->getContractorByStatus('01');
-    require_once($path.'view.inc.php');
-}
+} 
 ?>
