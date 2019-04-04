@@ -45,6 +45,39 @@
         requestDelay: 400
     };
 
+    var option_others = {
+        url: function(keyword) {
+            return "modules/invoice_supplier/controllers/getProductNotEventStockBy.php?keyword="+keyword;
+        },
+        list: {
+            maxNumberOfElements: 10,
+            match: {
+                enabled: true
+            }
+        },
+        getValue: function(element) {
+            return element.product_code ;
+        },
+        template: {
+            type: "description",
+            fields: {
+                description: "product_name"
+            }
+        },
+        ajaxSettings: {
+            dataType: "json",
+            method: "POST",
+            data: {
+                dataType: "json"
+            }
+        },
+        preparePostData: function(data) {
+            data.keyword = $(".other-ajax-post:focus").val();
+            return data;
+        },
+        requestDelay: 400
+    };
+
     var stock_group_data = [
     <?php for($i = 0 ; $i < count($stock_groups) ; $i++ ){?>
         {
@@ -300,6 +333,50 @@
             document.getElementById("supplier_code").focus();
         }
     } 
+
+    function add_row_new(id){
+        $('#modalAdd').modal('hide');
+        var index = 0;
+        if(isNaN($(id).closest('table').children('tbody').children('tr').length)){
+            index = 1;
+        }else{
+            index = $(id).closest('table').children('tbody').children('tr').length + 1;
+        }
+        $(id).closest('table').children('tbody').append(
+            '<tr class="odd gradeX">'+
+                '<td class="sorter">'+
+                '</td>'+ 
+                '<td>'+
+                    '<input type="hidden" name="purchase_order_list_code[]" value="">'+ 
+                    '<input type="hidden" name="invoice_supplier_list_cost[]" value="0">'+
+                    '<input type="hidden" name="invoice_supplier_list_cost_total[]" value="0">'+
+                    '<input class="other-ajax-post form-control" name="product_code[]" onchange="show_data(this);" placeholder="Product Code" value="">'+ 
+                    '<input type="text" class="form-control" name="product_name[]" readonly>'+
+                    '<input type="text" class="form-control" name="invoice_supplier_list_product_name[]" placeholder="Product Name (Supplier)">'+
+                    '<input type="text" class="form-control" name="invoice_supplier_list_product_detail[]" placeholder="Product Detail (Supplier)">'+
+                    '<input type="text" class="form-control" name="invoice_supplier_list_remark[]" placeholder="Remark"/>'+
+                '</td>'+
+                '<td>'+
+                    '<select name="stock_group_code[]" class="form-control select" data-live-search="true" disabled></select>'+ 
+                '</td>'+
+                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="invoice_supplier_list_qty[]" value="1" onchange="update_sum(this);"></td>'+
+                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="invoice_supplier_list_price[]" value="0" onchange="update_sum(this);"></td>'+
+                '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="invoice_supplier_list_total[]" value="0" onchange="update_sum(this);" readonly></td>'+
+                '<td>'+
+                    '<a href="javascript:;" onclick="product_detail_blank(this);">'+
+                        '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
+                    '</a> '+
+                    '<a href="javascript:;" onclick="delete_row(this);" style="color:red;">'+
+                        '<i class="fa fa-times" aria-hidden="true"></i>'+
+                    '</a>'+
+                '</td>'+
+            '</tr>'
+        );
+
+        $(".other-ajax-post").easyAutocomplete(option_others);
+        $(id).closest('table').children('tbody').children('tr:last').children('td').children('select[name="stock_group_code[]"]').selectpicker();
+        update_line();
+    }
     
     function search_pop_like(id){
         $('.table-pop').hide();
@@ -441,13 +518,9 @@
                         '<td class="sorter">'+
                         '</td>'+ 
                         '<td>'+
-                            '<input type="hidden" name="invoice_supplier_list_code[]" value="0">'+ 
-                            '<input type="hidden" name="purchase_order_list_code[]" value="'+ data_buffer[i].purchase_order_list_code +'">'+   
-                            '<input type="hidden" name="invoice_supplier_list_fix_type[]" value="no-fix">'+     
-                            '<input type="hidden" name="invoice_supplier_list_freight[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_freight_total[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_cost[]" value="0">'+     
-                            '<input type="hidden" name="invoice_supplier_list_cost_total[]" value="0">'+     
+                            '<input type="hidden" name="purchase_order_list_code[]" value="'+ data_buffer[i].purchase_order_list_code +'">'+
+                            '<input type="hidden" name="invoice_supplier_list_cost[]" value="'+ data_buffer[i].invoice_supplier_list_cost +'">'+
+                            '<input type="hidden" name="invoice_supplier_list_cost_total[]" value="'+ data_buffer[i].invoice_supplier_list_cost_total +'">'+
 					        '<input type="text" class="form-control" name="product_code[]" placeholder="Product Code" value="'+ data_buffer[i].product_code +'"readonly>'+ 
                             '<input type="text" class="form-control" name="product_name[]" value="'+ data_buffer[i].product_name +'" readonly>'+
                             '<input type="text" class="form-control" name="invoice_supplier_list_product_name[]" placeholder="Product Name (Supplier)">'+
@@ -603,7 +676,7 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-md-8">
-                เพิ่มใบกำกับภาษีรับเข้า / Add Invoice Supplier
+                เพิ่มใบกำกับภาษีรับเข้า Add Invoice Supplier
             </div>
             <div class="col-md-4">
                 <table width="100%">
@@ -629,7 +702,7 @@
             </div>
         </div> 
     </div>
-    <!-- /.panel-heading -->
+    <!--.panel-heading -->
     <div class="panel-body">
         <form id="form_target" role="form" method="post" onsubmit="return check();" action="index.php?app=invoice_supplier&action=add" >
             <div class="row">
@@ -637,14 +710,14 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>รหัสผู้ขาย / Supplier Code <font color="#F00"><b>*</b></font></label>
+                                <label>รหัสผู้ขาย Supplier Code <font color="#F00"><b>*</b></font></label>
                                 <input id="supplier_code" name="supplier_code" class="form-control" value="<? echo $supplier['supplier_code'];?>" readonly>
                                 <p class="help-block">Example : A0001.</p>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>ผู้ขาย / Supplier <font color="#F00"><b>*</b></font> </label>
+                                <label>ผู้ขาย Supplier <font color="#F00"><b>*</b></font> </label>
                                 <select id="supplier_select" name="supplier_select" class="form-control select" onchange="get_supplier_detail()" data-live-search="true">
                                     <option value="">Select</option>
                                     <?php 
@@ -660,26 +733,26 @@
                         </div>
                         <div class="col-lg-8">
                             <div class="form-group">
-                                <label>ชื่อตามใบกำกับภาษี / Full name <font color="#F00"><b>*</b></font></label>
+                                <label>ชื่อตามใบกำกับภาษี Full name <font color="#F00"><b>*</b></font></label>
                                 <input id="invoice_supplier_name" name="invoice_supplier_name" class="form-control" value="<?php echo $supplier['supplier_name_en'];?>">
                                 <p class="help-block">Example : Revel soft.</p>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>สาขา / Branch <font color="#F00"><b>*</b></font></label>
+                                <label>สาขา Branch <font color="#F00"><b>*</b></font></label>
                                 <input id="invoice_supplier_branch" name="invoice_supplier_branch" class="form-control" value="<?php echo $supplier['supplier_branch'];?>">
                                 <p class="help-block">Example : 0000 </p>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label>ที่อยู่ตามใบกำภาษี / Address <font color="#F00"><b>*</b></font></label>
+                                <label>ที่อยู่ตามใบกำภาษี Address <font color="#F00"><b>*</b></font></label>
                                 <textarea id="invoice_supplier_address" name="invoice_supplier_address" class="form-control" rows="5"><?php echo $supplier['supplier_address_1'] ."\n". $supplier['supplier_address_2'] ."\n". $supplier['supplier_address_3'];?></textarea>
                                 <p class="help-block">Example : IN.</p>
                             </div>
                             <div class="form-group">
-                                <label>เลขประจำตัวผู้เสียภาษี / Tax <font color="#F00"><b>*</b></font></label>
+                                <label>เลขประจำตัวผู้เสียภาษี Tax <font color="#F00"><b>*</b></font></label>
                                 <input id="invoice_supplier_tax" name="invoice_supplier_tax" class="form-control" value="<?php echo $supplier['supplier_tax'];?>">
                                 <p class="help-block">Example : 0305559003597.</p>
                             </div>
@@ -692,7 +765,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>วันที่รับสินค้า / Date receive</label>
+                                <label>วันที่รับสินค้า Date receive</label>
                                 <input type="text" id="invoice_supplier_receive_date" name="invoice_supplier_receive_date" value="<?PHP echo date('d').'-'.date('m').'-'.date('Y');?>" class="form-control calendar" onchange="check_date(this);" readonly>
                                 <input id="date_check" type="hidden" value="">
                                 <p class="help-block">31-01-2018</p>
@@ -700,7 +773,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>หมายเลขรับใบกำกับภาษี / receive code <font color="#F00"><b>*</b></font></label>
+                                <label>หมายเลขรับใบกำกับภาษี receive code <font color="#F00"><b>*</b></font></label>
                                 <input id="invoice_supplier_code" name="invoice_supplier_code" class="form-control" onchange="check_code(this)" value="<?php echo $last_code;?>" >
                                 <input id="invoice_check" type="hidden" value="">
                                 <p class="help-block">Example : RR1801001 OR RF1801001.</p>
@@ -709,7 +782,7 @@
 
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>วันที่ออกใบกำกับภาษี / Date</label>
+                                <label>วันที่ออกใบกำกับภาษี Date</label>
                                 <input type="text" id="invoice_supplier_craete_date" name="invoice_supplier_craete_date" class="form-control calendar" onchange="update_invoice_supplier_due_day(this)" readonly>
                                 <p class="help-block">31-01-2018</p>
                             </div>
@@ -717,7 +790,7 @@
 
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>หมายเลขใบกำกับภาษี / Inv code <font color="#F00"><b>*</b></font></label>
+                                <label>หมายเลขใบกำกับภาษี Inv code <font color="#F00"><b>*</b></font></label>
                                 <input id="invoice_code_receive" name="invoice_code_receive" class="form-control" >
                                 <p class="help-block">Example : INV1801001.</p>
                             </div>
@@ -725,7 +798,7 @@
 
                         <div class="col-lg-6" style="display:none">
                             <div class="form-group">
-                                <label>เครดิต / Credit Day </label>
+                                <label>เครดิต Credit Day </label>
                                 <input type="text" id="invoice_supplier_due_day" name="invoice_supplier_due_day" class="form-control" value="<?PHP echo $supplier['credit_day']; ?>"> 
                                 <p class="help-block">30</p>
                             </div>
@@ -733,7 +806,7 @@
 
                         <div class="col-lg-6" style="display:none">
                             <div class="form-group">
-                                <label>กำหนดชำระ / Due </label>
+                                <label>กำหนดชำระ Due </label>
                                 <input type="text" id="invoice_supplier_due_date" name="invoice_supplier_due_date" class="form-control calendar" readonly> 
                                 <p class="help-block">01-03-2018 </p>
                             </div>
@@ -741,7 +814,7 @@
 
                         <div class="col-lg-12" style="display:none">
                             <div class="form-group">
-                                <label>เงื่อนไขการชำระ / Term </label>
+                                <label>เงื่อนไขการชำระ Term </label>
                                 <input type="text" id="invoice_supplier_term" name="invoice_supplier_term" class="form-control" value="<?PHP echo $supplier['condition_pay']; ?>">
                                 <p class="help-block">Bank </p>
                             </div>
@@ -749,7 +822,7 @@
 
                         <div class="col-lg-12" style="display:none">
                             <div class="form-group">
-                                <label>ผู้รับใบกำกับภาษี / Employee <font color="#F00"><b>*</b></font> </label>
+                                <label>ผู้รับใบกำกับภาษี Employee <font color="#F00"><b>*</b></font> </label>
                                 <select id="employee_code" name="employee_code" class="form-control select" data-live-search="true">
                                     <option value="">Select</option>
                                     <?php 
@@ -773,7 +846,7 @@
                 <thead>
                     <tr>
                         <th style="text-align:center;" width="60">ลำดับ </th>
-                        <th style="text-align:center;">รหัสสินค้า / รายละเอียดสินค้า </th>
+                        <th style="text-align:center;">รหัสสินค้า รายละเอียดสินค้า </th>
                         <th style="text-align:center;" width="150">คลังสินค้า </th>
                         <th style="text-align:center;" width="150">จำนวน </th>
                         <th style="text-align:center;" width="150">ราคาต่อหน่วยบาท </th>
@@ -797,15 +870,10 @@
                         <td class="sorter">
                             <?PHP echo ($i + 1); ?>.
                         </td>
-                        <td><input type="hidden" name="invoice_supplier_list_code[]" value="0">   
+                        <td>
                             <input type="hidden" name="purchase_order_list_code[]" value="<?PHP echo $invoice_supplier_lists[$i]['purchase_order_list_code'];?>">  
-                            <input type="hidden" name="invoice_supplier_list_fix_type[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_fix_type'];?>">
-                            <input type="hidden" name="invoice_supplier_list_freight[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_freight'];?>">
-                            <input type="hidden" name="invoice_supplier_list_freight_total[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_freight_total'];?>">
                             <input type="hidden" name="invoice_supplier_list_cost[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_cost'];?>">
                             <input type="hidden" name="invoice_supplier_list_cost_total[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_cost_total'];?>">
-                            <input type="hidden" name="old_cost[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_cost'];?>">
-                            <input type="hidden" name="old_qty[]" value="<?PHP echo $invoice_supplier_lists[$i]['invoice_supplier_list_qty'];?>">
                             <input type="text" class="form-control" name="product_code[]" placeholder="Product Code" value="<?php echo $invoice_supplier_lists[$i]['product_code']; ?>" readonly>
                             <input type="text" class="form-control" name="product_name[]" readonly value="<?php echo $invoice_supplier_lists[$i]['product_name']; ?>">
                             <input type="text" class="form-control" name="invoice_supplier_list_product_name[]" placeholder="Product Name (Supplier)">
@@ -843,17 +911,20 @@
 
                 <tfoot>
                     <tr class="odd gradeX">
-                        <td colspan="7" align="center">
+                        <td>
+                            <button type="button" class="btn btn-success" onclick="add_row_new(this);">+ Other</button>
+                        </td>
+                        <td colspan="6" align="center">
                             <a id="add_product_tag" name="add_product_tag" href="javascript:;" onclick="show_purchase_order(this);" style="color:red;">
                                 <i class="fa fa-plus" aria-hidden="true"></i> 
-                                <span>เพิ่มสินค้า / Add product</span>
+                                <span>เพิ่มสินค้า Add product</span>
                             </a>
                             <div id="modalAdd" class="modal fade" tabindex="-1" role="dialog">
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">เลือกรายการสินค้า / Choose product</h4>
+                                            <h4 class="modal-title">เลือกรายการสินค้า Choose product</h4>
                                             <div class="col-lg-8">
                                                 <div id="data_show_list" class="form-control alert-box alert-info" style="text-align: left;" role="alert"></div>
                                             </div>
@@ -868,7 +939,7 @@
                                             <table width="100%" class="table table-striped table-bordered table-hover table-pop" >
                                                 <thead>
                                                     <tr>
-                                                        <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)" /></th>
+                                                        <th width="24"><input type="checkbox" value="all" id="check_all" onclick="checkAll(this)"></th>
                                                         <th style="text-align:center;">รหัสสินค้า </th>
                                                         <th style="text-align:center;">ชื่อสินค้า </th>
                                                         <th style="text-align:center;" width="150">จำนวน </th>
@@ -890,16 +961,16 @@
                                                 <button type="button" class="btn btn-primary" onclick="add_row(this);">Add Product</button>
                                             </div>
                                         </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
+                                    </div><!--.modal-content -->
+                                </div><!--.modal-dialog -->
+                            </div><!--.modal -->
                         </td>
                     </tr>
 
                     <tr class="odd gradeX"> 
                         <td colspan="3" rowspan="3"></td>
                         <td colspan="2" align="left" style="vertical-align: middle;">
-                            <span>ราคารวมทั้งสิ้น / Sub total</span>
+                            <span>ราคารวมทั้งสิ้น Sub total</span>
                         </td>
                         <td>
                         <?PHP
@@ -920,7 +991,7 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span>
+                                        <span>จำนวนภาษีมูลค่าเพิ่ม Vat</span>
                                     </td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
                                         <input type="hidden" id="invoice_supplier_vat_type" name="invoice_supplier_vat_type" value="<?php echo $supplier['vat_type'];?>">
@@ -949,7 +1020,7 @@
                     </tr>
                     <tr class="odd gradeX">
                         <td colspan="2" align="left" style="vertical-align: middle;">
-                            <span>จำนวนเงินรวมทั้งสิ้น / Net Total</span>
+                            <span>จำนวนเงินรวมทั้งสิ้น Net Total</span>
                         </td>
                         <td>
                             <?PHP 
@@ -972,7 +1043,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <label>ค่าขนส่งสินค้า / Freight in<font color="#F00"><b>*</b></font></label>
+                        <label>ค่าขนส่งสินค้า Freight </label>
                         <div>
                             <table name="tb_freight" class="table table-striped table-bordered table-hover">
                                 <thead>
@@ -992,7 +1063,7 @@
                                             <input type="text" class="form-control" name="invoice_supplier_freight_list_name[]" value="<?php echo $invoice_supplier_freight_lists[$i]['invoice_supplier_freight_list_name']; ?>">
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" style="text-align:right;" name="invoice_supplier_freight_list_total[]" value="<?php echo number_format($invoice_supplier_freight_lists[$i]['invoice_supplier_freight_list_total'],2);?>" onchange="calculate_freight();calculateCost();" />
+                                            <input type="text" class="form-control" style="text-align:right;" name="invoice_supplier_freight_list_total[]" value="<?php echo number_format($invoice_supplier_freight_lists[$i]['invoice_supplier_freight_list_total'],2);?>" onchange="calculate_freight();calculateCost();">
                                         </td>
                                         <td>
                                             <a href="javascript:;" onclick="delete_row(this);" style="color:red;">
@@ -1007,7 +1078,7 @@
                                         <td colspan="4" align="center" >
                                             <a href="javascript:;" onclick="add_freight_list(this);" style="color:red;">
                                                 <i class="fa fa-plus" aria-hidden="true"></i> 
-                                                <span>เพิ่มรายการ / Add list</span>
+                                                <span>เพิ่มรายการ Add list</span>
                                             </a>
                                         </td>
                                     </tr>

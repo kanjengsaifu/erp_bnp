@@ -7,6 +7,8 @@ require_once('../models/ProductModel.php');
 require_once('../models/SupplierModel.php');
 require_once('../models/StockGroupModel.php');
 
+require_once('../functions/DateTimeFunction.func.php');
+
 $path = "modules/purchase_request/views/";
 
 $user_model = new UserModel;
@@ -16,6 +18,8 @@ $purchase_request_list_model = new PurchaseRequestListModel;
 $product_model = new ProductModel;
 $supplier_model = new SupplierModel; 
 $stock_group_model = new StockGroupModel; 
+
+$date_time = new DateTimeFunction;
 
 $purchase_request_code = $_GET['code'];
 
@@ -56,20 +60,13 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
         $data = [];
         $data['purchase_request_code'] = $_POST['purchase_request_code'];
         $data['employee_code'] = $_POST['employee_code'];
-        
-        if (trim($_POST['purchase_request_date']) != ''){
-            $due_date = explode("-",$_POST['purchase_request_date']);
-            $data['purchase_request_date'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
-        }
-
-        if (trim($_POST['purchase_request_alert']) != ''){
-            $due_date = explode("-",$_POST['purchase_request_alert']);
-            $data['purchase_request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
-        }
-
+        $data['purchase_request_date'] = $date_time->changeDateFormat($_POST['purchase_request_date']);
         $data['purchase_request_remark'] = $_POST['purchase_request_remark'];
         $data['purchase_request_revise_code'] = $_POST['purchase_request_code'];
         $data['addby'] = $login_user['user_code'];
+        if (trim($_POST['purchase_request_alert']) != ''){
+            $data['purchase_request_alert'] = $date_time->changeDateFormat($_POST['purchase_request_alert']);
+        }
 
         $result = $purchase_request_model->insertPurchaseRequest($data); 
 
@@ -103,22 +100,17 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     if(isset($_POST['purchase_request_code'])){
         $data = [];
         $data['employee_code'] = $_POST['employee_code'];
-        $data['supplier_code'] = $_POST['supplier_code'];
-        if (trim($_POST['purchase_request_date']) != ''){
-            $due_date = explode("-",$_POST['purchase_request_date']);
-            $data['purchase_request_date'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
-        }
-
-        if (trim($_POST['purchase_request_alert']) != ''){
-            $due_date = explode("-",$_POST['purchase_request_alert']);
-            $data['purchase_request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
-        }
+        $data['purchase_request_date'] = $date_time->changeDateFormat($_POST['purchase_request_date']);
         $data['purchase_request_remark'] = $_POST['purchase_request_remark'];
+        $data['updateby'] = $login_user['user_code'];
+        if (trim($_POST['purchase_request_alert']) != ''){
+            $data['purchase_request_alert'] = $date_time->changeDateFormat($_POST['purchase_request_alert']);
+        }
 
-        $result = $purchase_request_model->updatePurchaseRequestByCode($purchase_request_code,$data);
+        $result = $purchase_request_model->updatePurchaseRequestByCode($_POST['purchase_request_code'],$data);
 
         if($result){
-            $purchase_request_list_model->deletePurchaseRequestListByPurchaseRequestCodeNotIN($purchase_request_code,$purchase_request_list_code);
+            $purchase_request_list_model->deletePurchaseRequestListByPurchaseRequestCodeNotIN($_POST['purchase_request_code'],$_POST['purchase_request_list_code']);
 
             for($i=0; $i<count($_POST['product_code']); $i++){
                 $data = [];
@@ -138,13 +130,20 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
                 }
             }
 
-            $notification_model->setNotification("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$_POST['purchase_request_code']." ".$data['urgent_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code","license_manager_page",'High');
-            ?> <script>window.location="index.php?app=purchase_request"</script> <?php
+            // $notification_model->setNotification("Purchase Request",$_POST['purchase_request_code'],"Purchase Request <br>No. ".$_POST['purchase_request_code']." ".$data['urgent_status'],"index.php?app=purchase_request&action=detail&code=".$_POST['purchase_request_code'],"license_manager_page",'High');
+           
+            ?> 
+                <script>window.location="index.php?app=purchase_request"</script>
+            <?php
         }else{
-            ?> <script>window.history.back();</script> <?php
+            ?> 
+                <script>window.history.back();</script> 
+            <?php
         }
     }else{
-        ?> <script>window.history.back();</script> <?php
+        ?> 
+            <script>window.history.back();</script>
+        <?php
     }
 }else if ($_GET['action'] == 'revise' && $menu['purchase_request']['edit']){
     $purchase_request = $purchase_request_model->getPurchaseRequestByCode($purchase_request_code);

@@ -930,7 +930,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label>ค่าขนส่งสินค้า / Freight in<font color="#F00"><b>*</b></font></label>
+                        <label>ค่าขนส่งสินค้า / Freight</label>
                         <div>
                             <table name="tb_freight" class="table table-striped table-bordered table-hover" >
                                 <thead>

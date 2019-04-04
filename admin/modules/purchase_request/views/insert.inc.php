@@ -96,7 +96,7 @@
         check_code();
         
         if($('#alert_code').hasClass('alert-danger')){
-            document.getElementById("agent_code").focus();
+            document.getElementById("purchase_request_code").focus();
             return false;
         }else if(employee_code.length == 0){
             alert("Please input employee");

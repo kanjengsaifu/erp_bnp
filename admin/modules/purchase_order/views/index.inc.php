@@ -214,13 +214,19 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             }
         }
 
-        $data['purchase_order_code'] = $_POST['purchase_order_code'];
         $data['employee_code'] = $_POST['employee_code'];
         $data['supplier_code'] = $_POST['supplier_code'];
         $data['purchase_order_category'] = $_POST['purchase_order_category'];
-        $data['purchase_order_date'] = $_POST['purchase_order_date'];
+        $data['purchase_order_date'] = $date_time->changeDateFormat($_POST['purchase_order_date']);
+        $data['purchase_order_remark'] = $_POST['purchase_order_remark'];
+        $data['purchase_order_total_price'] = (float)filter_var($_POST['purchase_order_remark'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_vat'] = (float)filter_var($_POST['purchase_order_vat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_vat_price'] = (float)filter_var($_POST['purchase_order_vat_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_net_price'] = (float)filter_var($_POST['purchase_order_net_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_delivery_by'] = $_POST['purchase_order_delivery_by'];
         $data['purchase_order_credit_term'] = $_POST['purchase_order_credit_term'];
         $data['purchase_order_approve_by'] = $login_user['user_code'];
+        $data['updateby'] = $login_user['user_code'];
 
         if($_POST['purchase_order_approve_status'] == 'Approve'){
             $data['purchase_order_status'] = 'Approved';
@@ -230,20 +236,12 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             $data['purchase_order_status'] = 'New';
         }
 
-        $data['purchase_order_delivery_by'] = $_POST['purchase_order_delivery_by'];
-        $data['purchase_order_remark'] = $_POST['purchase_order_remark'];
-        $data['purchase_order_total_price'] = (float)filter_var($_POST['purchase_order_remark'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_order_vat'] = (float)filter_var($_POST['purchase_order_vat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_order_vat_price'] = (float)filter_var($_POST['purchase_order_vat_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_order_net_price'] = (float)filter_var($_POST['purchase_order_net_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['updateby'] = $login_user['user_code'];
-
-        $result = $purchase_order_model->updatePurchaseOrderByCode($purchase_order_code,$data);
+        $result = $purchase_order_model->updatePurchaseOrderByCode($_POST['purchase_order_code'],$data);
     
         if($result){ 
             ?>
             <script>
-                window.location = "index.php?app=purchase_order&action=update&code=<?php echo $purchase_order_code;?>"
+                window.location = "index.php?app=purchase_order&action=update&code=<?php echo $_POST['purchase_order_code'];?>"
             </script>
             <?php
         }else{

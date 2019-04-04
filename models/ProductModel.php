@@ -8,6 +8,7 @@ class ProductModel extends BaseModel{
             static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
         }
     }
+
     function getProductLastCode($code,$digit){
         $sql = "SELECT CONCAT('$code' , LPAD(IFNULL(MAX(CAST(SUBSTRING(product_code,".(strlen($code)+1).",$digit) AS SIGNED)),0) + 1,$digit,'0' )) AS  lastcode 
         FROM tb_product 
@@ -64,7 +65,7 @@ class ProductModel extends BaseModel{
         GROUP BY tb_product.product_code
         ORDER BY tb_product.product_code  
         "; 
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) { 
             $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
@@ -112,16 +113,33 @@ class ProductModel extends BaseModel{
         LEFT JOIN tb_unit ON tb_product.unit_code = tb_unit.unit_code 
         WHERE tb_product.product_code = '$product_code' 
         ";
-        // echo $sql;
+
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            $data;
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
+            $result->close();
+            return $data;
+        }
+    }
+
+    function getProductNotEventStockBy($keyword  = ''){
+        $sql = " SELECT *
+        FROM tb_product 
+        LEFT JOIN tb_product_category ON tb_product.product_category_code = tb_product_category.product_category_code 
+        LEFT JOIN tb_product_type ON tb_product.product_type_code = tb_product_type.product_type_code  
+        WHERE stock_event = '0' 
+        AND (product_name LIKE ('%$keyword%') OR product_code LIKE ('%$keyword%'))
+        GROUP BY tb_product.product_code
+        ORDER BY product_code  
+        "; 
+
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) { 
+            $data = [];
             while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data = $row;
+                $data[] = $row;
             }
             $result->close();
             return $data;
         }
-
     }
  
 
@@ -139,14 +157,11 @@ class ProductModel extends BaseModel{
         WHERE product_code = '$code' 
         ";
 
-        // echo $sql;
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return true;
+            return true;
         }else {
             return false;
         }
-
-
     }
 
     function insertProduct($data = []){
@@ -160,9 +175,7 @@ class ProductModel extends BaseModel{
             product_brand_code, 
             product_description,
             addby,
-            adddate ,
-            updateby,
-            lastupdate 
+            adddate
         ) VALUES (
             '".$data['product_code']."', 
             '".static::$db->real_escape_string($data['product_name'])."', 
@@ -173,19 +186,14 @@ class ProductModel extends BaseModel{
             '".$data['product_brand_code']."', 
             '".static::$db->real_escape_string($data['product_description'])."', 
             '".$data['addby']."',
-            NOW() , 
-            '".$data['addby']."',
             NOW() 
-        ); 
-        ";
+        )";
 
-        // echo $sql;
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-           return $data['product_code'];
+            return true;
         }else {
             return false;
         }
-
     }
 
 

@@ -59,16 +59,16 @@
         <table width="100%" class="table table-striped table-bordered table-hover dataTables">
             <thead>
                 <tr>
-                    <th width="24" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ลำดับ">ลำดับ<br>No.</th>
-                    <th width="110"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="หมายเลขใบร้องขอ" >หมายเลขใบร้องขอ<br>PR No.</th>
-                    <th width="80"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="วันที่ออกใบร้องขอ" >วันที่ออก<br>PR Date</th>
-                    <th width="160"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ร้องขอโดย" >ร้องขอโดย<br>Request by</th>
-                    <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="สถานะอนุมัติ" >สถานะ<br>Status</th>
-                    <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ผู้อนุมัติ" >ผู้อนุมัติ<br>Approve by</th>
-                    <th width="120"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="รหัสคำสั่งซื้อ" >รหัสคำสั่งซื้อ<br>PO Code</th>
-                    <th width="160"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="เลขที่ใบรับสินค้า" >เลขที่ใบรับสินค้า<br>Invoice Code</th>
-                    <th width="100"class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="หมายเหตุ" >หมายเหตุ<br>Remark</th>
-                    <th width="10">
+                    <th width="24" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ลำดับ">ลำดับ<br>No.</th>
+                    <th width="110" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="หมายเลขใบร้องขอ" >หมายเลขใบร้องขอ<br>PR No.</th>
+                    <th width="80" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="วันที่ออกใบร้องขอ" >วันที่ออก<br>PR Date</th>
+                    <th width="160" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ร้องขอโดย" >ร้องขอโดย<br>Request by</th>
+                    <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="สถานะอนุมัติ" >สถานะ<br>Status</th>
+                    <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ผู้อนุมัติ" >ผู้อนุมัติ<br>Approve by</th>
+                    <th width="120" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="รหัสคำสั่งซื้อ" >รหัสคำสั่งซื้อ<br>PO Code</th>
+                    <th width="160" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="เลขที่ใบรับสินค้า" >เลขที่ใบรับสินค้า<br>Invoice Code</th>
+                    <th width="100" class="datatable-th text-center" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="หมายเหตุ" >หมายเหตุ<br>Remark</th>
+                    <th width="80">
                 </tr>
             </thead>
             <tbody>

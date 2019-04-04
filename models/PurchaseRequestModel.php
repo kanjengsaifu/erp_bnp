@@ -109,7 +109,7 @@ class PurchaseRequestModel extends BaseModel{
                 LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code
                 LEFT JOIN tb_invoice_supplier_list ON tb_purchase_order_list.purchase_order_list_code = tb_invoice_supplier_list.purchase_order_list_code
                 LEFT JOIN tb_invoice_supplier ON tb_invoice_supplier_list.invoice_supplier_code = tb_invoice_supplier.invoice_supplier_code
-                WHERE purchase_request_code = '$purchase_request_code' 
+                WHERE purchase_request_code = '$purchase_request_code' AND tb_invoice_supplier_list.invoice_supplier_code != ''
                 GROUP BY invoice_supplier_code
             ";
 
@@ -257,7 +257,7 @@ class PurchaseRequestModel extends BaseModel{
         purchase_request_alert = '".$data['purchase_request_alert']."', 
         purchase_request_approve_status = 'Waiting', 
         updateby = '".$data['updateby']."', 
-        lastupdate = '".$data['lastupdate']."' 
+        lastupdate = NOW() 
         WHERE purchase_request_code = '$code' 
         ";
 

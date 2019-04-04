@@ -31,9 +31,9 @@
         <table width="100%" class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ลำดับ" width="64px"> No.</th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="ผู้ขาย"> Supplier</th>
-                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" title="" data-original-title="เปิดใบสั่งซื้อ" width="180px"> Open purchase order</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ลำดับ" width="64px"> No.</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="ผู้ขาย"> Supplier</th>
+                    <th class="datatable-th" data-container="body" data-toggle="tooltip" data-placement="top" data-original-title="เปิดใบสั่งซื้อ" width="180px"> Open purchase order</th>
                 </tr>
             </thead>
             <tbody>
@@ -118,29 +118,29 @@
             <thead>
                 <tr>
                     <th class="datatable-th" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="ลำดับ" width="32">No.</th>
+                        data-placement="top" data-original-title="ลำดับ" width="32">No.</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="หมายเลขใบสั่งซื้อ"
+                        data-placement="top" data-original-title="หมายเลขใบสั่งซื้อ"
                         width="82">PO No.</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="วันที่ออกใบสั่งซื้อ"
+                        data-placement="top" data-original-title="วันที่ออกใบสั่งซื้อ"
                         width="82">PO Date</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="ผู้ขาย">Supplier</th>
+                        data-placement="top" data-original-title="ผู้ขาย">Supplier</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="ผู้ออกใบสั่งซื้อ" width="82">
+                        data-placement="top" data-original-title="ผู้ออกใบสั่งซื้อ" width="82">
                         Request by</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="สถานะสั่งซื้อ" width="90">PO
+                        data-placement="top" data-original-title="สถานะสั่งซื้อ" width="90">PO
                         Status</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="รหัสเอกสาร" width="102">
+                        data-placement="top" data-original-title="รหัสเอกสาร" width="102">
                         Invoice Code</th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="สถานะ" width="102">Status
+                        data-placement="top" data-original-title="สถานะ" width="102">Status
                     </th>
                     <th class="datatable-th text-center" data-container="body" data-toggle="tooltip"
-                        data-placement="top" title="" data-original-title="หมายเหตุ" width="82">Remark
+                        data-placement="top" data-original-title="หมายเหตุ" width="82">Remark
                     </th>
                     <th></th>
                 </tr>
