@@ -273,7 +273,7 @@ class PurchaseRequestModel extends BaseModel{
         purchase_request_approve_status = '".$data['purchase_request_approve_status']."', 
         purchase_request_approve_by = '".$data['purchase_request_approve_by']."', 
         purchase_request_approve_date = NOW(), 
-        request_status = 'Approved'
+        purchase_request_status = 'Approved'
         WHERE purchase_request_code = '$code' 
         ";
 
