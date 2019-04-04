@@ -27,11 +27,11 @@ class PurchaseRequestModel extends BaseModel{
         $str_user = "";
 
         if($date_start != "" && $date_end != ""){
-            $str_date = "AND request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
+            $str_date = "AND purchase_request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND purchase_request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
         }else if ($date_start != ""){
-            $str_date = "AND request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
+            $str_date = "AND purchase_request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
         }else if ($date_end != ""){
-            $str_date = "AND request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
+            $str_date = "AND purchase_request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
         }
 
         if($user_code != ""){
@@ -40,28 +40,28 @@ class PurchaseRequestModel extends BaseModel{
 
         $sql = " SELECT purchase_request_code, 
         tb.employee_code , 
-        request_date, 
-        revise_code,
+        purchase_request_date, 
+        purchase_request_revise_code,
         IFNULL((
-            SELECT IF(MAX(tb_purchase_request.revise_no) = tb.revise_no,0,1)
+            SELECT IF(MAX(tb_purchase_request.purchase_request_revise_no) = tb.purchase_request_revise_no,0,1)
             FROM tb_purchase_request 
-            WHERE revise_code = tb.revise_code 
+            WHERE purchase_request_revise_code = tb.purchase_request_revise_code 
         ),0) as count_revise,
-        revise_no,
+        purchase_request_revise_no,
         purchase_request_code, 
         IFNULL(CONCAT(tb1.user_name,' ',tb1.user_lastname),'-') as request_name, 
-        approve_status, 
+        purchase_request_approve_status, 
         IFNULL(CONCAT(tb2.user_name,' ',tb2.user_lastname),'-') as accept_name, 
-        request_cancelled, 
-        request_remark 
+        purchase_request_cancelled, 
+        purchase_request_remark 
         FROM tb_purchase_request as tb 
         LEFT JOIN tb_user as tb1 ON tb.employee_code = tb1.user_code 
-        LEFT JOIN tb_user as tb2 ON tb.approve_by = tb2.user_code 
+        LEFT JOIN tb_user as tb2 ON tb.purchase_request_approve_by = tb2.user_code 
         WHERE ( CONCAT(tb1.user_name,' ',tb1.user_lastname) LIKE ('%$keyword%') 
             OR CONCAT(tb2.user_name,' ',tb2.user_lastname) LIKE ('%$keyword%') 
             OR purchase_request_code LIKE ('%$keyword%') 
         ) $str_date $str_user  
-        ORDER BY request_date DESC 
+        ORDER BY purchase_request_date DESC 
         ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -77,20 +77,20 @@ class PurchaseRequestModel extends BaseModel{
     function getPurchaseOrderByPurchaseRequestCode($purchase_request_code){
         $sql =  "SELECT purchase_order_code
         FROM tb_purchase_order AS tb
-        WHERE purchase_revise_code IN (
-            SELECT purchase_revise_code
+        WHERE purchase_order_revise_code IN (
+            SELECT purchase_order_revise_code
             FROM tb_purchase_request_list
             LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
-            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_revise_code
-            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.purchase_revise_code = tb.purchase_revise_code
-            GROUP BY purchase_revise_code
-        )  AND purchase_revise_no = (
-            SELECT MAX(purchase_revise_no)
+            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_revise_code
+            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.purchase_order_revise_code = tb.purchase_order_revise_code
+            GROUP BY purchase_order_revise_code
+        )  AND purchase_order_revise_no = (
+            SELECT MAX(purchase_order_revise_no)
             FROM tb_purchase_request_list
             LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
-            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_revise_code
-            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.purchase_revise_code = tb.purchase_revise_code
-            GROUP BY purchase_revise_code
+            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_order_revise_code
+            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.purchase_order_revise_code = tb.purchase_order_revise_code
+            GROUP BY purchase_order_revise_code
         )";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -104,13 +104,13 @@ class PurchaseRequestModel extends BaseModel{
     }
 
     function getInvoiceSuppliertByPurchaseRequestCode($purchase_request_code){
-        $sql =  "SELECT tb_invoice_supplier_list.invoice_supplier_code,invoice_supplier_code_gen
+        $sql =  "SELECT tb_invoice_supplier_list.invoice_supplier_code
                 FROM tb_purchase_request_list 
                 LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code
                 LEFT JOIN tb_invoice_supplier_list ON tb_purchase_order_list.purchase_order_list_code = tb_invoice_supplier_list.purchase_order_list_code
                 LEFT JOIN tb_invoice_supplier ON tb_invoice_supplier_list.invoice_supplier_code = tb_invoice_supplier.invoice_supplier_code
                 WHERE purchase_request_code = '$purchase_request_code' 
-                GROUP BY invoice_supplier_code_gen
+                GROUP BY invoice_supplier_code
             ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
@@ -144,13 +144,13 @@ class PurchaseRequestModel extends BaseModel{
     }
 
     function getInvoiceSuppliertByPurchaseRequestListCode($purchase_request_list_code){
-        $sql =  "   SELECT tb_invoice_supplier_list.invoice_supplier_code,invoice_supplier_code_gen
+        $sql =  "   SELECT tb_invoice_supplier_list.invoice_supplier_code
                     FROM tb_purchase_request_list 
                     LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code
                     LEFT JOIN tb_invoice_supplier_list ON tb_purchase_order_list.purchase_order_list_code = tb_invoice_supplier_list.purchase_order_list_code
                     LEFT JOIN tb_invoice_supplier ON tb_invoice_supplier_list.invoice_supplier_code = tb_invoice_supplier.invoice_supplier_code
                     WHERE purchase_request_list_code = '$purchase_request_list_code' 
-                    GROUP BY invoice_supplier_code_gen
+                    GROUP BY invoice_supplier_code
                 
                 ";
 
@@ -170,18 +170,18 @@ class PurchaseRequestModel extends BaseModel{
         $str_user = "";
 
         if($date_start != "" && $date_end != ""){
-            $str_date = "AND request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
+            $str_date = "AND purchase_request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND purchase_request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
         }else if ($date_start != ""){
-            $str_date = "AND request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
+            $str_date = "AND purchase_request_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
         }else if ($date_end != ""){
-            $str_date = "AND request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
+            $str_date = "AND purchase_request_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
         }
 
         if($user_code != ""){
             $str_user = "AND tb.employee_code  = '$user_code' ";
         }
 
-        $sql =  "SELECT tb_purchase_request.purchase_request_code,purchase_request_list_code,request_date,purchase_request_code,request_remark,list_qty,product_name,product_code,purchase_order_code,invoice_supplier_code_gen
+        $sql =  "SELECT tb_purchase_request.purchase_request_code,purchase_request_list_code,purchase_request_date,purchase_request_code,purchase_request_remark,list_qty,product_name,product_code,purchase_order_code,tb_invoice_supplier.invoice_supplier_code
                 FROM tb_purchase_request                    
                 LEFT JOIN tb_purchase_request_list ON tb_purchase_request.purchase_request_code = tb_purchase_request_list.purchase_request_code
                 LEFT JOIN tb_product ON tb_purchase_request_list.product_code = tb_product.product_code
@@ -219,7 +219,7 @@ class PurchaseRequestModel extends BaseModel{
 
     function cancelPurchaseRequestByCode($code){
         $sql = " UPDATE tb_purchase_request SET 
-        request_cancelled = '1', 
+        purchase_request_cancelled = '1', 
         updateby = '".$data['updateby']."', 
         lastupdate = '".$data['lastupdate']."' 
         WHERE purchase_request_code = '$code' 
@@ -234,7 +234,7 @@ class PurchaseRequestModel extends BaseModel{
 
     function uncancelPurchaseRequestByCode($code){
         $sql = " UPDATE tb_purchase_request SET 
-        request_cancelled = '0', 
+        purchase_request_cancelled = '0', 
         updateby = '".$data['updateby']."', 
         lastupdate = '".$data['lastupdate']."' 
         WHERE purchase_request_code = '$code' 
@@ -248,14 +248,14 @@ class PurchaseRequestModel extends BaseModel{
     }
 
     function updatePurchaseRequestByCode($code,$data = []){
-        $data['request_remark']=mysqli_real_escape_string(static::$db,$data['request_remark']);
+        $data['purchase_request_remark']=mysqli_real_escape_string(static::$db,$data['purchase_request_remark']);
 
         $sql = " UPDATE tb_purchase_request SET  
         employee_code = '".$data['employee_code']."', 
-        request_date = '".$data['request_date']."', 
-        request_remark = '".$data['request_remark']."', 
-        request_alert = '".$data['request_alert']."', 
-        approve_status = 'Waiting', 
+        purchase_request_date = '".$data['purchase_request_date']."', 
+        purchase_request_remark = '".$data['purchase_request_remark']."', 
+        purchase_request_alert = '".$data['purchase_request_alert']."', 
+        purchase_request_approve_status = 'Waiting', 
         updateby = '".$data['updateby']."', 
         lastupdate = '".$data['lastupdate']."' 
         WHERE purchase_request_code = '$code' 
@@ -270,9 +270,9 @@ class PurchaseRequestModel extends BaseModel{
 
     function updatePurchaseRequestApproveByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_request SET 
-        approve_status = '".$data['approve_status']."', 
-        approve_by = '".$data['approve_by']."', 
-        approve_date = NOW(), 
+        purchase_request_approve_status = '".$data['purchase_request_approve_status']."', 
+        purchase_request_approve_by = '".$data['purchase_request_approve_by']."', 
+        purchase_request_approve_date = NOW(), 
         request_status = 'Approved'
         WHERE purchase_request_code = '$code' 
         ";
@@ -285,28 +285,28 @@ class PurchaseRequestModel extends BaseModel{
     }
 
     function insertPurchaseRequest($data = []){
-        $data['request_remark']=mysqli_real_escape_string(static::$db,$data['request_remark']);
+        $data['purchase_request_remark']=mysqli_real_escape_string(static::$db,$data['purchase_request_remark']);
 
         $sql = " INSERT INTO tb_purchase_request ( 
             purchase_request_code,
             employee_code,
-            request_date,
-            request_remark,
-            request_alert,
-            approve_status,
-            revise_code,
-            revise_no,
+            purchase_request_date,
+            purchase_request_remark,
+            purchase_request_alert,
+            purchase_request_approve_status,
+            purchase_request_revise_code,
+            purchase_request_revise_no,
             addby,
             adddate) 
             VALUES ('". 
             $data['purchase_request_code']."','".
             $data['employee_code']."','".
-            $data['request_date']."','".
-            $data['request_remark']."','".
-            $data['request_alert']."','".
+            $data['purchase_request_date']."','".
+            $data['purchase_request_remark']."','".
+            $data['purchase_request_alert']."','".
             "Waiting','".
-            $data['revise_code']."','".
-            $data['revise_no']."','".
+            $data['purchase_request_revise_code']."','".
+            $data['purchase_request_revise_no']."','".
             $data['addby']."',".
             "NOW()
         )";

@@ -89,8 +89,8 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $data['purchase_order_code'] = $_POST['purchase_order_code'];
         $data['employee_code'] = $_POST['employee_code'];
         $data['supplier_code'] = $_POST['supplier_code'];
-        $data['purchase_credit_term'] = $_POST['purchase_credit_term'];
-        $data['purchase_delivery_by'] = $_POST['purchase_delivery_by'];
+        $data['purchase_order_credit_term'] = $_POST['purchase_order_credit_term'];
+        $data['purchase_order_delivery_by'] = $_POST['purchase_order_delivery_by'];
         $data['purchase_order_remark'] = $_POST['purchase_order_remark'];
         $data['purchase_order_date'] = $date_time->changeDateFormat($_POST['purchase_order_date']);
         $data['purchase_order_total_price'] = (float)filter_var($_POST['purchase_order_total_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -98,7 +98,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $data['purchase_order_vat_type'] = $_POST['purchase_order_vat_type'];
         $data['purchase_order_vat_price'] = (float)filter_var($_POST['purchase_order_vat_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['purchase_order_net_price'] = (float)filter_var($_POST['purchase_order_net_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_revise_code'] = $_POST['purchase_order_code'];
+        $data['purchase_order_revise_code'] = $_POST['purchase_order_code'];
         $data['addby'] = $login_user['user_code'];
 
         $result = $purchase_order_model->insertPurchaseOrder($data);
@@ -225,23 +225,23 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $data['supplier_code'] = $_POST['supplier_code'];
         $data['purchase_order_category'] = $_POST['purchase_order_category'];
         $data['purchase_order_date'] = $_POST['purchase_order_date'];
-        $data['purchase_credit_term'] = $_POST['purchase_credit_term'];
-        $data['purchase_approve_by'] = $login_user['user_code'];
+        $data['purchase_order_credit_term'] = $_POST['purchase_order_credit_term'];
+        $data['purchase_order_approve_by'] = $login_user['user_code'];
 
-        if($_POST['purchase_approve_status'] == 'Approve'){
+        if($_POST['purchase_order_approve_status'] == 'Approve'){
             $data['purchase_order_status'] = 'Approved';
-        }else if($_POST['purchase_approve_status'] == 'Waitting'){
+        }else if($_POST['purchase_order_approve_status'] == 'Waitting'){
             $data['purchase_order_status'] = 'Request';
         }else {
             $data['purchase_order_status'] = 'New';
         }
 
-        $data['purchase_delivery_by'] = $_POST['purchase_delivery_by'];
+        $data['purchase_order_delivery_by'] = $_POST['purchase_order_delivery_by'];
         $data['purchase_order_remark'] = $_POST['purchase_order_remark'];
-        $data['purchase_order_total_price'] = (float)filter_var($purchase_order_total_price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_order_vat'] = (float)filter_var($purchase_order_vat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_order_vat_price'] = (float)filter_var($purchase_order_vat_price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['purchase_order_net_price'] = (float)filter_var($purchase_order_net_price, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_total_price'] = (float)filter_var($_POST['purchase_order_remark'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_vat'] = (float)filter_var($_POST['purchase_order_vat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_vat_price'] = (float)filter_var($_POST['purchase_order_vat_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['purchase_order_net_price'] = (float)filter_var($_POST['purchase_order_net_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['updateby'] = $login_user['user_code'];
 
         $result = $purchase_order_model->updatePurchaseOrderByCode($purchase_order_code,$data);
@@ -272,24 +272,25 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
         $result = $purchase_order_model->cancelPurchaseOrderByCode($purchase_order_code);  
 
-        $purchase_order_code = $purchase_order['purchase_revise_code']."-REVISE-".($purchase_order['purchase_revise_no'] + 1);
+        $purchase_order_code = $purchase_order['purchase_order_revise_code']."-REVISE-".($purchase_order['purchase_order_revise_no'] + 1);
 
         $data = [];
         $data['purchase_order_code'] = $purchase_order_code;
         $data['supplier_code'] = $purchase_order['supplier_code'];
         $data['employee_code'] = $purchase_order['employee_code'];
         $data['purchase_order_date'] = $purchase_order['purchase_order_date'];
-        $data['purchase_credit_term'] = $purchase_order['purchase_credit_term'];
-        $data['purchase_approve_status'] = '';
-        $data['purchase_delivery_by'] = $purchase_order['purchase_delivery_by'];
+        $data['purchase_order_credit_term'] = $purchase_order['purchase_order_credit_term'];
+        $data['purchase_order_approve_status'] = '';
+        $data['purchase_order_delivery_by'] = $purchase_order['purchase_order_delivery_by'];
         $data['purchase_order_remark'] = $purchase_order['purchase_order_remark'];
         $data['purchase_order_total_price'] = $purchase_order['purchase_order_total_price'];
         $data['purchase_order_vat'] = $purchase_order['purchase_order_vat'];
         $data['purchase_order_vat_type'] = $purchase_order['purchase_order_vat_type'];
         $data['purchase_order_vat_price'] = $purchase_order['purchase_order_vat_price'];
         $data['purchase_order_net_price'] = $purchase_order['purchase_order_net_price'];
-        $data['purchase_revise_code'] = $purchase_order['purchase_revise_code']; 
-        $data['purchase_revise_no'] = $purchase_order['purchase_revise_no'] + 1;
+        $data['purchase_order_revise_code'] = $purchase_order['purchase_order_revise_code']; 
+        $data['purchase_order_revise_no'] = $purchase_order['purchase_order_revise_no'] + 1;
+        $data['addby'] = $login_user['user_code'];
 
         $result = $purchase_order_model->insertPurchaseOrder($data);
             
@@ -304,6 +305,7 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
             $data['purchase_order_list_price'] = $purchase_order_lists[$i]['purchase_order_list_price'];
             $data['purchase_order_list_price_sum'] = $purchase_order_lists[$i]['purchase_order_list_price_sum'];
             $data['purchase_order_list_remark'] = $purchase_order_lists[$i]['purchase_order_list_remark'];
+            $data['addby'] = $login_user['user_code'];
 
             $result = $purchase_order_list_model->insertPurchaseOrderList($data);
 
@@ -327,13 +329,13 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
     <?php
     }
 }else if ($_GET['action'] == 'approve' && $menu['purchase_order']['approve']){
-    if(isset($_POST['purchase_approve_status'])){
+    if(isset($_POST['purchase_order_approve_status'])){
         $data = [];
-        $data['purchase_approve_status'] = $_POST['purchase_approve_status'];
-        $data['purchase_approve_by'] = $login_user['user_code'];
-        if($_POST['purchase_approve_status'] == 'Approve'){
+        $data['purchase_order_approve_status'] = $_POST['purchase_order_approve_status'];
+        $data['purchase_order_approve_by'] = $login_user['user_code'];
+        if($_POST['purchase_order_approve_status'] == 'Approve'){
             $data['purchase_order_status'] = 'Approved';
-        }else if($_POST['purchase_approve_status'] == 'Waitting'){
+        }else if($_POST['purchase_order_approve_status'] == 'Waitting'){
             $data['purchase_order_status'] = 'Request';
         }else {
             $data['purchase_order_status'] = 'New';
@@ -506,8 +508,8 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
 }else if ($_GET['action'] == 'request' && $menu['purchase_order']['edit']){
     if(isset($purchase_order_code)){
         $data = [];
-        $data['purchase_approve_status'] = "Waitting";
-        $data['purchase_approve_by'] = '';
+        $data['purchase_order_approve_status'] = "Waitting";
+        $data['purchase_order_approve_by'] = '';
         $data['purchase_order_status'] = 'Request';
         $data['updateby'] = $login_user['user_code'];
 		$purchase_order = $purchase_order_model->getPurchaseOrderByCode($purchase_order_code);

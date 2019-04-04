@@ -203,9 +203,9 @@
 
                     var content = "";
                     for(var i = 0; i < data.length ; i++){
-                        var purchase_order_list_qty = parseFloat( data[i].purchase_request_list_qty );
+                        var purchase_order_list_qty = parseFloat( data[i].purchase_order_list_qty );
                         var purchase_order_list_price = parseFloat( data[i].purchase_order_list_price );
-                        var order_list_total = (data[i].purchase_request_list_qty * data[i].purchase_order_list_price);
+                        var order_list_total = (data[i].purchase_order_list_qty * data[i].purchase_order_list_price);
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
                                             '<input onchange="//show_receive(this);" onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -291,9 +291,9 @@
                 data_buffer = data;
                 
                 for(var i = 0; i < data.length ; i++){
-                    var purchase_order_list_qty = parseFloat( data[i].purchase_request_list_qty );
+                    var purchase_order_list_qty = parseFloat( data[i].purchase_order_list_qty );
                     var purchase_order_list_price = parseFloat( data[i].purchase_order_list_price );
-                    var order_list_total = (data[i].purchase_request_list_qty * data[i].purchase_order_list_price);
+                    var order_list_total = (data[i].purchase_order_list_qty * data[i].purchase_order_list_price);
                     content += '<tr class="odd gradeX">'+
                                     '<td>'+
                                         '<input onchange="//show_receive(this);"  onclick="add_row_by_click(this,'+i+')"  type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -364,12 +364,12 @@
                         '<span>Remark : </span>'+
                         '<input type="text" class="form-control" name="purchase_order_list_remark[]" value="'+data_buffer[i].purchase_order_list_remark+'">'+
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_request_list_qty+'"></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_order_list_qty+'"></td>'+
                         '<td >'+
                             '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_order_list_price+'">'+
                             '<input type="checkbox" name="save_product_price[]" value="'+ data_buffer[i].product_code +'"> บันทึกราคาซื้อ'+ 
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].purchase_request_list_qty * data_buffer[i].purchase_order_list_price)+'"></td>'+ 
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].purchase_order_list_qty * data_buffer[i].purchase_order_list_price)+'"></td>'+ 
                         '<td>'+
                             '<a href="javascript:;" onclick="product_detail_blank(this);">'+
                                 '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
@@ -406,6 +406,31 @@
             $(id).closest('table').children('tbody').children('tr').children('td').children('input[type="checkbox"]').prop('checked', false);
             index_buffer = [];
             $('#data_show_list_choose').html("เลือก : "+index_buffer.length+" รายการ");
+        }
+    }
+
+    function calculateAll(){
+        var val = document.getElementsByName('purchase_order_list_price_sum[]');
+        var vat_type = <?php echo $purchase_order['purchase_order_vat_type']; ?>;
+        var vat = parseInt(document.getElementById("purchase_order_vat").value);
+        var total = 0.0;
+        
+        for(var i = 0 ; i < val.length ; i++){
+            total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
+        }
+
+        if(vat_type == 1){
+            $('#purchase_order_net_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_total_price').val(roundNumber(total - ((vat/(100.00 + vat) * total)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_vat_price').val(roundNumber((vat/(100.00 + vat)) * total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }else if(vat_type == 2){
+            $('#purchase_order_total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_vat_price').val(roundNumber((total * (vat/100.0)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_net_price').val(roundNumber((total * (vat/100.0) + total),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }else{
+            $('#purchase_order_total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_net_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_vat_price').val(0);
         }
     }
 
@@ -487,7 +512,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font><?php if($purchase_order['purchase_revise_no'] > 0){ ?><b><font color="#F00">Revise <?PHP echo $purchase_order['purchase_revise_no']; ?></font></b> <?PHP } ?></label>
+                                <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font><?php if($purchase_order['purchase_order_revise_no'] > 0){ ?><b><font color="#F00">Revise <?PHP echo $purchase_order['purchase_order_revise_no']; ?></font></b> <?PHP } ?></label>
                                 <input id="purchase_order_code" name="purchase_order_code" class="form-control" value="<? echo $purchase_order['purchase_order_code'];?>" onchange="check_code()" > 
                                 <input id="purchase_check" type="hidden" value="">
                                 <p class="help-block">Example : PO1801001.</p>
@@ -531,7 +556,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>จัดส่งโดย / Delivery by</label>
-                                <input type="text" id="purchase_delivery_by" name="purchase_delivery_by" value="<? echo $purchase_order['purchase_delivery_by'];?>"  class="form-control">
+                                <input type="text" id="purchase_order_delivery_by" name="purchase_order_delivery_by" value="<? echo $purchase_order['purchase_order_delivery_by'];?>"  class="form-control">
                                 <p class="help-block">Example :DHL </p>
                             </div>
                         </div>            
@@ -552,18 +577,18 @@
                             </div>
                         </div>
                     </div>   
-                    <?php if( $purchase_order['purchase_order_status'] != 'Approved' && $menu['purchase_order']['purchase_approve']){ ?> 
+                    <?php if( $purchase_order['purchase_order_status'] != 'Approved' && $menu['purchase_order']['purchase_order_approve']){ ?> 
                     <div class="row">
                         <div class="col-lg-6">
                             <label>สถานะ / status</label>
-                            <select id="purchase_approve_status" name="purchase_approve_status" class="form-control" data-live-search="true">
-                                <option <?php if($purchase_order['purchase_approve_status'] == "Waitting"){?>
+                            <select id="purchase_order_approve_status" name="purchase_order_approve_status" class="form-control" data-live-search="true">
+                                <option <?php if($purchase_order['purchase_order_approve_status'] == "Waitting"){?>
                                     selected <?php }?>>Waitting</option>
-                                <option <?php if($purchase_order['purchase_approve_status'] == "Approve"){?>
+                                <option <?php if($purchase_order['purchase_order_approve_status'] == "Approve"){?>
                                     selected <?php }?>>Approve</option>
-                                <option <?php if($purchase_order['purchase_approve_status'] == "Not Approve"){?>
+                                <option <?php if($purchase_order['purchase_order_approve_status'] == "Not Approve"){?>
                                     selected <?php }?>>Not Approve</option>
-                                <option <?php if($purchase_order['purchase_approve_status'] == ""){?>
+                                <option <?php if($purchase_order['purchase_order_approve_status'] == ""){?>
                                 selected <?php }?>>ไม่ระบุ</option>
                             </select>
                         </div>             
@@ -715,7 +740,7 @@
                             </table>
                         </td>
                         <td>
-                            <?PHP 
+                        <?PHP 
                             if($purchase_order['purchase_order_vat_type'] == 1){
                                 $vat_val = ($purchase_order['purchase_order_vat']/( 100 + $purchase_order['purchase_order_vat'] )) * $total;
                             } else if($purchase_order['purchase_order_vat_type'] == 2){
@@ -723,7 +748,7 @@
                             } else {
                                 $vat_val = 0.0;
                             }
-                            ?>
+                        ?>
                             <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat_price" name="purchase_order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
                         </td>
                         <td></td>
@@ -731,7 +756,7 @@
                     <tr class="odd gradeX">
                         <td colspan="2" align="left" style="vertical-align: middle;"><span>จำนวนเงินรวมทั้งสิ้น / Net Total</span></td>
                         <td>
-                            <?PHP 
+                        <?PHP 
                             if($purchase_order['purchase_order_vat_type'] == 1){
                                 $net_val =  $total;
                             } else if($purchase_order['purchase_order_vat_type'] == 2){
@@ -739,7 +764,7 @@
                             } else {
                                 $net_val = $total;
                             }
-                            ?>
+                        ?>
                             <input type="text" class="form-control" style="text-align: right;" id="purchase_order_net_price" name="purchase_order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
                         </td>
                         <td>

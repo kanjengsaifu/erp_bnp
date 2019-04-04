@@ -152,8 +152,8 @@
                 <tr class="odd gradeX">
                     <td class="text-center"><?php echo $i+1; ?></td>
                     <td><?php echo $purchase_orders[$i]['purchase_order_code']; ?>
-                        <?php if($purchase_orders[$i]['purchase_revise_no']){ ?>
-                            <br><b><font color="#F00">Revise<?PHP echo $purchase_orders[$i]['purchase_revise_no']; ?></font></b>
+                        <?php if($purchase_orders[$i]['purchase_order_revise']){ ?>
+                            <br><b><font color="#F00">Revise<?PHP echo $purchase_orders[$i]['purchase_order_revise']; ?></font></b>
                         <?PHP } ?>
                         <?php if($purchase_orders[$i]['purchase_order_cancelled']){ ?><b>
                             <font color="#F00">Cancelled</font>

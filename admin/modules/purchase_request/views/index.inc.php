@@ -57,18 +57,18 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
         $data['purchase_request_code'] = $_POST['purchase_request_code'];
         $data['employee_code'] = $_POST['employee_code'];
         
-        if (trim($_POST['request_date']) != ''){
-            $due_date = explode("-",$_POST['request_date']);
-            $data['request_date'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
+        if (trim($_POST['purchase_request_date']) != ''){
+            $due_date = explode("-",$_POST['purchase_request_date']);
+            $data['purchase_request_date'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
         }
 
-        if (trim($_POST['request_alert']) != ''){
-            $due_date = explode("-",$_POST['request_alert']);
-            $data['request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
+        if (trim($_POST['purchase_request_alert']) != ''){
+            $due_date = explode("-",$_POST['purchase_request_alert']);
+            $data['purchase_request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
         }
 
-        $data['request_remark'] = $_POST['request_remark'];
-        $data['revise_code'] = $_POST['purchase_request_code'];
+        $data['purchase_request_remark'] = $_POST['purchase_request_remark'];
+        $data['purchase_request_revise_code'] = $_POST['purchase_request_code'];
         $data['addby'] = $login_user['user_code'];
 
         $result = $purchase_request_model->insertPurchaseRequest($data); 
@@ -104,16 +104,16 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
         $data = [];
         $data['employee_code'] = $_POST['employee_code'];
         $data['supplier_code'] = $_POST['supplier_code'];
-        if (trim($_POST['request_date']) != ''){
-            $due_date = explode("-",$_POST['request_date']);
-            $data['request_date'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
+        if (trim($_POST['purchase_request_date']) != ''){
+            $due_date = explode("-",$_POST['purchase_request_date']);
+            $data['purchase_request_date'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
         }
 
-        if (trim($_POST['request_alert']) != ''){
-            $due_date = explode("-",$_POST['request_alert']);
-            $data['request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
+        if (trim($_POST['purchase_request_alert']) != ''){
+            $due_date = explode("-",$_POST['purchase_request_alert']);
+            $data['purchase_request_alert'] = $due_date[2].'-'.$due_date[1].'-'.$due_date[0];
         }
-        $data['request_remark'] = $_POST['request_remark'];
+        $data['purchase_request_remark'] = $_POST['purchase_request_remark'];
 
         $result = $purchase_request_model->updatePurchaseRequestByCode($purchase_request_code,$data);
 
@@ -151,16 +151,16 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     $purchase_request_lists = $purchase_request_list_model->getPurchaseRequestListBy($purchase_request_code);
     $purchase_request_model->cancelPurchaseRequestByCode($purchase_request_code);
     
-    $purchase_request_code = $purchase_request['revise_code']."-REVISE-".($purchase_request['revise_no'] + 1);
+    $purchase_request_code = $purchase_request['purchase_request_revise_code']."-REVISE-".($purchase_request['purchase_request_revise_no'] + 1);
 
     $data = [];
     $data['purchase_request_code'] = $purchase_request_code;
     $data['employee_code'] = $purchase_request['employee_code'];
-    $data['request_date'] = $purchase_request['request_date'];
-    $data['request_alert']  = $purchase_request['request_alert'];
-    $data['revise_no'] = $purchase_request['revise_no'] + 1;
-    $data['revise_code'] = $purchase_request['revise_code']; 
-    $data['request_remark'] = $purchase_request['request_remark'];
+    $data['purchase_request_date'] = $purchase_request['purchase_request_date'];
+    $data['purchase_request_alert']  = $purchase_request['purchase_request_alert'];
+    $data['purchase_request_revise_no'] = $purchase_request['purchase_request_revise_no'] + 1;
+    $data['purchase_request_revise_code'] = $purchase_request['purchase_request_revise_code']; 
+    $data['purchase_request_remark'] = $purchase_request['purchase_request_remark'];
     $data['addby'] = $login_user['user_code'];
 
     $result = $purchase_request_model->insertPurchaseRequest($data);
@@ -185,10 +185,10 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
     <?php
     }
 }else if ($_GET['action'] == 'approve' && $menu['purchase_request']['approve']){
-    if(isset($_POST['approve_status'])){
+    if(isset($_POST['purchase_request_approve_status'])){
         $data = [];
-        $data['approve_status'] = $_POST['approve_status'];
-        $data['approve_by'] = $login_user['user_code'];
+        $data['purchase_request_approve_status'] = $_POST['purchase_request_approve_status'];
+        $data['purchase_request_approve_by'] = $login_user['user_code'];
 
         $result = $purchase_request_model->updatePurchaseRequestApproveByCode($purchase_request_code,$data);
 
@@ -196,9 +196,9 @@ if ($_GET['action'] == 'insert' && $menu['purchase_request']['add']){
             // $purchase_request = $purchase_request_model->getPurchaseRequestByCode($purchase_request_code);
             // $notification_model->setNotificationSeenByTypeID('Purchase Request',$purchase_request_code);
 
-            // $notification_model->setNotification("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$purchase_request['purchase_request_code']." has ".$purchase_request['approve_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code","license_purchase_page",'High');
-            // $notification_model->setNotification("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$purchase_request['purchase_request_code']." has ".$purchase_request['approve_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code","license_purchase_page",'Medium');
-            // $notification_model->setNotificationByUserID("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$purchase_request['purchase_request_code']." has ".$purchase_request['approve_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code",$purchase_request['user_code']);
+            // $notification_model->setNotification("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$purchase_request['purchase_request_code']." has ".$purchase_request['purchase_request_approve_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code","license_purchase_page",'High');
+            // $notification_model->setNotification("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$purchase_request['purchase_request_code']." has ".$purchase_request['purchase_request_approve_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code","license_purchase_page",'Medium');
+            // $notification_model->setNotificationByUserID("Purchase Request",$purchase_request_code,"Purchase Request <br>No. ".$purchase_request['purchase_request_code']." has ".$purchase_request['purchase_request_approve_status'],"index.php?app=purchase_request&action=detail&code=$purchase_request_code",$purchase_request['user_code']);
            
         ?> 
             <script>window.location="index.php?app=purchase_request"</script>

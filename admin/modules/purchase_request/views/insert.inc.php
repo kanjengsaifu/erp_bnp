@@ -78,9 +78,9 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#request_date").val(data.date_now);
+                //$("#purchase_request_date").val(data.date_now);
                 $(".calendar").datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("request_date").focus();
+                document.getElementById("purchase_request_date").focus();
             } else{
                 $("#date_check").val("0");
                 //generate_credit_date();
@@ -219,7 +219,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>วันที่ร้องขอ <font color="#F00"><b>*</b></font></label>
-                        <input type="text" id="request_date" name="request_date" value="<?PHP echo date("d")."-".date("m")."-".date("Y"); ?>" class="form-control calendar" onchange="check_date(this);" readonly/>
+                        <input type="text" id="purchase_request_date" name="purchase_request_date" value="<?PHP echo date("d")."-".date("m")."-".date("Y"); ?>" class="form-control calendar" onchange="check_date(this);" readonly/>
                         <input id="date_check" type="hidden" value="">
                         <p class="help-block">01-03-2018</p>
                     </div>
@@ -243,7 +243,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>วันที่แจ้งเตือน </label>
-                        <input type="text" id="request_alert" name="request_alert" class="form-control calendar" readonly/>
+                        <input type="text" id="purchase_request_alert" name="purchase_request_alert" class="form-control calendar" readonly/>
                         <p class="help-block">01-03-2018</p>
                     </div>
                 </div>
@@ -266,7 +266,7 @@
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label>หมายเหตุ</label>
-                        <input id="request_remark" name="request_remark" class="form-control">
+                        <input id="purchase_request_remark" name="purchase_request_remark" class="form-control">
                         <p class="help-block">Example : -.</p>
                     </div>
                 </div>

@@ -78,9 +78,9 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#request_date").val(data.date_now);
+                //$("#purchase_request_date").val(data.date_now);
                 $( ".calendar" ).datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("request_date").focus();
+                document.getElementById("purchase_request_date").focus();
             } else{
                 $("#date_check").val("0");
                 //generate_credit_date();
@@ -90,7 +90,7 @@
 	
     function check(){
         var purchase_request_code = document.getElementById("purchase_request_code").value;
-        var request_date = document.getElementById("request_date").value;
+        var purchase_request_date = document.getElementById("purchase_request_date").value;
         var purchase_request_type = document.getElementById("purchase_request_type").value;
         var employee_code = document.getElementById("employee_code").value; 
         var date_check = document.getElementById("date_check").value;
@@ -100,8 +100,8 @@
         employee_code = $.trim(employee_code); 
         
         if(date_check == "1"){
-            alert("This "+request_date+" is locked in the system.");
-            document.getElementById("request_date").focus();
+            alert("This "+purchase_request_date+" is locked in the system.");
+            document.getElementById("purchase_request_date").focus();
             return false;
         }else if(purchase_request_code.length == 0){
             alert("Please input purchase request code");
@@ -250,7 +250,7 @@
             <div class="row ">
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
-                        <label>หมายเลขใบร้องขอสั่งซื้อสินค้า / PR Code <font color="#F00"><b>*</b></font> <?php if($purchase_request['revise_no'] > 0){ ?><b><font color="#F00"> Revise <?PHP echo $purchase_request['revise_no']; ?></font></b> <?PHP } ?></label>
+                        <label>หมายเลขใบร้องขอสั่งซื้อสินค้า / PR Code <font color="#F00"><b>*</b></font> <?php if($purchase_request['purchase_request_revise_no'] > 0){ ?><b><font color="#F00"> Revise <?PHP echo $purchase_request['purchase_request_revise_no']; ?></font></b> <?PHP } ?></label>
                         <input id="purchase_request_code" name="purchase_request_code" class="form-control" value="<?PHP echo $purchase_request['purchase_request_code'];?>" onchange="check_code(this)" >
                         <p id="alert_code" class="help-block">Example : PR1801010001.</p>
                     </div>
@@ -259,7 +259,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>วันที่ร้องขอ / PR Date</label>
-                        <input id="request_date" name="request_date" type="text" value="<?php if ($purchase_request['request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request['request_date'])); } ?>" class="form-control calendar" onchange="check_date(this);" readonly>
+                        <input id="purchase_request_date" name="purchase_request_date" type="text" value="<?php if ($purchase_request['purchase_request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request['purchase_request_date'])); } ?>" class="form-control calendar" onchange="check_date(this);" readonly>
                         <input id="date_check" type="hidden" value="">
                         <p class="help-block">01-03-2018</p>
                     </div>
@@ -285,7 +285,7 @@
                 <div class="col-md-6 col-lg-3">
                     <div class="form-group">
                         <label>วันที่แจ้งเตือน / Alert Date</label>
-                        <input type="text" id="request_alert" name="request_alert" value="<?php if ($purchase_request['request_alert'] != ''){ echo date("d-m-Y", strtotime($purchase_request['request_alert'])); } ?>" class="form-control calendar" readonly>
+                        <input type="text" id="purchase_request_alert" name="purchase_request_alert" value="<?php if ($purchase_request['purchase_request_alert'] != ''){ echo date("d-m-Y", strtotime($purchase_request['purchase_request_alert'])); } ?>" class="form-control calendar" readonly>
                         <p class="help-block">01-03-2018</p>
                     </div>
                 </div>
@@ -310,7 +310,7 @@
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label>หมายเหตุ / Remark</label>
-                        <input id="request_remark" name="request_remark" class="form-control" value="<? echo $purchase_request['request_remark'];?>">
+                        <input id="purchase_request_remark" name="purchase_request_remark" class="form-control" value="<? echo $purchase_request['purchase_request_remark'];?>">
                         <p class="help-block">Example : -.</p>
                     </div>
                 </div>

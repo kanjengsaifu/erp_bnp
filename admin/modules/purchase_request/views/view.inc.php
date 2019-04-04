@@ -77,9 +77,9 @@
                 ?>
                 <tr class="odd gradeX">
                     <td class="text-center"><?php echo $i+1; ?></td>
-                    <td><?php echo $purchase_request[$i]['purchase_request_code']; ?> <?php if($purchase_request[$i]['revise_no']){ ?><br><b><font color="#F00">Revise <?PHP echo $purchase_request[$i]['revise_no']; ?></font></b> <?PHP } ?> <?php if($purchase_request[$i]['request_cancelled']){ ?><b><font color="#F00">Cancelled</font></b> <?PHP } ?></td>
-                    <td class="text-center" data-order="<?php echo $timestamp = strtotime($purchase_request[$i]['request_date']); ?>">
-                        <?php if ($purchase_request[$i]['request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request[$i]['request_date'])); } ?>
+                    <td><?php echo $purchase_request[$i]['purchase_request_code']; ?> <?php if($purchase_request[$i]['purchase_request_revise_no']){ ?><br><b><font color="#F00">Revise <?PHP echo $purchase_request[$i]['purchase_request_revise_no']; ?></font></b> <?PHP } ?> <?php if($purchase_request[$i]['purchase_request_cancelled']){ ?><b><font color="#F00">Cancelled</font></b> <?PHP } ?></td>
+                    <td class="text-center" data-order="<?php echo $timestamp = strtotime($purchase_request[$i]['purchase_request_date']); ?>">
+                        <?php if ($purchase_request[$i]['purchase_request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request[$i]['purchase_request_date'])); } ?>
                     </td>
                     <td><?php echo $purchase_request[$i]['request_name']; ?></td>
                     <td class="text-center"><?php echo $purchase_request[$i]['approve_status']; ?></td>
@@ -103,27 +103,27 @@
                         for($k=0; $k < count($purchase_invoices); $k++){ 
                         ?>
                             <a href="?app=invoice_supplier&action=detail&code=<?php echo $purchase_invoices[$k]['invoice_supplier_code'];?>" target = "_blank" title="ดูรายละเอียดใบรับสินค้า">
-                                <?php echo $purchase_invoices[$k]['invoice_supplier_code_gen']; ?>
+                                <?php echo $purchase_invoices[$k]['invoice_supplier_code']; ?>
                             </a>
                             <br>
                         <?php
                         }
                         ?>
                     </td>
-                    <td><?php echo $purchase_request[$i]['request_remark']; ?></td>
+                    <td><?php echo $purchase_request[$i]['purchase_request_remark']; ?></td>
                     <td class="text-center">
                         <a href="?app=purchase_request&action=detail&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="ดูรายละเอียดใบร้องขอ">
                             <i class="fa fa-file-text-o" aria-hidden="true"></i>
                         </a>
                     <?php if($purchase_request[$i]['approve_status'] == "Waiting"){ ?>
-                        <?php if(!$purchase_request[$i]['request_cancelled']){ ?>
+                        <?php if(!$purchase_request[$i]['purchase_request_cancelled']){ ?>
                             <?php if($menu['purchase_request']['cancel']){ ?> 
                             <a href="?app=purchase_request&action=cancelled&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="ยกเลิกใบร้องขอ" onclick="return confirm('You want to cancelled purchase request : <?php echo $purchase_request[$i]['purchase_request_code']; ?>');" style="color:#F00;">
                                 <i class="fa fa-ban" aria-hidden="true"></i>
                             </a>
                             <?PHP } ?>
                             <?php if($menu['purchase_request']['edit']){ ?> 
-                            <a href="?app=purchase_request&action=revise&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="เขียนใบร้องขอใหม่" onclick="return confirm('You want to revise purchase request : <?php echo $purchase_request[$i]['purchase_request_code']; ?>');" style="color:#F00;">
+                            <a href="?app=purchase_request&action=revise&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="เขียนใบร้องขอใหม่" onclick="return confirm('You want to purchase_request_revise purchase request : <?php echo $purchase_request[$i]['purchase_request_code']; ?>');" style="color:#F00;">
                                 <i class="fa fa-registered" aria-hidden="true"></i>
                             </a>
                             <a href="?app=purchase_request&action=update&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="แก้ไขใบร้องขอ">
@@ -137,7 +137,7 @@
                             </a>
                             <?PHP } ?>
                             <?php if($menu['purchase_request']['edit']){ ?> 
-                            <a href="?app=purchase_request&action=revise&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="เขียนใบร้องขอใหม่" onclick="return confirm('You want to revise purchase request : <?php echo $purchase_request[$i]['purchase_request_code']; ?>');" style="color:#F00;">
+                            <a href="?app=purchase_request&action=revise&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="เขียนใบร้องขอใหม่" onclick="return confirm('You want to purchase_request_revise purchase request : <?php echo $purchase_request[$i]['purchase_request_code']; ?>');" style="color:#F00;">
                                 <i class="fa fa-registered" aria-hidden="true"></i>
                             </a>
                             <?PHP } ?>

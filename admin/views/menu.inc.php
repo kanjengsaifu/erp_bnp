@@ -335,6 +335,11 @@ for($i = 0 ; $i < count($menu_list); $i++){
                             <a href="?app=supplier" <?PHP if($_GET['app'] == "supplier"){?> class="active" <?PHP } ?> ><i class="fa fa-building-o" aria-hidden="true"></i> ผู้ขาย (Supplier)</a>
                         </li> 
                         <?PHP }?> 
+                        <?PHP if($menu['delivery']['view']){ ?>
+                        <li>
+                            <a href="?app=delivery" <?PHP if($_GET['app'] == "delivery"){?> class="active" <?PHP } ?> ><i class="fa fa-building-o" aria-hidden="true"></i> ผุ้ขนส่ง (Delivery)</a>
+                        </li> 
+                        <?PHP }?> 
                         <?PHP if($menu['address']['view']){ ?>
                         <li>
                             <a href="?app=address" <?PHP if($_GET['app'] == "address"){?> class="active" <?PHP } ?> ><i class="fa fa-map-marker" aria-hidden="true"></i> ข้อมูลพื้นที่ (Area)</a>

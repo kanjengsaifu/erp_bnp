@@ -29,6 +29,8 @@
         require_once("modules/company/views/index.inc.php");   
     }else if($_GET['app'] == "supplier" && $menu['supplier']['view']){
         require_once("modules/supplier/views/index.inc.php");   
+    }else if($_GET['app'] == "delivery" && $menu['delivery']['view']){
+        require_once("modules/delivery/views/index.inc.php");   
     }else if($_GET['app'] == "material" && $menu['material']['view']){
         require_once("modules/material/views/index.inc.php");   
     }else if($_GET['app'] == "unit" && $menu['unit']['view']){

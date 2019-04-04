@@ -49,14 +49,14 @@
         var supplier_code = document.getElementById("supplier_code").value;
         var purchase_order_code = document.getElementById("purchase_order_code").value;
         var purchase_order_date = document.getElementById("purchase_order_date").value;
-        var purchase_credit_term = document.getElementById("purchase_credit_term").value;
+        var purchase_order_credit_term = document.getElementById("purchase_order_credit_term").value;
         var employee_code = document.getElementById("employee_code").value;
         var date_check = document.getElementById("date_check").value;
 
         supplier_code = $.trim(supplier_code);
         purchase_order_code = $.trim(purchase_order_code);
         purchase_order_date = $.trim(purchase_order_date);
-        purchase_credit_term = $.trim(purchase_credit_term);
+        purchase_order_credit_term = $.trim(purchase_order_credit_term);
         employee_code = $.trim(employee_code);
 
         if(date_check == "1"){
@@ -89,7 +89,7 @@
         document.getElementById('supplier_code').value = supplier_code;
 
         $.post("controllers/getSupplierByCode.php", { 'supplier_code': supplier_code}, function( data ) {
-            document.getElementById('purchase_credit_term').value = data.credit_day;
+            document.getElementById('purchase_order_credit_term').value = data.credit_day;
             document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
         });
 
@@ -195,9 +195,9 @@
 
                     var content = "";
                     for(var i = 0; i < data.length; i++){
-                        var purchase_order_list_qty = parseFloat( data[i].purchase_request_list_qty );
+                        var purchase_order_list_qty = parseFloat( data[i].purchase_order_list_qty );
                         var purchase_order_list_price = parseFloat( data[i].purchase_order_list_price );
-                        var purchase_order_list_total = (data[i].purchase_request_list_qty * data[i].purchase_order_list_price);
+                        var purchase_order_list_total = (data[i].purchase_order_list_qty * data[i].purchase_order_list_price);
                         content += '<tr class="odd gradeX">'+
                                         '<td>'+
                                             '<input onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -280,9 +280,9 @@
                 $('#data_show_list').html("ทั้งหมด : "+data.length+" รายการ");
                 var content = "";
                 for(var i = 0; i < data.length ; i++){
-                    var purchase_order_list_qty = parseFloat( data[i].purchase_request_list_qty );
+                    var purchase_order_list_qty = parseFloat( data[i].purchase_order_list_qty );
                     var purchase_order_list_price = parseFloat( data[i].purchase_order_list_price );
-                    var purchase_order_list_total = (data[i].purchase_request_list_qty * data[i].purchase_order_list_price);
+                    var purchase_order_list_total = (data[i].purchase_order_list_qty * data[i].purchase_order_list_price);
                     content += '<tr class="odd gradeX">'+
                                     '<td>'+
                                         '<input onclick="add_row_by_click(this,'+i+')" type="checkbox" name="p_code" value="'+data[i].product_code+'">'+     
@@ -386,12 +386,12 @@
                             '<span>Remark : </span>'+
                             '<input type="text" class="form-control" name="purchase_order_list_remark[]" value="'+data_buffer[i].purchase_order_list_remark+'">'+
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_request_list_qty+'"></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_qty[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_order_list_qty+'"></td>'+
                         '<td>'+
                             '<input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price[]" onchange="update_sum(this);" value="'+data_buffer[i].purchase_order_list_price+'">'+
                             '<input type="checkbox" name="save_product_price[]" value="'+ data_buffer[i].product_code +'"> บันทึกราคาซื้อ'+ 
                         '</td>'+
-                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].purchase_request_list_qty * data_buffer[i].purchase_order_list_price)+'"></td>'+
+                        '<td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" name="purchase_order_list_price_sum[]" onchange="update_sum(this);" value="'+(data_buffer[i].purchase_order_list_qty * data_buffer[i].purchase_order_list_price)+'"></td>'+
                         '<td>'+
                             '<a href="javascript:;" onclick="product_detail_blank(this);">'+
                                 '<i class="fa fa-file-text-o" aria-hidden="true"></i>'+
@@ -433,15 +433,27 @@
 
     function calculateAll(){
         var val = document.getElementsByName('purchase_order_list_price_sum[]');
+        var vat_type = parseInt(document.getElementById("purchase_order_vat_type").value);
+        var vat = parseInt(document.getElementById("purchase_order_vat").value);
         var total = 0.0;
         
         for(var i = 0 ; i < val.length ; i++){
             total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
         }
 
-        $('#purchase_order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#purchase_order_vat_price').val((total * ($('#purchase_order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#purchase_order_net_price').val((total * ($('#purchase_order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        if(vat_type == 1){
+            $('#purchase_order_net_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_total_price').val(roundNumber(total - ((vat/(100.00 + vat) * total)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_vat_price').val(roundNumber((vat/(100.00 + vat)) * total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }else if(vat_type == 2){
+            $('#purchase_order_total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_vat_price').val(roundNumber((total * (vat/100.0)),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_net_price').val(roundNumber((total * (vat/100.0) + total),2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+        }else{
+            $('#purchase_order_total_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_net_price').val(roundNumber(total,2).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"));
+            $('#purchase_order_vat_price').val(0);
+        }
     }
 
     function product_detail_blank(id){
@@ -541,7 +553,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>เครดิต (วัน) / Credit term (Day)</label>
-                                <input type="text" id="purchase_credit_term" name="purchase_credit_term" class="form-control" value="<?PHP echo $supplier['credit_day'];?>">
+                                <input type="text" id="purchase_order_credit_term" name="purchase_order_credit_term" class="form-control" value="<?PHP echo $supplier['credit_day'];?>">
                                 <p class="help-block">Example : 10 </p>
                             </div>
                         </div>
@@ -550,7 +562,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>จัดส่งโดย / Delivery by</label>
-                                <input type="text" id="purchase_delivery_by" name="purchase_delivery_by" value="<?PHP echo $supplier['purchase_delivery_by'] ?>" class="form-control">
+                                <input type="text" id="purchase_order_delivery_by" name="purchase_order_delivery_by" value="<?PHP echo $supplier['purchase_order_delivery_by'] ?>" class="form-control">
                                 <p class="help-block">Example : DHL </p>
                             </div>
                         </div>
@@ -609,12 +621,12 @@
                             <span>Remark.</span>
                             <input type="text" class="form-control" name="purchase_order_list_remark[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_remark']; ?>">
                         </td>
-                        <td><input type="text" class="form-control" style="text-align:center;" autocomplete="off" onchange="update_sum(this);" name="purchase_order_list_qty[]" value="<?php echo $purchase_order_lists[$i]['purchase_request_list_qty']; ?>"></td>
+                        <td><input type="text" class="form-control" style="text-align:center;" autocomplete="off" onchange="update_sum(this);" name="purchase_order_list_qty[]" value="<?php echo $purchase_order_lists[$i]['purchase_order_list_qty']; ?>"></td>
                         <td>
                             <input type="text" class="form-control" style="text-align: right;" autocomplete="off"  onchange="update_sum(this);" name="purchase_order_list_price[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2); ?>">
                             <input type="checkbox" name="save_product_price[]" value="<?php echo $purchase_order_lists[$i]['product_code']; ?>"/> บันทึกราคาซื้อ
                         </td>
-                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="purchase_order_list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_request_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'],2); ?>"></td>
+                        <td align="right"><input type="text" class="form-control" style="text-align: right;" autocomplete="off" readonly onchange="update_sum(this);" name="purchase_order_list_price_sum[]" value="<?php echo number_format($purchase_order_lists[$i]['purchase_order_list_qty'] * $purchase_order_lists[$i]['purchase_order_list_price'],2); ?>"></td>
                         <td>
                             <a href="javascript:;" onclick="product_detail_blank(this);">
                                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -710,6 +722,7 @@
                                 <tr>
                                     <td><span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span></td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
+                                        <input type="hidden" id="purchase_order_vat_type" name="purchase_order_vat_type" value="<?php echo $supplier['vat_type'];?>">
                                         <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat" name="purchase_order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
                                     </td>
                                     <td width="16">%</td>

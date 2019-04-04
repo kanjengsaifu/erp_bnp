@@ -442,7 +442,6 @@ class InvoiceSupplierModel extends BaseModel{
             invoice_supplier_due_day, 
             invoice_supplier_begin,  
             invoice_supplier_remark, 
-            invoice_supplier_stock,
             addby,
             adddate) 
         VALUES ('". 
@@ -465,7 +464,6 @@ class InvoiceSupplierModel extends BaseModel{
         static::$db->real_escape_string($data['invoice_supplier_due_day'])."','".  
         $data['invoice_supplier_begin']."','".   
         static::$db->real_escape_string($data['invoice_supplier_remark'])."','". 
-        $data['invoice_supplier_stock']."','".
         $data['addby']."',".
         "NOW()
         )";

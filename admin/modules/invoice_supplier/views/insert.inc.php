@@ -54,8 +54,6 @@
     <?php }?>
     ];
 
-    var vat_type = <? echo $supplier['vat_type']; ?>;
-
     var data_buffer = [];
     var index_buffer = [];
 
@@ -528,6 +526,7 @@
 
     function calculateAll(){
         var val = document.getElementsByName('invoice_supplier_list_total[]');
+        var vat_type = parseInt(document.getElementById("invoice_supplier_vat_type").value);
         var vat = parseInt(document.getElementById("invoice_supplier_vat").value);
         var total = 0.0;
 
@@ -924,6 +923,7 @@
                                         <span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span>
                                     </td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
+                                        <input type="hidden" id="invoice_supplier_vat_type" name="invoice_supplier_vat_type" value="<?php echo $supplier['vat_type'];?>">
                                         <input type="text" class="form-control integer" style="text-align: right;" id="invoice_supplier_vat" name="invoice_supplier_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
                                     </td>
                                     <td width="16">

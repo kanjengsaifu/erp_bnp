@@ -44,9 +44,9 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Purchase Order Code <font color="#F00"><b>*</b></font>
-                                <?php if($purchase_order['purchase_revise_no']){ ?><b>
+                                <?php if($purchase_order['purchase_order_revise_no']){ ?><b>
                                         <font color="#F00">Revise
-                                            <?PHP echo $purchase_order['purchase_revise_no']; ?>
+                                            <?PHP echo $purchase_order['purchase_order_revise_no']; ?>
                                         </font>
                                     </b>
                                     <?PHP } ?> <?php if($purchase_order['purchase_order_cancelled']){ ?><b>
@@ -67,7 +67,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Credit term (Day)</label>
-                                <p class="help-block"><?php echo $purchase_order['purchase_credit_term']?>
+                                <p class="help-block"><?php echo $purchase_order['purchase_order_credit_term']?>
                                 </p>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Delivery by</label>
-                                <p class="help-block"><?php echo $purchase_order['purchase_delivery_by']?>
+                                <p class="help-block"><?php echo $purchase_order['purchase_order_delivery_by']?>
                                 </p>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                 </thead>
                 <tbody>
                     <?php 
-                    $sub_total = 0;
+                    $total = 0;
                     for($i=0; $i < count($purchase_order_lists); $i++){
                     ?>
                     <tr class="odd gradeX">
@@ -161,7 +161,7 @@
                         <?PHP } ?>
                     </tr>
                     <?
-                    $sub_total += $purchase_order_lists[$i]['purchase_order_list_price_sum'];
+                    $total += $purchase_order_lists[$i]['purchase_order_list_price_sum'];
                     }
                     ?>
                 </tbody>
@@ -169,21 +169,48 @@
                     <tr class="odd gradeX">
                         <td colspan="4" rowspan="3"></td>
                         <td colspan="3" align="right">Sub Total</td>
-                        <td align="right"><?php echo number_format($sub_total,2);?></td>
+                        <?PHP
+                            if($purchase_order['purchase_order_vat_type'] == 1){
+                                $total_val = $total - (($purchase_order['purchase_order_vat']/( 100 + $purchase_order['purchase_order_vat'] )) * $total);
+                            } else if($purchase_order['purchase_order_vat_type'] == 2){
+                                $total_val = $total;
+                            } else {
+                                $total_val = $total;
+                            }
+                        ?>
+                        <td align="right"><?php echo number_format($total_val,2);?></td>
                         <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td></td>
                         <?PHP } ?>
                     </tr>
                     <tr class="odd gradeX">
+                        <?PHP 
+                            if($purchase_order['purchase_order_vat_type'] == 1){
+                                $vat_val = ($purchase_order['purchase_order_vat']/( 100 + $purchase_order['purchase_order_vat'] )) * $total;
+                            }else if($purchase_order['purchase_order_vat_type'] == 2){
+                                $vat_val = ($purchase_order['purchase_order_vat']/100) * $total;
+                            }else {
+                                $vat_val = 0.0;
+                            }
+                        ?>
                         <td colspan="3" align="right">Vat</td>
-                        <td align="right"><?php echo number_format($sub_total * $vat/100,2);?></td>
+                        <td align="right"><?php echo number_format($vat_val,2);?></td>
                         <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td></td>
                         <?PHP } ?>
                     </tr>
                     <tr class="odd gradeX">
                         <td colspan="3" align="right">Net Total</td>
-                        <td align="right"><?php echo number_format($sub_total+($sub_total * $vat/100),2);?></td>
+                        <?PHP 
+                            if($purchase_order['purchase_order_vat_type'] == 1){
+                                $net_val =  $total;
+                            } else if($purchase_order['purchase_order_vat_type'] == 2){
+                                $net_val = ($purchase_order['purchase_order_vat']/100) * $total + $total;
+                            } else {
+                                $net_val = $total;
+                            }
+                        ?>
+                        <td align="right"><?php echo number_format($net_val,2);?></td>
                         <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td></td>
                         <?PHP } ?>
@@ -195,11 +222,11 @@
                 <input type="hidden" id="purchase_order_code" name="purchase_order_code" value="<?php echo $purchase_order_code; ?>">
                 <div class="row">
                     <div class="col-lg-offset-8 col-lg-2" align="right">
-                    <?php if($menu['purchase_order']['purchase_approve'] && !$purchase_order['purchase_order_cancelled']){ ?>
-                        <select id="purchase_approve_status" name="purchase_approve_status" class="form-control" data-live-search="true">
-                            <option <?php if($purchase_order['purchase_approve_status'] == "Waitting"){?> selected <?php }?>>Waitting</option>
-                            <option <?php if($purchase_order['purchase_approve_status'] == "Approve"){?> selected <?php }?>>Approve</option>
-                            <option <?php if($purchase_order['purchase_approve_status'] == "Not Approve"){?> selected <?php }?>>Not Approve</option>
+                    <?php if($menu['purchase_order']['purchase_order_approve'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                        <select id="purchase_order_approve_status" name="purchase_order_approve_status" class="form-control" data-live-search="true">
+                            <option <?php if($purchase_order['purchase_order_approve_status'] == "Waitting"){?> selected <?php }?>>Waitting</option>
+                            <option <?php if($purchase_order['purchase_order_approve_status'] == "Approve"){?> selected <?php }?>>Approve</option>
+                            <option <?php if($purchase_order['purchase_order_approve_status'] == "Not Approve"){?> selected <?php }?>>Not Approve</option>
                         </select>
                     <?PHP } ?>
                     </div>

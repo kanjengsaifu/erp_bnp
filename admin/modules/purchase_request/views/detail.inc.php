@@ -23,7 +23,7 @@
                         <label>หมายเลขสั่งซื้อสินค้า / PR Code <font color="#F00"><b>*</b></font> </label>
                         <p class="help-block">
                             <? echo $purchase_request['purchase_request_code'];?>
-                            <?php if($purchase_request['revise_no'] > 0){ ?><b><font color="#F00">Rewrite <?PHP echo $purchase_request['revise_no']; ?></font></b> <?PHP } ?> <?php if($purchase_request['request_cancelled'] == 1){ ?><b><font color="#F00">Cancelled</font></b> <?PHP } ?>
+                            <?php if($purchase_request['purchase_request_revise_no'] > 0){ ?><b><font color="#F00">Rewrite <?PHP echo $purchase_request['purchase_request_revise_no']; ?></font></b> <?PHP } ?> <?php if($purchase_request['purchase_request_cancelled'] == 1){ ?><b><font color="#F00">Cancelled</font></b> <?PHP } ?>
                         </p>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label>หมายเหคุ / Remark</label>
-                        <p class="help-block"><? echo $purchase_request['request_remark'];?></p>
+                        <p class="help-block"><? echo $purchase_request['purchase_request_remark'];?></p>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
 
             <div class="row">
                 <div class="col-lg-offset-8 col-lg-2" align="right">
-                <?php if($menu['purchase_request']['approve'] && !$purchase_request['request_cancelled']){ ?>
+                <?php if($menu['purchase_request']['approve'] && !$purchase_request['purchase_request_cancelled']){ ?>
                     <select id="approve_status" name="approve_status" class="form-control" data-live-search="true" >
                         <option <?php if($purchase_request['approve_status'] == "Waiting"){?> selected <?php }?> >Waiting</option>
                         <option <?php if($purchase_request['approve_status'] == "Approve"){?> selected <?php }?> >Approve</option>
@@ -82,7 +82,7 @@
                 <div class="col-lg-2" align="right">
                     <a href="index.php?app=purchase_request" class="btn btn-default">Back</a>
 
-                    <?php if($menu['purchase_request']['approve'] && !$purchase_request['request_cancelled']){ ?>
+                    <?php if($menu['purchase_request']['approve'] && !$purchase_request['purchase_request_cancelled']){ ?>
                     <button type="submit" class="btn btn-success">Save</button>
                     <?php } ?>
                 </div>
