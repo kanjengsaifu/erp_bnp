@@ -22,7 +22,7 @@
                 alert("This "+val_date+" is locked in the system.");
                 $("#date_check").val("1");
                 $('.calendar').datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("order_date").focus();
+                document.getElementById("purchase_order_date").focus();
             } else{
                 $("#date_check").val("0");
             }
@@ -32,28 +32,28 @@
     function check(){
         var supplier_code = document.getElementById("supplier_code").value;
         var purchase_order_code = document.getElementById("purchase_order_code").value;
-        var order_date = document.getElementById("order_date").value;
+        var purchase_order_date = document.getElementById("purchase_order_date").value;
         var credit_term = document.getElementById("credit_term").value;
         var employee_code = document.getElementById("employee_code").value;
         var date_check = document.getElementById("date_check").value;
         
         supplier_code = $.trim(supplier_code);
         purchase_order_code = $.trim(purchase_order_code);
-        order_date = $.trim(order_date);
+        purchase_order_date = $.trim(purchase_order_date);
         credit_term = $.trim(credit_term);
         employee_code = $.trim(employee_code);
 
         if(date_check == "1"){
-            alert("This "+order_date+" is locked in the system.");
-            document.getElementById("order_date").focus();
+            alert("This "+purchase_order_date+" is locked in the system.");
+            document.getElementById("purchase_order_date").focus();
             return false;
         }else if(supplier_code.length == 0){
             alert("Please input Supplier");
             document.getElementById("supplier_code").focus();
             return false;
-        }else if(order_date.length == 0){
+        }else if(purchase_order_date.length == 0){
             alert("Please input purchase Order Date");
-            document.getElementById("order_date").focus();
+            document.getElementById("purchase_order_date").focus();
             return false;
         }else if(employee_code.length == 0){
             alert("Please input employee");
@@ -417,9 +417,9 @@
             total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
         }
 
-        $('#order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#order_vat_price').val((total * ($('#order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#order_net_price').val((total * ($('#order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#purchase_order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#purchase_order_vat_price').val((total * ($('#purchase_order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#purchase_order_net_price').val((total * ($('#purchase_order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
     }
 
     function product_detail_blank(id){
@@ -487,7 +487,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font><?php if($purchase_order['revise_no'] > 0){ ?><b><font color="#F00">Revise <?PHP echo $purchase_order['revise_no']; ?></font></b> <?PHP } ?></label>
+                                <label>รหัสใบสั่งซื้อสินค้า / Purchase Order Code <font color="#F00"><b>*</b></font><?php if($purchase_order['purchase_revise_no'] > 0){ ?><b><font color="#F00">Revise <?PHP echo $purchase_order['purchase_revise_no']; ?></font></b> <?PHP } ?></label>
                                 <input id="purchase_order_code" name="purchase_order_code" class="form-control" value="<? echo $purchase_order['purchase_order_code'];?>" onchange="check_code()" > 
                                 <input id="purchase_check" type="hidden" value="">
                                 <p class="help-block">Example : PO1801001.</p>
@@ -514,7 +514,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>วันที่ออกใบสั่งซื้อสินค้า / Purchase Order Date</label>
-                                <input type="text" id="order_date" name="order_date" value="<?php if ($purchase_order['order_date'] != ''){ echo date("d-m-Y", strtotime($purchase_order['order_date'])); } ?>"  class="form-control calendar" onchange="check_date(this);" readonly>
+                                <input type="text" id="purchase_order_date" name="purchase_order_date" value="<?php if ($purchase_order['purchase_order_date'] != ''){ echo date("d-m-Y", strtotime($purchase_order['purchase_order_date'])); } ?>"  class="form-control calendar" onchange="check_date(this);" readonly>
                                 <input id="date_check" type="hidden" value="">
                                 <p class="help-block">Example :31-01-2018</p>
                             </div>
@@ -531,7 +531,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>จัดส่งโดย / Delivery by</label>
-                                <input type="text" id="delivery_by" name="delivery_by" value="<? echo $purchase_order['delivery_by'];?>"  class="form-control">
+                                <input type="text" id="purchase_delivery_by" name="purchase_delivery_by" value="<? echo $purchase_order['purchase_delivery_by'];?>"  class="form-control">
                                 <p class="help-block">Example :DHL </p>
                             </div>
                         </div>            
@@ -547,23 +547,23 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>หมายเหตุ / Remark</label>
-                                <input type="text" id="order_remark" name="order_remark" value="<? echo $purchase_order['order_remark'];?>"  class="form-control">
+                                <input type="text" id="purchase_order_remark" name="purchase_order_remark" value="<? echo $purchase_order['purchase_order_remark'];?>"  class="form-control">
                                 <p class="help-block">Example :-</p>
                             </div>
                         </div>
                     </div>   
-                    <?php if( $purchase_order['order_status'] != 'Approved' && $menu['purchase_order']['approve']){ ?> 
+                    <?php if( $purchase_order['purchase_order_status'] != 'Approved' && $menu['purchase_order']['purchase_approve']){ ?> 
                     <div class="row">
                         <div class="col-lg-6">
                             <label>สถานะ / status</label>
-                            <select id="approve_status" name="approve_status" class="form-control" data-live-search="true">
-                                <option <?php if($purchase_order['approve_status'] == "Waitting"){?>
+                            <select id="purchase_approve_status" name="purchase_approve_status" class="form-control" data-live-search="true">
+                                <option <?php if($purchase_order['purchase_approve_status'] == "Waitting"){?>
                                     selected <?php }?>>Waitting</option>
-                                <option <?php if($purchase_order['approve_status'] == "Approve"){?>
+                                <option <?php if($purchase_order['purchase_approve_status'] == "Approve"){?>
                                     selected <?php }?>>Approve</option>
-                                <option <?php if($purchase_order['approve_status'] == "Not Approve"){?>
+                                <option <?php if($purchase_order['purchase_approve_status'] == "Not Approve"){?>
                                     selected <?php }?>>Not Approve</option>
-                                <option <?php if($purchase_order['approve_status'] == ""){?>
+                                <option <?php if($purchase_order['purchase_approve_status'] == ""){?>
                                 selected <?php }?>>ไม่ระบุ</option>
                             </select>
                         </div>             
@@ -686,15 +686,15 @@
                         <td colspan="2" align="left" style="vertical-align: middle;"><span>ราคารวมทั้งสิ้น / Sub total</span></td>
                         <td>
                         <?PHP
-                            if($supplier['vat_type'] == 1){
-                                $total_val = $total - (($supplier['vat']/( 100 + $supplier['vat'] )) * $total);
-                            } else if($supplier['vat_type'] == 2){
+                            if($purchase_order['purchase_order_vat_type'] == 1){
+                                $total_val = $total - (($purchase_order['purchase_order_vat']/( 100 + $purchase_order['purchase_order_vat'] )) * $total);
+                            } else if($purchase_order['purchase_order_vat_type'] == 2){
                                 $total_val = $total;
                             } else {
                                 $total_val = $total;
                             }
                         ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="order_total_price" name="order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_total_price" name="purchase_order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly>
                         </td>
                         <td></td>
                     </tr>
@@ -706,7 +706,7 @@
                                         <span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span>
                                     </td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
-                                        <input type="text" class="form-control" style="text-align: right;" id="order_vat" name="order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
+                                        <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat" name="purchase_order_vat" value="<?php echo $purchase_order['purchase_order_vat'];?>" onchange="calculateAll();">
                                     </td>
                                     <td width="16">
                                     %
@@ -716,15 +716,15 @@
                         </td>
                         <td>
                             <?PHP 
-                            if($supplier['vat_type'] == 1){
-                                $vat_val = ($supplier['vat']/( 100 + $supplier['vat'] )) * $total;
-                            } else if($supplier['vat_type'] == 2){
-                                $vat_val = ($supplier['vat']/100) * $total;
+                            if($purchase_order['purchase_order_vat_type'] == 1){
+                                $vat_val = ($purchase_order['purchase_order_vat']/( 100 + $purchase_order['purchase_order_vat'] )) * $total;
+                            } else if($purchase_order['purchase_order_vat_type'] == 2){
+                                $vat_val = ($purchase_order['purchase_order_vat']/100) * $total;
                             } else {
                                 $vat_val = 0.0;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="order_vat_price" name="order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat_price" name="purchase_order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
                         </td>
                         <td></td>
                     </tr>
@@ -732,15 +732,15 @@
                         <td colspan="2" align="left" style="vertical-align: middle;"><span>จำนวนเงินรวมทั้งสิ้น / Net Total</span></td>
                         <td>
                             <?PHP 
-                            if($supplier['vat_type'] == 1){
+                            if($purchase_order['purchase_order_vat_type'] == 1){
                                 $net_val =  $total;
-                            } else if($supplier['vat_type'] == 2){
-                                $net_val = ($supplier['vat']/100) * $total + $total;
+                            } else if($purchase_order['purchase_order_vat_type'] == 2){
+                                $net_val = ($purchase_order['purchase_order_vat']/100) * $total + $total;
                             } else {
                                 $net_val = $total;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="order_net_price" name="order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_net_price" name="purchase_order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
                         </td>
                         <td>
                         </td>
@@ -752,7 +752,7 @@
                 <div class="col-lg-12" align="right">
                     <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>
                     <?php 
-                    if( $purchase_order['order_status'] == 'New'){
+                    if( $purchase_order['purchase_order_status'] == 'New'){
                     ?>
                     <button type="reset" class="btn btn-primary">Reset</button>
                     <button type="submit" class="btn btn-success">Save</button>
@@ -762,7 +762,7 @@
                     }
                     ?>
                     <?php 
-                    if( $purchase_order['order_status'] == 'Approved'){
+                    if( $purchase_order['purchase_order_status'] == 'Approved'){
                     ?>
                     <a href="index.php?app=purchase_order&action=sending&code=<?php echo $purchase_order_code;?>&supplier_code=<?PHP echo $purchase_order['supplier_code']; ?>" class="btn btn-warning" >Send Order</a>
                     <?php 

@@ -21,7 +21,7 @@
     <?php }?>
     ];
 
-    var vat_type = <? echo $supplier['vat_type']; ?>;
+    var vat_type = <? echo $invoice_supplier['invoice_supplier_vat_type']; ?>;
     
     var data_buffer = [];
     var index_buffer = [];
@@ -869,9 +869,9 @@
                             <span>ราคารวมทั้งสิ้น / Sub total</span>
                         </td><td>
                         <?PHP
-                            if($supplier['vat_type'] == 1){
-                                $total_val = $total - (($supplier['vat']/( 100 + $supplier['vat'] )) * $total);
-                            } else if($supplier['vat_type'] == 2){
+                            if($invoice_supplier['invoice_supplier_vat_type'] == 1){
+                                $total_val = $total - (($invoice_supplier['vat']/( 100 + $invoice_supplier['vat'] )) * $total);
+                            } else if($invoice_supplier['invoice_supplier_vat_type'] == 2){
                                 $total_val = $total;
                             } else {
                                 $total_val = $total;
@@ -895,9 +895,9 @@
                         </td>
                         <td>
                             <?PHP 
-                            if($supplier['vat_type'] == 1){
+                            if($invoice_supplier['invoice_supplier_vat_type'] == 1){
                                 $vat_val = ($supplier['vat']/( 100 + $supplier['vat'] )) * $total;
-                            } else if($supplier['vat_type'] == 2){
+                            } else if($invoice_supplier['invoice_supplier_vat_type'] == 2){
                                 $vat_val = ($supplier['vat']/100) * $total;
                             } else {
                                 $vat_val = 0.0;
@@ -913,9 +913,9 @@
                         </td>
                         <td>
                             <?PHP 
-                            if($supplier['vat_type'] == 1){
+                            if($invoice_supplier['invoice_supplier_vat_type'] == 1){
                                 $net_val =  $total;
-                            } else if($supplier['vat_type'] == 2){
+                            } else if($invoice_supplier['invoice_supplier_vat_type'] == 2){
                                 $net_val = ($supplier['vat']/100) * $total + $total;
                             } else {
                                 $net_val = $total;

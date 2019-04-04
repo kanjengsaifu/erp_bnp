@@ -35,9 +35,9 @@
                 alert("This "+val_date+" is locked in the system.");
                 
                 $("#date_check").val("1");
-                //$("#order_date").val(data.date_now);
+                //$("#purchase_order_date").val(data.date_now);
                 $('.calendar').datepicker({ dateFormat: 'dd-mm-yy' });
-                document.getElementById("order_date").focus();
+                document.getElementById("purchase_order_date").focus();
             } else{
                 $("#date_check").val("0");
                 //generate_credit_date();
@@ -48,20 +48,20 @@
     function check(){
         var supplier_code = document.getElementById("supplier_code").value;
         var purchase_order_code = document.getElementById("purchase_order_code").value;
-        var order_date = document.getElementById("order_date").value;
-        var credit_term = document.getElementById("credit_term").value;
+        var purchase_order_date = document.getElementById("purchase_order_date").value;
+        var purchase_credit_term = document.getElementById("purchase_credit_term").value;
         var employee_code = document.getElementById("employee_code").value;
         var date_check = document.getElementById("date_check").value;
 
         supplier_code = $.trim(supplier_code);
         purchase_order_code = $.trim(purchase_order_code);
-        order_date = $.trim(order_date);
-        credit_term = $.trim(credit_term);
+        purchase_order_date = $.trim(purchase_order_date);
+        purchase_credit_term = $.trim(purchase_credit_term);
         employee_code = $.trim(employee_code);
 
         if(date_check == "1"){
-            alert("This "+order_date+" is locked in the system.");
-            document.getElementById("order_date").focus();
+            alert("This "+purchase_order_date+" is locked in the system.");
+            document.getElementById("purchase_order_date").focus();
             return false;
         }else if(purchase_order_code == ""){
             alert("Please input purchase order code .");
@@ -71,9 +71,9 @@
             alert("Please input Supplier");
             document.getElementById("supplier_code").focus();
             return false;
-        }else if(order_date.length == 0){
+        }else if(purchase_order_date.length == 0){
             alert("Please input purchase order Date");
-            document.getElementById("order_date").focus();
+            document.getElementById("purchase_order_date").focus();
             return false;
         }else if(employee_code.length == 0){
             alert("Please input employee");
@@ -89,7 +89,7 @@
         document.getElementById('supplier_code').value = supplier_code;
 
         $.post("controllers/getSupplierByCode.php", { 'supplier_code': supplier_code}, function( data ) {
-            document.getElementById('credit_term').value = data.credit_day;
+            document.getElementById('purchase_credit_term').value = data.credit_day;
             document.getElementById('supplier_address').value = data.supplier_address_1 +'\n' + data.supplier_address_2 +'\n' +data.supplier_address_3;
         });
 
@@ -439,9 +439,9 @@
             total += parseFloat(val[i].value.toString().replace(new RegExp(',', 'g'),''));
         }
 
-        $('#order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#order_vat_price').val((total * ($('#order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
-        $('#order_net_price').val((total * ($('#order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#purchase_order_total_price').val(total.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#purchase_order_vat_price').val((total * ($('#purchase_order_vat').val()/100.0)).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
+        $('#purchase_order_net_price').val((total * ($('#purchase_order_vat').val()/100.0) + total).toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") );
     }
 
     function product_detail_blank(id){
@@ -533,7 +533,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>วันที่ออกใบสั่งซื้อสินค้า / Purchase Order Date</label>
-                                <input type="text" id="order_date" name="order_date" value="<?PHP echo date("d")."-".date("m")."-".date("Y"); ?>" class="form-control calendar" onchange="check_date(this);" readonly>
+                                <input type="text" id="purchase_order_date" name="purchase_order_date" value="<?PHP echo date("d")."-".date("m")."-".date("Y"); ?>" class="form-control calendar" onchange="check_date(this);" readonly>
                                 <input id="date_check" type="hidden" value="">
                                 <p class="help-block">Example : 31-01-2018</p>
                             </div>
@@ -541,7 +541,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>เครดิต (วัน) / Credit term (Day)</label>
-                                <input type="text" id="credit_term" name="credit_term" class="form-control" value="<?PHP echo $supplier['credit_day'];?>">
+                                <input type="text" id="purchase_credit_term" name="purchase_credit_term" class="form-control" value="<?PHP echo $supplier['credit_day'];?>">
                                 <p class="help-block">Example : 10 </p>
                             </div>
                         </div>
@@ -550,7 +550,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>จัดส่งโดย / Delivery by</label>
-                                <input type="text" id="delivery_by" name="delivery_by" value="<?PHP echo $supplier['delivery_by'] ?>" class="form-control">
+                                <input type="text" id="purchase_delivery_by" name="purchase_delivery_by" value="<?PHP echo $supplier['purchase_delivery_by'] ?>" class="form-control">
                                 <p class="help-block">Example : DHL </p>
                             </div>
                         </div>
@@ -566,7 +566,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>หมายเหตุ / Remark</label>
-                                <input type="text" id="order_remark" name="order_remark" value="<? echo $purchase_order['order_remark'];?>" class="form-control">
+                                <input type="text" id="purchase_order_remark" name="purchase_order_remark" value="<? echo $purchase_order['purchase_order_remark'];?>" class="form-control">
                                 <p class="help-block">Example : -</p>
                             </div>
                         </div>            
@@ -700,7 +700,7 @@
                                 $total_val = $total;
                             }
                         ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="order_total_price" name="order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_total_price" name="purchase_order_total_price" value="<?PHP echo number_format($total_val,2) ;?>"  readonly/>
                         </td>
                         <td></td>
                     </tr>
@@ -710,7 +710,7 @@
                                 <tr>
                                     <td><span>จำนวนภาษีมูลค่าเพิ่ม / Vat</span></td>
                                     <td style = "padding-left:8px;padding-right:8px;width:72px;">
-                                        <input type="text" class="form-control" style="text-align: right;" id="order_vat" name="order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
+                                        <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat" name="purchase_order_vat" value="<?php echo $supplier['vat'];?>" onchange="calculateAll();">
                                     </td>
                                     <td width="16">%</td>
                                 </tr>
@@ -726,7 +726,7 @@
                                 $vat_val = 0.0;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="order_vat_price"  name="order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_vat_price"  name="purchase_order_vat_price" value="<?PHP echo number_format($vat_val,2) ;?>"  readonly/>
                         </td>
                         <td></td>
                     </tr>
@@ -742,7 +742,7 @@
                                 $net_val = $total;
                             }
                             ?>
-                            <input type="text" class="form-control" style="text-align: right;" id="order_net_price" name="order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
+                            <input type="text" class="form-control" style="text-align: right;" id="purchase_order_net_price" name="purchase_order_net_price" value="<?PHP echo number_format($net_val,2) ;?>" readonly/>
                         </td>
                         <td></td>
                     </tr>

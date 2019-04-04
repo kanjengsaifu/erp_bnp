@@ -73,7 +73,7 @@ if ($_GET['action'] == 'import-view' && $menu['invoice_supplier']['add']){
 
     if($supplier_code != ''){
         $supplier = $supplier_model->getSupplierByCode($supplier_code);
-        $invoice_supplier_lists = $invoice_supplier_model->generateInvoiceSupplierListBySupplierCode($supplier_code);
+        $invoice_supplier_lists = $invoice_supplier_model->generateInvoiceSupplierListBySupplierCode($supplier_code,'','','',$purchase_order_code);
     }
 
     $code = "RR".date("y").date("m").date("d");
@@ -214,7 +214,8 @@ if ($_GET['action'] == 'import-view' && $menu['invoice_supplier']['add']){
             //     $code = $invoice_supplier_freight_list_model->insertInvoiceSupplierFreightInList($data_sub); 
             // }
 
-            $maintenance_stock_model->runMaintenance($_POST['invoice_supplier_receive_date']);
+            $invoice_supplier_receive_date = $date_time->changeDateFormat($_POST['invoice_supplier_receive_date']);
+            $maintenance_stock_model->runMaintenance($invoice_supplier_receive_date);
             ?>
                 <!-- <script>
                     window.location="index.php?app=invoice_supplier&action=update&code=<?php echo $invoice_supplier_code;?>";
@@ -625,7 +626,7 @@ if ($_GET['action'] == 'import-view' && $menu['invoice_supplier']['add']){
     $journal_purchases = $journal_purchase_model->deleteJournalPurchaseByInvoiceSupplierCode($invoice_supplier_code);
 
     ?>
-        <!-- <script>window.location="index.php?app=invoice_supplier"</script> -->
+        <script>window.location="index.php?app=invoice_supplier"</script>
     <?php
 }else{
     $date_start = $_GET['date_start'];

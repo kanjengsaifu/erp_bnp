@@ -77,20 +77,20 @@ class PurchaseRequestModel extends BaseModel{
     function getPurchaseOrderByPurchaseRequestCode($purchase_request_code){
         $sql =  "SELECT purchase_order_code
         FROM tb_purchase_order AS tb
-        WHERE revise_code IN (
-            SELECT revise_code
+        WHERE purchase_revise_code IN (
+            SELECT purchase_revise_code
             FROM tb_purchase_request_list
             LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
-            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.revise_code
-            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.revise_code = tb.revise_code
-            GROUP BY revise_code
-        )  AND revise_no = (
-            SELECT MAX(revise_no)
+            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_revise_code
+            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.purchase_revise_code = tb.purchase_revise_code
+            GROUP BY purchase_revise_code
+        )  AND purchase_revise_no = (
+            SELECT MAX(purchase_revise_no)
             FROM tb_purchase_request_list
             LEFT JOIN tb_purchase_order_list ON tb_purchase_request_list.purchase_order_list_code = tb_purchase_order_list.purchase_order_list_code    
-            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.revise_code
-            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.revise_code = tb.revise_code
-            GROUP BY revise_code
+            LEFT JOIN tb_purchase_order ON tb_purchase_order_list.purchase_order_code = tb_purchase_order.purchase_revise_code
+            WHERE purchase_request_code = '$purchase_request_code' AND tb_purchase_order.purchase_revise_code = tb.purchase_revise_code
+            GROUP BY purchase_revise_code
         )";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {

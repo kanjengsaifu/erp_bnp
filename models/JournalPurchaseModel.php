@@ -191,10 +191,16 @@ class JournalPurchaseModel extends BaseModel{
     
 
     function deleteJournalPurchaseByInvoiceSupplierCode($invoice_supplier_code){
-        $sql = " DELETE FROM tb_journal_purchase_list WHERE journal_purchase_code IN (SELECT journal_purchase_code FROM tb_journal_purchase WHERE invoice_supplier_code = '$invoice_supplier_code' ) ";
+        $sql = "DELETE FROM tb_journal_purchase_list 
+        WHERE journal_purchase_code IN (
+            SELECT journal_purchase_code 
+            FROM tb_journal_purchase 
+            WHERE invoice_supplier_code = '$invoice_supplier_code'
+        )";
+        
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
-        $sql = " DELETE FROM tb_journal_purchase WHERE  invoice_supplier_code = '$invoice_supplier_code' ";
+        $sql = "DELETE FROM tb_journal_purchase WHERE  invoice_supplier_code = '$invoice_supplier_code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
     }
 }

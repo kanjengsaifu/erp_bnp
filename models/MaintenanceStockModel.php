@@ -43,14 +43,14 @@ class MaintenanceStockModel extends BaseModel{
 
             if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
                 $data = [];
-                while( $row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                while($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                     $data[] = $row;
                 }
                 $result->close(); 
 
                 // 1-1.3.1 วนรอบปรับต้นทุนต่างๆ ในคลังสินค้า
                 for($i = 0; $i < count($data); $i++){  
-                    $this->addSummitProduct($data[$i]['summit_product_date'], $data[$i]['stock_group_code'], $data[$i]['summit_product_code'], $data[$i]['product_code'], $data[$i]['summit_product_qty'], $data[$i]['summit_product_cost']);
+                    $this->addSummitProduct($data[$i]['adddate'], $data[$i]['stock_group_code'], $data[$i]['summit_product_code'], $data[$i]['product_code'], $data[$i]['summit_product_qty'], $data[$i]['summit_product_cost']);
                 }
             }
 
@@ -75,10 +75,9 @@ class MaintenanceStockModel extends BaseModel{
                 
                 for($i = 0; $i < count($data); $i++){
                     //1-2.2.1 ล้างประวัติคลังสินค้า ตั้งแต่วันที่ทำการแก้ไข 
-                    $sql = "DELETE FROM ".$data[$i]['table_name']." WHERE stock_date >= STR_TO_DATE('$start_date','%d-%m-%Y %H:%i:%s')";
+                    $sql = "DELETE FROM ".$data[$i]['table_name']." WHERE stock_date >= STR_TO_DATE('$start_date','%Y-%m-%d') ";
                     mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
-
-
+                    
                     // 1-2.3 ปรับ Index ของทุกคลังสินค้าใหม่ ให้เท่ากับ index ล่าสุด
                     $sql = "ALTER TABLE ".$data[$i]['table_name']." AUTO_INCREMENT = (SELECT MAX(stock_code) + 1 FROM ".$data[$i]['table_name']." )";
                     mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
@@ -90,8 +89,8 @@ class MaintenanceStockModel extends BaseModel{
                         GROUP BY product_code 
                     )";
 
-                    $data_transaction = [];
                     if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+                        $data_transaction = [];
                         while( $row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
                             $data_transaction[] = $row;
                         }
@@ -116,11 +115,11 @@ class MaintenanceStockModel extends BaseModel{
                 }
             }
 
-            $str_invoice_supplier = " AND invoice_supplier_receive_date >= STR_TO_DATE('$start_date','%d-%m-%Y %H:%i:%s') ";
-            $str_move = " AND stock_move_date >= STR_TO_DATE('$start_date','%d-%m-%Y %H:%i:%s') ";
-            $str_change = " AND stock_change_product_date >= STR_TO_DATE('$start_date','%d-%m-%Y %H:%i:%s') ";
-            $str_invoice_customer = " AND invoice_customer_date >= STR_TO_DATE('$start_date','%d-%m-%Y %H:%i:%s') ";
-            $str_issue = " AND stock_issue_date >= STR_TO_DATE('$start_date','%d-%m-%Y %H:%i:%s') ";
+            $str_invoice_supplier = " AND invoice_supplier_receive_date >= STR_TO_DATE('$start_date','%Y-%m-%d') ";
+            $str_move = " AND stock_move_date >= STR_TO_DATE('$start_date','%Y-%m-%d') ";
+            $str_change = " AND stock_change_product_date >= STR_TO_DATE('$start_date','%Y-%m-%d') ";
+            $str_invoice_customer = " AND invoice_customer_date >= STR_TO_DATE('$start_date','%Y-%m-%d') ";
+            $str_issue = " AND stock_issue_date >= STR_TO_DATE('$start_date','%Y-%m-%d') ";
         }
 
         //2. ดึงข้อมูลการรับสินค้าเข้าเรียงตามวันที่
@@ -385,7 +384,8 @@ class MaintenanceStockModel extends BaseModel{
         $sql = "SELECT stock_qty , stock_cost_avg  
         FROM tb_stock
         WHERE stock_group_code = '$stock_group_code' 
-        AND product_code = '$product_code' ;";
+        AND product_code = '$product_code'
+        ";
 
         if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             $stock = mysqli_fetch_array($result,MYSQLI_ASSOC) ;
@@ -635,7 +635,8 @@ class MaintenanceStockModel extends BaseModel{
         ($stock['stock_qty'])."','".
         ($stock['stock_cost_avg'])."','".
         ($stock['stock_qty'] * $stock['stock_cost_avg'])."','".
-        $summit_product_code."'); "; 
+        $summit_product_code."'
+        )"; 
 
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
     }
@@ -698,28 +699,9 @@ class MaintenanceStockModel extends BaseModel{
         ($stock['stock_qty'] * $stock['stock_cost_avg'])."','".
         $invoice_supplier_list_code."'); "; 
 
-        echo $sql;
-
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
     }   
 
-    //##########################################################################################################
-    //
-    //###################################### ทำการคำณวนต้นทุนเมื่อลบรายการรับสินค้า #################################
-    //
-    //##########################################################################################################
-
-    function removePurchase($stock_group_code, $invoice_supplier_list_code, $product_code, $qty, $cost){
-        $stock = $this->getStockGroupTable($stock_group_code); 
-
-        $this->createRowStock($stock['stock_group_code'],$product_code);
-        $stock = $this->calculatePurchaseCostOut($stock['stock_group_code'], $product_code, $qty, $cost);
-
-        $sql = "DELETE FROM ".$stock['table_name']." WHERE invoice_supplier_list_code ='".$invoice_supplier_list_code."'";
-        mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);  
-
-    } 
-    
     //##########################################################################################################
     //
     //###################################### ทำการคำณวนต้นทุนเมื่อเพิ่มรายการขายสินค้า #################################

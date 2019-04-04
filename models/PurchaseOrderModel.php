@@ -29,11 +29,11 @@ class PurchaseOrderModel extends BaseModel{
         $str_user = "";
 
         if($date_start != "" && $date_end != ""){
-            $str_date = "AND order_date >= STR_TO_DATE('$date_start','%d-%m-%Y %H:%i:%s') AND order_date <= STR_TO_DATE('$date_end','%d-%m-%Y %H:%i:%s') ";
+            $str_date = "AND purchase_order_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND purchase_order_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
         }else if ($date_start != ""){
-            $str_date = "AND order_date >= STR_TO_DATE('$date_start','%d-%m-%Y %H:%i:%s') ";    
+            $str_date = "AND purchase_order_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
         }else if ($date_end != ""){
-            $str_date = "AND order_date <= STR_TO_DATE('$date_end','%d-%m-%Y %H:%i:%s') ";  
+            $str_date = "AND purchase_order_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
         }
 
         if($user_code != ""){
@@ -45,23 +45,23 @@ class PurchaseOrderModel extends BaseModel{
         }
 
         $sql = " SELECT purchase_order_code, tb.supplier_code,
-        purchase_order_code, order_date, revise_code, revise_no,
-        order_status, approve_status, credit_term, order_cancelled, delivery_by,
+        purchase_order_code, purchase_order_date, purchase_revise_code, purchase_revise_no,
+        purchase_order_status, purchase_approve_status, purchase_credit_term, purchase_order_cancelled, purchase_delivery_by,
         IFNULL((
-            SELECT IF(MAX(tb_purchase_order.revise_no) = tb.revise_no,0,1)
+            SELECT IF(MAX(tb_purchase_order.purchase_revise_no) = tb.purchase_revise_no,0,1)
             FROM tb_purchase_order 
-            WHERE revise_code = tb.revise_code 
+            WHERE purchase_revise_code = tb.purchase_revise_code 
         ),0) as count_revise,
         IFNULL(CONCAT(tb_employee.user_name,' ',tb_employee.user_lastname),'-') as employee_name, 
-        IFNULL(CONCAT(tb_approve.user_name,' ',tb_approve.user_lastname),'-') as accept_name, 
+        IFNULL(CONCAT(tb_purchase_approve.user_name,' ',tb_purchase_approve.user_lastname),'-') as accept_name, 
         IFNULL(supplier_name_en,'-') as supplier_name
         FROM tb_purchase_order as tb 
         LEFT JOIN tb_user as tb_employee ON tb.employee_code = tb_employee.user_code 
-        LEFT JOIN tb_user as tb_approve ON tb.approve_by = tb_approve.user_code 
+        LEFT JOIN tb_user as tb_purchase_approve ON tb.purchase_approve_by = tb_purchase_approve.user_code 
         LEFT JOIN tb_supplier ON tb.supplier_code = tb_supplier.supplier_code 
         WHERE (
             CONCAT(tb_employee.user_name,' ',tb_employee.user_lastname) LIKE ('%$keyword%')
-            OR CONCAT(tb_approve.user_name,' ',tb_approve.user_lastname) LIKE ('%$keyword%')
+            OR CONCAT(tb_purchase_approve.user_name,' ',tb_purchase_approve.user_lastname) LIKE ('%$keyword%')
             OR purchase_order_code LIKE ('%$keyword%')
         )
         $str_supplier
@@ -134,11 +134,11 @@ class PurchaseOrderModel extends BaseModel{
         $str_date = "";
 
         if($date_start != "" && $date_end != ""){
-            $str_date = " order_date >= STR_TO_DATE('$date_start','%d-%m-%Y %H:%i:%s') AND order_date <= STR_TO_DATE('$date_end','%d-%m-%Y %H:%i:%s') ";
+            $str_date = " purchase_order_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND purchase_order_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
         }else if ($date_start != ""){
-            $str_date = " order_date >= STR_TO_DATE('$date_start','%d-%m-%Y %H:%i:%s') ";    
+            $str_date = " purchase_order_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
         }else if ($date_end != ""){
-            $str_date = " order_date <= STR_TO_DATE('$date_end','%d-%m-%Y %H:%i:%s') ";  
+            $str_date = " purchase_order_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
         }
 
         if($supplier_code != ""){
@@ -150,8 +150,8 @@ class PurchaseOrderModel extends BaseModel{
         tb_purchase_order.supplier_code,
         tb_purchase_order.employee_code,
         tb_purchase_order.purchase_order_code,
-        tb_purchase_order.order_status,
-        tb_purchase_order.order_date,
+        purchase_order_status,
+        tb_purchase_order.purchase_order_date,
         tb_purchase_order_list.purchase_order_list_code,
         tb_purchase_order_list.product_code,
         tb_purchase_order_list.purchase_list_qty,
@@ -191,11 +191,11 @@ class PurchaseOrderModel extends BaseModel{
         if($purchase_order_code == ""){
 
             if($date_start != "" && $date_end != ""){
-                $str_date = "AND order_date >= STR_TO_DATE('$date_start','%d-%m-%Y %H:%i:%s') AND order_date <= STR_TO_DATE('$date_end','%d-%m-%Y %H:%i:%s') ";
+                $str_date = "AND purchase_order_date >= STR_TO_DATE('$date_start','%d-%m-%Y') AND purchase_order_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";
             }else if ($date_start != ""){
-                $str_date = "AND order_date >= STR_TO_DATE('$date_start','%d-%m-%Y %H:%i:%s') ";    
+                $str_date = "AND purchase_order_date >= STR_TO_DATE('$date_start','%d-%m-%Y') ";    
             }else if ($date_end != ""){
-                $str_date = "AND order_date <= STR_TO_DATE('$date_end','%d-%m-%Y %H:%i:%s') ";  
+                $str_date = "AND purchase_order_date <= STR_TO_DATE('$date_end','%d-%m-%Y') ";  
             }
 
             if($supplier_code != ""){
@@ -232,7 +232,7 @@ class PurchaseOrderModel extends BaseModel{
         $sql = " SELECT *
         FROM tb_purchase_order as tb
         LEFT JOIN tb_user as tb1 ON tb.employee_code = tb1.user_code 
-        LEFT JOIN tb_user as tb3 ON tb.approve_by = tb3.user_code 
+        LEFT JOIN tb_user as tb3 ON tb.purchase_approve_by = tb3.user_code 
         LEFT JOIN tb_supplier as tb2 ON tb.supplier_code = tb2.supplier_code 
         WHERE  purchase_order_code LIKE ('%$keyword%')   
         ORDER BY purchase_order_code DESC 
@@ -295,7 +295,7 @@ class PurchaseOrderModel extends BaseModel{
                 OR tb_purchase_request_list.product_code LIKE ('%$search%') 
                 OR product_name LIKE ('%$search%')
             )  
-        AND approve_status = 'Approve' 
+        AND purchase_approve_status = 'Approve' 
         GROUP BY purchase_request_list_code 
         ORDER BY purchase_request_list_code ASC
         ";
@@ -312,7 +312,7 @@ class PurchaseOrderModel extends BaseModel{
 
     function cancelPurchaseOrderByCode($code){
         $sql = " UPDATE tb_purchase_order SET 
-        order_cancelled = '1', 
+        purchase_order_cancelled = '1', 
         updateby = '".$data['updateby']."', 
         lastupdate = '".$data['lastupdate']."' 
         WHERE purchase_order_code = '$code' 
@@ -327,7 +327,7 @@ class PurchaseOrderModel extends BaseModel{
 
     function uncancelPurchaseOrderByCode($code){
         $sql = " UPDATE tb_purchase_order SET 
-        order_cancelled = '0', 
+        purchase_order_cancelled = '0', 
         updateby = '".$data['updateby']."', 
         lastupdate = '".$data['lastupdate']."' 
         WHERE purchase_order_code = '$code' 
@@ -344,15 +344,15 @@ class PurchaseOrderModel extends BaseModel{
         $sql = " UPDATE tb_purchase_order SET  
         supplier_code = '".$data['supplier_code']."', 
         employee_code = '".$data['employee_code']."', 
-        credit_term = '".$data['credit_term']."', 
-        delivery_by = '".$data['delivery_by']."',  
-        order_date = '".$data['order_date']."', 
-        order_status = '".$data['order_status']."', 
-        order_remark = '".static::$db->real_escape_string($data['order_remark'])."',  
-        order_total_price = '".$data['order_total_price']."', 
-        order_vat = '".$data['order_vat']."', 
-        order_vat_price = '".$data['order_vat_price']."', 
-        order_net_price = '".$data['order_net_price']."',
+        purchase_credit_term = '".$data['purchase_credit_term']."', 
+        purchase_delivery_by = '".$data['purchase_delivery_by']."',  
+        purchase_order_date = '".$data['purchase_order_date']."', 
+        purchase_order_status = '".$data['purchase_order_status']."', 
+        purchase_order_remark = '".static::$db->real_escape_string($data['purchase_order_remark'])."',  
+        purchase_order_total_price = '".$data['purchase_order_total_price']."', 
+        purchase_order_vat = '".$data['purchase_order_vat']."', 
+        purchase_order_vat_price = '".$data['purchase_order_vat_price']."', 
+        purchase_order_net_price = '".$data['purchase_order_net_price']."',
         updateby = '".$data['updateby']."', 
         lastupdate = NOW()
         WHERE purchase_order_code = '$code' 
@@ -367,10 +367,10 @@ class PurchaseOrderModel extends BaseModel{
 
     function updatePurchaseOrderApproveByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_order SET 
-        approve_status = '".$data['approve_status']."', 
-        approve_by = '".$data['approve_by']."', 
-        approve_date = NOW(), 
-        order_status = '".$data['order_status']."', 
+        purchase_order_status = '".$data['purchase_order_status']."', 
+        purchase_approve_status = '".$data['purchase_approve_status']."', 
+        purchase_approve_by = '".$data['purchase_approve_by']."', 
+        purchase_approve_date = NOW(), 
         updateby = '".$data['updateby']."', 
         lastupdate = NOW() 
         WHERE purchase_order_code = '$code' 
@@ -385,10 +385,10 @@ class PurchaseOrderModel extends BaseModel{
 
     function updatePurchaseOrderRequestByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_order SET 
-        approve_status = '".$data['approve_status']."', 
-        approve_by = '".$data['approve_by']."', 
-        approve_date = '', 
-        order_status = '".$data['order_status']."', 
+        purchase_order_status = '".$data['purchase_order_status']."', 
+        purchase_approve_status = '".$data['purchase_approve_status']."', 
+        purchase_approve_by = '".$data['purchase_approve_by']."', 
+        purchase_approve_date = '', 
         updateby = '".$data['updateby']."', 
         lastupdate = NOW() 
         WHERE purchase_order_code = '$code' 
@@ -403,7 +403,7 @@ class PurchaseOrderModel extends BaseModel{
 
     function updatePurchaseOrderStatusByCode($code,$data = []){
         $sql = " UPDATE tb_purchase_order SET 
-        order_status = '".$data['order_status']."', 
+        purchase_order_status = '".$data['purchase_order_status']."', 
         updateby = '".$data['updateby']."',
         lastupdate = NOW() 
         WHERE purchase_order_code = '$code' 
@@ -423,7 +423,7 @@ class PurchaseOrderModel extends BaseModel{
                 SELECT DISTINCT supplier_code 
                 FROM tb_purchase_request_list 
                 LEFT JOIN tb_purchase_request ON tb_purchase_request_list.purchase_request_code = tb_purchase_request.purchase_request_code                   
-                WHERE purchase_order_list_code = '' AND request_cancelled = 0 AND approve_status = 'Approve' 
+                WHERE purchase_order_list_code = '' AND request_cancelled = 0 AND purchase_approve_status = 'Approve' 
             )
             GROUP BY supplier_code 
         ";
@@ -443,40 +443,42 @@ class PurchaseOrderModel extends BaseModel{
             purchase_order_code,
             supplier_code,
             employee_code,
-            approve_status,
-            approve_by,
-            approve_date,
-            credit_term,
-            delivery_by, 
-            order_date,
-            order_status,
-            order_remark, 
-            order_total_price,
-            order_vat,
-            order_vat_price,
-            order_net_price,
-            revise_code,
-            revise_no,
+            purchase_order_date,
+            purchase_order_status,
+            purchase_order_remark, 
+            purchase_order_total_price,
+            purchase_order_vat,
+            purchase_order_vat_type,
+            purchase_order_vat_price,
+            purchase_order_net_price,
+            purchase_delivery_by, 
+            purchase_credit_term,
+            purchase_approve_status,
+            purchase_approve_by,
+            purchase_approve_date,
+            purchase_revise_code,
+            purchase_revise_no,
             addby,
             adddate) 
         VALUES ('". 
             $data['purchase_order_code']."','".
             $data['supplier_code']."','".
             $data['employee_code']."','".
-            $data['approve_status']."','".
-            $data['approve_by']."','".
-            $data['approve_date']."','".
-            $data['credit_term']."','".
-            $data['delivery_by']."','". 
-            $data['order_date']."','".
+            $data['purchase_order_date']."','".
             "New','".
-            static::$db->real_escape_string($data['order_remark'])."','". 
-            $data['order_total_price']."','".
-            $data['order_vat']."','".
-            $data['order_vat_price']."','".
-            $data['order_net_price']."','".
-            $data['revise_code']."','".
-            $data['revise_no']."','".
+            static::$db->real_escape_string($data['purchase_order_remark'])."','". 
+            $data['purchase_order_total_price']."','".
+            $data['purchase_order_vat']."','".
+            $data['purchase_order_vat_type']."','".
+            $data['purchase_order_vat_price']."','".
+            $data['purchase_order_net_price']."','".
+            $data['purchase_delivery_by']."','". 
+            $data['purchase_credit_term']."','".
+            $data['purchase_approve_status']."','".
+            $data['purchase_approve_by']."','".
+            $data['purchase_approve_date']."','".
+            $data['purchase_revise_code']."','".
+            $data['purchase_revise_no']."','".
             $data['addby']."',".
             "NOW()
         )";

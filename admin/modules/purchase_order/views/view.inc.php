@@ -152,34 +152,34 @@
                 <tr class="odd gradeX">
                     <td class="text-center"><?php echo $i+1; ?></td>
                     <td><?php echo $purchase_orders[$i]['purchase_order_code']; ?>
-                        <?php if($purchase_orders[$i]['revise_no']){ ?>
-                            <br><b><font color="#F00">Revise<?PHP echo $purchase_orders[$i]['revise_no']; ?></font></b>
+                        <?php if($purchase_orders[$i]['purchase_revise_no']){ ?>
+                            <br><b><font color="#F00">Revise<?PHP echo $purchase_orders[$i]['purchase_revise_no']; ?></font></b>
                         <?PHP } ?>
-                        <?php if($purchase_orders[$i]['order_cancelled']){ ?><b>
+                        <?php if($purchase_orders[$i]['purchase_order_cancelled']){ ?><b>
                             <font color="#F00">Cancelled</font>
                         </b>
                         <?PHP } ?>
                     </td>
-                    <td class="text-center" data-order="<?php echo $timestamp = strtotime($purchase_orders[$i]['order_date']) ?>">
-                        <?php if ($purchase_orders[$i]['order_date'] != ''){ echo date("d-m-Y", strtotime($purchase_orders[$i]['order_date'])); } ?>
+                    <td class="text-center" data-order="<?php echo $timestamp = strtotime($purchase_orders[$i]['purchase_order_date']) ?>">
+                        <?php if ($purchase_orders[$i]['purchase_order_date'] != ''){ echo date("d-m-Y", strtotime($purchase_orders[$i]['purchase_order_date'])); } ?>
                     </td>
                     <td><?php echo $purchase_orders[$i]['supplier_name']; ?> </td>
                     <td><?php echo $purchase_orders[$i]['employee_name']; ?></td>
                     <td class="text-center">
-                        <?php if($purchase_orders[$i]['order_status'] =="New"){ ?>
+                        <?php if($purchase_orders[$i]['purchase_order_status'] =="New"){ ?>
                         <b class="font-weight-bold text-success text-center"><i class="fa fa-plus" aria-hidden="true"></i>
-                            <?php echo $purchase_orders[$i]['order_status']; ?>
+                            <?php echo $purchase_orders[$i]['purchase_order_status']; ?>
                         </b>
                         <?php
-                        }else if($purchase_orders[$i]['order_status'] =="Request"){ ?>
+                        }else if($purchase_orders[$i]['purchase_order_status'] =="Request"){ ?>
                         <b class="font-weight-bold text-danger text-center"><i class="fa fa-registered" aria-hidden="true"></i>
-                            <?php echo $purchase_orders[$i]['order_status']; ?>
+                            <?php echo $purchase_orders[$i]['purchase_order_status']; ?>
                         </b>
                         <?php
-                        }else if($purchase_orders[$i]['order_status'] =="Approved" && !$purchase_orders[$i]['order_cancelled']){ 
+                        }else if($purchase_orders[$i]['purchase_order_status'] =="Approved" && !$purchase_orders[$i]['purchase_order_cancelled']){ 
                         ?>
                             <b class="font-weight-bold text-info text-center"><i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                <?php echo $purchase_orders[$i]['order_status']; ?>
+                                <?php echo $purchase_orders[$i]['purchase_order_status']; ?>
                             </b>
                             <br>
                             <b>
@@ -193,11 +193,11 @@
                                 </a>
                             </b>
                         <?php
-                        }else if($purchase_orders[$i]['order_status'] =="Sending"){ 
+                        }else if($purchase_orders[$i]['purchase_order_status'] =="Sending"){ 
                         ?>
                         <div>
                             <b class="font-weight-bold text-warning text-center"><i class="fa fa-paper-plane" aria-hidden="true"></i>
-                                <?php echo $purchase_orders[$i]['order_status']; ?>
+                                <?php echo $purchase_orders[$i]['purchase_order_status']; ?>
                             </b>
                         </div>
                         <div>
@@ -220,9 +220,9 @@
                             </b>
                         </div>
                         <?php
-                        }else if($purchase_orders[$i]['order_status'] =="Confirm"){ ?>
+                        }else if($purchase_orders[$i]['purchase_order_status'] =="Confirm"){ ?>
                         <b class="font-weight-bold text-secondary text-center"><i class="fa fa-check-square-o" aria-hidden="true"></i>
-                            <?php echo $purchase_orders[$i]['order_status']; ?>
+                            <?php echo $purchase_orders[$i]['purchase_order_status']; ?>
                         </b>
                         <?php
                         }
@@ -284,8 +284,8 @@
                             <i class="fa fa-print" aria-hidden="true"></i>
                         </a>
 
-                    <?php if($purchase_orders[$i]['order_status'] == "New" || $purchase_orders[$i]['order_status'] == "Approved"){ ?>
-                        <?php if(!$purchase_orders[$i]['order_cancelled']){ ?>
+                    <?php if($purchase_orders[$i]['purchase_order_status'] == "New" || $purchase_orders[$i]['purchase_order_status'] == "Approved"){ ?>
+                        <?php if(!$purchase_orders[$i]['purchase_order_cancelled']){ ?>
                             <?php if($menu['purchase_order']['cancel']){ ?> 
                             <a href="?app=purchase_order&action=cancelled&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
                                 title="ยกเลิกใบร้องขอ"
@@ -302,7 +302,7 @@
                                 <i class="fa fa-registered" aria-hidden="true"></i>
                             </a>
                             <?PHP } ?>
-                            <?PHP if($purchase_orders[$i]['order_status'] == "New" && $menu['purchase_order']['edit']){ ?>
+                            <?PHP if($purchase_orders[$i]['purchase_order_status'] == "New" && $menu['purchase_order']['edit']){ ?>
                             <a href="?app=purchase_order&action=update&code=<?php echo $purchase_orders[$i]['purchase_order_code'];?>"
                                 title="แก้ไขใบร้องขอ">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>

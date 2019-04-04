@@ -1,17 +1,17 @@
 <?php
 require_once("BaseModel.php");  
-require_once("StockModel.php"); 
+require_once("MaintenanceStockModel.php"); 
 
 class InvoiceSupplierModel extends BaseModel{ 
 
-    private $stock;
+    private $maintenance_stock;
 
     function __construct(){
         if(!static::$db){
             static::$db = mysqli_connect($this->host, $this->username, $this->password, $this->db_name);
         }
         mysqli_set_charset(static::$db,"utf8");
-        $this->stock = new StockModel;
+        $this->maintenance_stock = new MaintenanceStockModel;
     }
 
     function getInvoiceSupplierLastCode($code,$digit){
@@ -186,7 +186,7 @@ class InvoiceSupplierModel extends BaseModel{
             GROUP BY tb_purchase_order_list.purchase_order_list_code 
             HAVING IFNULL(SUM(invoice_supplier_list_qty),0) < AVG(purchase_order_list_qty)  
         ) 
-        AND order_status = 'Confirm' 
+        AND purchase_order_status = 'Confirm' 
         AND tb_purchase_order.purchase_order_code LIKE('%$keyword%') 
         GROUP BY tb_purchase_order.purchase_order_code 
         ";
@@ -236,7 +236,7 @@ class InvoiceSupplierModel extends BaseModel{
                     GROUP BY tb_purchase_order_list.purchase_order_list_code 
                     HAVING IFNULL(SUM(invoice_supplier_list_qty),0) < AVG(purchase_order_list_qty)  
                 ) 
-                AND order_status = 'Confirm' 
+                AND purchase_order_status = 'Confirm' 
                 AND tb_purchase_order.purchase_order_code = '$code' 
                 GROUP BY tb_purchase_order.purchase_order_code 
         ";
@@ -262,7 +262,7 @@ class InvoiceSupplierModel extends BaseModel{
                 GROUP BY tb_purchase_order_list.purchase_order_list_code 
                 HAVING IFNULL(SUM(invoice_supplier_list_qty),0) < AVG(purchase_order_list_qty)  
             ) 
-            AND order_status = 'Confirm'
+            AND purchase_order_status = 'Confirm'
         )
         ";
 
@@ -366,7 +366,7 @@ class InvoiceSupplierModel extends BaseModel{
             HAVING IFNULL(SUM(invoice_supplier_list_qty),0) < MAX(purchase_order_list_qty)  
         ) 
         AND (product_name LIKE ('%$search%') OR tb_purchase_order_list.product_code LIKE ('%$search%')) 
-        AND order_status = 'Confirm'
+        AND purchase_order_status = 'Confirm'
         ORDER BY tb_purchase_order.purchase_order_code , purchase_order_list_no
         ";
 
@@ -429,6 +429,7 @@ class InvoiceSupplierModel extends BaseModel{
             employee_code,
             invoice_supplier_total_price,
             invoice_supplier_vat,
+            invoice_supplier_vat_type,
             invoice_supplier_vat_price,
             invoice_supplier_net_price,
             invoice_supplier_craete_date,
@@ -451,6 +452,7 @@ class InvoiceSupplierModel extends BaseModel{
         $data['employee_code']."','".
         $data['invoice_supplier_total_price']."','".
         $data['invoice_supplier_vat']."','".
+        $data['invoice_supplier_vat_type']."','".
         $data['invoice_supplier_vat_price']."','".
         $data['invoice_supplier_net_price']."','".
         static::$db->real_escape_string($data['invoice_supplier_craete_date'])."','".
@@ -496,24 +498,6 @@ class InvoiceSupplierModel extends BaseModel{
     }
 
     function deleteInvoiceSupplierByCode($code){
-        $sql = "SELECT invoice_supplier_list_code, tb_invoice_supplier_list.product_code , invoice_supplier_list 
-        FROM  tb_invoice_supplier_list 
-        LEFT JOIN tb_product ON tb_invoice_supplier_list.product_code = tb_product.product_code  
-        WHERE invoice_supplier_code = '$code' ";   
-                     
-        $data_clear=[];
-
-        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
-            while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                $data_clear [] = $row;
-            }
-            $result->close();
-        }
-
-        for($i = 0 ; $i < count($data_clear); $i++){ 
-            $this->stock->removePurchase($data_clear[$i]); 
-        }
- 
         $sql = " DELETE FROM tb_invoice_supplier_list WHERE invoice_supplier_code = '$code' ";
         mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT);
 
