@@ -436,8 +436,8 @@ class PurchaseOrderModel extends BaseModel{
                 $data[] = $row;
             }
             $result->close();
+            return $data;
         }
-        return $data;
     }
 
     function insertPurchaseOrder($data = []){

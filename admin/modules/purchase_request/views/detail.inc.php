@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <h1 class="page-header">Purchase Request Management [<?PHP echo $purchase_request['approve_status']; ?>]</h1>
+        <h1 class="page-header">Purchase Request Management [<?PHP echo $purchase_request['purchase_request_approve_status']; ?>]</h1>
     </div>
     <div class="col-lg-6" align="right">
        
@@ -72,10 +72,10 @@
             <div class="row">
                 <div class="col-lg-offset-8 col-lg-2" align="right">
                 <?php if($menu['purchase_request']['approve'] && !$purchase_request['purchase_request_cancelled']){ ?>
-                    <select id="approve_status" name="approve_status" class="form-control" data-live-search="true" >
-                        <option <?php if($purchase_request['approve_status'] == "Waiting"){?> selected <?php }?> >Waiting</option>
-                        <option <?php if($purchase_request['approve_status'] == "Approve"){?> selected <?php }?> >Approve</option>
-                        <option <?php if($purchase_request['approve_status'] == "Not Approve"){?> selected <?php }?> >Not Approve</option>
+                    <select id="purchase_request_approve_status" name="purchase_request_approve_status" class="form-control" data-live-search="true" >
+                        <option <?php if($purchase_request['purchase_request_approve_status'] == "Waiting"){?> selected <?php }?> >Waiting</option>
+                        <option <?php if($purchase_request['purchase_request_approve_status'] == "Approve"){?> selected <?php }?> >Approve</option>
+                        <option <?php if($purchase_request['purchase_request_approve_status'] == "Not Approve"){?> selected <?php }?> >Not Approve</option>
                     </select>
                 <?php } ?>
                 </div>

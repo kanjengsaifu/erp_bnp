@@ -103,7 +103,7 @@
                         <th style="text-align:center;">Recieve</th>
                         <th style="text-align:center;">@</th>
                         <th style="text-align:center;">Amount</th>
-                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                        <?php if($menu['purchase_order']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <th width="80"></th>
                         <?PHP } ?>
                     </tr>
@@ -154,7 +154,7 @@
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['list_recieve_qty'],0)?></td>
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price'],2)?></td>
                         <td align="right"><?php echo number_format($purchase_order_lists[$i]['purchase_order_list_price_sum'],2)?></td>
-                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                        <?php if($menu['purchase_order']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td>
                             <a href="index.php?app=purchase_order&action=balance&code=<?PHP echo $purchase_order_code; ?>&list=<?PHP echo $purchase_order_lists[$i]['purchase_order_list_code']; ?>" class="btn btn-danger">Close</a>
                         </td>
@@ -179,7 +179,7 @@
                             }
                         ?>
                         <td align="right"><?php echo number_format($total_val,2);?></td>
-                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                        <?php if($menu['purchase_order']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td></td>
                         <?PHP } ?>
                     </tr>
@@ -195,7 +195,7 @@
                         ?>
                         <td colspan="3" align="right">Vat</td>
                         <td align="right"><?php echo number_format($vat_val,2);?></td>
-                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                        <?php if($menu['purchase_order']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td></td>
                         <?PHP } ?>
                     </tr>
@@ -211,7 +211,7 @@
                             }
                         ?>
                         <td align="right"><?php echo number_format($net_val,2);?></td>
-                        <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                        <?php if($menu['purchase_order']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <td></td>
                         <?PHP } ?>
                     </tr>
@@ -222,7 +222,7 @@
                 <input type="hidden" id="purchase_order_code" name="purchase_order_code" value="<?php echo $purchase_order_code; ?>">
                 <div class="row">
                     <div class="col-lg-offset-8 col-lg-2" align="right">
-                    <?php if($menu['purchase_order']['purchase_order_approve'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                    <?php if($menu['purchase_order']['approve'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <select id="purchase_order_approve_status" name="purchase_order_approve_status" class="form-control" data-live-search="true">
                             <option <?php if($purchase_order['purchase_order_approve_status'] == "Waitting"){?> selected <?php }?>>Waitting</option>
                             <option <?php if($purchase_order['purchase_order_approve_status'] == "Approve"){?> selected <?php }?>>Approve</option>
@@ -232,10 +232,10 @@
                     </div>
                     
                     <div class="col-lg-2" align="right">
-                    <?php if($menu['purchase_request']['approve'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                    <?php if($menu['purchase_order']['approve'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <button type="submit" class="btn btn-success">Save</button>
                     <?PHP } ?>
-                    <?php if($menu['purchase_request']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
+                    <?php if($menu['purchase_order']['edit'] && !$purchase_order['purchase_order_cancelled']){ ?>
                         <a href="index.php?app=purchase_order&action=balance&code=<?PHP echo $purchase_order_code; ?>" class="btn btn-danger">Close</a>
                     <?PHP } ?>
                         <a href="index.php?app=purchase_order" class="btn btn-default">Back</a>

@@ -20,8 +20,6 @@
         },
     <?php }?>
     ];
-
-    var vat_type = <? echo $invoice_supplier['invoice_supplier_vat_type']; ?>;
     
     var data_buffer = [];
     var index_buffer = [];
@@ -500,6 +498,7 @@
 
     function calculateAll(){
         var val = document.getElementsByName('invoice_supplier_list_total[]');
+        var vat_type = <? echo $invoice_supplier['invoice_supplier_vat_type']; ?>;
         var vat = parseInt(document.getElementById("invoice_supplier_vat").value);
         var total = 0.0;
 

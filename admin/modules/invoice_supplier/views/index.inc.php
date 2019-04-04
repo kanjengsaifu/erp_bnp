@@ -137,7 +137,8 @@ if ($_GET['action'] == 'import-view' && $menu['invoice_supplier']['add']){
         $data['employee_code'] = $_POST['employee_code'];
         $data['invoice_supplier_total_price'] = (float)filter_var($_POST['invoice_supplier_total_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['invoice_supplier_vat'] = (float)filter_var($_POST['invoice_supplier_vat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-        $data['invoice_supplier_vat_price'] =(float)filter_var( $_POST['invoice_supplier_vat_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $data['invoice_supplier_vat_type'] = $_POST['invoice_supplier_vat_type'];
+        $data['invoice_supplier_vat_price'] = (float)filter_var( $_POST['invoice_supplier_vat_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['invoice_supplier_net_price'] = (float)filter_var($_POST['invoice_supplier_net_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $data['invoice_supplier_craete_date'] = $date_time->changeDateFormat($_POST['invoice_supplier_craete_date']);
         $data['invoice_supplier_receive_date'] = $date_time->changeDateFormat($_POST['invoice_supplier_receive_date']);

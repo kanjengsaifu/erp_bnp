@@ -50,6 +50,23 @@ class PurchaseOrderListModel extends BaseModel{
         }
     }
 
+    function getPurchaseOrderListByCode($code){
+        $sql = "SELECT * ,
+        IFNULL((
+            SELECT SUM(IFNULL(invoice_supplier_list_qty,0)) 
+            FROM tb_invoice_supplier_list 
+            WHERE purchase_order_list_code = tb.purchase_order_list_code),0) as list_receive_qty 
+        FROM tb_purchase_order_list as tb
+        WHERE purchase_order_list_code = '$code' 
+        ";
+        
+        if ($result = mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
+            $data = mysqli_fetch_array($result,MYSQLI_ASSOC);
+            $result->close();
+            return $data;
+        }
+    }
+
     function getPurchaseOrderListCodeByOther($purchase_order_code,$purchase_order_list_no){
         $sql ="SELECT * 
         FROM tb_purchase_order_list 
@@ -121,6 +138,8 @@ class PurchaseOrderListModel extends BaseModel{
             purchase_order_list_remark = '".$data['purchase_order_list_remark']."'
             WHERE purchase_order_list_code = '$code'
         ";
+
+        echo $sql;
 
         if (mysqli_query(static::$db,$sql, MYSQLI_USE_RESULT)) {
             return true;

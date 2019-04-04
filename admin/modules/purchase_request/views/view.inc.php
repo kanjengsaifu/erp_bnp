@@ -82,7 +82,7 @@
                         <?php if ($purchase_request[$i]['purchase_request_date'] != ''){ echo date("d-m-Y", strtotime($purchase_request[$i]['purchase_request_date'])); } ?>
                     </td>
                     <td><?php echo $purchase_request[$i]['request_name']; ?></td>
-                    <td class="text-center"><?php echo $purchase_request[$i]['approve_status']; ?></td>
+                    <td class="text-center"><?php echo $purchase_request[$i]['purchase_request_approve_status']; ?></td>
                     <td><?php echo $purchase_request[$i]['accept_name']; ?></td>
                     <td class="text-center">
                         <?php
@@ -115,7 +115,7 @@
                         <a href="?app=purchase_request&action=detail&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="ดูรายละเอียดใบร้องขอ">
                             <i class="fa fa-file-text-o" aria-hidden="true"></i>
                         </a>
-                    <?php if($purchase_request[$i]['approve_status'] == "Waiting"){ ?>
+                    <?php if($purchase_request[$i]['purchase_request_approve_status'] == "Waiting"){ ?>
                         <?php if(!$purchase_request[$i]['purchase_request_cancelled']){ ?>
                             <?php if($menu['purchase_request']['cancel']){ ?> 
                             <a href="?app=purchase_request&action=cancelled&code=<?php echo $purchase_request[$i]['purchase_request_code'];?>" title="ยกเลิกใบร้องขอ" onclick="return confirm('You want to cancelled purchase request : <?php echo $purchase_request[$i]['purchase_request_code']; ?>');" style="color:#F00;">

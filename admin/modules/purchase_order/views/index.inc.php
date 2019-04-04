@@ -53,12 +53,6 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
 }else if ($_GET['action'] == 'detail'){ 
     $purchase_order = $purchase_order_model->getPurchaseOrderByCode($purchase_order_code);
     $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
-    if($supplier['vat_type'] == '0'){
-        $vat= '0';
-    }else{
-        $vat = $purchase_order['vat'];
-    }
-
     require_once($path.'detail.inc.php');
 }else if ($_GET['action'] == 'delete' && $menu['purchase_order']['delete']){
     // $notification_model->deleteNotificationByTypeID('Purchase Order',$purchase_order_code);
@@ -371,25 +365,20 @@ if ($_GET['action'] == 'insert' && $menu['purchase_order']['add']){
         <?php
     }
 }else if ($_GET['action'] == 'balance' && $menu['purchase_order']['edit']){
-    $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
+    if($purchase_order_list_code != ''){
+        $purchase_order_list = $purchase_order_list_model->getPurchaseOrderListByCode($purchase_order_list_code);        
+        $data_sub = [];
+        $data_sub['purchase_order_list_qty'] = $purchase_order_list['list_receive_qty'];
+        $data_sub['purchase_order_list_price'] = $purchase_order_list['purchase_order_list_price'];
+        $data_sub['purchase_order_list_price_sum'] = $purchase_order_list['purchase_order_list_price_sum'];
+        $data_sub['purchase_order_list_remark'] = $purchase_order_list['purchase_order_list_remark'];
+        $purchase_order_list_model->updatePurchaseOrderListByCodeAdmin($data_sub,$purchase_order_list_code);
+    }else{
+        $purchase_order_lists = $purchase_order_list_model->getPurchaseOrderListBy($purchase_order_code);
 
-    for($i=0; $i < count($purchase_order_lists) ; $i++){
-        if($purchase_order_list_code > 0 ){
-            if($purchase_order_list_code == $purchase_order_lists[$i]['purchase_order_list_code'] ){
-                $data_sub = [];
-                $data_sub['purchase_order_code'] = $purchase_order_code;
-                $data_sub['product_code'] = $purchase_order_lists[$i]['product_code'];
-                $data_sub['list_recieve_qty'] = $purchase_order_lists[$i]['list_recieve_qty'];
-                $data_sub['purchase_order_list_price'] = $purchase_order_lists[$i]['purchase_order_list_price'];
-                $data_sub['purchase_order_list_price_sum'] = $purchase_order_lists[$i]['purchase_order_list_price_sum'];
-                $data_sub['purchase_order_list_remark'] = $purchase_order_lists[$i]['purchase_order_list_remark'];
-                $purchase_order_list_model->updatePurchaseOrderListByCodeAdmin($data_sub,$purchase_order_lists[$i]['purchase_order_list_code']);
-            }
-        }else{
+        for($i=0; $i < count($purchase_order_lists); $i++){
             $data_sub = [];
-            $data_sub['purchase_order_code'] = $purchase_order_code;
-            $data_sub['product_code'] = $purchase_order_lists[$i]['product_code'];
-            $data_sub['list_recieve_qty'] = $purchase_order_lists[$i]['list_recieve_qty'];
+            $data_sub['purchase_order_list_qty'] = $purchase_order_lists[$i]['list_receive_qty'];
             $data_sub['purchase_order_list_price'] = $purchase_order_lists[$i]['purchase_order_list_price'];
             $data_sub['purchase_order_list_price_sum'] = $purchase_order_lists[$i]['purchase_order_list_price_sum'];
             $data_sub['purchase_order_list_remark'] = $purchase_order_lists[$i]['purchase_order_list_remark'];
