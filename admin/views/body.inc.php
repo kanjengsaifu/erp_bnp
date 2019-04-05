@@ -42,7 +42,9 @@
     }else if($_GET['app'] == "product" && $menu['product']['view']){
         require_once("modules/product/views/index.inc.php");   
     }else if($_GET['app'] == "product_type" && $menu['product_type']['view']){
-        require_once("modules/product_type/views/index.inc.php");   
+        require_once("modules/product_type/views/index.inc.php");      
+    }else if($_GET['app'] == "product_category" && $menu['product_category']['view']){
+            require_once("modules/product_category/views/index.inc.php");   
     }else if($_GET['app'] == "product_brand" && $menu['product_brand']['view']){
         require_once("modules/product_brand/views/index.inc.php");   
     }else if($_GET['app'] == "project" && $menu['project']['view']){

@@ -284,6 +284,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                         || $_GET["app"]=='material_type' 
                         || $_GET["app"]=='product' 
                         || $_GET["app"]=='product_type'
+                        || $_GET["app"]=='product_category'
                         || $_GET["app"]=='product_brand'
                         || $_GET["app"]=='project'
                         || $_GET["app"]=='address'
@@ -311,6 +312,7 @@ for($i = 0 ; $i < count($menu_list); $i++){
                             <a href="?app=product" <?PHP if(
                                 $_GET['app'] == "product" 
                             || $_GET["app"]=='product_type'
+                            || $_GET["app"]=='product_category'
                             || $_GET["app"]=='product_brand'
                             ){?> class="active" <?PHP } ?> ><i class="fa fa-product-hunt" aria-hidden="true"></i> สินค้า</a>
                         </li>

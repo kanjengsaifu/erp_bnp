@@ -127,13 +127,16 @@
     <div class="col-lg-6" align="right">
         <?php if($menu['product_type']['view']==1){ ?> 
         <a href="?app=product_type" class="btn btn-primary btn-menu ">ประเภทสินค้า / Product type</a> 
+        <?PHP }?>
+        <?php if($menu['product_category']['view']==1){ ?> 
+        <a href="?app=product_category" class="btn btn-primary btn-menu">ลักษณะสินค้า / Product category</a> 
         <?PHP }?> 
         <?php if($menu['product_brand']['view']==1){ ?> 
         <a href="?app=product_brand" class="btn btn-primary btn-menu ">ยี่ห้อสินค้า / Product brand</a> 
         <?PHP }?> 
         <?php if($menu['product']['view']==1){ ?> 
         <a href="?app=product" class="btn btn-primary btn-menu active">สินค้า / Product</a> 
-        <?PHP }?>  
+        <?PHP }?>
     </div>
     <!-- /.col-lg-12 -->
 </div>
